@@ -1,0 +1,7 @@
+TEST('F15_AssertArrayEquals_UINT');
+IF NOT IS_TEST_FINISHED('F15_AssertArrayEquals_UINT') THEN
+	_v15e[1] := 1;
+	_v15a[1] := 2;
+	AssertArrayEquals_UINT(Expecteds := _v15e, Actuals := _v15a, Message := 'F15_AssertArrayEquals_UINT');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,37 @@
+CoUnit PRD Suite R2 — unchanged-candidate adversarial probe evidence
+Review date: 2026-09-09
+Subject: supplied CoUnit-PRD-Suite-R2(1).zip / internal package COUNIT-PRD-SUITE-R2
+
+1. Supplied R2 validator
+Command: python review/validate_packet.py
+Observed: PASS
+Key output:
+  PRDs: 4; slices: 12; assertion methods: 44; compatibility surface rows: 60
+  SRC-001 entries: 665
+  xUnit controls: positive=0; negatives=3 rejected
+Limit: the original validator did not check CSV row width or the byte-vs-character path admission rule.
+
+2. RF-008 path byte-capacity counterexample
+R2 rule: reporting-contract.md §6 requires LEN(finalPath) <= 244 before appending '.counit.tmp' / '.counit.bak'.
+CODESYS contract facts used by review: STRING(255) capacity is byte-based; Standard LEN reports characters.
+Analytical UTF-8 fixture:
+  P = 122 repetitions of U+00E9: character count 122, UTF-8 bytes 244, with 11-byte suffix = 255 bytes -> boundary fits.
+  P = 123 repetitions of U+00E9: character count 123, UTF-8 bytes 246, with 11-byte suffix = 257 bytes -> does not fit.
+R2 LEN rule admits the second case because 123 <= 244.
+Consequence: a conforming R2 worker may overflow/truncate a companion path or fail to prove distinct path identities before file effects.
+
+3. RF-009 legacy mapping acceptance gap
+R2 reporting contract §5 requires the exact legacy single-byte mapping to be bound rather than guessed.
+R2 runtime matrix records only string_encoding_mode=LEGACY_SINGLE_BYTE; no exact mapping identity field exists.
+R2 COU04-S2 requires a legacy non-ASCII case but does not require a mapping-sensitive raw byte or an expected result obtained independently of the PLC converter.
+Counterexample class: a converter that treats 0x80 using the wrong legacy mapping can still pass a legacy fixture based only on a byte such as 0xE9 whose logical value is the same under more than one plausible Western single-byte mapping.
+
+4. RF-010 runtime-matrix CSV shape
+R2 file: PRD-COU-04/qualification/runtime-matrix.csv
+CSV reader observation:
+  header fields: 26
+  template row fields: 29
+Cause: the free-text notes cell contains three unquoted commas.
+The original validator used csv.DictReader and checked field names but did not reject extra row cells, so it reported the matrix structurally coherent.
+
+No product code or target runtime was executed by these probes.

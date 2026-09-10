@@ -1,0 +1,4 @@
+IF GVL_Qualification.OwnerReady AND NOT GVL_Qualification.ForeignCalled THEN
+	TEST('ForeignMustNotRegister');
+	GVL_Qualification.ForeignCalled := TRUE;
+END_IF

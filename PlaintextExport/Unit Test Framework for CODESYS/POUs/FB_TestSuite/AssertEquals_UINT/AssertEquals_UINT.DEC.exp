@@ -1,0 +1,11 @@
+METHOD PUBLIC AssertEquals_UINT
+VAR_INPUT
+	Expected : UINT;
+	Actual : UINT;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

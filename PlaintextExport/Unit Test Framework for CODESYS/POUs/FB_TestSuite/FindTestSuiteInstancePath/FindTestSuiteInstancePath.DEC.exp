@@ -1,0 +1,2 @@
+(* Searches for the instance path of the calling function block *)
+METHOD PRIVATE FindTestSuiteInstancePath : T_MaxString

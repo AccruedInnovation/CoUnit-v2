@@ -1,0 +1,63 @@
+IF GVL_coUnit.IgnoreCurrentTest OR GVL_coUnit.CurrentTestIsFinished THEN
+    RETURN;
+END_IF
+
+TestInstancePath := AddTestNameToInstancePath(FINDTestSuiteInstancePath());
+SizeOfExpecteds := ABS(UPPER_BOUND(Expecteds, 1) - LOWER_BOUND(Expecteds, 1)) + 1;
+SizeOfActuals := ABS(UPPER_BOUND(Actuals, 1) - LOWER_BOUND(Actuals, 1)) + 1;
+
+IF SizeOfExpecteds <> SizeOfActuals THEN
+    Equals := FALSE;
+    SizeEquals := FALSE;
+ELSE
+    (* Even though we know that both arrays are equal in size, the two arrays can start at two completely different
+       indexes, which needs to be taken into account for. *)
+    ExpectedsIndex := LOWER_BOUND(Expecteds, 1); // The start position for the expecteds
+    ActualsIndex := LOWER_BOUND(Actuals, 1); // The start position for the actuals
+
+    FOR Index := 1 TO SizeOfExpecteds BY 1 DO
+        IF Expecteds[ExpectedsIndex] <> Actuals[ActualsIndex] THEN
+            Equals := FALSE;
+            EXIT;
+        END_IF
+
+        ExpectedsIndex := ExpectedsIndex + 1;
+        ActualsIndex := ActualsIndex + 1;
+    END_FOR
+END_IF
+
+AssertArrayResults.ReportResult(ExpectedsSize := DINT_TO_UDINT(SizeOfExpecteds),
+    ExpectedsTypeClass := IBaseLibrary.TypeClass.TYPE_BYTE,
+    ActualsSize := DINT_TO_UDINT(SizeOfActuals),
+    ActualsTypeClass := IBaseLibrary.TypeClass.TYPE_BYTE,
+    Message := Message,
+    TestInstancePath := TestInstancePath,
+    AlreadyReported => AlreadyReported);
+
+IF NOT AlreadyReported AND NOT Equals THEN
+    SetTestFailed(AssertionType := E_AssertionType.Type_Array_BYTE, AssertionMessage := Message);
+
+    IF NOT SizeEquals THEN
+        Message := CONCAT(STR1 := Message, STR2 := ', size of arrays not matching.');
+        ExpectedString := 'SIZE = ';
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(SizeOfExpecteds));
+        ActualString := 'SIZE = ';
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(SizeOfActuals));
+    ELSE
+        ExpectedByteString := CONCAT(STR1 := '0x', STR2 := BYTE_TO_HEXSTR(in := Expecteds[ExpectedsIndex], iPrecision := 2, bLoCase := FALSE));
+        ExpectedString := 'ARRAY[';
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(ExpectedsIndex));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '] = ');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ExpectedByteString);
+        ActualByteString := CONCAT(STR1 := '0x', STR2 := BYTE_TO_HEXSTR(in := Actuals[ActualsIndex], iPrecision := 2, bLoCase := FALSE));
+        ActualString := 'ARRAY[';
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(ActualsIndex));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '] = ');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ActualByteString);
+    END_IF
+
+    AssertMessageFormatter.LogAssertFailure(Expected := ExpectedString,
+        Actual := ActualString,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+END_IF

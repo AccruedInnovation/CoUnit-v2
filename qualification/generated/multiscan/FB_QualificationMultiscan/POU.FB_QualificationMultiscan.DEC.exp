@@ -1,0 +1,10 @@
+FUNCTION_BLOCK FB_QualificationMultiscan EXTENDS FB_TestSuite
+VAR_OUTPUT
+	LaterFailureExecuted : BOOL;
+END_VAR
+VAR
+	_branch : UDINT;
+	_first : UDINT;
+	_long : UDINT;
+	_good : BOOL;
+END_VAR

@@ -1,0 +1,5 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	OwnerReady : BOOL;
+	ForeignCalled : BOOL;
+END_VAR

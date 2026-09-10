@@ -1,0 +1,5 @@
+TEST('F29_AssertEquals_LTIME');
+IF NOT IS_TEST_FINISHED('F29_AssertEquals_LTIME') THEN
+	AssertEquals_LTIME(Expected := _v29e, Actual := _v29a, Message := 'F29_AssertEquals_LTIME');
+	TEST_FINISHED();
+END_IF

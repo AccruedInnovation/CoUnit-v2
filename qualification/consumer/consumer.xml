@@ -1,0 +1,618 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="Process.Core+Process.Signal+Process.Alarm+Process.Conditions+Process.Control+Process.IO+Protocol.ModbusTCP+Device.Laumas.TLM8+Device.Odot+Device.Productivity+Device.SynergyLogic+Process.Path+Process.Transfer+Process.Equipment+Inspection.GrainProductionAdapters+Process.Logging+Process.Path.Legacy+Process.Persistence+Process.Path.Persistence+Process.Safety+Process.Sequence+Process.All.xml" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_MovingAverage" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="BufferSize">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="Value">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="Average">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_buffer">
+              <type>
+                <array>
+                  <dimension lower="0" upper="99" />
+                  <baseType>
+                    <LREAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="_writeIdx">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_count">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_sum">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+            <variable name="_i">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="Init">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_initDone">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">// Ring buffer simple moving average
+// Uses circular buffer with wrap-around write index — no array shifting
+// Average stays 0.0 until buffer has BufferSize samples collected
+
+Init := FALSE;
+
+// --- Init on first cycle ---
+IF NOT _initDone THEN
+	_writeIdx := 0;
+	_count := 0;
+	_sum := 0.0;
+	_initDone := TRUE;
+	Init := TRUE;
+END_IF
+
+// --- Ring buffer write ---
+// Subtract overwritten value from running sum if buffer is full
+IF _count &gt;= BufferSize THEN
+	_sum := _sum - _buffer[_writeIdx];
+ELSE
+	_count := _count + 1;
+END_IF
+
+// Write new value and add to running sum
+_buffer[_writeIdx] := Value;
+_sum := _sum + Value;
+
+// Wrap-around write index
+_writeIdx := (_writeIdx + 1) MOD BufferSize;
+
+// --- Average output ---
+// Wait until buffer has BufferSize samples before producing valid output
+IF _count &gt;= BufferSize THEN
+	Average := _sum / INT_TO_LREAL(_count);
+ELSE
+	Average := 0.0;
+END_IF
+
+(* revision history
+factory  .  may 2026    rev 1.0
+	original version
+
+*)
+</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="_Reset" ObjectId="19f18aab-14e6-5740-ba07-5f58625210f4" qualifiedName="FB_MovingAverage._Reset">
+              <interface>
+                <returnType>
+                  <BOOL />
+                </returnType>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">FOR _i := 0 TO 99 BY 1 DO
+	_buffer[_i] := 0.0;
+END_FOR
+
+_i := 0;
+_writeIdx := 0;
+_count := 0;
+_sum := 0.0;
+Average := 0.0;
+Init := FALSE;
+_initDone := FALSE;
+
+_Reset := TRUE;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD _Reset : BOOL
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_MovingAverage
+VAR_INPUT
+	BufferSize		: UINT; // Buffer size (2-100)
+	Value			: LREAL; // Current sample to push into buffer
+END_VAR
+VAR_OUTPUT
+	Average			: LREAL; // Computed moving average
+END_VAR
+VAR
+	_buffer			: ARRAY[0..99] OF LREAL; // Ring buffer
+	_writeIdx		: UINT; // Ring buffer write index
+	_count			: UINT; // Number of samples collected
+	_sum			: LREAL; // Running sum of buffer contents
+	_i				: UINT;
+	Init			: BOOL; // First cycle flag
+	_initDone		: BOOL;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>dc4de8bd-46ac-5ce7-95ea-c7c344042833</ObjectId>
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_MovingAverage_Test" pouType="functionBlock">
+        <interface>
+          <localVars>
+            <variable name="fbUnderTest">
+              <type>
+                <derived name="FB_MovingAverage" />
+              </type>
+            </variable>
+            <variable name="_idx">
+              <type>
+                <DINT />
+              </type>
+            </variable>
+          </localVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>CoUnit.FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">// Test method invocations
+_reset();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: StartupFill_ReturnsZero');
+StartupFill_ReturnsZero();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: ConstantInput_ProducesExpected');
+ConstantInput_ProducesExpected();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: SlidingWindow_CorrectAverage');
+SlidingWindow_CorrectAverage();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: WindowWrap_CorrectAfterOverwrite');
+WindowWrap_CorrectAfterOverwrite();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: ZeroInput_AfterFill_BringsAverageDown');
+ZeroInput_AfterFill_BringsAverageDown();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: InitFlag_TrueOnFirstCall_FalseOnSecondCall');
+InitFlag_TrueOnFirstCall_FalseOnSecondCall();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: NegativeValues_AveragedCorrectly');
+NegativeValues_AveragedCorrectly();
+PRG_TEST.TestLog(Message := 'FB_MovingAverage_Test: WarmReset_ResumesWithoutReconfig');
+WarmReset_ResumesWithoutReconfig();
+</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="_reset" ObjectId="ad49c6e5-24cb-5074-b003-95d418d02868" qualifiedName="FB_MovingAverage_Test._reset">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">// Reset FB_MovingAverage runtime state through its public API
+fbUnderTest._Reset();
+fbUnderTest.BufferSize := 5;
+fbUnderTest.Value := 0.0;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Reset filter state before each test *)
+METHOD _reset
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="ConstantInput_ProducesExpected" ObjectId="52979e8f-09bc-5384-9a50-d1115863eb31" qualifiedName="FB_MovingAverage_Test.ConstantInput_ProducesExpected">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('ConstantInput_ProducesExpected');
+
+_reset();
+fbUnderTest.BufferSize := 4;
+
+// Fill buffer with constant value 100.0
+FOR _idx := 1 TO 4 DO
+	fbUnderTest.Value := 100.0;
+	fbUnderTest();
+END_FOR
+
+// After fill, Average should be 100.0
+AssertEquals_LREAL(Expected := 100.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Constant input 100: Average = 100 after fill');
+
+// Push more of same value, average stays
+FOR _idx := 1 TO 6 DO
+	fbUnderTest.Value := 100.0;
+	fbUnderTest();
+END_FOR
+AssertEquals_LREAL(Expected := 100.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Constant input 100: Average = 100 after 10 more cycles');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Tests: constant input after fill produces same value as average *)
+METHOD ConstantInput_ProducesExpected
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="InitFlag_TrueOnFirstCall_FalseOnSecondCall" ObjectId="a9e7b8cb-5891-5a3c-930b-915119846fd4" qualifiedName="FB_MovingAverage_Test.InitFlag_TrueOnFirstCall_FalseOnSecondCall">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('InitFlag_TrueOnFirstCall_FalseOnSecondCall');
+
+_reset();
+
+(* Cycle 1: first call - Init should be TRUE *)
+fbUnderTest();
+AssertTrue(fbUnderTest.Init, 'Init should be TRUE on first cycle');
+
+(* Cycle 2: second call - Init should be FALSE *)
+fbUnderTest();
+AssertFalse(fbUnderTest.Init, 'Init should be FALSE on second cycle');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Test: Init flag is TRUE on first cycle, FALSE on second *)
+METHOD InitFlag_TrueOnFirstCall_FalseOnSecondCall
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="NegativeValues_AveragedCorrectly" ObjectId="69c000f5-993c-59af-90c1-9d3c92363401" qualifiedName="FB_MovingAverage_Test.NegativeValues_AveragedCorrectly">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('NegativeValues_AveragedCorrectly');
+
+_reset();
+
+(* Negative values in the window should be averaged correctly *)
+fbUnderTest.BufferSize := 3;
+fbUnderTest.Value := -10.0; fbUnderTest();
+fbUnderTest.Value := -20.0; fbUnderTest();
+fbUnderTest.Value := -30.0; fbUnderTest();
+AssertTrue(fbUnderTest.Average &lt; 0.0, 'Average of negative values should be negative');
+(* Verify precise computation: (-10 + -20 + -30) / 3 = -20.0 *)
+AssertEquals_LREAL(Expected := -20.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Average of -10,-20,-30 = -20.0');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Test: negative input handling *)
+METHOD NegativeValues_AveragedCorrectly
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="SlidingWindow_CorrectAverage" ObjectId="b2e952f4-4b48-5945-8627-a8859973c061" qualifiedName="FB_MovingAverage_Test.SlidingWindow_CorrectAverage">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('SlidingWindow_CorrectAverage');
+
+_reset();
+fbUnderTest.BufferSize := 4;
+
+// Fill buffer: 10, 20, 30, 40 -&gt; Average = (10+20+30+40)/4 = 25.0
+fbUnderTest.Value := 10.0; fbUnderTest();
+fbUnderTest.Value := 20.0; fbUnderTest();
+fbUnderTest.Value := 30.0; fbUnderTest();
+fbUnderTest.Value := 40.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 25.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Fill 10,20,30,40: Average = 25.0');
+
+// Push 50 -&gt; replaces 10 -&gt; Buffer: 50,20,30,40 -&gt; Average = (50+20+30+40)/4 = 35.0
+fbUnderTest.Value := 50.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 35.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Push 50 (replaces 10): Average = 35.0');
+
+// Push 60 -&gt; replaces 20 -&gt; Buffer: 50,60,30,40 -&gt; Average = (50+60+30+40)/4 = 45.0
+fbUnderTest.Value := 60.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 45.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Push 60 (replaces 20): Average = 45.0');
+
+// Push 70 -&gt; replaces 30 -&gt; Buffer: 50,60,70,40 -&gt; Average = (50+60+70+40)/4 = 55.0
+fbUnderTest.Value := 70.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 55.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Push 70 (replaces 30): Average = 55.0');
+
+// Push 80 -&gt; replaces 40 -&gt; Buffer: 50,60,70,80 -&gt; Average = (50+60+70+80)/4 = 65.0
+fbUnderTest.Value := 80.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 65.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Push 80 (replaces 40): Average = 65.0');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Tests: sliding window correctly computes average as new values replace old ones *)
+METHOD SlidingWindow_CorrectAverage
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="StartupFill_ReturnsZero" ObjectId="2199248d-1233-5e04-91ee-5040f25b03f3" qualifiedName="FB_MovingAverage_Test.StartupFill_ReturnsZero">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('StartupFill_ReturnsZero');
+
+_reset();
+fbUnderTest.BufferSize := 5;
+
+// Before buffer is full, Average should be 0.0
+fbUnderTest.Value := 10.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := '1st sample: Average = 0 (filling)');
+
+fbUnderTest.Value := 20.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := '2nd sample: Average = 0 (filling)');
+
+fbUnderTest.Value := 30.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := '3rd sample: Average = 0 (filling)');
+
+fbUnderTest.Value := 40.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := '4th sample: Average = 0 (filling, one more to go)');
+
+// 5th sample fills the buffer
+fbUnderTest.Value := 50.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 30.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := '5th sample: Average = (10+20+30+40+50)/5 = 30.0');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Tests: before buffer is full, Average returns 0 *)
+METHOD StartupFill_ReturnsZero
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="WarmReset_ResumesWithoutReconfig" ObjectId="697084ac-989c-50fd-a5bd-8ebdbfbae065" qualifiedName="FB_MovingAverage_Test.WarmReset_ResumesWithoutReconfig">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('WarmReset_ResumesWithoutReconfig');
+
+_reset();
+fbUnderTest.BufferSize := 3;
+fbUnderTest.Value := 10.0;
+fbUnderTest();
+fbUnderTest.Value := 20.0;
+fbUnderTest();
+fbUnderTest.Value := 30.0;
+fbUnderTest();
+AssertEquals_LREAL(Expected := 20.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Average before reset');
+
+fbUnderTest._Reset();
+fbUnderTest();
+
+AssertTrue(Condition := fbUnderTest.Init, Message := 'Reset reproduces first-cycle Init');
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Reset clears the prior moving window');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD WarmReset_ResumesWithoutReconfig
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="WindowWrap_CorrectAfterOverwrite" ObjectId="ab70555f-7c94-509e-8a43-5f1d2aabc78d" qualifiedName="FB_MovingAverage_Test.WindowWrap_CorrectAfterOverwrite">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('WindowWrap_CorrectAfterOverwrite');
+
+_reset();
+fbUnderTest.BufferSize := 3;
+
+// Fill: 10, 20, 30 -&gt; Average = 20.0
+fbUnderTest.Value := 10.0; fbUnderTest();
+fbUnderTest.Value := 20.0; fbUnderTest();
+fbUnderTest.Value := 30.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 20.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Fill 10,20,30: Average = 20.0');
+
+// Push many values: 40, 50, 60, 70, 80 each replacing oldest
+// After 40: (40+20+30)/3 = 30.0
+fbUnderTest.Value := 40.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 30.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Wrap: push 40 replaces 10 = 30.0');
+
+// After 50: (40+50+30)/3 = 40.0
+fbUnderTest.Value := 50.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 40.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Wrap: push 50 replaces 20 = 40.0');
+
+// After 60: (40+50+60)/3 = 50.0
+fbUnderTest.Value := 60.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 50.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Wrap: push 60 replaces 30 = 50.0');
+
+// After 70: (70+50+60)/3 = 60.0
+fbUnderTest.Value := 70.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 60.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Wrap: push 70 replaces 40 = 60.0');
+
+// After 80: (70+80+60)/3 = 70.0
+fbUnderTest.Value := 80.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 70.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Wrap: push 80 replaces 50 = 70.0');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Tests: ring buffer wrap-around maintains correct average after many samples *)
+METHOD WindowWrap_CorrectAfterOverwrite
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="ZeroInput_AfterFill_BringsAverageDown" ObjectId="c6b69e7b-f55e-593f-88d2-16e80c89fb1e" qualifiedName="FB_MovingAverage_Test.ZeroInput_AfterFill_BringsAverageDown">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('ZeroInput_AfterFill_BringsAverageDown');
+
+_reset();
+fbUnderTest.BufferSize := 4;
+
+// Fill with 100: Average = 100.0
+FOR _idx := 1 TO 4 DO
+	fbUnderTest.Value := 100.0;
+	fbUnderTest();
+END_FOR
+AssertEquals_LREAL(Expected := 100.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Fill: Average = 100.0');
+
+// Push zero, replaces 100 (oldest) -&gt; (0+100+100+100)/4 = 75.0
+fbUnderTest.Value := 0.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 75.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Zero replaces first 100: Average = 75.0');
+
+// Push another zero -&gt; (0+0+100+100)/4 = 50.0
+fbUnderTest.Value := 0.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 50.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Zero replaces second 100: Average = 50.0');
+
+// Push another zero -&gt; (0+0+0+100)/4 = 25.0
+fbUnderTest.Value := 0.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 25.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'Zero replaces third 100: Average = 25.0');
+
+// Push another zero -&gt; (0+0+0+0)/4 = 0.0
+fbUnderTest.Value := 0.0; fbUnderTest();
+AssertEquals_LREAL(Expected := 0.0, Actual := fbUnderTest.Average, Delta := 0.0001, Message := 'All zeros: Average = 0.0');
+
+TEST_FINISHED();
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Tests: zero input after fill progressively reduces the average *)
+METHOD ZeroInput_AfterFill_BringsAverageDown
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">(*
+	Test suite for FB_MovingAverage.
+	Covers: startup fill returns zero until buffer is full; constant input produces
+	expected average after fill; sliding window reflects new samples and drops old ones;
+	ring buffer wrap-around preserves correct average; zero input after fill brings
+	average down.
+	Uses typed LREAL assertions with Delta.
+*)
+FUNCTION_BLOCK FB_MovingAverage_Test EXTENDS CoUnit.FB_TestSuite
+VAR
+	fbUnderTest : FB_MovingAverage;
+	_idx		: DINT;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>69456d55-dec1-5ba5-b209-0be7dc56f8f5</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="POUs">
+          <Folder Name="Signal">
+            <Object Name="FB_MovingAverage" ObjectId="dc4de8bd-46ac-5ce7-95ea-c7c344042833">
+              <Object Name="_Reset" ObjectId="19f18aab-14e6-5740-ba07-5f58625210f4" />
+            </Object>
+          </Folder>
+        </Folder>
+        <Folder Name="Tests">
+          <Folder Name="Signal">
+            <Object Name="FB_MovingAverage_Test" ObjectId="69456d55-dec1-5ba5-b209-0be7dc56f8f5">
+              <Object Name="_reset" ObjectId="ad49c6e5-24cb-5074-b003-95d418d02868" />
+              <Object Name="ConstantInput_ProducesExpected" ObjectId="52979e8f-09bc-5384-9a50-d1115863eb31" />
+              <Object Name="InitFlag_TrueOnFirstCall_FalseOnSecondCall" ObjectId="a9e7b8cb-5891-5a3c-930b-915119846fd4" />
+              <Object Name="NegativeValues_AveragedCorrectly" ObjectId="69c000f5-993c-59af-90c1-9d3c92363401" />
+              <Object Name="SlidingWindow_CorrectAverage" ObjectId="b2e952f4-4b48-5945-8627-a8859973c061" />
+              <Object Name="StartupFill_ReturnsZero" ObjectId="2199248d-1233-5e04-91ee-5040f25b03f3" />
+              <Object Name="WarmReset_ResumesWithoutReconfig" ObjectId="697084ac-989c-50fd-a5bd-8ebdbfbae065" />
+              <Object Name="WindowWrap_CorrectAfterOverwrite" ObjectId="ab70555f-7c94-509e-8a43-5f1d2aabc78d" />
+              <Object Name="ZeroInput_AfterFill_BringsAverageDown" ObjectId="c6b69e7b-f55e-593f-88d2-16e80c89fb1e" />
+            </Object>
+          </Folder>
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

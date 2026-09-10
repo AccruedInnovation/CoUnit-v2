@@ -1,0 +1,16 @@
+(*
+    Publishes test results into an xUnit compatible Xml file
+*)
+FUNCTION_BLOCK FB_xUnitXmlPublisher IMPLEMENTS I_TestResultLogger
+VAR
+    // Dependancy Injection via FB_Init
+    TestResults : I_TestResults;
+    // File access mode
+    AccessMode : SysFile.ACCESS_MODE := SysFile.AM_WRITE_PLUS;
+    File : FB_FileControl;
+    Xml : FB_XMLControl;
+    BufferInitialised : BOOL := FALSE;
+    Buffer : ARRAY[0..(GVL_Param_coUnit.XUnitBufferSize - 1)] OF BYTE;
+    WritingTestSuiteResultNumber : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+    PublishTrigger : R_TRIG;
+END_VAR

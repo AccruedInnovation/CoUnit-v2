@@ -1,0 +1,8 @@
+FUNCTION F_GetTestSuiteNameFromTestInstancePath : T_MaxString
+VAR_INPUT
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR
+    TestSuiteName : T_MaxString;
+    FindPosition : INT;
+END_VAR

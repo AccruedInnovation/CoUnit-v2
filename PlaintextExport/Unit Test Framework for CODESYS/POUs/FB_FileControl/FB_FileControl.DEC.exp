@@ -1,0 +1,6 @@
+{attribute 'hide_all_locals'}
+FUNCTION_BLOCK FB_FileControl
+VAR
+    FileAccessMode : SysFile.ACCESS_MODE := SysFile.AM_WRITE_PLUS;
+    FileHandle : SysFile.SysTypes.RTS_IEC_HANDLE;
+END_VAR

@@ -1,0 +1,5 @@
+(*
+    Jump to the beginning of the XML data
+    XML.ToStartBuffer();
+*)
+METHOD PUBLIC ToStartBuffer

@@ -1,0 +1,10 @@
+(*
+    Creates a new Tag:
+    XML: <MyTag>
+
+    XML.NewTag(Name: = 'MyTag');
+*)
+METHOD PUBLIC NewTag
+VAR_INPUT
+    Name : T_MaxString;
+END_VAR

@@ -1,0 +1,48 @@
+(*
+ Asserts that two ULINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – ULINT expected value
+     | Actual – ULINT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ULINT := 45683838383;
+         b : ULINT := 45683838383;
+     END_VAR
+
+     TEST('Test_ULINT_Equals');
+     AssertEquals_ULINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ULINT := 10000;
+         b : ULINT := 53685437234;
+     END_VAR
+
+     TEST('Test_ULINT_Differ');
+     AssertEquals_ULINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_ULINT
+VAR_INPUT
+    Expected : ULINT; // ULINT expected value
+    Actual : ULINT; // ULINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

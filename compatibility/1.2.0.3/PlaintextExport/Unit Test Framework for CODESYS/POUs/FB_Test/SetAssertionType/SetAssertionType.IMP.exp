@@ -1,0 +1,3 @@
+IF AssertionType = E_AssertionType.Type_UNDEFINED THEN
+    AssertionType := AssertType;
+END_IF

@@ -1,0 +1,1 @@
+Write_Device_Log(MsgCtrlMask := CmpLog.LogClass.LOG_ERROR, MsgFmtStr := '%s', StrArg := Reason);

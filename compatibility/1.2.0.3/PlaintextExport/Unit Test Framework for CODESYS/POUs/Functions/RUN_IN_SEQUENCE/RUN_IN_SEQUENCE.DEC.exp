@@ -1,0 +1,7 @@
+(*
+    This function runs all test suites that have been initialized.
+    The test suites are run in sequence (one after the other).
+*)
+FUNCTION RUN_IN_SEQUENCE
+VAR_INPUT
+END_VAR

@@ -1,0 +1,7 @@
+CoUnitTryGetTask := FALSE;
+Handle := SysFile.SysTypes.RTS_INVALID_HANDLE;
+IF GVL_coUnit.InjectTaskLookupFailure THEN RETURN; END_IF
+Handle := CmpIecTask.IECTaskGetCurrent(pResult := ADR(_result));
+IF _result <> 0 THEN RETURN; END_IF
+IF Handle = SysFile.SysTypes.RTS_INVALID_HANDLE THEN RETURN; END_IF
+CoUnitTryGetTask := TRUE;

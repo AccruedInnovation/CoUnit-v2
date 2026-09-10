@@ -1,0 +1,15 @@
+FOR IteratorCounter := 1 TO GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite BY 1 DO
+    IF AssertResultInstances[IteratorCounter].DetectionCount = 0 AND AssertResultInstances[IteratorCounter].DetectionCountThisCycle = 0
+        THEN // Find first free spot
+        AssertResultInstances[IteratorCounter].AssertResult.Expected :=
+            F_AnyToUnionValue(AnySize := ExpectedSize, AnyTypeClass := ExpectedTypeClass, AnyValue := ExpectedValue);
+
+        AssertResultInstances[IteratorCounter].AssertResult.Actual :=
+            F_AnyToUnionValue(AnySize := ActualSize, AnyTypeClass := ActualTypeClass, AnyValue := ActualValue);
+
+        AssertResultInstances[IteratorCounter].AssertResult.Message := Message;
+        AssertResultInstances[IteratorCounter].AssertResult.TestInstancePath := TestInstancePath;
+        AssertResultInstances[IteratorCounter].DetectionCountThisCycle := 1;
+        EXIT;
+    END_IF
+END_FOR

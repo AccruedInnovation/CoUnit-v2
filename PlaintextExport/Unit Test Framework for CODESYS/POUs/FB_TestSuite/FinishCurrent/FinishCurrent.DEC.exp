@@ -1,0 +1,5 @@
+METHOD INTERNAL FinishCurrent : BOOL
+VAR
+	_index : UINT;
+	_execute : BOOL;
+END_VAR

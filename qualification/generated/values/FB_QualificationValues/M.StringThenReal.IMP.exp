@@ -1,0 +1,10 @@
+TEST('StringThenReal');
+IF NOT IS_TEST_FINISHED('StringThenReal') THEN
+	_regressionScan := _regressionScan + 1;
+	IF _regressionScan = 1 THEN
+		AssertEquals_STRING(Expected := 'text-first', Actual := 'different', Message := 'first-string');
+	ELSE
+		AssertEquals_REAL(Expected := 1.0, Actual := 2.0, Delta := 0.0, Message := 'later-real');
+		TEST_FINISHED();
+	END_IF
+END_IF

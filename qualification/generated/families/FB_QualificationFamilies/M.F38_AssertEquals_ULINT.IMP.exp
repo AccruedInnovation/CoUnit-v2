@@ -1,0 +1,5 @@
+TEST('F38_AssertEquals_ULINT');
+IF NOT IS_TEST_FINISHED('F38_AssertEquals_ULINT') THEN
+	AssertEquals_ULINT(Expected := _v38e, Actual := _v38a, Message := 'F38_AssertEquals_ULINT');
+	TEST_FINISHED();
+END_IF

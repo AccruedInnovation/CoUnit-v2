@@ -1,0 +1,21 @@
+{attribute 'hide'}
+(*
+    This function converts a decimal number into a hexadecimal STRING (base 16).
+    
+    If the actual number of significant digits is less than the iPrecision parameter, the resulting STRING is filled with zeros FROM the left. 
+    If the number of significant digits is greater than the iPrecision parameter, the resulting string is not cut off! 
+    If the iPrecision parameter and the in parameter are zero, the resulting string is empty.
+*)
+FUNCTION WORD_TO_HEXSTR : T_MaxString
+VAR_INPUT
+	in : WORD; // The decimal number requiring conversion.
+	
+	iPrecision : INT; // Minimum number of displayed digits (digits). 
+					   
+	bLoCase : BOOL; // This parameter determines whether lower or upper case letters are used in the conversion. 
+					// FALSE => "ABCDEF", TRUE => "abcdef".
+END_VAR
+
+VAR
+	m_Format : STRING(6);
+END_VAR

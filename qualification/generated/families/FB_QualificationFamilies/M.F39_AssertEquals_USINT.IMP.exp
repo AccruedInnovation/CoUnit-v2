@@ -1,0 +1,5 @@
+TEST('F39_AssertEquals_USINT');
+IF NOT IS_TEST_FINISHED('F39_AssertEquals_USINT') THEN
+	AssertEquals_USINT(Expected := _v39e, Actual := _v39a, Message := 'F39_AssertEquals_USINT');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,7 @@
+TEST('AssertionLimit');
+IF NOT IS_TEST_FINISHED('AssertionLimit') THEN
+	FOR _index := 1 TO 2048 DO
+		AssertTrue(Condition := TRUE, Message := 'bounded-call');
+	END_FOR
+	TEST_FINISHED();
+END_IF

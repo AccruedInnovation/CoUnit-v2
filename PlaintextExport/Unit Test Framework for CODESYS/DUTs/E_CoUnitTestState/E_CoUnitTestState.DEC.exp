@@ -1,0 +1,4 @@
+{attribute 'strict'}
+{attribute 'qualified_only'}
+TYPE E_CoUnitTestState : (OPEN, PASSED, FAILED, SKIPPED, ABORTED, ERROR);
+END_TYPE

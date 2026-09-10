@@ -1,0 +1,4 @@
+METHOD INTERNAL AbortRunningTestSuiteTests
+VAR
+	_i : UDINT;
+END_VAR

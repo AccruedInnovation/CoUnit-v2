@@ -1,0 +1,8 @@
+(* This function declares a new test (if it has not been already declared in an earlier cycle) *)
+FUNCTION TEST
+VAR_INPUT
+    TestName : T_MaxString;
+END_VAR
+VAR
+    CounterTestSuiteAddress : UINT;
+END_VAR

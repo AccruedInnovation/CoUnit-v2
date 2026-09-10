@@ -1,0 +1,53 @@
+IF NOT FirstCycleExecuted THEN
+    GetCurrentTaskIndex();
+    CycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;
+    FirstCycleExecuted := TRUE;
+END_IF
+
+GetCurrentTaskIndex();
+CurrentCycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;
+
+(* Is current cycle the same as the last call to this method?
+   If not, reset the detection count *)
+IF CurrentCycleCount <> CycleCount THEN
+    CopyDetectionCountAndResetDetectionCountInThisCycle();
+END_IF
+
+(* If not found anything, create the first *)
+IF NOT FoundOne THEN
+    (* No existing match found, create a new entry *)
+    AddAssertResult(ExpectedSize := ExpectedSize,
+        ExpectedTypeClass := ExpectedTypeClass,
+        ExpectedValue := ExpectedValue,
+        ActualSize := ActualSize,
+        ActualTypeClass := ActualTypeClass,
+        ActualValue := ActualValue,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+
+    CreateAssertResultInstance(ExpectedSize := ExpectedSize,
+        ExpectedTypeClass := ExpectedTypeClass,
+        ExpectedValue := ExpectedValue,
+        ActualSize := ActualSize,
+        ActualTypeClass := ActualTypeClass,
+        ActualValue := ActualValue,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+    (* An additional instance of this assert needs to be created *)
+ELSIF AdditionalIdenticalAssert THEN
+    AddAssertResult(ExpectedSize := ExpectedSize,
+        ExpectedTypeClass := ExpectedTypeClass,
+        ExpectedValue := ExpectedValue,
+        ActualSize := ActualSize,
+        ActualTypeClass := ActualTypeClass,
+        ActualValue := ActualValue,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+    (* In all other cases, this assert has already been reported, we don't need to do anything *)
+ELSE
+    AlreadyReported := TRUE;
+END_IF
+
+(* Update the cycle count *)
+GetCurrentTaskIndex();
+CurrentCycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;

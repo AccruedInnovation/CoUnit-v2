@@ -1,0 +1,13 @@
+METHOD CutOff : STRING
+VAR_INPUT
+    StartPos : UDINT;
+END_VAR
+VAR_OUTPUT
+    CutLen : UDINT;
+    XmlError : E_XmlError;
+END_VAR
+VAR
+    Loop : UDINT;
+    PointerToByteToCut : POINTER TO BYTE;
+    PointerToByteBuffer : POINTER TO BYTE;
+END_VAR

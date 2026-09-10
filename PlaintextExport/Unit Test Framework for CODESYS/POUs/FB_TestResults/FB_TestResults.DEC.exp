@@ -1,0 +1,7 @@
+(* Owns the final snapshot and source-compatible result projection. *)
+FUNCTION_BLOCK FB_TestResults IMPLEMENTS I_TestResults
+VAR
+	TestSuiteResults : ST_TestSuiteResults;
+	_snapshot : ST_CoUnitRunSnapshot;
+	_buildAttempted : BOOL;
+END_VAR

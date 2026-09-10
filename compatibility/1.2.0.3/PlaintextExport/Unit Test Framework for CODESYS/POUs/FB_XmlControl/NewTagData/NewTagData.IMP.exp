@@ -1,0 +1,3 @@
+XmlBuffer.Append := TAG_CLOSE;
+XmlBuffer.Append := Data;
+TagOpen := FALSE;

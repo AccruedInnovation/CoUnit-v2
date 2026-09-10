@@ -1,0 +1,4 @@
+METHOD PRIVATE BeforeOperation : BOOL
+VAR_INPUT
+	Operation : E_CoUnitFileOperation;
+END_VAR

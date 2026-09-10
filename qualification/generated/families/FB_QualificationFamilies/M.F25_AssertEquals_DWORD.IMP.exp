@@ -1,0 +1,5 @@
+TEST('F25_AssertEquals_DWORD');
+IF NOT IS_TEST_FINISHED('F25_AssertEquals_DWORD') THEN
+	AssertEquals_DWORD(Expected := _v25e, Actual := _v25a, Message := 'F25_AssertEquals_DWORD');
+	TEST_FINISHED();
+END_IF

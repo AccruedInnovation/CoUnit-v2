@@ -1,0 +1,152 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+RUN();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT Done THEN
+	OraclePass := TRUE;
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (_snapshot.SuiteCount = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = UDINT#5) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (_snapshot.Passed = UDINT#2) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = UDINT#3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (_snapshot.Skipped = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (_snapshot.Errors = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Total = UINT#5) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].Name = 'BranchPassThenFail') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.Message = 'B') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].Name = 'FirstFailureCoherent') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 16; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 17; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 18; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 19; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 20; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.Message = 'first-A') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 21; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].Name = 'TenThousandInvocations') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 22; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 23; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 24; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 25; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 26; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].FirstFailure.Message = 'last-invocation') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 27; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].Name = 'ZeroAssertions') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 28; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].State = E_CoUnitTestState.PASSED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 29; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].NumberOfAsserts = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 30; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].Name = 'ThreeAssertions') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 31; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].State = E_CoUnitTestState.PASSED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 32; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].NumberOfAsserts = UINT#3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 33; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.ExpectedText = 'TRUE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 34; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.ActualText = 'FALSE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 35; END_IF
+	END_IF
+	IF NOT (_suite1.LaterFailureExecuted) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 36; END_IF
+	END_IF
+	Done := TRUE;
+END_IF
+

@@ -1,0 +1,6 @@
+(* Sets the currently running test as finished *)
+FUNCTION TEST_FINISHED : BOOL
+VAR
+    TestName : T_MaxString;
+    Counter : UINT := 0;
+END_VAR

@@ -1,0 +1,8 @@
+NamedB();
+NamedA();
+Whitespace();
+DisabledCase();
+Duplicate();
+ConflictingShape();
+_found := GetCanonicalRecord(Index := 6, Record => _shape);
+ShapePreserved := _found AND NOT _shape.IsOrdered AND (_shape.OrderNumber = 0) AND (_shape.CanonicalName = 'Shape') AND (_shape.State = E_CoUnitTestState.PASSED);

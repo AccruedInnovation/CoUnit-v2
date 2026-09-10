@@ -1,0 +1,9 @@
+(*
+    This functionblock acts as a stream buffer for use with FB_XmlControl
+*)
+FUNCTION_BLOCK FB_StreamBuffer
+VAR
+    _PointerToStringBuffer : POINTER TO BYTE;
+    _BufferSize : UDINT;
+    _Length : UDINT;
+END_VAR

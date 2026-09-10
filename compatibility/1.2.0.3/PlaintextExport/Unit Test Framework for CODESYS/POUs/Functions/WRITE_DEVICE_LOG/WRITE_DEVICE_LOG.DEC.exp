@@ -1,0 +1,24 @@
+(* 
+    WRITE_DEVICE_LOG().
+    Adds a message to the log, if the message is longer then 127 characters
+    ithe entry splits into two log messages (max 255 chars = 2 log entries)
+
+    Usage example:
+    WRITE_DEVICE_LOG( msgCtrlMask := UDINT_TO_DWORD( CmpLog.LogClass.LOG_INFO ), 
+		             msgFmtStr := 'Ammount of tests : %s',
+			         strArg := uiTestAmmount );
+	
+    results into the following logstring
+        Ammount of tests : 3 
+*)
+FUNCTION WRITE_DEVICE_LOG : DINT
+VAR_INPUT
+    msgCtrlMask : DWORD; // use UDINT_TO_DWORD( CmpLog.LogClass.LOG_.... )
+    msgFmtStr : T_MaxString; // Usage example: ' Ammount of tests : %s'
+    strArg : T_MaxString; // Usage example: uiTestAmmount
+END_VAR
+VAR
+    uiMaxSize : USINT := 127;
+    sText : T_MaxString;
+    iCharPos : INT;
+END_VAR

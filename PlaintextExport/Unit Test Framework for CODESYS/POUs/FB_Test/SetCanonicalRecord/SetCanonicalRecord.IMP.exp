@@ -1,0 +1,9 @@
+TestName := Record.CanonicalName;
+TestIsFinished := Record.State <> E_CoUnitTestState.OPEN;
+TestIsSkipped := Record.State = E_CoUnitTestState.SKIPPED;
+TestIsFailed := Record.HasFailure;
+TestOrderNumber := Record.OrderNumber;
+NumberOfAssertions := 0;
+IF Record.MaxAssertionsPerInvocation <= UINT#65535 THEN NumberOfAssertions := UDINT_TO_UINT(Record.MaxAssertionsPerInvocation); END_IF
+AssertionMessage := Record.FirstFailure.Message;
+AssertionType := Record.FirstFailure.AssertionType;

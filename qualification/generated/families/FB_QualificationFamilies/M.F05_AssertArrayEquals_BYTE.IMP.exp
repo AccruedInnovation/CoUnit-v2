@@ -1,0 +1,7 @@
+TEST('F05_AssertArrayEquals_BYTE');
+IF NOT IS_TEST_FINISHED('F05_AssertArrayEquals_BYTE') THEN
+	_v5e[1] := 1;
+	_v5a[1] := 2;
+	AssertArrayEquals_BYTE(Expecteds := _v5e, Actuals := _v5a, Message := 'F05_AssertArrayEquals_BYTE');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,28 @@
+IF _printed THEN LogTestSuiteResults := NOT _loggingFailed; RETURN; END_IF
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF NOT _snapshot.IsValid THEN RETURN; END_IF
+IF GVL_Param_coUnit.LogExtendedResults THEN
+	FOR _s := 1 TO _snapshot.SuiteCount DO
+		LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Suite: %s', _snapshot.Suites[_s].Name);
+		FOR _t := 1 TO _snapshot.Suites[_s].Total DO
+			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Test: %s', _snapshot.Suites[_s].Tests[_t].Name);
+			CASE _snapshot.Suites[_s].Tests[_t].State OF
+				E_CoUnitTestState.PASSED: _text := 'PASSED';
+				E_CoUnitTestState.FAILED: _text := 'FAILED';
+				E_CoUnitTestState.SKIPPED: _text := 'SKIPPED';
+				E_CoUnitTestState.ABORTED: _text := 'ABORTED';
+				E_CoUnitTestState.ERROR: _text := 'ERROR';
+			END_CASE
+			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| State: %s', _text);
+			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Assertions: %s', UINT_TO_STRING(_snapshot.Suites[_s].Tests[_t].NumberOfAsserts));
+		END_FOR
+	END_FOR
+END_IF
+_text := CONCAT('Total=', UDINT_TO_STRING(_snapshot.Total));
+_text := CONCAT(_text, CONCAT(' Passed=', UDINT_TO_STRING(_snapshot.Passed)));
+_text := CONCAT(_text, CONCAT(' Failed=', UDINT_TO_STRING(_snapshot.Failed)));
+_text := CONCAT(_text, CONCAT(' Skipped=', UDINT_TO_STRING(_snapshot.Skipped)));
+_text := CONCAT(_text, CONCAT(' Errors=', UDINT_TO_STRING(_snapshot.Errors)));
+LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '%s', _text);
+_printed := TRUE;
+LogTestSuiteResults := NOT _loggingFailed;

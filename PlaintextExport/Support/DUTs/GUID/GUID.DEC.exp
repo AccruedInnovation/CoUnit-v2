@@ -1,0 +1,16 @@
+{attribute 'signature_flag' := '33554432'}
+{attribute 'checksuperglobal'}
+{attribute 'show'}
+{attribute 'no-analysis'}
+TYPE GUID : 
+	STRUCT
+		 {attribute 'hide'}
+		Data1 : DWORD;
+		 {attribute 'hide'}
+		Data2 : WORD;
+		 {attribute 'hide'}
+		Data3 : WORD;
+		 {attribute 'hide'}
+		Data4 : ARRAY [0..7] OF BYTE;
+	END_STRUCT
+END_TYPE

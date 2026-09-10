@@ -1,0 +1,7 @@
+TEST('F04_AssertArrayEquals_BOOL');
+IF NOT IS_TEST_FINISHED('F04_AssertArrayEquals_BOOL') THEN
+	_v4e[1] := TRUE;
+	_v4a[1] := FALSE;
+	AssertArrayEquals_BOOL(Expecteds := _v4e, Actuals := _v4a, Message := 'F04_AssertArrayEquals_BOOL');
+	TEST_FINISHED();
+END_IF

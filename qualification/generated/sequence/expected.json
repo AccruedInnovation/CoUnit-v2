@@ -1,0 +1,50 @@
+{
+  "shard": "sequence",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "Sequence0",
+        "state": "PASSED",
+        "assertions": 0
+      }
+    ],
+    [
+      {
+        "name": "Sequence1",
+        "state": "PASSED",
+        "assertions": 0
+      }
+    ],
+    [
+      {
+        "name": "Sequence2",
+        "state": "PASSED",
+        "assertions": 0
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#3",
+    "_snapshot.Total = UDINT#3",
+    "_snapshot.Passed = UDINT#3",
+    "_snapshot.Failed = UDINT#0",
+    "_snapshot.Skipped = UDINT#0",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#1",
+    "_snapshot.Suites[1].Tests[1].Name = 'Sequence0'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[2].Total = UINT#1",
+    "_snapshot.Suites[2].Tests[1].Name = 'Sequence1'",
+    "_snapshot.Suites[2].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[2].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[3].Total = UINT#1",
+    "_snapshot.Suites[3].Tests[1].Name = 'Sequence2'",
+    "_snapshot.Suites[3].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[3].Tests[1].NumberOfAsserts = UINT#0"
+  ]
+}

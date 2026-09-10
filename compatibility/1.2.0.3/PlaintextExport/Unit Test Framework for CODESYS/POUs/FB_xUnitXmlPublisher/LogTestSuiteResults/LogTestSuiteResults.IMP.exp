@@ -1,0 +1,82 @@
+UnitTestResults REF= TestResults.GetTestSuiteResults();
+// Only publish once if "GVL_Param_TcUnit.xUnitEnablePublish" is enabled and all test results are stored.
+PublishTrigger(CLK := (TestResults.GetAreTestResultsAvailable() AND GVL_Param_coUnit.xUnitEnablePublish));
+
+IF PublishTrigger.Q THEN
+    (* <?xml version="1.0" encoding="UTF-8"?> *)
+    Xml.WriteDocumentHeader(Header := '<?xml version="1.0" encoding="UTF-8"?>');
+    (* <testsuites> *)
+    Xml.NewTag('testsuites');
+    Xml.NewParameter('disabled', '');
+    Xml.NewParameter('failures', UINT_TO_STRING(UnitTestResults.NumberOfFailedTestCases));
+    Xml.NewParameter('tests', UINT_TO_STRING(UnitTestResults.NumberOfSuccessfulTestCases));
+
+    FOR CurrentSuiteNumber := 1 TO UnitTestResults.NumberOfTestSuites BY 1 DO
+        (* <testsuite> *)
+        Xml.NewTag('testsuite');
+        Xml.NewParameter('id', UINT_TO_STRING(UnitTestResults.TestSuiteResults[CurrentSuiteNumber].Identity));
+        Xml.NewParameter('name', UnitTestResults.TestSuiteResults[CurrentSuiteNumber].name);
+        Xml.NewParameter('tests', UINT_TO_STRING(UnitTestResults.TestSuiteResults[CurrentSuiteNumber].NumberOfTests));
+        Xml.NewParameter('failures', UINT_TO_STRING(UnitTestResults.TestSuiteResults[CurrentSuiteNumber].NumberOfFailedTests));
+
+        FOR CurrentTestCount := 1 TO UnitTestResults.TestSuiteResults[CurrentSuiteNumber].NumberOfTests BY 1 DO
+            (* <testcase> *)
+            Xml.NewTag('testcase');
+            Xml.NewParameter('name', UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].TestName);
+            Xml.NewParameter('classname', UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].TestClassName);
+
+            IF UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].TestIsFailed THEN
+                Xml.NewParameter('status', TEST_STATUS_FAIL);
+            ELSIF UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].TestIsSkipped THEN
+                Xml.NewParameter('status', TEST_STATUS_SKIP);
+            ELSE
+                Xml.NewParameter('status', TEST_STATUS_PASS);
+            END_IF
+
+            (* Determine testcase fail or success *)
+            IF UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].FailureType <> E_AssertionType.Type_UNDEFINED
+                THEN
+                (* In case of fail 
+                    <failure message="Values differ" type="BYTE" />
+                *)
+                Xml.NewTag('failure');
+                Xml.NewParameter('message', UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].FailureMessage);
+                Xml.NewParameter('type',
+                    F_AssertionTypeToString(UnitTestResults.TestSuiteResults[CurrentSuiteNumber].TestCaseResults[CurrentTestCount].FailureType));
+
+                (* Close failure tag *)
+                Xml.CloseTag();
+            ELSE
+                (* In case of success *)
+                Xml.NewTagData('');
+            END_IF
+
+            (* Close testcase tag*)
+            Xml.CloseTag();
+        END_FOR
+
+        (* Close testsuite tag *)
+        Xml.CloseTag();
+    END_FOR
+
+    (* Close testsuites *)
+    Xml.CloseTag();
+    (* Delete, open, save and close the file *)
+    DeleteOpenWriteClose();
+    (* Clear the internal buffer *)
+    Xml.ClearBuffer();
+    (* Inform user *)
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        msgFmtStr := '%s',
+        strArg := '| ==========TEST RESULTS EXPORTED===========');
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        msgFmtStr := '| Location: %s ',
+        strArg := GVL_coUnit.xUnitFilePath);
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '%s',
+        StrArg := '| ======================================');
+	
+	LogTestSuiteResults := TRUE;
+END_IF

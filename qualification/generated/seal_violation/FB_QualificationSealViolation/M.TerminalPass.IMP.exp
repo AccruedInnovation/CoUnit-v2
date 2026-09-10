@@ -1,0 +1,4 @@
+TEST('TerminalPass');
+IF NOT IS_TEST_FINISHED('TerminalPass') THEN
+	TEST_FINISHED();
+END_IF

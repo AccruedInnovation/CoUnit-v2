@@ -1,0 +1,36 @@
+{
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "scope": "Forced UTF8 decoder branch after native RUN bind; does not qualify a native UTF8 compiler/runtime row",
+  "suites": [
+    [
+      {
+        "name": "Utf8Diagnostic",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_REAL",
+        "message_contains": "A"
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#1",
+    "_snapshot.Passed = UDINT#0",
+    "_snapshot.Failed = UDINT#1",
+    "_snapshot.Skipped = UDINT#0",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#1",
+    "_snapshot.Suites[1].Tests[1].Name = 'Utf8Diagnostic'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[1].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[1].FirstFailure.AssertionType = E_AssertionType.Type_REAL",
+    "FIND(_snapshot.Suites[1].Tests[1].FirstFailure.Message, 'A') > 0"
+  ],
+  "diagnostic_byte_count": 255,
+  "diagnostic_hex": "496e76616c696420617373657274696f6e20617267756d656e743a2041c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a9c3a92e2e2e3c7472756e63617465643e",
+  "diagnostic_text": "Invalid assertion argument: Aéééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé...<truncated>"
+}

@@ -1,0 +1,9 @@
+IF NumberOfTests > 0 THEN
+    FOR IteratorCounter := 1 TO NumberOfTests BY 1 DO
+        IF Tests[IteratorCounter].GetName() = GVL_coUnit.CurrentTestNameBeingCalled THEN
+            Tests[IteratorCounter].SetFailed();
+            Tests[IteratorCounter].SetAssertionType(AssertType := AssertionType);
+            Tests[IteratorCounter].SetAssertionMessage(AssertMessage := AssertionMessage);
+        END_IF
+    END_FOR
+END_IF

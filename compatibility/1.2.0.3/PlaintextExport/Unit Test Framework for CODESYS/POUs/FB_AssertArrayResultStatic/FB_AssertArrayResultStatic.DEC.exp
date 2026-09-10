@@ -1,0 +1,27 @@
+(*
+    This function block is responsible for keeping track of which array-asserts that have been made.
+    The reason we need to keep track of these is because if the user does the same assert twice
+    (because of running a test suite over several PLC-cycles) we want to know it so we don't print several times
+    (if the assert fails). An instance of an array-assert is keyed/identified with the following parameters as key:
+    - Array-size (in bytes) of the expecteds
+    - Datatype of the expecteds
+    - Array-size (in bytes) of the actuals
+    - Datatype of the actuals
+    - Message (string)
+    - Test instance path (string)
+*)
+FUNCTION_BLOCK FB_AssertArrayResultStatic
+VAR
+    (* The total number of instances of each of the "AssertArrayResults" *)
+    AssertArrayResults : ARRAY[1..GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite] OF ST_AssertArrayResult;
+    (* The total number of unique asserts *)
+    TotalArrayAsserts : UINT := 0;
+    (* Function block to get the current task cycle *)
+    GetCurrentTaskIndex : GetCurTaskInfo;
+    (* The total number of instances of each of the "AssertArrayResults" *)
+    AssertArrayResultInstances : ARRAY[1..GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite] OF ST_AssertArrayResultInstances;
+    (* The last PLC cycle count *)
+    CycleCount : UDINT;
+    (* Only run first cycle *)
+    FirstCycleExecuted : BOOL;
+END_VAR

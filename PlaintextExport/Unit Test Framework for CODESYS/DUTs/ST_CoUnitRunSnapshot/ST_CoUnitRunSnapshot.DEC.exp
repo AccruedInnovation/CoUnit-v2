@@ -1,0 +1,13 @@
+TYPE ST_CoUnitRunSnapshot :
+STRUCT
+	IsValid : BOOL;
+	Disposition : E_CoUnitRunDisposition;
+	SuiteCount : UINT;
+	Total : UDINT;
+	Passed : UDINT;
+	Failed : UDINT;
+	Skipped : UDINT;
+	Errors : UDINT;
+	Suites : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestSuites] OF ST_CoUnitSnapshotSuite;
+END_STRUCT
+END_TYPE

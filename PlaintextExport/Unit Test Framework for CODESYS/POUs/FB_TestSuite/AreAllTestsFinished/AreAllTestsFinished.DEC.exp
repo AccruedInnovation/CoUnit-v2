@@ -1,0 +1,4 @@
+METHOD PUBLIC AreAllTestsFinished : BOOL
+VAR
+	_i : UDINT;
+END_VAR

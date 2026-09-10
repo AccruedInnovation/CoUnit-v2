@@ -1,0 +1,12 @@
+(* 
+   Marks the test as finished in this testsuite.
+   Returns TRUE if test was found, and FALSE if a test with this name was not found in this testsuite
+*)
+METHOD INTERNAL SetTestFinished : BOOL
+VAR_INPUT
+    TestName : T_MaxString;
+END_VAR
+VAR
+    IteratorCounter : UINT;
+    NumberOfTestsToAnalyse : UINT(0..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+END_VAR

@@ -1,0 +1,4 @@
+METHOD INTERNAL Diagnostic
+VAR_INPUT
+	Reason : T_MaxString;
+END_VAR

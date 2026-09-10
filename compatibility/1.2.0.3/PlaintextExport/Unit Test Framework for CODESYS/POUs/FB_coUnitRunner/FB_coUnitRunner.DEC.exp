@@ -1,0 +1,22 @@
+(*
+    This function block is responsible for holding track of the tests and executing them.
+*)
+FUNCTION_BLOCK FB_coUnitRunner
+VAR
+    (* Indication of whether all test suites have reported that they are finished *)
+    AllTestSuitesFinished : BOOL := FALSE;
+	(* Indication of whether XML report is finished *)
+    IsReportWrittenToDisk : BOOL := FALSE;
+    (* Test result information *)
+    TestResults : FB_TestResults;
+    (* Prints the results to Log to display the results.
+	   This test result formatter can be replaced with something else. *)
+    CdsTestResultLogger : FB_CdsTestResultLogger(TestResults);
+    TestResultLogger : I_TestResultLogger := CdsTestResultLogger;
+    (* If this flag is set, it means that some external event triggered the
+       request to abort running the test suites *)
+    AbortRunningTestSuites : BOOL;
+    (* Publishes a xUnit compatible XML file *)
+    xUnitXmlPublisher : FB_xUnitXmlPublisher(TestResults);
+    XmlTestResultPublisher : I_TestResultLogger := xUnitXmlPublisher;
+END_VAR

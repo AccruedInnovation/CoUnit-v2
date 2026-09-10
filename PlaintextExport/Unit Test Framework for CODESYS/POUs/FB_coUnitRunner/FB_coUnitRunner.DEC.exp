@@ -1,0 +1,35 @@
+FUNCTION_BLOCK FB_coUnitRunner
+VAR
+	RunState : E_CoUnitRunState := E_CoUnitRunState.IDLE;
+	RunDisposition : E_CoUnitRunDisposition := E_CoUnitRunDisposition.UNSET;
+	RunMode : E_CoUnitRunMode := E_CoUnitRunMode.MODE_UNSET;
+	Epoch : ULINT;
+	BoundTaskHandle : CmpIecTask.RTS_IEC_HANDLE;
+	BoundTaskValid : BOOL;
+	StartClaim : DWORD;
+	CrossTaskViolationLatch : DWORD;
+	PostCommitViolationLatch : DWORD;
+	SnapshotSealed : BOOL;
+	InitialLookupDiagnosticClaim : DWORD;
+	InitializationError : BOOL;
+	FrameworkErrorReason : T_MaxString;
+	Suites : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestSuites] OF POINTER TO FB_TestSuite;
+	SuiteCount : UINT;
+	ActiveSuite : POINTER TO FB_TestSuite;
+	ActiveSuiteIndex : UINT;
+	ActiveTestIndex : UINT;
+	ShouldExecuteCurrentTest : BOOL;
+	SuiteInvocationAssertionCount : UDINT;
+	SequenceSuiteIndex : UDINT := 1;
+	DelayTimer : TON;
+	DelayTime : TIME;
+	TopLevelActive : BOOL;
+	TestResults : FB_TestResults;
+	CdsTestResultLogger : FB_CdsTestResultLogger(TestResults);
+	TestResultLogger : I_TestResultLogger := CdsTestResultLogger;
+	xUnitXmlPublisher : FB_xUnitXmlPublisher(TestResults);
+	XmlTestResultPublisher : I_TestResultLogger := xUnitXmlPublisher;
+	SnapshotReady : BOOL;
+	ResultsLogged : BOOL;
+	PostCompleteMisuseReported : BOOL;
+END_VAR

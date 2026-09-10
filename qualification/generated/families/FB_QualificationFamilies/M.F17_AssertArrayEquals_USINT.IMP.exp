@@ -1,0 +1,7 @@
+TEST('F17_AssertArrayEquals_USINT');
+IF NOT IS_TEST_FINISHED('F17_AssertArrayEquals_USINT') THEN
+	_v17e[1] := 1;
+	_v17a[1] := 2;
+	AssertArrayEquals_USINT(Expecteds := _v17e, Actuals := _v17a, Message := 'F17_AssertArrayEquals_USINT');
+	TEST_FINISHED();
+END_IF

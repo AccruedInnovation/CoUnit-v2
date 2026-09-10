@@ -1,0 +1,8 @@
+METHOD PRIVATE EmitTest : BOOL
+VAR_IN_OUT
+	Test : ST_CoUnitSnapshotTest;
+END_VAR
+VAR
+	_type : T_MaxString;
+	_error : T_MaxString;
+END_VAR

@@ -1,0 +1,69 @@
+IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+_shapeMatches := TRUE;
+_expectedLower[1] := LOWER_BOUND(Expecteds, 1);
+_actualLower[1] := LOWER_BOUND(Actuals, 1);
+_extent[1] := DINT_TO_LINT(UPPER_BOUND(Expecteds, 1)) - DINT_TO_LINT(_expectedLower[1]) + 1;
+_actualExtent[1] := DINT_TO_LINT(UPPER_BOUND(Actuals, 1)) - DINT_TO_LINT(_actualLower[1]) + 1;
+IF _extent[1] <> _actualExtent[1] THEN _shapeMatches := FALSE; END_IF
+_expectedLower[2] := LOWER_BOUND(Expecteds, 2);
+_actualLower[2] := LOWER_BOUND(Actuals, 2);
+_extent[2] := DINT_TO_LINT(UPPER_BOUND(Expecteds, 2)) - DINT_TO_LINT(_expectedLower[2]) + 1;
+_actualExtent[2] := DINT_TO_LINT(UPPER_BOUND(Actuals, 2)) - DINT_TO_LINT(_actualLower[2]) + 1;
+IF _extent[2] <> _actualExtent[2] THEN _shapeMatches := FALSE; END_IF
+_expectedLower[3] := LOWER_BOUND(Expecteds, 3);
+_actualLower[3] := LOWER_BOUND(Actuals, 3);
+_extent[3] := DINT_TO_LINT(UPPER_BOUND(Expecteds, 3)) - DINT_TO_LINT(_expectedLower[3]) + 1;
+_actualExtent[3] := DINT_TO_LINT(UPPER_BOUND(Actuals, 3)) - DINT_TO_LINT(_actualLower[3]) + 1;
+IF _extent[3] <> _actualExtent[3] THEN _shapeMatches := FALSE; END_IF
+IF NOT _shapeMatches THEN
+	_result.ExpectedText := 'extents=';
+	_result.ActualText := 'extents=';
+	_result.ExpectedText := CONCAT(_result.ExpectedText, LINT_TO_STRING(_extent[1]));
+	_result.ActualText := CONCAT(_result.ActualText, LINT_TO_STRING(_actualExtent[1]));
+	_result.ExpectedText := CONCAT(_result.ExpectedText, ',');
+	_result.ActualText := CONCAT(_result.ActualText, ',');
+	_result.ExpectedText := CONCAT(_result.ExpectedText, LINT_TO_STRING(_extent[2]));
+	_result.ActualText := CONCAT(_result.ActualText, LINT_TO_STRING(_actualExtent[2]));
+	_result.ExpectedText := CONCAT(_result.ExpectedText, ',');
+	_result.ActualText := CONCAT(_result.ActualText, ',');
+	_result.ExpectedText := CONCAT(_result.ExpectedText, LINT_TO_STRING(_extent[3]));
+	_result.ActualText := CONCAT(_result.ActualText, LINT_TO_STRING(_actualExtent[3]));
+ELSE
+	_result.Passed := TRUE;
+	_offset[1] := 0;
+	WHILE _offset[1] < _extent[1] DO
+		_offset[2] := 0;
+		WHILE _offset[2] < _extent[2] DO
+			_offset[3] := 0;
+			WHILE _offset[3] < _extent[3] DO
+				_elementEqual := Compare_LREAL(Expected := Expecteds[LINT_TO_DINT(DINT_TO_LINT(_expectedLower[1]) + _offset[1]), LINT_TO_DINT(DINT_TO_LINT(_expectedLower[2]) + _offset[2]), LINT_TO_DINT(DINT_TO_LINT(_expectedLower[3]) + _offset[3])], Actual := Actuals[LINT_TO_DINT(DINT_TO_LINT(_actualLower[1]) + _offset[1]), LINT_TO_DINT(DINT_TO_LINT(_actualLower[2]) + _offset[2]), LINT_TO_DINT(DINT_TO_LINT(_actualLower[3]) + _offset[3])], Delta := Delta, ArgumentError => _argumentError);
+				_result.ArgumentError := _argumentError;
+				IF NOT _elementEqual THEN
+					_result.Passed := FALSE;
+					_result.ExpectedText := Text_LREAL(Value := Expecteds[LINT_TO_DINT(DINT_TO_LINT(_expectedLower[1]) + _offset[1]), LINT_TO_DINT(DINT_TO_LINT(_expectedLower[2]) + _offset[2]), LINT_TO_DINT(DINT_TO_LINT(_expectedLower[3]) + _offset[3])]);
+					_result.ActualText := Text_LREAL(Value := Actuals[LINT_TO_DINT(DINT_TO_LINT(_actualLower[1]) + _offset[1]), LINT_TO_DINT(DINT_TO_LINT(_actualLower[2]) + _offset[2]), LINT_TO_DINT(DINT_TO_LINT(_actualLower[3]) + _offset[3])]);
+					_result.DiagnosticSuffix := 'First mismatch at logical offset=';
+					_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, LINT_TO_STRING(_offset[1]));
+					_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, ',');
+					_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, LINT_TO_STRING(_offset[2]));
+					_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, ',');
+					_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, LINT_TO_STRING(_offset[3]));
+					EXIT;
+				END_IF
+				IF NOT _result.Passed THEN EXIT; END_IF
+				_offset[3] := _offset[3] + 1;
+			END_WHILE
+			IF NOT _result.Passed THEN EXIT; END_IF
+			_offset[2] := _offset[2] + 1;
+		END_WHILE
+		IF NOT _result.Passed THEN EXIT; END_IF
+		_offset[1] := _offset[1] + 1;
+	END_WHILE
+END_IF
+IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; END_IF
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_Array3D_LREAL, Message := Message, Comparison := _result);

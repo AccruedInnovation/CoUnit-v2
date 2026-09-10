@@ -1,0 +1,7 @@
+METHOD PUBLIC ReadQualificationGuard : BOOL
+VAR_OUTPUT
+	Count : UINT;
+	OrderedCount : UINT;
+	Cursor : UDINT;
+	LastRecord : ST_CoUnitTestRecord;
+END_VAR

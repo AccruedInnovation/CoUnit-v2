@@ -1,0 +1,12 @@
+IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+_result.Passed := Expected = Actual;
+IF NOT _result.Passed THEN
+	_result.ExpectedText := DWORD_TO_STRING(Expected);
+	_result.ActualText := DWORD_TO_STRING(Actual);
+END_IF
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_DWORD, Message := Message, Comparison := _result);

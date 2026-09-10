@@ -1,0 +1,12 @@
+METHOD PUBLIC LogTestSuiteResults : BOOL;
+VAR
+    coUnitTestResults : REFERENCE TO ST_TestSuiteResults;
+    StringToPrint : T_MaxString;
+    TestsInTestSuiteCounter : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+    MaxNumberOfTestsToPrint : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+END_VAR
+VAR CONSTANT
+    TEST_STATUS_SKIP : STRING := 'SKIP';
+    TEST_STATUS_PASS : STRING := 'PASS';
+    TEST_STATUS_FAIL : STRING := 'FAIL';
+END_VAR

@@ -1,0 +1,7 @@
+IF _effectCount <> 0 THEN RETURN; END_IF
+_faultOperation := Operation;
+_faultOccurrence := Occurrence;
+_faultOccurrence2 := Occurrence2;
+_faultError := ErrorCode;
+_shortWrite := ShortWrite;
+ConfigureFault := TRUE;

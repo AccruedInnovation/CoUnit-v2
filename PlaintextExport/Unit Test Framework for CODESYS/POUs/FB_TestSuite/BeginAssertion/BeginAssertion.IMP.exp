@@ -1,0 +1,16 @@
+BeginAssertion := FALSE;
+TestIndex := 0;
+Ordinal := 0;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => TestIndex, Execute => _execute) THEN
+	RETURN;
+END_IF
+IF NOT _execute THEN
+	RETURN;
+END_IF
+IF NOT GVL_coUnit.coUnitRunner.ConsumeAssertionBudget() THEN
+	RETURN;
+END_IF
+TestRecords[TestIndex].InvocationOrdinal := TestRecords[TestIndex].InvocationOrdinal + 1;
+TestRecords[TestIndex].MaxAssertionsPerInvocation := MAX(TestRecords[TestIndex].MaxAssertionsPerInvocation, TestRecords[TestIndex].InvocationOrdinal);
+Ordinal := TestRecords[TestIndex].InvocationOrdinal;
+BeginAssertion := TRUE;

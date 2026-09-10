@@ -1,0 +1,17 @@
+(*
+    This method is responsible for the entire generation of the output file. 
+    The output of the xml writer is NOT beautified.
+    
+    When new data is available, feel free to add it to the report
+*)
+METHOD PUBLIC LogTestSuiteResults : BOOL
+VAR
+    UnitTestResults : REFERENCE TO ST_TestSuiteResults;
+    CurrentSuiteNumber : UINT;
+    CurrentTestCount : UINT;
+END_VAR
+VAR CONSTANT
+    TEST_STATUS_SKIP : STRING := 'SKIP';
+    TEST_STATUS_PASS : STRING := 'PASS';
+    TEST_STATUS_FAIL : STRING := 'FAIL';
+END_VAR

@@ -1,0 +1,15 @@
+IF Value < 16#80 THEN
+	AppendCodePoint := AppendByte(UDINT_TO_BYTE(Value));
+ELSIF Value < 16#800 THEN
+	IF NOT AppendByte(UDINT_TO_BYTE(16#C0 OR SHR(Value, 6))) THEN RETURN; END_IF
+	AppendCodePoint := AppendByte(UDINT_TO_BYTE(16#80 OR (Value AND 16#3F)));
+ELSIF Value < 16#10000 THEN
+	IF NOT AppendByte(UDINT_TO_BYTE(16#E0 OR SHR(Value, 12))) THEN RETURN; END_IF
+	IF NOT AppendByte(UDINT_TO_BYTE(16#80 OR (SHR(Value, 6) AND 16#3F))) THEN RETURN; END_IF
+	AppendCodePoint := AppendByte(UDINT_TO_BYTE(16#80 OR (Value AND 16#3F)));
+ELSE
+	IF NOT AppendByte(UDINT_TO_BYTE(16#F0 OR SHR(Value, 18))) THEN RETURN; END_IF
+	IF NOT AppendByte(UDINT_TO_BYTE(16#80 OR (SHR(Value, 12) AND 16#3F))) THEN RETURN; END_IF
+	IF NOT AppendByte(UDINT_TO_BYTE(16#80 OR (SHR(Value, 6) AND 16#3F))) THEN RETURN; END_IF
+	AppendCodePoint := AppendByte(UDINT_TO_BYTE(16#80 OR (Value AND 16#3F)));
+END_IF

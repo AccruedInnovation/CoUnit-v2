@@ -1,0 +1,2 @@
+CompleteTestInstancePath := CONCAT(STR1 := TestInstancePath, STR2 := '@');
+AddTestNameToInstancePath := CONCAT(STR1 := CompleteTestInstancePath, STR2 := GVL_coUnit.CurrentTestNameBeingCalled);

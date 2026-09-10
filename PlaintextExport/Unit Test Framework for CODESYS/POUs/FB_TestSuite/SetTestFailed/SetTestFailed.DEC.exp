@@ -1,0 +1,10 @@
+METHOD PRIVATE SetTestFailed
+VAR_INPUT
+	AssertionType : E_AssertionType;
+	AssertionMessage : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_execute : BOOL;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

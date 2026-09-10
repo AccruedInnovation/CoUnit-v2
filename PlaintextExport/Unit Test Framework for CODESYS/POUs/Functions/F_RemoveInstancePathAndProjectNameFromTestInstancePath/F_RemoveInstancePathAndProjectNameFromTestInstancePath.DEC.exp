@@ -1,0 +1,9 @@
+FUNCTION F_RemoveInstancePathAndProjectNameFromTestInstancePath : T_MaxString
+VAR_INPUT
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR
+    CharacterPositionOfProjectName : INT;
+    ProjectNameWithDot : T_MaxString;
+    GetCurProjInfo : GetCurProjInfo;
+END_VAR

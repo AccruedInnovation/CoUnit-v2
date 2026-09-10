@@ -1,0 +1,1 @@
+AssertEquals_BOOL(Expected := FALSE, Actual := Condition, Message := Message);

@@ -1,0 +1,5 @@
+TEST('F42_AssertFalse');
+IF NOT IS_TEST_FINISHED('F42_AssertFalse') THEN
+	AssertFalse(Condition := TRUE, Message := 'F42_AssertFalse');
+	TEST_FINISHED();
+END_IF

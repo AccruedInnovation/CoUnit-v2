@@ -1,0 +1,6 @@
+METHOD LREALPositiveInfinityEqual
+VAR
+	_pa : POINTER TO LREAL;
+	_pb : POINTER TO LREAL;
+	_pd : POINTER TO LREAL;
+END_VAR

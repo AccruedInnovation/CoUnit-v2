@@ -1,0 +1,27 @@
+IF NOT Snapshot.IsValid OR Snapshot.SuiteCount > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
+IF Snapshot.Disposition <> E_CoUnitRunDisposition.NORMAL AND Snapshot.Disposition <> E_CoUnitRunDisposition.ABORTED AND
+	Snapshot.Disposition <> E_CoUnitRunDisposition.FRAMEWORK_ERROR THEN RETURN; END_IF
+FOR _s := 1 TO Snapshot.SuiteCount DO
+	IF Snapshot.Suites[_s].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN RETURN; END_IF
+	_passed := 0; _failed := 0; _skipped := 0; _errors := 0;
+	FOR _t := 1 TO Snapshot.Suites[_s].Total DO
+		IF Snapshot.Suites[_s].Tests[_t].NumberOfAsserts > GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite THEN RETURN; END_IF
+		CASE Snapshot.Suites[_s].Tests[_t].State OF
+			E_CoUnitTestState.PASSED: _passed := _passed + 1;
+			E_CoUnitTestState.FAILED: _failed := _failed + 1;
+			E_CoUnitTestState.SKIPPED: _skipped := _skipped + 1;
+			E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR: _errors := _errors + 1;
+		ELSE RETURN;
+		END_CASE
+	END_FOR
+	IF _passed <> Snapshot.Suites[_s].Passed OR _failed <> Snapshot.Suites[_s].Failed OR
+		_skipped <> Snapshot.Suites[_s].Skipped OR _errors <> Snapshot.Suites[_s].Errors THEN RETURN; END_IF
+	_total := _total + Snapshot.Suites[_s].Total;
+	_allPassed := _allPassed + _passed;
+	_allFailed := _allFailed + _failed;
+	_allSkipped := _allSkipped + _skipped;
+	_allErrors := _allErrors + _errors;
+END_FOR
+ValidateSnapshot := (_total = Snapshot.Total) AND (_allPassed = Snapshot.Passed) AND
+	(_allFailed = Snapshot.Failed) AND (_allSkipped = Snapshot.Skipped) AND (_allErrors = Snapshot.Errors) AND
+	(Snapshot.Total = Snapshot.Passed + Snapshot.Failed + Snapshot.Skipped + Snapshot.Errors);

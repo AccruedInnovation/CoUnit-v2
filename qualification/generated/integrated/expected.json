@@ -1,0 +1,60 @@
+{
+  "shard": "integrated",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "DelayedPass",
+        "state": "PASSED",
+        "assertions": 1
+      },
+      {
+        "name": "ChangingFailure",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_BOOL",
+        "message": "third-scan-failure"
+      }
+    ],
+    [
+      {
+        "name": "NotExecuted",
+        "state": "SKIPPED",
+        "assertions": 0
+      },
+      {
+        "name": "OtherSuitePass",
+        "state": "PASSED",
+        "assertions": 0
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#2",
+    "_snapshot.Total = UDINT#4",
+    "_snapshot.Passed = UDINT#2",
+    "_snapshot.Failed = UDINT#1",
+    "_snapshot.Skipped = UDINT#1",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#2",
+    "_snapshot.Suites[1].Tests[1].Name = 'DelayedPass'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[2].Name = 'ChangingFailure'",
+    "_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType = E_AssertionType.Type_BOOL",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.Message = 'third-scan-failure'",
+    "_snapshot.Suites[2].Total = UINT#2",
+    "_snapshot.Suites[2].Tests[1].Name = 'NotExecuted'",
+    "_snapshot.Suites[2].Tests[1].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[2].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[2].Tests[2].Name = 'OtherSuitePass'",
+    "_snapshot.Suites[2].Tests[2].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[2].Tests[2].NumberOfAsserts = UINT#0"
+  ]
+}

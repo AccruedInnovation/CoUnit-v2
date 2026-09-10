@@ -1,0 +1,247 @@
+============================================================
+Codesys PLC Code Generation - Structural Validator
+============================================================
+
+Found 15093 .exp files
+
+Errors: 0
+
+Warnings: 236
+  WARNING: SetFieldRef in DO_Intf missing VAR_IN_OUT block
+  WARNING: Interface I_PathEndpointBinding missing GetStatus method
+  WARNING: Interface I_PathEndpointBinding missing SetFieldRef method
+  WARNING: Interface I_PathEndpointBinding missing SetTimeReference method
+  WARNING: Interface I_TransferDestination missing GetStatus method
+  WARNING: Interface I_TransferDestination missing SetFieldRef method
+  WARNING: Interface I_TransferDestination missing SetTimeReference method
+  WARNING: Interface I_PermissiveSignal missing GetStatus method
+  WARNING: Interface I_PermissiveSignal missing SetFieldRef method
+  WARNING: Interface I_PermissiveSignal missing SetTimeReference method
+  WARNING: Interface I_InterlockSignal missing GetStatus method
+  WARNING: Interface I_InterlockSignal missing SetFieldRef method
+  WARNING: Interface I_InterlockSignal missing SetTimeReference method
+  WARNING: Interface TwoPositionDevice_Intf missing GetStatus method
+  WARNING: Interface TwoPositionDevice_Intf missing SetFieldRef method
+  WARNING: Interface TwoPositionDevice_Intf missing SetTimeReference method
+  WARNING: Interface I_AlarmCollection missing GetStatus method
+  WARNING: Interface I_AlarmCollection missing SetFieldRef method
+  WARNING: Interface I_AlarmCollection missing SetTimeReference method
+  WARNING: Interface I_PathEquipmentWatchdog missing GetStatus method
+  WARNING: Interface I_PathEquipmentWatchdog missing SetFieldRef method
+  WARNING: Interface I_PathEquipmentWatchdog missing SetTimeReference method
+  WARNING: Interface I_TransferSource missing GetStatus method
+  WARNING: Interface I_TransferSource missing SetFieldRef method
+  WARNING: Interface I_TransferSource missing SetTimeReference method
+  WARNING: Interface I_PPLParticipant missing GetStatus method
+  WARNING: Interface I_PPLParticipant missing SetFieldRef method
+  WARNING: Interface I_PPLParticipant missing SetTimeReference method
+  WARNING: SetFieldRef in AO_Intf missing VAR_IN_OUT block
+  WARNING: Interface MotorValve_Intf missing GetStatus method
+  WARNING: Interface MotorValve_Intf missing SetFieldRef method
+  WARNING: Interface MotorValve_Intf missing SetTimeReference method
+  WARNING: Interface I_ProductivityTransportDriver missing GetStatus method
+  WARNING: Interface I_ProductivityTransportDriver missing SetFieldRef method
+  WARNING: Interface I_ProductivityTransportDriver missing SetTimeReference method
+  WARNING: Interface I_TransferDispatcher missing GetStatus method
+  WARNING: Interface I_TransferDispatcher missing SetFieldRef method
+  WARNING: Interface I_TransferDispatcher missing SetTimeReference method
+  WARNING: Interface I_PathFlowConstraintParticipant missing GetStatus method
+  WARNING: Interface I_PathFlowConstraintParticipant missing SetFieldRef method
+  WARNING: Interface I_PathFlowConstraintParticipant missing SetTimeReference method
+  WARNING: SetFieldRef in DI_Intf missing VAR_IN_OUT block
+  WARNING: Interface I_PathRouteCatalog missing GetStatus method
+  WARNING: Interface I_PathRouteCatalog missing SetFieldRef method
+  WARNING: Interface I_PathRouteCatalog missing SetTimeReference method
+  WARNING: Interface I_MonotonicClock missing GetStatus method
+  WARNING: Interface I_MonotonicClock missing SetFieldRef method
+  WARNING: Interface I_MonotonicClock missing SetTimeReference method
+  WARNING: Interface I_MotorRunFeedback missing GetStatus method
+  WARNING: Interface I_MotorRunFeedback missing SetFieldRef method
+  WARNING: Interface I_MotorRunFeedback missing SetTimeReference method
+  WARNING: SetFieldRef in Counter_Intf missing VAR_IN_OUT block
+  WARNING: Interface I_SpeedFeedback missing GetStatus method
+  WARNING: Interface I_SpeedFeedback missing SetFieldRef method
+  WARNING: Interface I_SpeedFeedback missing SetTimeReference method
+  WARNING: Interface I_MotorPowerSwitch missing GetStatus method
+  WARNING: Interface I_MotorPowerSwitch missing SetFieldRef method
+  WARNING: Interface I_MotorPowerSwitch missing SetTimeReference method
+  WARNING: Interface I_PathCandidatePolicyControl missing GetStatus method
+  WARNING: Interface I_PathCandidatePolicyControl missing SetFieldRef method
+  WARNING: Interface I_PathCandidatePolicyControl missing SetTimeReference method
+  WARNING: Interface I_PathTopologyNode missing GetStatus method
+  WARNING: Interface I_PathTopologyNode missing SetFieldRef method
+  WARNING: Interface I_PathTopologyNode missing SetTimeReference method
+  WARNING: Interface I_LegTransferDestinationEquipment missing GetStatus method
+  WARNING: Interface I_LegTransferDestinationEquipment missing SetFieldRef method
+  WARNING: Interface I_LegTransferDestinationEquipment missing SetTimeReference method
+  WARNING: Interface VariableSpeedMotor_Intf missing GetStatus method
+  WARNING: Interface VariableSpeedMotor_Intf missing SetFieldRef method
+  WARNING: Interface VariableSpeedMotor_Intf missing SetTimeReference method
+  WARNING: SetFieldRef in Temp_Intf missing VAR_IN_OUT block
+  WARNING: Interface I_AlarmIntf missing GetStatus method
+  WARNING: Interface I_AlarmIntf missing SetFieldRef method
+  WARNING: Interface I_AlarmIntf missing SetTimeReference method
+  WARNING: Interface I_TransferMeasurement missing GetStatus method
+  WARNING: Interface I_TransferMeasurement missing SetFieldRef method
+  WARNING: Interface I_TransferMeasurement missing SetTimeReference method
+  WARNING: Interface I_PathManagerLeaseControl missing GetStatus method
+  WARNING: Interface I_PathManagerLeaseControl missing SetFieldRef method
+  WARNING: Interface I_PathManagerLeaseControl missing SetTimeReference method
+  WARNING: Interface I_PPLChangeSink missing GetStatus method
+  WARNING: Interface I_PPLChangeSink missing SetFieldRef method
+  WARNING: Interface I_PPLChangeSink missing SetTimeReference method
+  WARNING: Interface I_LogStorage missing GetStatus method
+  WARNING: Interface I_LogStorage missing SetFieldRef method
+  WARNING: Interface I_LogStorage missing SetTimeReference method
+  WARNING: Interface I_CurrentFeedback missing GetStatus method
+  WARNING: Interface I_CurrentFeedback missing SetFieldRef method
+  WARNING: Interface I_CurrentFeedback missing SetTimeReference method
+  WARNING: Interface I_PPLNode missing GetStatus method
+  WARNING: Interface I_PPLNode missing SetFieldRef method
+  WARNING: Interface I_PPLNode missing SetTimeReference method
+  WARNING: SetFieldRef in AI_Intf missing VAR_IN_OUT block
+  WARNING: Interface I_PathConfigurationParticipant missing GetStatus method
+  WARNING: Interface I_PathConfigurationParticipant missing SetFieldRef method
+  WARNING: Interface I_PathConfigurationParticipant missing SetTimeReference method
+  WARNING: GetStatus in I_PathLease returns 'BOOL', expected ST_* status type
+  WARNING: Interface I_PathLease missing SetFieldRef method
+  WARNING: Interface I_PathLease missing SetTimeReference method
+  WARNING: Interface I_PathAcquisitionResource missing GetStatus method
+  WARNING: Interface I_PathAcquisitionResource missing SetFieldRef method
+  WARNING: Interface I_PathAcquisitionResource missing SetTimeReference method
+  WARNING: Interface I_PathTopologyPort missing GetStatus method
+  WARNING: Interface I_PathTopologyPort missing SetFieldRef method
+  WARNING: Interface I_PathTopologyPort missing SetTimeReference method
+  WARNING: Interface I_PathTopologyRegistrar missing GetStatus method
+  WARNING: Interface I_PathTopologyRegistrar missing SetFieldRef method
+  WARNING: Interface I_PathTopologyRegistrar missing SetTimeReference method
+  WARNING: Interface PathRuntimeLifecycleServices missing GetStatus method
+  WARNING: Interface PathRuntimeLifecycleServices missing SetFieldRef method
+  WARNING: Interface PathRuntimeLifecycleServices missing SetTimeReference method
+  WARNING: Interface I_LogSink missing GetStatus method
+  WARNING: Interface I_LogSink missing SetFieldRef method
+  WARNING: Interface I_LogSink missing SetTimeReference method
+  WARNING: Interface I_PathTransportParticipant missing GetStatus method
+  WARNING: Interface I_PathTransportParticipant missing SetFieldRef method
+  WARNING: Interface I_PathTransportParticipant missing SetTimeReference method
+  WARNING: Interface I_EquipmentLogSink missing GetStatus method
+  WARNING: Interface I_EquipmentLogSink missing SetFieldRef method
+  WARNING: Interface I_EquipmentLogSink missing SetTimeReference method
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_alarm\PlaintextExport\POUs\Alarms\FB_ProcessAlarm\M.GetActive.IMP.exp:1: [SA0025] qualify enum member Active (E_PathAutomaticState)
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_conditions\PlaintextExport\POUs\Permissions\Interlocks\FB_Interlock\M.SetBypass.DEC.exp:1: [SA0013] Bypass shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_conditions\PlaintextExport\POUs\Permissions\Permissives\FB_Permissive\M.SetBypass.DEC.exp:1: [SA0013] Bypass shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_control\PlaintextExport\POUs\PID\FB_PID\M.SetRemoteSetpoint.DEC.exp:1: [SA0013] sp shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_control\PlaintextExport\POUs\Signal\FB_ThreePointStepper\M.SetHighLimitRef.IMP.exp:4: [SA0029] use declared spelling Ref instead of REF
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_control\PlaintextExport\POUs\Signal\FB_ThreePointStepper\M.SetLowLimitRef.IMP.exp:4: [SA0029] use declared spelling Ref instead of REF
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_control\PlaintextExport\POUs\Signal\FB_ThreePointStepper\M.SetPositionRef.IMP.exp:4: [SA0029] use declared spelling Ref instead of REF
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_core\PlaintextExport\StringManip\StrCamelToText\POU.StrCamelToText.IMP.exp:23: [SA0029] use declared spelling in instead of In
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_core\PlaintextExport\StringManip\StrCamelToText\POU.StrCamelToText.IMP.exp:28: [SA0029] use declared spelling in instead of In
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_core\PlaintextExport\StringManip\StrCamelToText\POU.StrCamelToText.IMP.exp:34: [SA0029] use declared spelling in instead of In
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_laumas_tlm8\PlaintextExport\Devices\Laumas\FB_TLM8_ModbusTCP\M.SetClientSettings.IMP.exp:3: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_laumas_tlm8\PlaintextExport\Devices\Laumas\FB_TLM8_ModbusTCP\POU.FB_TLM8_ModbusTCP.IMP.exp:34: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_laumas_tlm8\PlaintextExport\Devices\Laumas\FB_TLM8_ModbusTCP\POU.FB_TLM8_ModbusTCP.IMP.exp:84: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_odot\PlaintextExport\Devices\Odot\FB_MT_3B_26_6V_4P_ModbusTCP\M.SetClientSettings.IMP.exp:6: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_odot\PlaintextExport\Devices\Odot\FB_MT_3B_26_6V_4P_ModbusTCP\POU.FB_MT_3B_26_6V_4P_ModbusTCP.IMP.exp:38: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_odot\PlaintextExport\Devices\Odot\FB_MT_3B_26_6V_4P_ModbusTCP\POU.FB_MT_3B_26_6V_4P_ModbusTCP.IMP.exp:208: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_productivity\PlaintextExport\Devices\Productivity\FB_ProductivityTCP\M.InitializeChannels.IMP.exp:28: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_productivity\PlaintextExport\Devices\Productivity\FB_ProductivityTCP\M.SetClientSettings.IMP.exp:3: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_AIAO_ModbusTCP\M.SetClientSettings.IMP.exp:6: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_AIAO_ModbusTCP\POU.FB_SLM_MX_AIAO_ModbusTCP.IMP.exp:38: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_AIAO_ModbusTCP\POU.FB_SLM_MX_AIAO_ModbusTCP.IMP.exp:308: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_COMBO_ModbusTCP\M.SetClientSettings.IMP.exp:6: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_COMBO_ModbusTCP\POU.FB_SLM_MX_COMBO_ModbusTCP.IMP.exp:38: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_COMBO_ModbusTCP\POU.FB_SLM_MX_COMBO_ModbusTCP.IMP.exp:337: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_DIDO_ModbusTCP\M.SetClientSettings.IMP.exp:6: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_DIDO_ModbusTCP\POU.FB_SLM_MX_DIDO_ModbusTCP.IMP.exp:38: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_DIDO_ModbusTCP\POU.FB_SLM_MX_DIDO_ModbusTCP.IMP.exp:299: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_TestBench_ModbusTCP\M.SetClientSettings.IMP.exp:6: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_TestBench_ModbusTCP\POU.FB_SLM_MX_TestBench_ModbusTCP.IMP.exp:38: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_device_synergy_logic\PlaintextExport\Devices\SynergyLogic\FB_SLM_MX_TestBench_ModbusTCP\POU.FB_SLM_MX_TestBench_ModbusTCP.IMP.exp:176: [SA0107] use named arguments for resolved call StringIPToIPArray
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_equipment\PlaintextExport\POUs\Equipment\FB_Distributor\M._UpdatePathComposition.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_equipment\PlaintextExport\POUs\Equipment\FB_Distributor\M.ConfigurePhysicalOutlets.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_equipment\PlaintextExport\POUs\Motors\Feedback\FB_CurrentSensor\M.GetCurrentFeedback.DEC.exp:1: [SA0013] _status shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_grain\PlaintextExport\POUs\Equipment\FB_GrainBin3Composite\M.SetFieldRef.DEC.exp:1: [SA0013] LevelHighHigh shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_io\PlaintextExport\POUs\IO_Channels\FB_DO\POU.FB_DO.IMP.exp:59: [SA0107] use named arguments for resolved call CommandHAL
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Enqueue.IMP.exp:10: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Enqueue.IMP.exp:11: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogBool\M.Enqueue.IMP.exp:19: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Enqueue.IMP.exp:10: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Enqueue.IMP.exp:11: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogEvent\M.Enqueue.IMP.exp:19: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Close.IMP.exp:4: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Close.IMP.exp:10: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Close.IMP.exp:15: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:10: [SA0107] use named arguments for resolved call LogLength
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:15: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:25: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:35: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:54: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Put.IMP.exp:66: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogFileSink\M.Retry.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Enqueue.IMP.exp:10: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Enqueue.IMP.exp:11: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogInt\M.Enqueue.IMP.exp:19: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:9: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:14: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:15: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogLReal\M.Enqueue.IMP.exp:23: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:9: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:14: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:15: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogReal\M.Enqueue.IMP.exp:23: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Drain.IMP.exp:12: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Enqueue.IMP.exp:3: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Enqueue.IMP.exp:5: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Enqueue.IMP.exp:10: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Enqueue.IMP.exp:11: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogString\M.Enqueue.IMP.exp:19: [SA0107] use named arguments for resolved call LogIncrement
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_logging\PlaintextExport\POUs\Logging\FB_LogSysFile\M.Write.IMP.exp:3: [SA0107] use named arguments for resolved call LogLength
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_persistence\PlaintextExport\POUs\Persistence\FB_PPLManager\M.ReportEvent.DEC.exp:1: [SA0013] _accepted shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_signal\PlaintextExport\POUs\Signal\FB_MedianFilter\M._Reset.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathEquipmentRegistry\M.SetPhase.DEC.exp:1: [SA0013] Generation shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathEquipmentRegistry\M.SetPhase.DEC.exp:1: [SA0013] Phase shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._ConfigureRuntime.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._ConfigureRuntime.DEC.exp:1: [SA0013] _binding shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._ConfigureRuntime.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RefreshComposition.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RefreshComposition.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RunAutomatic.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RunAutomatic.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RunAutomatic.DEC.exp:1: [SA0013] _status shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RunQueue.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M._RunQueue.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.AcknowledgeRuleFault.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ArmAutomaticTrigger.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.CanApplyTopologyChange.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ConfigureAutomaticRule.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ConfigureIntent.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.EvaluateAutomaticRule.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.EvaluateAutomaticRule.DEC.exp:1: [SA0013] _status shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.EvaluateAutomaticRule.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.GetLevelObservation.DEC.exp:1: [SA0013] _member shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.GetRuleStatus.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ObserveAutomaticCompletion.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ObserveAutomaticCompletion.DEC.exp:1: [SA0013] _status shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.ObserveAutomaticCompletion.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.RequestRebuild.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.RequestRebuild.DEC.exp:1: [SA0013] _ok shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.SetAutomaticRuleEnabled.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.SetRouteEnabled.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+  WARNING: D:\AI\CodesysNewLib\repo\PlaintextExport\_lib_transfer\PlaintextExport\Subsystems\PathRuntime\Transfer\FB_PathRuntimeController\M.SubmitTransfer.DEC.exp:1: [SA0013] _i shadows an owner/inherited variable
+
+VALIDATION PASSED

@@ -1,0 +1,5 @@
+(* Sets the assertion type. If one already exists, it's not overwritten as we keep the first assertion in the test *)
+METHOD INTERNAL SetAssertionType
+VAR_INPUT
+    AssertType : E_AssertionType;
+END_VAR

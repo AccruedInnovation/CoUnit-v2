@@ -1,0 +1,7 @@
+METHOD INTERNAL FrameworkError
+VAR_INPUT
+	Reason : T_MaxString;
+END_VAR
+VAR
+	_i : UDINT;
+END_VAR

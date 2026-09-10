@@ -1,0 +1,4 @@
+TEST('NamedB');
+IF NOT IS_TEST_FINISHED('NamedB') THEN
+	// Remain open until NamedA finishes this known target.
+END_IF

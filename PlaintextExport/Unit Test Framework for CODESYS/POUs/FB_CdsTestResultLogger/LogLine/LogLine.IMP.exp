@@ -1,0 +1,3 @@
+_result := WRITE_DEVICE_LOG(Mask, Format, Argument);
+LogLine := _result = 0;
+IF NOT LogLine THEN _loggingFailed := TRUE; END_IF

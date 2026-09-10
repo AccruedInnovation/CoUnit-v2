@@ -1,0 +1,53 @@
+(*
+    This method is called in every assert and returns whether this particular assert has already been called.
+    The reason one would like to know whether this assert has already been reported or not is to not report it several
+    times to any logging service. Because a test-suite can consist of several tests, and certain tests can require the
+    test to run over several cycles it means that certain asserts could be called several times and thus we need to
+    keep track of which asserts we've already reported. The user of the framework should not need to care for any of
+    this and he/she should be able to call the asserts in any way they FIND suitable.
+
+    To know what assert this is we need to check for the total combination of:
+    - Test message
+    - Test instance path
+    - Expecteds size (in bytes)
+    - Actuals size (in bytes)
+    - Expecteds datatype
+    - Actuals datatype
+    Theoretically we can have a situation where a test has three different asserts, each and one with the same test
+    message/test instance path/actuals size&datatype/expecteds size&datatype but called within the same or different
+    cycles. In order for us to handle all situations we need a simple algorithm that works according to:
+    - Keep track of how many instances the combination of test message/test instance path/expecteds size&datatype/
+      actuals size&datatype we have. So for example, if we have called
+      Assert(Exp := [5,4,3], Act := [5,4,3], 'Hello there', 'PRG.InstanceTestSuite.Test')
+      two times in one cycle, we have two instances of that combination. This is done according to:
+    - Iterate all existing reports.
+      - If we have a new PLC-cycle, set the current detection-count to zero.
+      - If new report does not match in any of the above fields, create it (together with current PLC-cycle).
+        Also store the information that we have one instance of this combination and +1 on the detection-count.
+      - If new report matches in all of the above, +1 in the detection-count. If this detection-count is larger than
+        the stored detection-count for this combination, create a new report and add +1 to the storage of
+        the detection-count.
+*)
+METHOD PUBLIC ReportResult
+VAR_INPUT
+    ExpectedsSize : UDINT;
+    ExpectedsTypeClass : IBaseLibrary.TypeClass;
+    ActualsSize : UDINT;
+    ActualsTypeClass : IBaseLibrary.TypeClass;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR_OUTPUT
+    AlreadyReported : BOOL := FALSE;
+END_VAR
+VAR
+    LocationIndex : UINT;
+    DataTypesNotEquals : BOOL;
+    DataSizeNotEquals : BOOL;
+    DataContentNotEquals : BOOL;
+    CurrentCycleCount : UDINT;
+    IteratorCounter : UINT;
+    DetectionCountTemp : UINT := 0;
+    FoundOne : BOOL;
+    AdditionalIdenticalAssert : BOOL;
+END_VAR

@@ -1,0 +1,14 @@
+TEST('Utf8Diagnostic');
+IF NOT IS_TEST_FINISHED('Utf8Diagnostic') THEN
+	_scans := _scans + 1;
+	IF _scans = 1 THEN RETURN; END_IF
+	_bytes := ADR(_message);
+	_bytes[0] := 65;
+	FOR _i := 0 TO 123 DO
+		_bytes[1 + 2 * _i] := 16#C3;
+		_bytes[2 + 2 * _i] := 16#A9;
+	END_FOR
+	_bytes[249] := 0;
+	AssertEquals_REAL(Expected := 1.0, Actual := 1.0, Delta := -1.0, Message := _message);
+	TEST_FINISHED();
+END_IF

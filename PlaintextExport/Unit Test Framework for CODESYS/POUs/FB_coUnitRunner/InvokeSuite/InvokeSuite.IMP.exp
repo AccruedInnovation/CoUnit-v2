@@ -1,0 +1,15 @@
+IF NOT CheckViolation() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.RUNNING THEN RETURN; END_IF
+IF Index < 1 OR Index > SuiteCount THEN
+	FrameworkError(Reason := 'Invalid suite index');
+	RETURN;
+END_IF
+ClearContext();
+ActiveSuite := Suites[Index];
+ActiveSuiteIndex := Index;
+GVL_coUnit.CurrentTestSuiteBeingCalled := ActiveSuite;
+SuiteInvocationAssertionCount := 0;
+ActiveSuite^.SetHasStartedRunning();
+ActiveSuite^();
+ClearContext();
+CheckViolation();

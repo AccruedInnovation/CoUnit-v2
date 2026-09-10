@@ -1,0 +1,4 @@
+METHOD INTERNAL GetNumberOfFailedTests : UINT
+VAR
+	_i : UDINT;
+END_VAR

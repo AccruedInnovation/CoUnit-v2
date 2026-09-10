@@ -1,0 +1,30 @@
+(* Disposable-project hook: independently inspect stored bytes, never mutate paths. *)
+_qPath := ADR(_path);
+_qExpected := ADR(ExpectedPath);
+_qStage := ADR(_stage);
+_qBackup := ADR(_backup);
+_qS := ADR(_qStageSuffix);
+_qB := ADR(_qBackupSuffix);
+PathLength := 0;
+StageLength := 0;
+BackupLength := 0;
+FOR _qI := 0 TO 255 DO
+	IF _qPath[_qI] = 0 THEN PathLength := _qI; EXIT; END_IF
+END_FOR
+FOR _qI := 0 TO 255 DO
+	IF _qStage[_qI] = 0 THEN StageLength := _qI; EXIT; END_IF
+END_FOR
+FOR _qI := 0 TO 255 DO
+	IF _qBackup[_qI] = 0 THEN BackupLength := _qI; EXIT; END_IF
+END_FOR
+PrefixPreserved := TRUE;
+FOR _qI := 0 TO 243 DO
+	IF _qPath[_qI] <> _qExpected[_qI] OR _qStage[_qI] <> _qExpected[_qI] OR _qBackup[_qI] <> _qExpected[_qI] THEN PrefixPreserved := FALSE; END_IF
+END_FOR
+SuffixAndNul := (_qPath[244] = 0) AND (_qExpected[244] = 0) AND (_qStage[255] = 0) AND (_qBackup[255] = 0);
+Distinct := (_qStage[244] <> 0) AND (_qBackup[244] <> 0) AND (_qPath[244] = 0);
+FOR _qI := 0 TO 10 DO
+	IF _qStage[244 + _qI] <> _qS[_qI] OR _qBackup[244 + _qI] <> _qB[_qI] THEN SuffixAndNul := FALSE; END_IF
+END_FOR
+Distinct := Distinct AND (_qStage[252] <> _qBackup[252]);
+ReadQualificationPaths := (PathLength = 244) AND (StageLength = 255) AND (BackupLength = 255) AND PrefixPreserved AND SuffixAndNul AND Distinct;

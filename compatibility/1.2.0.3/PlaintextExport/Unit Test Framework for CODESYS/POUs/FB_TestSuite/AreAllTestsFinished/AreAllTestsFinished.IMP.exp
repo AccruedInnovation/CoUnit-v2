@@ -1,0 +1,23 @@
+AreAllTestsFinished := FALSE;
+
+IF NumberOfTests > 0 THEN
+    AreAllTestsFinished := TRUE;
+
+    (* A test is considered finished if it is finished running (i.e. set by TEST_FINISHED) or if it is skipped/disabled *)
+    FOR Counter := 1 TO GetNumberOfTests() BY 1 DO
+        AreAllTestsFinished := AreAllTestsFinished AND (Tests[Counter].IsFinished() OR Tests[Counter].IsSkipped());
+    END_FOR
+
+    (* A test is considered finished if it is finished running (i.e. set by TEST_FINISHED) or if it is skipped/disabled *)
+    FOR Counter := 1 TO NumberOfTestsToAnalyse BY 1 DO
+        AreAllTestsFinished := AreAllTestsFinished AND (Tests[Counter].IsFinished() OR Tests[Counter].IsSkipped());
+    END_FOR
+END_IF
+
+(* If we have been running at least one cycle and no tests are registered it means that this testsuite is empty
+   and doesn't contain any test cases. In that case, add a warning message and ignore this testsuite. *)
+IF ((NumberOfTests = 0) AND NOT (FirstCycle)) AND HasStartedRunning THEN
+    AreAllTestsFinished := TRUE;
+END_IF
+
+FirstCycle := FALSE;

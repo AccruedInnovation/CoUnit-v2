@@ -1,0 +1,4 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitReportState : (DISABLED, PENDING, WRITING, WRITTEN, FAILED);
+END_TYPE

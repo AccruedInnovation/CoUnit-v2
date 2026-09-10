@@ -1,0 +1,5 @@
+TEST('F24_AssertEquals_DINT');
+IF NOT IS_TEST_FINISHED('F24_AssertEquals_DINT') THEN
+	AssertEquals_DINT(Expected := _v24e, Actual := _v24a, Message := 'F24_AssertEquals_DINT');
+	TEST_FINISHED();
+END_IF

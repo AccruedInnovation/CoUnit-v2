@@ -1,0 +1,16 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCalls : UINT;
+	DiagnosticClaim : DWORD;
+	IdlePreserved : BOOL := TRUE;
+	EpochPreserved : BOOL := TRUE;
+	SuiteAndTestsPreserved : BOOL := TRUE;
+	RecoveryComplete : BOOL;
+	SnapshotDisposition : E_CoUnitRunDisposition;
+END_VAR
+VAR
+	_suite : FB_QualificationInitialLookup;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+END_VAR

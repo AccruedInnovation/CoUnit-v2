@@ -1,0 +1,7 @@
+FUNCTION_BLOCK FB_QualificationUtf8 EXTENDS FB_TestSuite
+VAR
+	_message : T_MaxString;
+	_bytes : POINTER TO BYTE;
+	_i : UINT;
+	_scans : UINT;
+END_VAR

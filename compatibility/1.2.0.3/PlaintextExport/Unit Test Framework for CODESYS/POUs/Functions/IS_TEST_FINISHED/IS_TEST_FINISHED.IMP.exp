@@ -1,0 +1,10 @@
+IS_TEST_FINISHED := FALSE;
+
+FOR Counter := 1 TO GVL_coUnit.CurrentTestSuiteBeingCalled^.GetNumberOfTests() BY 1 DO
+    CurrentTest := GVL_coUnit.CurrentTestSuiteBeingCalled^.Tests[Counter];
+
+    IF CurrentTest.TestName = TestName THEN
+        IS_TEST_FINISHED := CurrentTest.IsFinished();
+        RETURN;
+    END_IF
+END_FOR

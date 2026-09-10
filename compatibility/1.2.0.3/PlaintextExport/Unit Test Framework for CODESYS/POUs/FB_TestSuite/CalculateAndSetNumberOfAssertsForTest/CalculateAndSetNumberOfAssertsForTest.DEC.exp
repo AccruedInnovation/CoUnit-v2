@@ -1,0 +1,11 @@
+METHOD INTERNAL CalculateAndSetNumberOfAssertsForTest
+VAR_INPUT
+    TestName : T_MaxString;
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    TotalNumberOfAsserts : UINT;
+    NumberOfAsserts : UINT;
+    NumberOfArrayAsserts : UINT;
+    IteratorCounter : UINT;
+END_VAR

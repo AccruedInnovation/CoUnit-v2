@@ -1,0 +1,5 @@
+IF FileHandle <> SysFile.SysTypes.RTS_INVALID_HANDLE THEN
+    Close := SysFile.SysFileClose(hFile := FileHandle);
+ELSE
+    Close := cmperrors.Errors.ERR_INVALID_HANDLE;
+END_IF

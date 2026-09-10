@@ -1,0 +1,1100 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+RUN();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT Done THEN
+	OraclePass := TRUE;
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (_snapshot.SuiteCount = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = UDINT#44) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (_snapshot.Passed = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = UDINT#44) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (_snapshot.Skipped = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (_snapshot.Errors = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Total = UINT#44) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].Name = 'F00_AssertArray2dEquals_LREAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.AssertionType = E_AssertionType.Type_Array2D_LREAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[1].FirstFailure.Message, 'F00_AssertArray2dEquals_LREAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].Name = 'F01_AssertArray2dEquals_REAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 16; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 17; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 18; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 19; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType = E_AssertionType.Type_Array2D_REAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 20; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[2].FirstFailure.Message, 'F01_AssertArray2dEquals_REAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 21; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].Name = 'F02_AssertArray3dEquals_LREAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 22; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 23; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 24; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 25; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType = E_AssertionType.Type_Array3D_LREAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 26; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[3].FirstFailure.Message, 'F02_AssertArray3dEquals_LREAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 27; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].Name = 'F03_AssertArray3dEquals_REAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 28; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 29; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 30; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 31; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[4].FirstFailure.AssertionType = E_AssertionType.Type_Array3D_REAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 32; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[4].FirstFailure.Message, 'F03_AssertArray3dEquals_REAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 33; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].Name = 'F04_AssertArrayEquals_BOOL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 34; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 35; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 36; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 37; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[5].FirstFailure.AssertionType = E_AssertionType.Type_Array_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 38; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[5].FirstFailure.Message, 'F04_AssertArrayEquals_BOOL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 39; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[6].Name = 'F05_AssertArrayEquals_BYTE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 40; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[6].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 41; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[6].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 42; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[6].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 43; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[6].FirstFailure.AssertionType = E_AssertionType.Type_Array_BYTE) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 44; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[6].FirstFailure.Message, 'F05_AssertArrayEquals_BYTE') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 45; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[7].Name = 'F06_AssertArrayEquals_DINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 46; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[7].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 47; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[7].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 48; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[7].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 49; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[7].FirstFailure.AssertionType = E_AssertionType.Type_Array_DINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 50; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[7].FirstFailure.Message, 'F06_AssertArrayEquals_DINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 51; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[8].Name = 'F07_AssertArrayEquals_DWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 52; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[8].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 53; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[8].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 54; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[8].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 55; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[8].FirstFailure.AssertionType = E_AssertionType.Type_Array_DWORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 56; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[8].FirstFailure.Message, 'F07_AssertArrayEquals_DWORD') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 57; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[9].Name = 'F08_AssertArrayEquals_INT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 58; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[9].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 59; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[9].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 60; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[9].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 61; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[9].FirstFailure.AssertionType = E_AssertionType.Type_Array_INT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 62; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[9].FirstFailure.Message, 'F08_AssertArrayEquals_INT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 63; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[10].Name = 'F09_AssertArrayEquals_LINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 64; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[10].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 65; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[10].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 66; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[10].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 67; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[10].FirstFailure.AssertionType = E_AssertionType.Type_Array_LINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 68; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[10].FirstFailure.Message, 'F09_AssertArrayEquals_LINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 69; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[11].Name = 'F10_AssertArrayEquals_LREAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 70; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[11].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 71; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[11].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 72; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[11].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 73; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[11].FirstFailure.AssertionType = E_AssertionType.Type_Array_LREAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 74; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[11].FirstFailure.Message, 'F10_AssertArrayEquals_LREAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 75; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[12].Name = 'F11_AssertArrayEquals_LWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 76; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[12].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 77; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[12].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 78; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[12].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 79; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[12].FirstFailure.AssertionType = E_AssertionType.Type_Array_LWORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 80; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[12].FirstFailure.Message, 'F11_AssertArrayEquals_LWORD') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 81; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[13].Name = 'F12_AssertArrayEquals_REAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 82; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[13].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 83; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[13].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 84; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[13].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 85; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[13].FirstFailure.AssertionType = E_AssertionType.Type_Array_REAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 86; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[13].FirstFailure.Message, 'F12_AssertArrayEquals_REAL') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 87; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[14].Name = 'F13_AssertArrayEquals_SINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 88; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[14].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 89; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[14].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 90; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[14].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 91; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[14].FirstFailure.AssertionType = E_AssertionType.Type_Array_SINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 92; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[14].FirstFailure.Message, 'F13_AssertArrayEquals_SINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 93; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[15].Name = 'F14_AssertArrayEquals_UDINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 94; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[15].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 95; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[15].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 96; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[15].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 97; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[15].FirstFailure.AssertionType = E_AssertionType.Type_Array_UDINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 98; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[15].FirstFailure.Message, 'F14_AssertArrayEquals_UDINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 99; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[16].Name = 'F15_AssertArrayEquals_UINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 100; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[16].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 101; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[16].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 102; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[16].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 103; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[16].FirstFailure.AssertionType = E_AssertionType.Type_Array_UINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 104; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[16].FirstFailure.Message, 'F15_AssertArrayEquals_UINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 105; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[17].Name = 'F16_AssertArrayEquals_ULINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 106; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[17].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 107; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[17].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 108; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[17].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 109; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[17].FirstFailure.AssertionType = E_AssertionType.Type_Array_ULINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 110; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[17].FirstFailure.Message, 'F16_AssertArrayEquals_ULINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 111; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[18].Name = 'F17_AssertArrayEquals_USINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 112; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[18].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 113; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[18].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 114; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[18].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 115; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[18].FirstFailure.AssertionType = E_AssertionType.Type_Array_USINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 116; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[18].FirstFailure.Message, 'F17_AssertArrayEquals_USINT') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 117; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[19].Name = 'F18_AssertArrayEquals_WORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 118; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[19].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 119; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[19].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 120; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[19].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 121; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[19].FirstFailure.AssertionType = E_AssertionType.Type_Array_WORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 122; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[19].FirstFailure.Message, 'F18_AssertArrayEquals_WORD') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 123; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].Name = 'F19_AssertEquals') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 124; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 125; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 126; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 127; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].FirstFailure.AssertionType = E_AssertionType.Type_ANY) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 128; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[20].FirstFailure.Message = 'F19_AssertEquals') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 129; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].Name = 'F20_AssertEquals_BOOL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 130; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 131; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 132; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 133; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 134; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[21].FirstFailure.Message = 'F20_AssertEquals_BOOL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 135; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].Name = 'F21_AssertEquals_BYTE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 136; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 137; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 138; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 139; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].FirstFailure.AssertionType = E_AssertionType.Type_BYTE) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 140; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[22].FirstFailure.Message = 'F21_AssertEquals_BYTE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 141; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].Name = 'F22_AssertEquals_DATE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 142; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 143; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 144; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 145; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].FirstFailure.AssertionType = E_AssertionType.Type_DATE) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 146; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[23].FirstFailure.Message = 'F22_AssertEquals_DATE') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 147; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].Name = 'F23_AssertEquals_DATE_AND_TIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 148; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 149; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 150; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 151; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].FirstFailure.AssertionType = E_AssertionType.Type_DATE_AND_TIME) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 152; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[24].FirstFailure.Message = 'F23_AssertEquals_DATE_AND_TIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 153; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].Name = 'F24_AssertEquals_DINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 154; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 155; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 156; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 157; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].FirstFailure.AssertionType = E_AssertionType.Type_DINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 158; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[25].FirstFailure.Message = 'F24_AssertEquals_DINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 159; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].Name = 'F25_AssertEquals_DWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 160; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 161; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 162; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 163; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].FirstFailure.AssertionType = E_AssertionType.Type_DWORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 164; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[26].FirstFailure.Message = 'F25_AssertEquals_DWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 165; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].Name = 'F26_AssertEquals_INT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 166; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 167; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 168; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 169; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].FirstFailure.AssertionType = E_AssertionType.Type_INT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 170; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[27].FirstFailure.Message = 'F26_AssertEquals_INT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 171; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].Name = 'F27_AssertEquals_LINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 172; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 173; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 174; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 175; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].FirstFailure.AssertionType = E_AssertionType.Type_LINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 176; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[28].FirstFailure.Message = 'F27_AssertEquals_LINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 177; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].Name = 'F28_AssertEquals_LREAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 178; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 179; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 180; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 181; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].FirstFailure.AssertionType = E_AssertionType.Type_LREAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 182; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[29].FirstFailure.Message = 'F28_AssertEquals_LREAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 183; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].Name = 'F29_AssertEquals_LTIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 184; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 185; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 186; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 187; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].FirstFailure.AssertionType = E_AssertionType.Type_LTIME) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 188; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[30].FirstFailure.Message = 'F29_AssertEquals_LTIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 189; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].Name = 'F30_AssertEquals_LWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 190; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 191; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 192; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 193; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].FirstFailure.AssertionType = E_AssertionType.Type_LWORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 194; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[31].FirstFailure.Message = 'F30_AssertEquals_LWORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 195; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].Name = 'F31_AssertEquals_REAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 196; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 197; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 198; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 199; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].FirstFailure.AssertionType = E_AssertionType.Type_REAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 200; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[32].FirstFailure.Message = 'F31_AssertEquals_REAL') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 201; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].Name = 'F32_AssertEquals_SINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 202; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 203; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 204; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 205; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].FirstFailure.AssertionType = E_AssertionType.Type_SINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 206; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[33].FirstFailure.Message = 'F32_AssertEquals_SINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 207; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[34].Name = 'F33_AssertEquals_STRING') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 208; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[34].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 209; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[34].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 210; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[34].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 211; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[34].FirstFailure.AssertionType = E_AssertionType.Type_STRING) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 212; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[34].FirstFailure.Message, 'F33_AssertEquals_STRING') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 213; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].Name = 'F34_AssertEquals_TIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 214; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 215; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 216; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 217; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].FirstFailure.AssertionType = E_AssertionType.Type_TIME) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 218; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[35].FirstFailure.Message = 'F34_AssertEquals_TIME') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 219; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].Name = 'F35_AssertEquals_TIME_OF_DAY') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 220; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 221; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 222; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 223; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].FirstFailure.AssertionType = E_AssertionType.Type_TIME_OF_DAY) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 224; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[36].FirstFailure.Message = 'F35_AssertEquals_TIME_OF_DAY') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 225; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].Name = 'F36_AssertEquals_UDINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 226; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 227; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 228; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 229; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].FirstFailure.AssertionType = E_AssertionType.Type_UDINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 230; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[37].FirstFailure.Message = 'F36_AssertEquals_UDINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 231; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].Name = 'F37_AssertEquals_UINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 232; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 233; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 234; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 235; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].FirstFailure.AssertionType = E_AssertionType.Type_UINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 236; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[38].FirstFailure.Message = 'F37_AssertEquals_UINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 237; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].Name = 'F38_AssertEquals_ULINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 238; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 239; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 240; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 241; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].FirstFailure.AssertionType = E_AssertionType.Type_ULINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 242; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[39].FirstFailure.Message = 'F38_AssertEquals_ULINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 243; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].Name = 'F39_AssertEquals_USINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 244; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 245; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 246; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 247; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].FirstFailure.AssertionType = E_AssertionType.Type_USINT) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 248; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[40].FirstFailure.Message = 'F39_AssertEquals_USINT') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 249; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].Name = 'F40_AssertEquals_WORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 250; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 251; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 252; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 253; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].FirstFailure.AssertionType = E_AssertionType.Type_WORD) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 254; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[41].FirstFailure.Message = 'F40_AssertEquals_WORD') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 255; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[42].Name = 'F41_AssertEquals_WSTRING') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 256; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[42].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 257; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[42].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 258; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[42].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 259; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[42].FirstFailure.AssertionType = E_AssertionType.Type_WSTRING) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 260; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[42].FirstFailure.Message, 'F41_AssertEquals_WSTRING') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 261; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].Name = 'F42_AssertFalse') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 262; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 263; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 264; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 265; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 266; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[43].FirstFailure.Message = 'F42_AssertFalse') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 267; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].Name = 'F43_AssertTrue') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 268; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 269; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 270; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 271; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].FirstFailure.AssertionType = E_AssertionType.Type_BOOL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 272; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[44].FirstFailure.Message = 'F43_AssertTrue') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 273; END_IF
+	END_IF
+	Done := TRUE;
+END_IF
+

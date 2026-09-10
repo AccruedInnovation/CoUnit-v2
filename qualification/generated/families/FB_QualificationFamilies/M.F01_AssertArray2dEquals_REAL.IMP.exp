@@ -1,0 +1,7 @@
+TEST('F01_AssertArray2dEquals_REAL');
+IF NOT IS_TEST_FINISHED('F01_AssertArray2dEquals_REAL') THEN
+	_v1e[1, 1] := 1;
+	_v1a[1, 1] := 2;
+	AssertArray2dEquals_REAL(Expecteds := _v1e, Actuals := _v1a, Delta := 0.0, Message := 'F01_AssertArray2dEquals_REAL');
+	TEST_FINISHED();
+END_IF

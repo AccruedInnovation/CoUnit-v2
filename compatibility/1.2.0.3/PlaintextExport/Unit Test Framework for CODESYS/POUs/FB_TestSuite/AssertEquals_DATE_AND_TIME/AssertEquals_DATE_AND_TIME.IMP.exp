@@ -1,0 +1,22 @@
+IF GVL_coUnit.IgnoreCurrentTest OR GVL_coUnit.CurrentTestIsFinished THEN
+    RETURN;
+END_IF
+
+TestInstancePath := AddTestNameToInstancePath(TestInstancePath := FINDTestSuiteInstancePath());
+AssertResults.ReportResult(ExpectedSize := SIZEOF(Expected),
+    ExpectedTypeClass := IBaseLibrary.TypeClass.TYPE_DATEANDTIME,
+    ExpectedValue := ADR(Expected),
+    ActualSize := SIZEOF(Actual),
+    ActualTypeClass := IBaseLibrary.TypeClass.TYPE_DATEANDTIME,
+    ActualValue := ADR(Actual),
+    Message := Message,
+    TestInstancePath := TestInstancePath,
+    AlreadyReported => AlreadyReported);
+
+IF NOT AlreadyReported AND Expected <> Actual THEN
+    SetTestFailed(AssertionType := E_AssertionType.Type_DATE_AND_TIME, AssertionMessage := Message);
+    AssertMessageFormatter.LogAssertFailure(Expected := DT_TO_STRING(Expected),
+        Actual := DT_TO_STRING(Actual),
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+END_IF

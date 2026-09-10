@@ -1,0 +1,8 @@
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => _testIndex, Execute => _execute) THEN RETURN; END_IF
+IF NOT _execute THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := TestRecords[_testIndex].InvocationOrdinal, AssertionType := AssertionType, Message := AssertionMessage, Comparison := _result);

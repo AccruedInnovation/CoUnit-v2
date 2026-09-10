@@ -1,0 +1,33 @@
+(* Run coUnit test suites *)
+IF NOT AllTestSuitesFinished THEN
+    IF GVL_coUnit.NumberOfInitializedTestSuites = 0 THEN
+        AllTestSuitesFinished := TRUE;
+    ELSIF GVL_coUnit.NumberOfInitializedTestSuites > 0 THEN
+        FOR Counter := 1 TO GVL_coUnit.NumberOfInitializedTestSuites BY 1 DO
+            IF GVL_coUnit.TestSuiteAddresses[Counter]^.AreAllTestsFinished() THEN
+                NumberOfTestSuitesFinished := NumberOfTestSuitesFinished + 1;
+            ELSE
+                GVL_coUnit.CurrentTestSuiteBeingCalled := GVL_coUnit.TestSuiteAddresses[Counter];
+                GVL_coUnit.CurrentTestSuiteBeingCalled^.SetHasStartedRunning();
+                GVL_coUnit.CurrentTestSuiteBeingCalled^();
+            END_IF
+        END_FOR
+
+        (* Check if some event triggered an abortion of running the tests, in that case abort it now.
+           This can be accomplished by setting the result of the test suites run to finished. *)
+        IF AbortRunningTestSuites THEN
+            NumberOfTestSuitesFinished := GVL_coUnit.NumberOfInitializedTestSuites;
+        END_IF
+
+        IF NumberOfTestSuitesFinished = GVL_coUnit.NumberOfInitializedTestSuites THEN
+            AllTestSuitesFinished := TRUE;
+        END_IF
+    END_IF
+END_IF
+
+(* Store test suite results continuously *)
+TestResults();
+(* Log test suite results continuously *)
+TestResultLogger.LogTestSuiteResults();
+(* publish the xUnit Xml file once if enabled *)
+IsReportWrittenToDisk := XmlTestResultPublisher.LogTestSuiteResults();

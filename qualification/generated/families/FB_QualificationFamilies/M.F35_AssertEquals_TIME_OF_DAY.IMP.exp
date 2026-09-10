@@ -1,0 +1,5 @@
+TEST('F35_AssertEquals_TIME_OF_DAY');
+IF NOT IS_TEST_FINISHED('F35_AssertEquals_TIME_OF_DAY') THEN
+	AssertEquals_TIME_OF_DAY(Expected := _v35e, Actual := _v35a, Message := 'F35_AssertEquals_TIME_OF_DAY');
+	TEST_FINISHED();
+END_IF

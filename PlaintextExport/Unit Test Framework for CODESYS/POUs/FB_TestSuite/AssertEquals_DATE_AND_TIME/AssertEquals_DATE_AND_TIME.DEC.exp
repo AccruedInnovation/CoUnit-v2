@@ -1,0 +1,11 @@
+METHOD PUBLIC AssertEquals_DATE_AND_TIME
+VAR_INPUT
+	Expected : DATE_AND_TIME;
+	Actual : DATE_AND_TIME;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

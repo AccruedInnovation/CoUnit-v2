@@ -1,0 +1,8 @@
+(*
+    Opens a file
+*)
+METHOD PUBLIC Open : SysFile.SysTypes.RTS_IEC_RESULT;
+VAR_INPUT
+    FileName : T_MaxString := 'filepath/output.xml';  // File name can contain an absolute or relative path to the file. Path entries must be separated with a Slash (/)
+    FileAccessMode : SysFile.ACCESS_MODE := SysFile.ACCESS_MODE.AM_APPEND_PLUS;
+END_VAR

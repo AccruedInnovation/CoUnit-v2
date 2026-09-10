@@ -1,0 +1,12 @@
+TYPE ST_CoUnitSnapshotSuite :
+STRUCT
+	Name : T_MaxString;
+	Identity : UINT;
+	Total : UINT;
+	Passed : UINT;
+	Failed : UINT;
+	Skipped : UINT;
+	Errors : UINT;
+	Tests : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF ST_CoUnitSnapshotTest;
+END_STRUCT
+END_TYPE

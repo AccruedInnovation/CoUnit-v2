@@ -1,0 +1,60 @@
+.................FAIL: root count mismatch: declared={'tests': 2, 'failures': 0, 'errors': 0, 'skipped': 0}, observed={'tests': 1, 'failures': 0, 'errors': 0, 'skipped': 0}
+FAIL: testcase 'TwoStates' has multiple terminal result children
+FAIL: <testcase> 'assertions' must be >= 0
+..FAIL: semantic summary does not match expected JSON
+expected={"errors": 1, "failures": 1, "skipped": 1, "suites": [{"cases": [{"assertions": 2, "classname": "Suite & <A>", "name": "Pass \"quoted\"", "status": "passed"}, {"assertions": 3, "classname": "Suite & <A>", "failure": {"message": "expected <3 & 4> but got \"5\"", "type": "Type_DINT"}, "name": "Fail & compare", "status": "failure"}, {"assertions": 0, "classname": "Suite & <A>", "name": "Disabled", "status": "skipped"}, {"assertions": 0, "classname": "Suite & <A>", "error": {"message": "task lookup failed"}, "name": "Framework error", "status": "error"}], "errors": 1, "failures": 1, "name": "Suite & <A>", "skipped": 1, "tests": 4}], "tests": 4}
+actual={"errors": 0, "failures": 0, "skipped": 0, "suites": [], "tests": 0}
+.
+----------------------------------------------------------------------
+Ran 20 tests in 0.052s
+
+OK
+PASS: xUnit XML parses and count/result/detail semantics match
+{
+  "errors": 1,
+  "failures": 1,
+  "skipped": 1,
+  "suites": [
+    {
+      "cases": [
+        {
+          "assertions": 2,
+          "classname": "Suite & <A>",
+          "name": "Pass \"quoted\"",
+          "status": "passed"
+        },
+        {
+          "assertions": 3,
+          "classname": "Suite & <A>",
+          "failure": {
+            "message": "expected <3 & 4> but got \"5\"",
+            "type": "Type_DINT"
+          },
+          "name": "Fail & compare",
+          "status": "failure"
+        },
+        {
+          "assertions": 0,
+          "classname": "Suite & <A>",
+          "name": "Disabled",
+          "status": "skipped"
+        },
+        {
+          "assertions": 0,
+          "classname": "Suite & <A>",
+          "error": {
+            "message": "task lookup failed"
+          },
+          "name": "Framework error",
+          "status": "error"
+        }
+      ],
+      "errors": 1,
+      "failures": 1,
+      "name": "Suite & <A>",
+      "skipped": 1,
+      "tests": 4
+    }
+  ],
+  "tests": 4
+}

@@ -1,0 +1,3 @@
+_suite := GVL_coUnit.coUnitRunner.GetActiveSuite(RequireContext := TRUE);
+IF _suite = 0 THEN RETURN; END_IF
+_suite^.BeginTest(Name := TestName, Ordered := FALSE);

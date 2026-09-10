@@ -1,0 +1,4 @@
+(*
+    Gets/Sets the current length (in bytes) of the streambuffer
+*)
+PROPERTY Length : UDINT

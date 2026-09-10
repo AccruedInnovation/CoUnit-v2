@@ -1,0 +1,4 @@
+(*
+    This function runs all test suites that have been initialized.
+*)
+FUNCTION RUN

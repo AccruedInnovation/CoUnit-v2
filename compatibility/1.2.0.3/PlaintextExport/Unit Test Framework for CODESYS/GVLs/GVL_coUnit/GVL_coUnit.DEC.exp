@@ -1,0 +1,36 @@
+{attribute 'no_assign'}
+{attribute 'qualified_only'}
+VAR_GLOBAL
+    coUnitRunner : FB_coUnitRunner;
+   
+	(* Indication of whether the last instantiated test suite has an assert instance created *)
+    TestSuiteIsRegistered : BOOL;
+   
+    (* Pointer to current test suite being called *)
+    CurrentTestSuiteBeingCalled : POINTER TO FB_TestSuite;
+    
+	(* Current name of test being called *)
+    CurrentTestNameBeingCalled : T_MaxString;
+    
+    (* Whether or not the current test being called has finished running *)
+    CurrentTestIsFinished : BOOL;
+
+    (* This is a flag that indicates that the current test should be ignored, and
+	   thus that all assertions under it should be ignored as well. A test can be ignored either
+	   because the user has requested so, or because the test is a duplicate name *)
+	IgnoreCurrentTest : BOOL; 
+
+    (* The assert function block instance should be 1:1 mapped to
+       the test suite instance path. *)
+    NumberOfInitializedTestSuites : UINT := 0;
+    TestSuiteAddresses : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestSuites] OF POINTER TO FB_TestSuite;
+
+    (* If the user is utilizing the TEST_ORDERED(), we need to keep track of which ordered test is currently running.
+       We do this by defining an array, in where we can see which current TEST_ORDERED() is the one to be handled right now.
+       The below array is only used for TEST_ORDERED()-tests.  *)
+    CurrentlyRunningOrderedTestInTestSuite : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestSuites] OF UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+	
+	
+    (* Default path and filename for the xunit testresults e.g.: for use with jenkins *)
+    xUnitFilePath : T_MaxString := 'coUnit_xunit_testresults.xml';
+END_VAR

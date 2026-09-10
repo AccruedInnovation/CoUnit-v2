@@ -1,0 +1,7 @@
+(*
+    This function takes the type-class of a ANY-variable and returns the STRING representation of it.
+*)
+FUNCTION F_AnyTypeClassToString : STRING
+VAR_INPUT
+    AnyTypeClass : __System.TYPE_CLASS;
+END_VAR

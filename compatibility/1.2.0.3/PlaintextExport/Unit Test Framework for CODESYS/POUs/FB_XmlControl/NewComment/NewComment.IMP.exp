@@ -1,0 +1,8 @@
+IF TagOpen THEN
+    XmlBuffer.Append := TAG_CLOSE;
+    TagOpen := FALSE;
+END_IF;
+
+XmlBuffer.Append := OPEN_COMMENT;
+XmlBuffer.Append := Comment;
+XmlBuffer.Append := CLOSE_COMMENT;

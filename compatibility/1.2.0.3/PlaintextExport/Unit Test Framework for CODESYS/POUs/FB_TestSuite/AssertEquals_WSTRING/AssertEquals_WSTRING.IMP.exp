@@ -1,0 +1,22 @@
+IF GVL_coUnit.IgnoreCurrentTest OR GVL_coUnit.CurrentTestIsFinished THEN
+    RETURN;
+END_IF
+
+TestInstancePath := AddTestNameToInstancePath(TestInstancePath := FindTestSuiteInstancePath());
+AssertResults.ReportResult(ExpectedSize := SIZEOF(Expected),
+    ExpectedTypeClass := IBaseLibrary.TypeClass.TYPE_WSTRING,
+    ExpectedValue := ADR(Expected),
+    ActualSize := SIZEOF(Actual),
+    ActualTypeClass := IBaseLibrary.TypeClass.TYPE_WSTRING,
+    ActualValue := ADR(Actual),
+    Message := Message,
+    TestInstancePath := TestInstancePath,
+    AlreadyReported => AlreadyReported);
+
+IF NOT AlreadyReported AND (WLEN(STR := Expected) <> WLEN(STR := Actual) OR (Expected <> Actual)) THEN
+    SetTestFailed(AssertionType := E_AssertionType.Type_WSTRING, AssertionMessage := Message);
+    AssertMessageFormatter.LogAssertFailure(Expected := 'Not possible to print EXP unicode WSTRING value',
+        Actual := 'Not possible to print ACT unicode WSTRING value',
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+END_IF

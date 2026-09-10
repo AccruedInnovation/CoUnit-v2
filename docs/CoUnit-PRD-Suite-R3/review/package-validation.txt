@@ -1,0 +1,7 @@
+PASS
+PRDs: 4; slices: 12; assertion methods: 44; compatibility surface rows: 60
+SRC-001 sha256: 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+SRC-001 entries: 665
+R14 path-byte controls: UTF8 122×U+00E9=244 bytes accepted-boundary; 123×U+00E9=246 bytes rejected-boundary
+runtime matrix row widths: 27 fields
+xUnit controls: positive=0; negatives=3 rejected

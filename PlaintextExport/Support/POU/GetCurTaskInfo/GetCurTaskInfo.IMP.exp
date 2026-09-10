@@ -1,0 +1,10 @@
+Valid := FALSE;
+IF GVL_coUnit.InjectTaskLookupFailure THEN RETURN; END_IF
+pCurTask := CmpIecTask.IECTaskGetCurrent(pResult := ADR(pResult));
+IF pResult <> 0 THEN RETURN; END_IF
+IF pCurTask = SysFile.SysTypes.RTS_INVALID_HANDLE THEN RETURN; END_IF
+pCurTaskInfo := CmpIecTask.IECTaskGetInfo3(hIecTask := pCurTask, pResult := ADR(pResult));
+IF pResult <> 0 THEN RETURN; END_IF
+IF pCurTaskInfo = 0 THEN RETURN; END_IF
+CurTaskInfo := pCurTaskInfo^;
+Valid := TRUE;

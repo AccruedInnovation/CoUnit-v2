@@ -1,0 +1,9 @@
+{attribute 'hide'}
+TYPE ST_Log :
+STRUCT
+	LogOptions: CmpLog.LogOptions := (szName := 'coUnit', bEnable := 1, uiType := CmpLog.LogTypes.LT_STD, uiFilter := 16#FFFFFFFF, iMaxEntries := 1000, iMaxFileSize := 1000, iMaxFiles := 10);
+	hLog : SysTypes.RTS_IEC_HANDLE;
+	pResult : POINTER TO SysTypes.RTS_IEC_RESULT;
+	Created : BOOL;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,12 @@
+METHOD INTERNAL BuildSnapshot : BOOL
+VAR_INPUT
+	Disposition : E_CoUnitRunDisposition;
+END_VAR
+VAR
+	_s : UINT;
+	_t : UINT;
+	_suite : POINTER TO FB_TestSuite;
+	_record : ST_CoUnitTestRecord;
+	_ok : BOOL;
+	_sealedDisposition : E_CoUnitRunDisposition;
+END_VAR

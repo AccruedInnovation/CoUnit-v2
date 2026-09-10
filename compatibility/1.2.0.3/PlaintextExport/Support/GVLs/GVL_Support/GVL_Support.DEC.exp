@@ -1,0 +1,7 @@
+{attribute 'qualified_only'}
+{attribute 'hide'}
+VAR_GLOBAL
+	{attribute 'hide'}
+	_ST_Logger : ST_Log;
+	_CmpCfLog : CmpCfLog;
+END_VAR

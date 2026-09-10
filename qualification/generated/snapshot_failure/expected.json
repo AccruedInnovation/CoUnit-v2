@@ -1,0 +1,9 @@
+{
+  "native_status": "NOT_RUN",
+  "Done": true,
+  "OraclePass": true,
+  "SnapshotValid": false,
+  "Disposition": "FRAMEWORK_ERROR",
+  "report": "No new current report; preserve prior sentinel or absence",
+  "log": "No successful publication banner"
+}

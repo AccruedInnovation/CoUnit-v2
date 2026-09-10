@@ -1,0 +1,3 @@
+pCurApp := CmpApp.AppGetCurrent( pResult := pResult );
+pCurProjInfo := CmpApp.AppGetApplicationInfo( pApp := pCurApp, pResult := pResult );
+PROJECT_INFO := pCurProjInfo^;

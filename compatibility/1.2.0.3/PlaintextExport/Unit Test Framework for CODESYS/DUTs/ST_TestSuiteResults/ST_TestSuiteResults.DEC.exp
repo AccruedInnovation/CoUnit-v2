@@ -1,0 +1,12 @@
+TYPE ST_TestSuiteResults :
+STRUCT   
+    (* General test results *)
+    NumberOfTestSuites : UINT; // The total number of test suites
+    NumberOfTestCases : UINT; // The total number of test cases (for all test suites)
+    NumberOfSuccessfulTestCases : UINT; // The total number of test cases that had all ASSERTS successful
+    NumberOfFailedTestCases : UINT; // The total number of test cases that had at least one ASSERT failed
+
+    (* Test results for each individiual test suite *)
+    TestSuiteResults : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestSuites] OF ST_TestSuiteResult;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,10 @@
+_effectCount := _effectCount + 1;
+_lastError := 0;
+IF Operation = _faultOperation THEN
+	_occurrence := _occurrence + 1;
+	IF _occurrence = _faultOccurrence OR (_faultOccurrence2 <> 0 AND _occurrence = _faultOccurrence2) THEN
+		_lastError := _faultError;
+		RETURN;
+	END_IF
+END_IF
+BeforeOperation := TRUE;

@@ -1,0 +1,17 @@
+(* TEST ONLY: resolve event arguments through LogCopyInfo; never add a log entry. *)
+FUNCTION F_QualificationLogCallback : SysTypes.RTS_IEC_RESULT
+VAR_INPUT
+	pEventParam : POINTER TO CmpEventMgr.EventParam;
+END_VAR
+VAR
+	_event : POINTER TO CmpLog.EVTPARAM_CmpLogAdd;
+	_source : POINTER TO BYTE;
+	_dest : POINTER TO BYTE;
+	_index : UINT;
+	_i : UINT;
+	_length : UINT;
+	_resolved : STRING(127);
+	_copyBytes : DINT;
+	_copyResult : SysTypes.RTS_IEC_RESULT;
+	_arguments : POINTER TO BYTE;
+END_VAR

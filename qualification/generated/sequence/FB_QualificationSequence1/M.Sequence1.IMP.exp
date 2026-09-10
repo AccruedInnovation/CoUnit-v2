@@ -1,0 +1,4 @@
+TEST('Sequence1');
+IF NOT IS_TEST_FINISHED('Sequence1') THEN
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,9 @@
+FinishCurrent := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => _index, Execute => _execute) THEN RETURN; END_IF
+IF TestRecords[_index].State <> E_CoUnitTestState.OPEN THEN
+	FinishCurrent := TRUE;
+	RETURN;
+END_IF
+IF NOT _execute THEN RETURN; END_IF
+FinishCurrent := FinishIndex(Index := _index);
+GVL_coUnit.coUnitRunner.SelectTest(Index := 0, Execute := FALSE, Name := '');

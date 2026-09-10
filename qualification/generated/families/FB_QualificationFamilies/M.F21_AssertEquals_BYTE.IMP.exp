@@ -1,0 +1,5 @@
+TEST('F21_AssertEquals_BYTE');
+IF NOT IS_TEST_FINISHED('F21_AssertEquals_BYTE') THEN
+	AssertEquals_BYTE(Expected := _v21e, Actual := _v21a, Message := 'F21_AssertEquals_BYTE');
+	TEST_FINISHED();
+END_IF

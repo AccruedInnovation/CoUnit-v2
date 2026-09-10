@@ -1,0 +1,6 @@
+XmlBuffer.Append := SPACE;
+XmlBuffer.Append := Name;
+XmlBuffer.Append := EQUALS;
+XmlBuffer.Append := QUOTE;
+XmlBuffer.Append := Value;
+XmlBuffer.Append := QUOTE;

@@ -1,0 +1,2 @@
+TYPE T_MaxString : STRING(255); // String with max length of 255 characters
+END_TYPE

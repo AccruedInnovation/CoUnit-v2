@@ -1,0 +1,8 @@
+FindTest := 0;
+IF NOT CoUnitCanonicalName(Name := Name, Canonical => _canonical, Disabled => _disabled) THEN RETURN; END_IF
+FOR _i := 1 TO NumberOfTests DO
+	IF TestRecords[UDINT_TO_UINT(_i)].CanonicalName = _canonical THEN
+		FindTest := UDINT_TO_UINT(_i);
+		RETURN;
+	END_IF
+END_FOR

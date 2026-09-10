@@ -1,0 +1,5 @@
+TEST('AnyTypeMismatch');
+IF NOT IS_TEST_FINISHED('AnyTypeMismatch') THEN
+	AssertEquals(Expected := _uint, Actual := _udint, Message := 'AnyTypeMismatch');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,4 @@
+SearchPosition := 0;
+TagListSeekBuffer.Length := 0;
+TagsSeek := '';
+Tag := '';

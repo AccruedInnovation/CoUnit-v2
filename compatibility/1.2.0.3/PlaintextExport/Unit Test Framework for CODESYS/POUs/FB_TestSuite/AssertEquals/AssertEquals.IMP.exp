@@ -1,0 +1,293 @@
+IF GVL_coUnit.IgnoreCurrentTest OR GVL_coUnit.CurrentTestIsFinished THEN
+    RETURN;
+END_IF
+
+(*
+    This compares two instances of any object type and returns whether they
+    are the same type, size and value or not. This is necessary for two reasons:
+    1. So that we can know exactly what differs between the two input parameters
+    2. It's not possible to do a comparison (= or <>) between two instances of ANY. 
+*)
+(* Check whether the type of the inputs differs *)
+IF Expected.TypeClass <> Actual.TypeClass THEN
+    DataTypesNotEquals := TRUE;
+END_IF
+
+(* 
+	For STRING & WSTRING we make an exception,
+	we skip checking them on size and start comparing them on content
+*)
+IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_STRING OR UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_WSTRING
+    THEN
+    (* STRING *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_STRING THEN
+        MEMCPY(destAddr := ADR(stringExpected), srcAddr := Expected.pValue, n := DINT_TO_UDINT(Expected.diSize));
+        MEMCPY(destAddr := ADR(stringActual), srcAddr := Actual.pValue, n := DINT_TO_UDINT(Actual.diSize));
+        AssertEquals_STRING(Expected := stringExpected, Actual := stringActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* WSTRING *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_WSTRING THEN
+        MEMCPY(destAddr := ADR(wstringExpected), srcAddr := Expected.pValue, n := DINT_TO_UDINT(Expected.diSize));
+        MEMCPY(destAddr := ADR(wstringActual), srcAddr := Actual.pValue, n := DINT_TO_UDINT(Actual.diSize));
+        AssertEquals_WSTRING(Expected := wstringExpected, Actual := wstringActual, Message := Message);
+        RETURN;
+    END_IF
+ELSE
+    (* Check whether the size of the inputs differs *)
+    IF NOT DataTypesNotEquals THEN
+        IF (Expected.diSize <> Actual.diSize) THEN
+            DataSizeNotEquals := TRUE;
+        END_IF
+    END_IF
+END_IF
+
+(* Even though the data type and size are equals, the contents may still differ *)
+IF NOT DataTypesNotEquals AND NOT DataSizeNotEquals THEN
+    // Compare each byte in the ANY-types
+    FOR IteratorCounter := 0 TO Expected.diSize - 1 BY 1 DO
+        IF Expected.pValue[IteratorCounter] <> Actual.pValue[IteratorCounter] THEN
+            DataContentNotEquals := TRUE;
+            EXIT;
+        END_IF
+    END_FOR
+END_IF
+
+(* First check whether the input data are any of the standard data types that are supported by TcUnit.
+   In this case call the standard Assert-methods for that data. But before doing that we need to make sure
+   that both the expected and actual:
+   - Have both the same data type
+   - Both have the same data size
+*)
+IF NOT DataTypesNotEquals AND NOT DataSizeNotEquals THEN
+    (* BOOL *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_BOOL THEN
+        MEMCPY(destAddr := ADR(boolExpected), srcAddr := Expected.pValue, n := SIZEOF(BOOL));
+        MEMCPY(destAddr := ADR(boolActual), srcAddr := Actual.pValue, n := SIZEOF(BOOL));
+        AssertEquals_BOOL(Expected := boolExpected, Actual := boolActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* BYTE *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_BYTE THEN
+        MEMCPY(destAddr := ADR(byteExpected), srcAddr := Expected.pValue, n := SIZEOF(BYTE));
+        MEMCPY(destAddr := ADR(byteActual), srcAddr := Actual.pValue, n := SIZEOF(BYTE));
+        AssertEquals_BYTE(Expected := byteExpected, Actual := byteActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* DATE *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_DATE THEN
+        MEMCPY(destAddr := ADR(dateExpected), srcAddr := Expected.pValue, n := SIZEOF(DATE));
+        MEMCPY(destAddr := ADR(dateActual), srcAddr := Actual.pValue, n := SIZEOF(DATE));
+        AssertEquals_DATE(Expected := dateExpected, Actual := dateActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* DATE_AND_TIME *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_DATEANDTIME THEN
+        MEMCPY(destAddr := ADR(dateAndTimeExpected), srcAddr := Expected.pValue, n := SIZEOF(DATE_AND_TIME));
+        MEMCPY(destAddr := ADR(dateAndTimeActual), srcAddr := Actual.pValue, n := SIZEOF(DATE_AND_TIME));
+        AssertEquals_DATE_AND_TIME(Expected := dateAndTimeExpected, Actual := dateAndTimeActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* DINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_DINT THEN
+        MEMCPY(destAddr := ADR(dintExpected), srcAddr := Expected.pValue, n := SIZEOF(DINT));
+        MEMCPY(destAddr := ADR(dintActual), srcAddr := Actual.pValue, n := SIZEOF(DINT));
+        AssertEquals_DINT(Expected := dintExpected, Actual := dintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* DWORD *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_DWORD THEN
+        MEMCPY(destAddr := ADR(dwordExpected), srcAddr := Expected.pValue, n := SIZEOF(DWORD));
+        MEMCPY(destAddr := ADR(dwordActual), srcAddr := Actual.pValue, n := SIZEOF(DWORD));
+        AssertEquals_DWORD(Expected := dwordExpected, Actual := dwordActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* INT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_INT THEN
+        MEMCPY(destAddr := ADR(intExpected), srcAddr := Expected.pValue, n := SIZEOF(INT));
+        MEMCPY(destAddr := ADR(intActual), srcAddr := Actual.pValue, n := SIZEOF(INT));
+        AssertEquals_INT(Expected := intExpected, Actual := intActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* LINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_LINT THEN
+        MEMCPY(destAddr := ADR(lintExpected), srcAddr := Expected.pValue, n := SIZEOF(LINT));
+        MEMCPY(destAddr := ADR(lintActual), srcAddr := Actual.pValue, n := SIZEOF(LINT));
+        AssertEquals_LINT(Expected := lintExpected, Actual := lintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* LREAL *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_LREAL THEN
+        MEMCPY(destAddr := ADR(lrealExpected), srcAddr := Expected.pValue, n := SIZEOF(LREAL));
+        MEMCPY(destAddr := ADR(lrealActual), srcAddr := Actual.pValue, n := SIZEOF(LREAL));
+        AssertEquals_LREAL(Expected := lrealExpected,
+            Actual := lrealActual,
+            Delta := 0.0,
+            Message := Message);
+
+        RETURN;
+    END_IF
+
+    (* LTIME *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_LTIME THEN
+        MEMCPY(destAddr := ADR(ltimeExpected), srcAddr := Expected.pValue, n := SIZEOF(LTIME));
+        MEMCPY(destAddr := ADR(ltimeActual), srcAddr := Actual.pValue, n := SIZEOF(LTIME));
+        AssertEquals_LTIME(Expected := ltimeExpected, Actual := ltimeActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* LWORD *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_LWORD THEN
+        MEMCPY(destAddr := ADR(lwordExpected), srcAddr := Expected.pValue, n := SIZEOF(LWORD));
+        MEMCPY(destAddr := ADR(lwordActual), srcAddr := Actual.pValue, n := SIZEOF(LWORD));
+        AssertEquals_LWORD(Expected := lwordExpected, Actual := lwordActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* REAL *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_REAL THEN
+        MEMCPY(destAddr := ADR(realExpected), srcAddr := Expected.pValue, n := SIZEOF(REAL));
+        MEMCPY(destAddr := ADR(realActual), srcAddr := Actual.pValue, n := SIZEOF(REAL));
+        AssertEquals_REAL(Expected := realExpected,
+            Actual := realActual,
+            Delta := 0.0,
+            Message := Message);
+
+        RETURN;
+    END_IF
+
+    (* SINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_SINT THEN
+        MEMCPY(destAddr := ADR(sintExpected), srcAddr := Expected.pValue, n := SIZEOF(SINT));
+        MEMCPY(destAddr := ADR(sintActual), srcAddr := Actual.pValue, n := SIZEOF(SINT));
+        AssertEquals_SINT(Expected := sintExpected, Actual := sintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    // (* STRING *)
+    // IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_STRING THEN
+    //     MEMCPY(destAddr := ADR(stringExpected), srcAddr := Expected.pValue, n := DINT_TO_UDINT(Expected.diSize));
+    //     MEMCPY(destAddr := ADR(stringActual), srcAddr := Actual.pValue, n := DINT_TO_UDINT(Actual.diSize));
+    //     AssertEquals_STRING(Expected := stringExpected, Actual := stringActual, Message := Message);
+    //     RETURN;
+    // END_IF
+    //
+    //(* WSTRING *)
+    // IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_WSTRING THEN
+    //     MEMCPY(destAddr := ADR(wstringExpected), srcAddr := Expected.pValue, n := DINT_TO_UDINT(Expected.diSize));
+    //     MEMCPY(destAddr := ADR(wstringActual), srcAddr := Actual.pValue, n := DINT_TO_UDINT(Actual.diSize));
+    //     AssertEquals_WSTRING(Expected := wstringExpected, Actual := wstringActual, Message := Message);
+    //     RETURN;
+    // END_IF
+    (* TIME *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_TIME THEN
+        MEMCPY(destAddr := ADR(timeExpected), srcAddr := Expected.pValue, n := SIZEOF(TIME));
+        MEMCPY(destAddr := ADR(timeActual), srcAddr := Actual.pValue, n := SIZEOF(TIME));
+        AssertEquals_TIME(Expected := timeExpected, Actual := timeActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* TIME_OF_DAY *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_TIMEOFDAY THEN
+        MEMCPY(destAddr := ADR(timeOfDayExpected), srcAddr := Expected.pValue, n := SIZEOF(TIME_OF_DAY));
+        MEMCPY(destAddr := ADR(timeOfDayActual), srcAddr := Actual.pValue, n := SIZEOF(TIME_OF_DAY));
+        AssertEquals_TIME_OF_DAY(Expected := timeOfDayExpected, Actual := timeOfDayActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* UDINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_UDINT THEN
+        MEMCPY(destAddr := ADR(udintExpected), srcAddr := Expected.pValue, n := SIZEOF(UDINT));
+        MEMCPY(destAddr := ADR(udintActual), srcAddr := Actual.pValue, n := SIZEOF(UDINT));
+        AssertEquals_UDINT(Expected := udintExpected, Actual := udintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* UINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_UINT THEN
+        MEMCPY(destAddr := ADR(uintExpected), srcAddr := Expected.pValue, n := SIZEOF(UINT));
+        MEMCPY(destAddr := ADR(uintActual), srcAddr := Actual.pValue, n := SIZEOF(UINT));
+        AssertEquals_UINT(Expected := uintExpected, Actual := uintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* ULINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_ULINT THEN
+        MEMCPY(destAddr := ADR(ulintExpected), srcAddr := Expected.pValue, n := SIZEOF(ULINT));
+        MEMCPY(destAddr := ADR(ulintActual), srcAddr := Actual.pValue, n := SIZEOF(ULINT));
+        AssertEquals_ULINT(Expected := ulintExpected, Actual := ulintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* USINT *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_USINT THEN
+        MEMCPY(destAddr := ADR(usintExpected), srcAddr := Expected.pValue, n := SIZEOF(USINT));
+        MEMCPY(destAddr := ADR(usintActual), srcAddr := Actual.pValue, n := SIZEOF(USINT));
+        AssertEquals_USINT(Expected := usintExpected, Actual := usintActual, Message := Message);
+        RETURN;
+    END_IF
+
+    (* WORD *)
+    IF UDINT_TO_INT(Expected.TypeClass) = IBaseLibrary.TypeClass.TYPE_WORD THEN
+        MEMCPY(destAddr := ADR(wordExpected), srcAddr := Expected.pValue, n := SIZEOF(WORD));
+        MEMCPY(destAddr := ADR(wordActual), srcAddr := Actual.pValue, n := SIZEOF(WORD));
+        AssertEquals_WORD(Expected := wordExpected, Actual := wordActual, Message := Message);
+        RETURN;
+    END_IF
+END_IF
+
+(* If we've come to this row, it means that the data input is not any of the standard primitive data types, and thus
+   we need to do special handling *)
+TestInstancePath := AddTestNameToInstancePath(TestInstancePath := FINDTestSuiteInstancePath());
+
+IF DataTypesNotEquals THEN
+    ExpectedDataString := CONCAT(STR1 := '(Type class = ', STR2 := F_AnyTypeClassToString((Expected.TypeClass)));
+    ExpectedDataString := CONCAT(STR1 := ExpectedDataString, STR2 := ')');
+    ActualDataString := CONCAT(STR1 := '(Type class = ', STR2 := F_AnyTypeClassToString(Actual.TypeClass));
+    ActualDataString := CONCAT(STR1 := ActualDataString, STR2 := ')');
+ELSIF DataSizeNotEquals THEN
+    ExpectedDataString := CONCAT(STR1 := 'Data size = ', STR2 := DINT_TO_STRING(Expected.diSize));
+    ExpectedDataString := CONCAT(STR1 := ExpectedDataString, STR2 := ')');
+    ActualDataString := CONCAT(STR1 := 'Data size = ', STR2 := DINT_TO_STRING(Actual.diSize));
+    ActualDataString := CONCAT(STR1 := ActualDataString, STR2 := ')');
+ELSIF DataContentNotEquals THEN
+    FOR Count := 0 TO MIN(Expected.diSize - 1, 38) BY 1 DO // One byte will equal two characters (example: 255 = 0xff, 1 = 0x01)
+        ExpectedDataString :=
+            CONCAT(STR1 := ExpectedDataString, STR2 := BYTE_TO_HEXSTR(in := Expected.pValue[Count], iPrecision := 2, bLoCase := FALSE));
+    END_FOR
+
+    ExpectedDataString := CONCAT(STR1 := '0x', STR2 := ExpectedDataString);
+
+    FOR Count := 0 TO MIN(Actual.diSize - 1, 38) BY 1 DO // One byte will equal two characters (example: 255 = 0xff, 1 = 0x01)
+        ActualDataString := CONCAT(STR1 := ActualDataString, STR2 := BYTE_TO_HEXSTR(in := Actual.pValue[Count], iPrecision := 2, bLoCase := FALSE));
+    END_FOR
+
+    ActualDataString := CONCAT(STR1 := '0x', STR2 := ActualDataString);
+END_IF
+
+AssertResults.ReportResult(ExpectedSize := DINT_TO_UDINT(Expected.diSize),
+    ExpectedTypeClass := UDINT_TO_INT(Expected.TypeClass),
+    ExpectedValue := Expected.pValue,
+    ActualSize := DINT_TO_UDINT(Actual.diSize),
+    ActualTypeClass := UDINT_TO_INT(Actual.TypeClass),
+    ActualValue := Actual.pValue,
+    Message := Message,
+    TestInstancePath := TestInstancePath,
+    AlreadyReported => AlreadyReported);
+
+IF NOT AlreadyReported AND (DataTypesNotEquals OR DataSizeNotEquals OR DataContentNotEquals) THEN
+    SetTestFailed(AssertionType := E_AssertionType.Type_ANY, AssertionMessage := Message);
+    AssertMessageFormatter.LogAssertFailure(Expected := ExpectedDataString,
+        Actual := ActualDataString,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+END_IF

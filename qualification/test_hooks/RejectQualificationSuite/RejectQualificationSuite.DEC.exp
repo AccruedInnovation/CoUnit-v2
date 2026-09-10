@@ -1,0 +1,9 @@
+METHOD PUBLIC RejectQualificationSuite : BOOL
+VAR
+	_count : UINT;
+	_last : POINTER TO FB_TestSuite;
+	_active : POINTER TO FB_TestSuite;
+	_index : UINT;
+	_sequence : UDINT;
+	_accepted : BOOL;
+END_VAR

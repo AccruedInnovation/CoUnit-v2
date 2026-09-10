@@ -1,0 +1,5 @@
+GetCanonicalRecord := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.IsOwner() THEN RETURN; END_IF
+IF Index < 1 OR Index > NumberOfTests THEN RETURN; END_IF
+Record := TestRecords[Index];
+GetCanonicalRecord := TRUE;

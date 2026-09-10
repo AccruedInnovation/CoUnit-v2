@@ -1,0 +1,6 @@
+// Set buffer and flag
+Xml.SetBuffer(PointerToBuffer := ADR(Buffer), SizeOfBuffer := SIZEOF(Buffer));
+// Set buffer initialised
+BufferInitialised := TRUE;
+// Set testresult interface
+TestResults := iTestResults;

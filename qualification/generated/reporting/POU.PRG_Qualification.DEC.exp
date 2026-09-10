@@ -1,0 +1,33 @@
+PROGRAM PRG_Qualification
+VAR_INPUT
+	Path : T_MaxString := 'counit_qualification/report.xml';
+	TextMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
+	ChunkLimit : UDINT := 64;
+	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	FaultOccurrence : UDINT := 0;
+	FaultOccurrence2 : UDINT := 0;
+	FaultError : UDINT := 16#FFFF0001;
+	ShortWrite : BOOL;
+	PauseAfterPhase : UINT;
+	ExpectedState : E_CoUnitReportState := E_CoUnitReportState.WRITTEN;
+	ReleasePause : BOOL;
+	SuiteName : T_MaxString := 'Suite & <A>';
+	FailureMessage : T_MaxString := 'expected <3 & 4> but got "5"';
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	Configured : BOOL;
+	Phase : UINT;
+	FileEffects : UDINT;
+	LastFileError : UDINT;
+	ReportState : E_CoUnitReportState;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	_snapshot : ST_CoUnitRunSnapshot;
+	_results : FB_TestResults;
+	_publisher : FB_xUnitXmlPublisher(_results);
+	_result : BOOL;
+	Init : BOOL;
+END_VAR

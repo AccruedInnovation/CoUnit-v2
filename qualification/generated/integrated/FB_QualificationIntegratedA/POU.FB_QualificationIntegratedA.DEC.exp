@@ -1,0 +1,6 @@
+FUNCTION_BLOCK FB_QualificationIntegratedA EXTENDS FB_TestSuite
+VAR
+	_passScan : UINT;
+	_failScan : UINT;
+	_good : BOOL;
+END_VAR

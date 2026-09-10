@@ -1,0 +1,14 @@
+METHOD PRIVATE BuildPaths : BOOL
+VAR
+	_p : POINTER TO BYTE;
+	_s : POINTER TO BYTE;
+	_b : POINTER TO BYTE;
+	_suffixS : STRING(11) := '.counit.tmp';
+	_suffixB : STRING(11) := '.counit.bak';
+	_ss : POINTER TO BYTE;
+	_sb : POINTER TO BYTE;
+	_length : UINT;
+	_i : UINT;
+	_same : BOOL;
+	_terminated : BOOL;
+END_VAR

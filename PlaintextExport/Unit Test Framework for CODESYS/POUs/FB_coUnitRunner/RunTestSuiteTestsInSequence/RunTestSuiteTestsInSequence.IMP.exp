@@ -1,0 +1,1 @@
+ExecuteRun(Mode := E_CoUnitRunMode.IN_SEQUENCE, Delay := TimeBetweenTestSuitesExecution);

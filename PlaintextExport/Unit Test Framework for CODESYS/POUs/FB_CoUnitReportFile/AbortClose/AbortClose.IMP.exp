@@ -1,0 +1,6 @@
+AbortClose := TRUE;
+IF _handle <> SysFile.SysTypes.RTS_INVALID_HANDLE THEN
+	_result := SysFile.SysFileClose(hFile := _handle);
+	_handle := SysFile.SysTypes.RTS_INVALID_HANDLE;
+	AbortClose := _result = CmpErrors.Errors.ERR_OK;
+END_IF

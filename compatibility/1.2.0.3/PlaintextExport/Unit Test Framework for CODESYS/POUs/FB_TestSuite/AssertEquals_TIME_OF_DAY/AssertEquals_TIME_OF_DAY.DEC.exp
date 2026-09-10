@@ -1,0 +1,48 @@
+(*
+ Asserts that two TIME_OF_DAYs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – TIME_OF_DAY expected value
+     | Actual – TIME_OF_DAY actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : TIME_OF_DAY := TIME_OF_DAY#06:21:11.492;
+         b : TIME_OF_DAY := TIME_OF_DAY#06:21:11.492;
+     END_VAR
+
+     TEST('Test_TIME_OF_DAY_Equals');
+     AssertEquals_TIME_OF_DAY(Expected := a,
+                              Actual := b,
+                              Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : TIME_OF_DAY := TIME_OF_DAY#15:36:30.123;
+         b : TIME_OF_DAY := TIME_OF_DAY#06:21:11.492;
+     END_VAR
+
+     TEST('Test_TIME_OF_DAY_Differ');
+     AssertEquals_TIME_OF_DAY(Expected := a,
+                              Actual := b,
+                              Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_TIME_OF_DAY
+VAR_INPUT
+    Expected : TIME_OF_DAY; // TIME_OF_DAY expected value
+    Actual : TIME_OF_DAY; // TIME_OF_DAY actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

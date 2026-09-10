@@ -1,0 +1,8 @@
+TEST('LREALSignalNaN');
+IF NOT IS_TEST_FINISHED('LREALSignalNaN') THEN
+	_pa := ADR(_fLREAL3a);
+	_pb := ADR(_fLREAL3b);
+	_pd := ADR(_fLREAL3d);
+	AssertEquals_LREAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'LREALSignalNaN');
+	TEST_FINISHED();
+END_IF

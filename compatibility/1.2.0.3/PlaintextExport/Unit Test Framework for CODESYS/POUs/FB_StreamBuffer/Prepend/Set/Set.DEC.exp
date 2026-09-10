@@ -1,0 +1,7 @@
+VAR
+    TempBuf : STRING(GVL_Param_XmlControl.MaxFileSize);
+    pTempBuf : POINTER TO BYTE;
+    pByteIn : POINTER TO BYTE;
+    pByteBuffer : POINTER TO BYTE;
+    i : UDINT;
+END_VAR

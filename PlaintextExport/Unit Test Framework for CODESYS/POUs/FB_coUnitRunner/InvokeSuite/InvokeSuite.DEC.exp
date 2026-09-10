@@ -1,0 +1,4 @@
+METHOD INTERNAL InvokeSuite
+VAR_INPUT
+	Index : UINT;
+END_VAR

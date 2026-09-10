@@ -1,0 +1,14 @@
+IF TagOpen THEN
+    XmlBuffer.Append := END_TAG_CLOSE;
+    Select := TagListBuffer.FindBack(SearchString := FORWARD_SLASH);
+    ClosedTag := TagListBuffer.CutOff(StartPos := Select);
+    TagOpen := FALSE;
+ELSE
+    Select := TagListBuffer.FindBack(SearchString := FORWARD_SLASH);
+    ClosedTag := TagListBuffer.CutOff(StartPos := Select);
+    XmlBuffer.Append := TAG_OPEN;
+    XmlBuffer.Append := ClosedTag;
+    XmlBuffer.Append := TAG_CLOSE;
+END_IF
+
+CloseTag := ClosedTag;

@@ -1,0 +1,4 @@
+METHOD PUBLIC NewTagData
+VAR_INPUT
+    Data : T_MaxString;
+END_VAR

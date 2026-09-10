@@ -1,0 +1,75 @@
+(*
+ Asserts that two DINT arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+    | Expecteds – DINT array with expected values
+    | Actuals – DINT array with actual values
+    | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[2..7] OF DINT := [64, 98, 2147483647, -2147483648, 0, -63987538];
+         b : ARRAY[2..7] OF DINT := [64, 98, 2147483647, -2147483648, 0, -63987538];
+     END_VAR
+ 
+     TEST('Test_DINT_Array_Equals');
+     AssertArrayEquals_DINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();								  
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+ 
+     VAR
+         a : ARRAY[3..4] OF DINT := [-11, 2147483647];
+         b : ARRAY[4..6] OF DINT := [-11, 2147483647, 0];
+     END_VAR
+ 
+     TEST('Test_DINT_Array_DifferInSize');
+     AssertArrayEquals_DINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();								  
+
+ Failing example 2:
+
+ .. code-block:: codesys
+ 
+     VAR
+         a : ARRAY[3..5] OF DINT := [-4746, -2147483645, 0];
+         b : ARRAY[3..5] OF DINT := [-4746, -2147483641, 0];
+     END_VAR
+ 
+     TEST('Test_DINT_Array_DifferInContent');
+     AssertArrayEquals_DINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_DINT
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF DINT; // DINT array with expected values
+    Actuals : ARRAY[*] OF DINT; // DINT array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

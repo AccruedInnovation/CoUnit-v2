@@ -1,0 +1,17 @@
+(* Canonical suite state; only the owning runner task may mutate it. *)
+{attribute 'call_after_init'}
+{attribute 'reflection'}
+FUNCTION_BLOCK FB_TestSuite
+VAR
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	InstancePath : T_MaxString;
+	TestRecords : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF ST_CoUnitTestRecord;
+	NumberOfTests : UINT;
+	NumberOfOrderedTests : UINT;
+	OrderedCursor : UDINT := 1;
+	HasBeenInvoked : BOOL;
+	_testProjection : FB_Test;
+	LogAssertMessageFormatter : FB_LogAssertMessageFormatter;
+	AssertMessageFormatter : I_AssertMessageFormatter := LogAssertMessageFormatter;
+END_VAR

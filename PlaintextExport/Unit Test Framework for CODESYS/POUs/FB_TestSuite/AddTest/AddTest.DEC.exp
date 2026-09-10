@@ -1,0 +1,5 @@
+METHOD INTERNAL AddTest
+VAR_INPUT
+	TestName : T_MaxString;
+	IsTestOrdered : BOOL;
+END_VAR

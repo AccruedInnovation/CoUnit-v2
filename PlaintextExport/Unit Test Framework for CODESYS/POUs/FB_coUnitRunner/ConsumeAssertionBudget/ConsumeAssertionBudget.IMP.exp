@@ -1,0 +1,9 @@
+ConsumeAssertionBudget := FALSE;
+IF NOT CheckViolation() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.RUNNING OR_ELSE ActiveSuite = 0 OR_ELSE NOT ShouldExecuteCurrentTest THEN RETURN; END_IF
+IF SuiteInvocationAssertionCount >= GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite THEN
+	FrameworkError(Reason := 'Suite invocation assertion capacity exceeded');
+	RETURN;
+END_IF
+SuiteInvocationAssertionCount := SuiteInvocationAssertionCount + 1;
+ConsumeAssertionBudget := TRUE;

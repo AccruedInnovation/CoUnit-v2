@@ -1,0 +1,5 @@
+(* Sets the assertion message. If one already exists, it's not overwritten as we keep the first assertion in the test *)
+METHOD INTERNAL SetAssertionMessage
+VAR_INPUT
+    AssertMessage : T_MaxString;
+END_VAR

@@ -1,0 +1,7 @@
+Count := NumberOfTests;
+OrderedCount := NumberOfOrderedTests;
+Cursor := OrderedCursor;
+IF NumberOfTests > 0 THEN
+	LastRecord := TestRecords[NumberOfTests];
+END_IF
+ReadQualificationGuard := TRUE;

@@ -1,0 +1,73 @@
+{
+  "shard": "names",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "NamedB",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "NamedA",
+        "state": "PASSED",
+        "assertions": 2
+      },
+      {
+        "name": "Trimmed",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "Hidden",
+        "state": "SKIPPED",
+        "assertions": 0
+      },
+      {
+        "name": "Duplicate",
+        "state": "PASSED",
+        "assertions": 1
+      },
+      {
+        "name": "Shape",
+        "state": "PASSED",
+        "assertions": 1
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#6",
+    "_snapshot.Passed = UDINT#5",
+    "_snapshot.Failed = UDINT#0",
+    "_snapshot.Skipped = UDINT#1",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#6",
+    "_snapshot.Suites[1].Tests[1].Name = 'NamedB'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[2].Name = 'NamedA'",
+    "_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#2",
+    "_snapshot.Suites[1].Tests[3].Name = 'Trimmed'",
+    "_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[4].Name = 'Hidden'",
+    "_snapshot.Suites[1].Tests[4].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[1].Tests[4].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[5].Name = 'Duplicate'",
+    "_snapshot.Suites[1].Tests[5].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[5].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[6].Name = 'Shape'",
+    "_snapshot.Suites[1].Tests[6].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[6].NumberOfAsserts = UINT#1",
+    "_suite1.ShapePreserved"
+  ],
+  "required_log_occurrences": {
+    "Conflicting test declaration shape": 1,
+    "Duplicate test declaration in runner epoch": 1
+  }
+}

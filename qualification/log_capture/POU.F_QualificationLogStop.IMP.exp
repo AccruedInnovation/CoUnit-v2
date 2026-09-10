@@ -1,0 +1,26 @@
+GVL_QualificationLog.Active := FALSE;
+IF GVL_QualificationLog.Registered THEN
+	GVL_QualificationLog.UnregisterError := CmpEventMgr.EventUnregisterCallbackFunction(
+		hEvent := GVL_QualificationLog.EventHandle, pfCallbackFunction := ADR(F_QualificationLogCallback));
+	IF GVL_QualificationLog.UnregisterError <> CmpErrors.Errors.ERR_OK THEN RETURN; END_IF
+	GVL_QualificationLog.Registered := FALSE;
+END_IF
+(* Capture is now inactive and unregistered. Materialize ASCII hex for efficient host reads. *)
+_hex := ADR(_digits);
+FOR _entry := 1 TO GVL_QualificationLog.Count DO
+	_dest := ADR(GVL_QualificationLog.HexEntries[_entry]);
+	_byteIndex := 0;
+	WHILE _byteIndex < GVL_QualificationLog.Lengths[_entry] DO
+		_value := GVL_QualificationLog.Bytes[_entry, _byteIndex];
+		_dest[2 * _byteIndex] := _hex[BYTE_TO_UINT(SHR(_value, 4))];
+		_dest[2 * _byteIndex + 1] := _hex[BYTE_TO_UINT(_value AND BYTE#16#0F)];
+		_byteIndex := _byteIndex + 1;
+	END_WHILE
+	_dest[2 * _byteIndex] := 0;
+END_FOR
+IF GVL_QualificationLog.EventHandle <> SysTypes.RTS_INVALID_HANDLE THEN
+	GVL_QualificationLog.CloseError := CmpEventMgr.EventClose2(hEvent := GVL_QualificationLog.EventHandle);
+	IF GVL_QualificationLog.CloseError <> CmpErrors.Errors.ERR_OK THEN RETURN; END_IF
+	GVL_QualificationLog.EventHandle := SysTypes.RTS_INVALID_HANDLE;
+END_IF
+F_QualificationLogStop := TRUE;

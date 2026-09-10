@@ -1,0 +1,16 @@
+source_or_risk,verification_ids,producer,final_owner,semantic_target
+suite capacity pre-write guard,VER-COU-001,PRD-COU-01,PRD-COU-04,max+1 cannot mutate fixed storage or committed count
+test capacity pre-write guard,VER-COU-002,PRD-COU-01,PRD-COU-04,max+1 cannot mutate fixed storage or committed count
+assertion invocation bound/no history,VER-COU-003;VER-COU-008;VER-COU-032,PRD-COU-02,PRD-COU-04,per-invocation bounded count with no ordinal identity suppression
+runner termination/order/skip/named finish,VER-COU-004;VER-COU-005;VER-COU-006;VER-COU-007,PRD-COU-01,PRD-COU-04,truthful finite runner lifecycle
+assertion type/value safety,VER-COU-009;VER-COU-010;VER-COU-011;VER-COU-012;VER-COU-013;VER-COU-014,PRD-COU-02,PRD-COU-04,typed outcomes and safe argument handling
+final result truth,VER-COU-015;VER-COU-016;VER-COU-029,PRD-COU-03,PRD-COU-04,reconciled terminal snapshot and count projection
+Device Log behavior,VER-COU-017;VER-COU-018,PRD-COU-03,PRD-COU-04,plain messages retained and verbosity flag scoped
+xUnit escaping/streaming,VER-COU-019;VER-COU-020,PRD-COU-03,PRD-COU-04,well-formed complete bounded report with exact counts
+file failure/currentness,VER-COU-021;VER-COU-031,PRD-COU-03,PRD-COU-04,failed or interrupted publish cannot expose partial report as current
+cross-task/context/platform containment,VER-COU-022;VER-COU-026;VER-COU-027,PRD-COU-01,PRD-COU-04,no foreign-task state write and no failed pointer dereference
+public source compatibility,VER-COU-023,PRD-COU-01;PRD-COU-02;PRD-COU-03,PRD-COU-04,representative current user source compiles without normal source edits
+inherited defect regression,VER-COU-024,PRD-COU-01;PRD-COU-02;PRD-COU-03,PRD-COU-04,all applicable exact-source regression cases stay fixed
+runtime support evidence,VER-COU-025,PRD-COU-04,release/architecture owner,claim only exact environments actually qualified
+canonical names/duplicates,VER-COU-028,PRD-COU-01,PRD-COU-04,one canonical identity and deterministic duplicate behavior
+reinitialization,VER-COU-030,PRD-COU-01;PRD-COU-03,PRD-COU-04,new run starts fresh while report recovery follows publication contract

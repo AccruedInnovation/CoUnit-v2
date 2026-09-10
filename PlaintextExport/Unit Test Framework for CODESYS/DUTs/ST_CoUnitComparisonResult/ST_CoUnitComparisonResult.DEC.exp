@@ -1,0 +1,9 @@
+TYPE ST_CoUnitComparisonResult :
+STRUCT
+	Passed : BOOL;
+	ArgumentError : BOOL;
+	ExpectedText : T_MaxString;
+	ActualText : T_MaxString;
+	DiagnosticSuffix : T_MaxString;
+END_STRUCT
+END_TYPE

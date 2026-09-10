@@ -1,0 +1,19 @@
+(* This runs all the test suites in sequence (one after the other) *)
+METHOD INTERNAL RunTestSuiteTestsInSequence
+VAR_INPUT
+    TimeBetweenTestSuitesExecution : TIME; // Time delay between a test suite is finished and the next test suite starts
+END_VAR
+VAR
+    BusyPrinting : BOOL;
+    (* We need to hold a temporary state of the statistics 
+       as we don't consider the tests to be completely finished until all test suites have executed completely.
+       The reason we want to do it this way is because a test suite can run over several cycles. Only once all tests
+       are finished (which might take many cycles), do we gather correct statistics *)
+    NumberOfTestSuitesFinished : UINT := 0;
+END_VAR
+VAR_INST
+    (* This variable holds which current test suite is being called, as we are running
+       each one in a sequence (one by one) *)
+    CurrentlyRunningTestSuite : UINT := 1;
+    TimerBetweenExecutionOfTestSuites : TOF;
+END_VAR

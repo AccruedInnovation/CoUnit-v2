@@ -1,0 +1,48 @@
+(* 
+ Asserts that two DINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – BYTE expected value
+     | Actual – BYTE actual value
+     | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DINT := -80000;
+         b : DINT := -80000;
+     END_VAR
+
+     TEST('Test_DINT_Equals');
+     AssertEquals_DINT(Expected := a,
+                              Actual := b,
+                              Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DINT := -55555;
+         b : DINT := 70000;
+     END_VAR
+
+     TEST('Test_DINT_Differ');
+     AssertEquals_DINT(Expected := a,
+                              Actual := b,
+                              Message := 'Values differ');
+     TEST_FINISHED();   
+*)
+METHOD PUBLIC AssertEquals_DINT
+VAR_INPUT
+    Expected : DINT; // DINT expected value
+    Actual : DINT; // DINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

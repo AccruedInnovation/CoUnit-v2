@@ -1,0 +1,5 @@
+(*
+	This function block is responsible for printing the results of the assertions using the built-in
+	LOGSTR functionality provided in this library. This sends the result to the DeviceLog.
+*)
+FUNCTION_BLOCK FB_LogAssertMessageFormatter IMPLEMENTS I_AssertMessageFormatter

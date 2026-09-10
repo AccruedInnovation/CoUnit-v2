@@ -1,0 +1,17 @@
+IF FailedCalls < 3 THEN
+	GVL_coUnit.InjectTaskLookupFailure := TRUE;
+	RUN();
+	GVL_coUnit.InjectTaskLookupFailure := FALSE;
+	FailedCalls := FailedCalls + 1;
+	DiagnosticClaim := GVL_coUnit.coUnitRunner.GetInitialLookupDiagnosticClaim();
+	IdlePreserved := IdlePreserved AND (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.IDLE);
+	EpochPreserved := EpochPreserved AND (GVL_coUnit.coUnitRunner.GetEpoch() = 0);
+	SuiteAndTestsPreserved := SuiteAndTestsPreserved AND (GVL_coUnit.coUnitRunner.GetSuiteCount() = 1) AND (_suite.GetNumberOfTests() = 0);
+ELSE
+	RUN();
+	_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+	SnapshotDisposition := _snapshot.Disposition;
+	Done := GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE;
+	RecoveryComplete := Done AND _snapshot.IsValid AND (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) AND (_snapshot.SuiteCount = 1) AND (_snapshot.Total = 1) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 0) AND (_snapshot.Errors = 0) AND (_snapshot.Skipped = 0);
+	OraclePass := RecoveryComplete AND IdlePreserved AND EpochPreserved AND SuiteAndTestsPreserved AND (DiagnosticClaim = 1);
+END_IF

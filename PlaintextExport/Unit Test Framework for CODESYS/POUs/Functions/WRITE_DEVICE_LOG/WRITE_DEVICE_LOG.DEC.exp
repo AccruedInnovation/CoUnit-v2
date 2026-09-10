@@ -1,0 +1,25 @@
+(* First-placeholder substitution; ordered bounded log entries. Zero means success. *)
+FUNCTION WRITE_DEVICE_LOG : DINT
+VAR_INPUT
+	msgCtrlMask : DWORD;
+	msgFmtStr : T_MaxString;
+	strArg : T_MaxString;
+END_VAR
+VAR
+	_text : STRING(508); // 255-byte format - 2-byte placeholder + 255-byte argument
+	_chunk : T_MaxString;
+	_pos : UINT := 255;
+	_formatLength : UINT;
+	_argumentLength : UINT;
+	_prefixLength : UINT;
+	_written : UINT;
+	_i : UINT;
+	_index : UINT;
+	_used : UINT;
+	_width : UINT;
+	_format : POINTER TO BYTE;
+	_argument : POINTER TO BYTE;
+	_source : POINTER TO BYTE;
+	_dest : POINTER TO BYTE;
+	_ok : BOOL;
+END_VAR

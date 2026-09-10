@@ -1,0 +1,4 @@
+FUNCTION_BLOCK FB_QualificationSealViolation EXTENDS FB_TestSuite
+VAR
+
+END_VAR

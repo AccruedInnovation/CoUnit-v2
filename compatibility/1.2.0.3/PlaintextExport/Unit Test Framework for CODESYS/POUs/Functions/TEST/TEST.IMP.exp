@@ -1,0 +1,15 @@
+(* Mark this test as the current one being executed *)
+GVL_coUnit.CurrentTestNameBeingCalled := TestName;
+
+(* Check if combination of address for the test suite and test name already exists.
+   For every test suite the name of the test case needs to be unique.
+   If a test with this name already exists, don't add it to the available tests.
+   Otherwise, add it to the available tests *)
+FOR CounterTestSuiteAddress := 1 TO GVL_coUnit.NumberOfInitializedTestSuites BY 1 DO
+    (* Look for the test suite by comparing to the one that is currently running *)
+    IF GVL_coUnit.TestSuiteAddresses[CounterTestSuiteAddress] = GVL_coUnit.CurrentTestSuiteBeingCalled THEN
+        GVL_coUnit.TestSuiteAddresses[CounterTestSuiteAddress]^.AddTest(TestName := TestName, IsTestOrdered := FALSE);
+        GVL_coUnit.CurrentTestIsFinished := GVL_coUnit.TestSuiteAddresses[CounterTestSuiteAddress]^.IsTestFinished(TestName := TestName);
+        RETURN;
+    END_IF
+END_FOR

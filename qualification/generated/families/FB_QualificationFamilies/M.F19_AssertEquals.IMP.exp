@@ -1,0 +1,5 @@
+TEST('F19_AssertEquals');
+IF NOT IS_TEST_FINISHED('F19_AssertEquals') THEN
+	AssertEquals(Expected := _v19e, Actual := _v19a, Message := 'F19_AssertEquals');
+	TEST_FINISHED();
+END_IF

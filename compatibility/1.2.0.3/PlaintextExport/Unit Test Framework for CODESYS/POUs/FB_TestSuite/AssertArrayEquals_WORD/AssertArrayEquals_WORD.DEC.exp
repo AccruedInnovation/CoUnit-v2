@@ -1,0 +1,75 @@
+ (* Asserts that two WORD arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expecteds – WORD array with expected values
+     | Actuals – WORD array with actual values
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[1..5] OF WORD := [16#AAAA, 16#BBBB, 16#CCCC, 16#DDDD, 16#EEEE];
+         b : ARRAY[1..5] OF WORD := [16#AAAA, 16#BBBB, 16#CCCC, 16#DDDD, 16#EEEE];
+     END_VAR
+
+     TEST('Test_WORD_Array_Equals');
+     AssertArrayEquals_WORD(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[1..5] OF WORD := [16#0000, 16#3333, 16#5555, 16#7777, 16#BBBB];
+         b : ARRAY[1..7] OF WORD := [16#0000, 16#3333, 16#5555, 16#7777, 16#BBBB, 16#FFFF, 16#1122];
+     END_VAR
+
+     TEST('Test_WORD_Array_DifferInSize');
+     AssertArrayEquals_WORD(Expecteds := a,
+                                   Actuals := b,
+                                   Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[1..7] OF WORD := [16#2323, 16#876A, 16#4CD4, 16#F3DC, 16#BBBB, 16#FFFF, 16#1133];
+         b : ARRAY[1..7] OF WORD := [16#2323, 16#876A, 16#4CD4, 16#F3DC, 16#BBBB, 16#FFFF, 16#1122];
+     END_VAR
+
+     TEST('Test_WORD_Array_DifferInContent');
+     AssertArrayEquals_WORD(Expecteds := a,
+                                   Actuals := b,
+                                   Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_WORD
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF WORD; // WORD array with expected values
+    Actuals : ARRAY[*] OF WORD; // WORD array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedDWordString : STRING;
+    ActualDWordString : STRING;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

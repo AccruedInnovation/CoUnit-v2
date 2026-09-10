@@ -1,0 +1,52 @@
+(*
+ Asserts that two LREALs are equal to within a positive delta. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – LREAL expected value
+     | Actual – LREAL actual value
+     | Delta – The maximum delta between the absolute value of expected and actual for which both numbers are still considered equal
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LREAL := 1234567.89;
+         b : LREAL := 1234567.76;
+     END_VAR
+
+     TEST('Test_LREAL_Equals');
+     AssertEquals_LREAL(Expected := a,
+                        Actual := b,
+                        Delta := 0.2,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LREAL := 1234567.89;
+         b : LREAL := 1234567.76;
+     END_VAR
+
+     TEST('Test_LREAL_Differ');
+     AssertEquals_LREAL(Expected := a,
+                        Actual := b,
+                        Delta := 0.1,
+                        Message := 'Values differ');
+     TEST_FINISHED();  
+*)
+METHOD PUBLIC AssertEquals_LREAL
+VAR_INPUT
+    Expected : LREAL; // LREAL expected value
+    Actual : LREAL; // LREAL actual value
+    Delta : LREAL; // The maximum delta between the absolute value of expected and actual for which both numbers are still considered equal
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

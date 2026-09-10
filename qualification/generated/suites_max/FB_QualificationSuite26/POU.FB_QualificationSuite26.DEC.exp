@@ -1,0 +1,4 @@
+FUNCTION_BLOCK FB_QualificationSuite26 EXTENDS FB_TestSuite
+VAR
+
+END_VAR

@@ -1,0 +1,14 @@
+METHOD PRIVATE GetDetectionCount : UINT
+VAR_INPUT
+    ExpectedSize : UDINT;
+    ExpectedTypeClass : IBaseLibrary.TypeClass;
+    ExpectedValue : POINTER TO BYTE;
+    ActualSize : UDINT;
+    ActualTypeClass : IBaseLibrary.TypeClass;
+    ActualValue : POINTER TO BYTE;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR
+    IteratorCounter : UINT;
+END_VAR

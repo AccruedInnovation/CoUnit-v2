@@ -1,0 +1,70 @@
+(* Find the first ASCII placeholder by stored byte position, independent of STRING mode. *)
+_format := ADR(msgFmtStr);
+_argument := ADR(strArg);
+_source := ADR(_text);
+WHILE _formatLength < 255 DO
+	IF _format[_formatLength] = 0 THEN EXIT; END_IF
+	_formatLength := _formatLength + 1;
+END_WHILE
+WHILE _argumentLength < 255 DO
+	IF _argument[_argumentLength] = 0 THEN EXIT; END_IF
+	_argumentLength := _argumentLength + 1;
+END_WHILE
+WHILE _i + 1 < _formatLength DO
+	IF _format[_i] = 16#25 AND _format[_i + 1] = 16#73 THEN _pos := _i; EXIT; END_IF
+	_i := _i + 1;
+END_WHILE
+_prefixLength := _formatLength;
+IF _pos < 255 THEN _prefixLength := _pos; END_IF
+_i := 0;
+WHILE _i < _prefixLength DO
+	_source[_written] := _format[_i];
+	_written := _written + 1;
+	_i := _i + 1;
+END_WHILE
+IF _pos < 255 THEN
+	_i := 0;
+	WHILE _i < _argumentLength DO
+		_source[_written] := _argument[_i];
+		_written := _written + 1;
+		_i := _i + 1;
+	END_WHILE
+	_i := _pos + 2;
+	WHILE _i < _formatLength DO
+		_source[_written] := _format[_i];
+		_written := _written + 1;
+		_i := _i + 1;
+	END_WHILE
+END_IF
+_source[_written] := 0;
+_source := ADR(_text);
+_dest := ADR(_chunk);
+WRITE_DEVICE_LOG := 0;
+FOR _index := 0 TO 507 DO
+	IF _source[_index] = 0 THEN EXIT; END_IF
+	(* Keep valid UTF-8 code points within one byte-bounded entry. In legacy mode
+	   this may merely shorten an entry; no source byte changes. *)
+	_width := 1;
+	IF _source[_index] >= 16#C2 AND _source[_index] <= 16#DF THEN _width := 2;
+	ELSIF _source[_index] >= 16#E0 AND _source[_index] <= 16#EF THEN _width := 3;
+	ELSIF _source[_index] >= 16#F0 AND _source[_index] <= 16#F4 THEN _width := 4; END_IF
+	IF _used + _width > 127 THEN
+		_dest[_used] := 0;
+		_ok := GVL_Support._CmpCfLog.AddLogEntry(DWORD_TO_UDINT(msgCtrlMask), 0, 0, _chunk);
+		IF NOT _ok THEN WRITE_DEVICE_LOG := -1; END_IF
+		_used := 0;
+	END_IF
+	_dest[_used] := _source[_index];
+	_used := _used + 1;
+	IF _used = 127 THEN
+		_dest[_used] := 0;
+		_ok := GVL_Support._CmpCfLog.AddLogEntry(DWORD_TO_UDINT(msgCtrlMask), 0, 0, _chunk);
+		IF NOT _ok THEN WRITE_DEVICE_LOG := -1; END_IF
+		_used := 0;
+	END_IF
+END_FOR
+IF _used > 0 OR _index = 0 THEN
+	_dest[_used] := 0;
+	_ok := GVL_Support._CmpCfLog.AddLogEntry(DWORD_TO_UDINT(msgCtrlMask), 0, 0, _chunk);
+	IF NOT _ok THEN WRITE_DEVICE_LOG := -1; END_IF
+END_IF

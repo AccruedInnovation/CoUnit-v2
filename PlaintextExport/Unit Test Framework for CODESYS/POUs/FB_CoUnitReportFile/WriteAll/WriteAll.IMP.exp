@@ -1,0 +1,9 @@
+IF _handle = SysFile.SysTypes.RTS_INVALID_HANDLE OR Bytes = 0 THEN _lastError := 16#FFFF0002; RETURN; END_IF
+_allowed := BeforeOperation(E_CoUnitFileOperation.WRITE);
+IF NOT _allowed AND NOT _shortWrite THEN RETURN; END_IF
+_requested := Count;
+IF NOT _allowed AND _shortWrite AND Count > 0 THEN _requested := Count - 1; END_IF
+_written := SysFile.SysFileWrite(hFile := _handle, pbyBuffer := Bytes, ulSize := _requested, pResult := ADR(_result));
+_lastError := _result;
+WriteAll := (_result = CmpErrors.Errors.ERR_OK) AND (TO_ULINT(_written) = UDINT_TO_ULINT(Count));
+IF NOT WriteAll AND _lastError = 0 THEN _lastError := 16#FFFF0003; END_IF

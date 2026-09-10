@@ -1,0 +1,17 @@
+(* Optional wrapper: schedule this program instead of PRG_Qualification. *)
+PROGRAM PRG_QualificationObserved
+VAR_INPUT
+	WaitForReport : BOOL := FALSE;
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	Started : BOOL;
+	Stopped : BOOL;
+	CaptureHealthy : BOOL;
+	CapturedCount : UINT;
+END_VAR
+VAR
+	_attempted : BOOL;
+	_reportState : E_CoUnitReportState;
+END_VAR

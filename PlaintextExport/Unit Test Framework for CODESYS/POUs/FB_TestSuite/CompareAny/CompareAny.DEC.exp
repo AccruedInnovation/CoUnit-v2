@@ -1,0 +1,59 @@
+METHOD PRIVATE CompareAny : ST_CoUnitComparisonResult
+VAR_INPUT
+	ExpectedData : POINTER TO BYTE;
+	ActualData : POINTER TO BYTE;
+	ExpectedSize : DINT;
+	ActualSize : DINT;
+	ExpectedClass : DINT;
+	ActualClass : DINT;
+END_VAR
+VAR
+	_result : ST_CoUnitComparisonResult;
+	_i : DINT;
+	_expectedLength : DINT;
+	_actualLength : DINT;
+	_expectedUnit : WORD;
+	_actualUnit : WORD;
+	_unitSize : DINT;
+	_mismatch : BOOL;
+	_expectedBOOL : BOOL;
+	_actualBOOL : BOOL;
+	_expectedBYTE : BYTE;
+	_actualBYTE : BYTE;
+	_expectedWORD : WORD;
+	_actualWORD : WORD;
+	_expectedDWORD : DWORD;
+	_actualDWORD : DWORD;
+	_expectedLWORD : LWORD;
+	_actualLWORD : LWORD;
+	_expectedSINT : SINT;
+	_actualSINT : SINT;
+	_expectedINT : INT;
+	_actualINT : INT;
+	_expectedDINT : DINT;
+	_actualDINT : DINT;
+	_expectedLINT : LINT;
+	_actualLINT : LINT;
+	_expectedUSINT : USINT;
+	_actualUSINT : USINT;
+	_expectedUINT : UINT;
+	_actualUINT : UINT;
+	_expectedUDINT : UDINT;
+	_actualUDINT : UDINT;
+	_expectedULINT : ULINT;
+	_actualULINT : ULINT;
+	_expectedREAL : REAL;
+	_actualREAL : REAL;
+	_expectedLREAL : LREAL;
+	_actualLREAL : LREAL;
+	_expectedTIME : TIME;
+	_actualTIME : TIME;
+	_expectedLTIME : LTIME;
+	_actualLTIME : LTIME;
+	_expectedDATE : DATE;
+	_actualDATE : DATE;
+	_expectedDATE_AND_TIME : DATE_AND_TIME;
+	_actualDATE_AND_TIME : DATE_AND_TIME;
+	_expectedTIME_OF_DAY : TIME_OF_DAY;
+	_actualTIME_OF_DAY : TIME_OF_DAY;
+END_VAR

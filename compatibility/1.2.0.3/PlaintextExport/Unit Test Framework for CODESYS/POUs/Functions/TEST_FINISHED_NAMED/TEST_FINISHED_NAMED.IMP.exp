@@ -1,0 +1,32 @@
+(* Find the test suite and:
+   1. Set the test in that test suite as finished
+   2. Calculate and set the number of asserts made for that test
+*)
+FOR Counter := 1 TO GVL_coUnit.NumberOfInitializedTestSuites BY 1 DO
+    IF GVL_coUnit.TestSuiteAddresses[Counter] = GVL_coUnit.CurrentTestSuiteBeingCalled THEN
+        FoundTestName := GVL_coUnit.TestSuiteAddresses[Counter]^.SetTestFinished(TestName := TestName);
+
+        IF NOT FoundTestName THEN
+            IF FailedLookupCounter < MaxNumberOfNonExistentTestNamesFailedLookups THEN
+                WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+                    MsgFmtStr := 'Failed to find test $'%s$'',
+                    StrArg := TestName);
+
+                FailedLookupCounter := FailedLookupCounter + 1;
+                (* Abort coUnit *)
+                GVL_coUnit.coUnitRunner.AbortRunningTestSuiteTests();
+            ELSIF NOT AlreadyPrintedFinalWarning THEN
+                WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+                    MsgFmtStr := 'Excess failed attempts to mark test finished, failed. Further warnings will be suppressed',
+                    StrArg := TestName);
+
+                AlreadyPrintedFinalWarning := TRUE;
+            END_IF
+        ELSE
+            GVL_coUnit.TestSuiteAddresses[Counter]^.CalculateAndSetNumberOfAssertsForTest(TestName := TestName);
+            GVL_coUnit.CurrentTestIsFinished := TRUE;
+        END_IF
+
+        RETURN;
+    END_IF
+END_FOR

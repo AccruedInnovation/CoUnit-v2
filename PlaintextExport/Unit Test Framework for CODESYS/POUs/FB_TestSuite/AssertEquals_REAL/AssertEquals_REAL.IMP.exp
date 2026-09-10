@@ -1,0 +1,13 @@
+IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+_result.Passed := Compare_REAL(Expected := Expected, Actual := Actual, Delta := Delta, ArgumentError => _result.ArgumentError);
+IF NOT _result.Passed THEN
+	_result.ExpectedText := Text_REAL(Value := Expected);
+	_result.ActualText := Text_REAL(Value := Actual);
+END_IF
+IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; END_IF
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_REAL, Message := Message, Comparison := _result);

@@ -1,0 +1,9 @@
+METHOD INTERNAL IsTestFinished : BOOL
+VAR_INPUT
+	TestName : T_MaxString;
+END_VAR
+VAR
+	_index : UINT;
+	_unused : UINT;
+	_execute : BOOL;
+END_VAR

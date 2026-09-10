@@ -1,0 +1,48 @@
+(*
+ Asserts that two SINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – SINT expected value
+     | Actual – SINT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : SINT := -128;
+         b : SINT := -128;
+     END_VAR
+
+     TEST('Test_SINT_Equals');
+     AssertEquals_SINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : SINT := 127;
+         b : SINT := -30;
+     END_VAR
+
+     TEST('Test_SINT_Differ');
+     AssertEquals_SINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_SINT
+VAR_INPUT
+    Expected : SINT; // SINT expected value
+    Actual : SINT; // SINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

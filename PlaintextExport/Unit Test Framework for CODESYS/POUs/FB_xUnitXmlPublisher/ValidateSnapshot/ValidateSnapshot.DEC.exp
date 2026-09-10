@@ -1,0 +1,17 @@
+METHOD PRIVATE ValidateSnapshot : BOOL
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR
+VAR
+	_s : UINT;
+	_t : UINT;
+	_passed : UDINT;
+	_failed : UDINT;
+	_skipped : UDINT;
+	_errors : UDINT;
+	_total : UDINT;
+	_allPassed : UDINT;
+	_allFailed : UDINT;
+	_allSkipped : UDINT;
+	_allErrors : UDINT;
+END_VAR

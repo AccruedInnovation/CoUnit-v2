@@ -1,0 +1,4 @@
+METHOD INTERNAL IsOwner : BOOL
+VAR
+	_handle : CmpIecTask.RTS_IEC_HANDLE;
+END_VAR

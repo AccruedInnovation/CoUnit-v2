@@ -1,0 +1,15 @@
+{attribute 'hide'}
+(*
+OSCAT
+
+version 1.2	25. oct 2008
+programmer 	hugo
+tested by		tobias
+
+to_lower converts a character from uppercase to lowercase
+
+*)
+FUNCTION TO_LOWER : BYTE
+VAR_INPUT
+	IN : BYTE;
+END_VAR

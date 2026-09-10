@@ -1,0 +1,61 @@
+(*
+ Asserts that two LREALs are equal TO within a positive delta. IF they are NOT, an assertion error is created.
+ 
+ Parameters:
+     | Expected – LREAL expected value
+     | Actual – LREAL actual value
+     | Delta – The maximum delta between the absolute value of expected and actual for which both numbers are still considered equal
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+    
+     VAR
+         a : LREAL := 1234567.89;
+         b : LREAL := 1234567.76;
+     END_VAR
+     
+     TEST('Test_LREAL_Equals');
+     AssertEquals_LREAL(Expected := a,
+                        Actual := b,
+                        Delta := 0.2,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+     Failing example:
+
+     VAR
+         a : LREAL := 1234567.89;
+         b : LREAL := 1234567.76;
+     END_VAR
+
+     TEST('Test_LREAL_Differ');
+     AssertEquals_LREAL(Expected := a,
+                          Actual := b,
+                           Delta := 0.1,
+                         Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_LREAL
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF LREAL; // LREAL array with expected values
+    Actuals : ARRAY[*] OF LREAL; // LREAL array with actual values
+END_VAR
+VAR_INPUT
+    Delta : LREAL; // The maximum delta between the value of expected and actual for which both numbers are still considered equal, proportional to the Expected value in that array cell
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

@@ -1,0 +1,12 @@
+METHOD PUBLIC AssertEquals_LREAL
+VAR_INPUT
+	Expected : LREAL;
+	Actual : LREAL;
+	Delta : LREAL;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

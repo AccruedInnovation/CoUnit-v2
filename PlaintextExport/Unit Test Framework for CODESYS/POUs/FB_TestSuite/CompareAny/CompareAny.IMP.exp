@@ -1,0 +1,383 @@
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+IF (ExpectedData = 0) OR (ActualData = 0) THEN
+	_result.ArgumentError := TRUE;
+	_result.DiagnosticSuffix := 'Null ANY data pointer';
+ELSIF (ExpectedSize < 0) OR (ActualSize < 0) THEN
+	_result.ArgumentError := TRUE;
+	_result.DiagnosticSuffix := 'Negative ANY descriptor size';
+ELSIF ExpectedClass <> ActualClass THEN
+	_result.ExpectedText := CONCAT('type=', DINT_TO_STRING(ExpectedClass));
+	_result.ActualText := CONCAT('type=', DINT_TO_STRING(ActualClass));
+ELSE
+	IF (ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_STRING)) OR (ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING)) THEN
+		_unitSize := 1;
+		IF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING) THEN _unitSize := SIZEOF(WORD); END_IF
+		IF ((ExpectedSize MOD _unitSize) <> 0) OR ((ActualSize MOD _unitSize) <> 0) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'WSTRING size is not a whole native WORD code unit';
+		ELSE
+			(* Find both terminators independently: an early mismatch must not hide a malformed descriptor. *)
+			_expectedLength := 0;
+			WHILE _expectedLength < ExpectedSize DO
+				_expectedUnit := 0;
+				MEMCPY(destAddr := ADR(_expectedUnit), srcAddr := ExpectedData + _expectedLength, n := DINT_TO_UDINT(_unitSize));
+				IF _expectedUnit = 0 THEN EXIT; END_IF
+				_expectedLength := _expectedLength + _unitSize;
+			END_WHILE
+			_actualLength := 0;
+			WHILE _actualLength < ActualSize DO
+				_actualUnit := 0;
+				MEMCPY(destAddr := ADR(_actualUnit), srcAddr := ActualData + _actualLength, n := DINT_TO_UDINT(_unitSize));
+				IF _actualUnit = 0 THEN EXIT; END_IF
+				_actualLength := _actualLength + _unitSize;
+			END_WHILE
+			IF (_expectedLength = ExpectedSize) OR (_actualLength = ActualSize) THEN
+				_result.ArgumentError := TRUE;
+				_result.DiagnosticSuffix := 'Missing bounded STRING/WSTRING terminator';
+			ELSE
+				_result.Passed := _expectedLength = _actualLength;
+				_i := 0;
+				_mismatch := FALSE;
+				WHILE _i < MIN(_expectedLength, _actualLength) DO
+					_expectedUnit := 0;
+					_actualUnit := 0;
+					MEMCPY(destAddr := ADR(_expectedUnit), srcAddr := ExpectedData + _i, n := DINT_TO_UDINT(_unitSize));
+					MEMCPY(destAddr := ADR(_actualUnit), srcAddr := ActualData + _i, n := DINT_TO_UDINT(_unitSize));
+					IF _expectedUnit <> _actualUnit THEN _result.Passed := FALSE; _mismatch := TRUE; EXIT; END_IF
+					_i := _i + _unitSize;
+				END_WHILE
+				IF NOT _result.Passed THEN
+					_result.ExpectedText := CONCAT('code units=', DINT_TO_STRING(_expectedLength / _unitSize));
+					_result.ActualText := CONCAT('code units=', DINT_TO_STRING(_actualLength / _unitSize));
+					IF _mismatch THEN
+						_result.ExpectedText := CONCAT(CONCAT(_result.ExpectedText, ', unit='), WORD_TO_STRING(_expectedUnit));
+						_result.ActualText := CONCAT(CONCAT(_result.ActualText, ', unit='), WORD_TO_STRING(_actualUnit));
+						_result.DiagnosticSuffix := CONCAT('First differing code-unit offset=', DINT_TO_STRING(_i / _unitSize));
+					END_IF
+				END_IF
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_BOOL) THEN
+		IF (ExpectedSize <> SIZEOF(BOOL)) OR (ActualSize <> SIZEOF(BOOL)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid BOOL ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedBOOL), srcAddr := ExpectedData, n := SIZEOF(BOOL));
+			MEMCPY(destAddr := ADR(_actualBOOL), srcAddr := ActualData, n := SIZEOF(BOOL));
+			_result.Passed := _expectedBOOL = _actualBOOL;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := BOOL_TO_STRING(_expectedBOOL);
+				_result.ActualText := BOOL_TO_STRING(_actualBOOL);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE) THEN
+		IF (ExpectedSize <> SIZEOF(BYTE)) OR (ActualSize <> SIZEOF(BYTE)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid BYTE ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedBYTE), srcAddr := ExpectedData, n := SIZEOF(BYTE));
+			MEMCPY(destAddr := ADR(_actualBYTE), srcAddr := ActualData, n := SIZEOF(BYTE));
+			_result.Passed := _expectedBYTE = _actualBYTE;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := BYTE_TO_STRING(_expectedBYTE);
+				_result.ActualText := BYTE_TO_STRING(_actualBYTE);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_WORD) THEN
+		IF (ExpectedSize <> SIZEOF(WORD)) OR (ActualSize <> SIZEOF(WORD)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid WORD ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedWORD), srcAddr := ExpectedData, n := SIZEOF(WORD));
+			MEMCPY(destAddr := ADR(_actualWORD), srcAddr := ActualData, n := SIZEOF(WORD));
+			_result.Passed := _expectedWORD = _actualWORD;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := WORD_TO_STRING(_expectedWORD);
+				_result.ActualText := WORD_TO_STRING(_actualWORD);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_DWORD) THEN
+		IF (ExpectedSize <> SIZEOF(DWORD)) OR (ActualSize <> SIZEOF(DWORD)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid DWORD ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedDWORD), srcAddr := ExpectedData, n := SIZEOF(DWORD));
+			MEMCPY(destAddr := ADR(_actualDWORD), srcAddr := ActualData, n := SIZEOF(DWORD));
+			_result.Passed := _expectedDWORD = _actualDWORD;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := DWORD_TO_STRING(_expectedDWORD);
+				_result.ActualText := DWORD_TO_STRING(_actualDWORD);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_LWORD) THEN
+		IF (ExpectedSize <> SIZEOF(LWORD)) OR (ActualSize <> SIZEOF(LWORD)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid LWORD ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedLWORD), srcAddr := ExpectedData, n := SIZEOF(LWORD));
+			MEMCPY(destAddr := ADR(_actualLWORD), srcAddr := ActualData, n := SIZEOF(LWORD));
+			_result.Passed := _expectedLWORD = _actualLWORD;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := LWORD_TO_STRING(_expectedLWORD);
+				_result.ActualText := LWORD_TO_STRING(_actualLWORD);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_SINT) THEN
+		IF (ExpectedSize <> SIZEOF(SINT)) OR (ActualSize <> SIZEOF(SINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid SINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedSINT), srcAddr := ExpectedData, n := SIZEOF(SINT));
+			MEMCPY(destAddr := ADR(_actualSINT), srcAddr := ActualData, n := SIZEOF(SINT));
+			_result.Passed := _expectedSINT = _actualSINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := SINT_TO_STRING(_expectedSINT);
+				_result.ActualText := SINT_TO_STRING(_actualSINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_INT) THEN
+		IF (ExpectedSize <> SIZEOF(INT)) OR (ActualSize <> SIZEOF(INT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid INT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedINT), srcAddr := ExpectedData, n := SIZEOF(INT));
+			MEMCPY(destAddr := ADR(_actualINT), srcAddr := ActualData, n := SIZEOF(INT));
+			_result.Passed := _expectedINT = _actualINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := INT_TO_STRING(_expectedINT);
+				_result.ActualText := INT_TO_STRING(_actualINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_DINT) THEN
+		IF (ExpectedSize <> SIZEOF(DINT)) OR (ActualSize <> SIZEOF(DINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid DINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedDINT), srcAddr := ExpectedData, n := SIZEOF(DINT));
+			MEMCPY(destAddr := ADR(_actualDINT), srcAddr := ActualData, n := SIZEOF(DINT));
+			_result.Passed := _expectedDINT = _actualDINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := DINT_TO_STRING(_expectedDINT);
+				_result.ActualText := DINT_TO_STRING(_actualDINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_LINT) THEN
+		IF (ExpectedSize <> SIZEOF(LINT)) OR (ActualSize <> SIZEOF(LINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid LINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedLINT), srcAddr := ExpectedData, n := SIZEOF(LINT));
+			MEMCPY(destAddr := ADR(_actualLINT), srcAddr := ActualData, n := SIZEOF(LINT));
+			_result.Passed := _expectedLINT = _actualLINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := LINT_TO_STRING(_expectedLINT);
+				_result.ActualText := LINT_TO_STRING(_actualLINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_USINT) THEN
+		IF (ExpectedSize <> SIZEOF(USINT)) OR (ActualSize <> SIZEOF(USINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid USINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedUSINT), srcAddr := ExpectedData, n := SIZEOF(USINT));
+			MEMCPY(destAddr := ADR(_actualUSINT), srcAddr := ActualData, n := SIZEOF(USINT));
+			_result.Passed := _expectedUSINT = _actualUSINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := USINT_TO_STRING(_expectedUSINT);
+				_result.ActualText := USINT_TO_STRING(_actualUSINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_UINT) THEN
+		IF (ExpectedSize <> SIZEOF(UINT)) OR (ActualSize <> SIZEOF(UINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid UINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedUINT), srcAddr := ExpectedData, n := SIZEOF(UINT));
+			MEMCPY(destAddr := ADR(_actualUINT), srcAddr := ActualData, n := SIZEOF(UINT));
+			_result.Passed := _expectedUINT = _actualUINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := UINT_TO_STRING(_expectedUINT);
+				_result.ActualText := UINT_TO_STRING(_actualUINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_UDINT) THEN
+		IF (ExpectedSize <> SIZEOF(UDINT)) OR (ActualSize <> SIZEOF(UDINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid UDINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedUDINT), srcAddr := ExpectedData, n := SIZEOF(UDINT));
+			MEMCPY(destAddr := ADR(_actualUDINT), srcAddr := ActualData, n := SIZEOF(UDINT));
+			_result.Passed := _expectedUDINT = _actualUDINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := UDINT_TO_STRING(_expectedUDINT);
+				_result.ActualText := UDINT_TO_STRING(_actualUDINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_ULINT) THEN
+		IF (ExpectedSize <> SIZEOF(ULINT)) OR (ActualSize <> SIZEOF(ULINT)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid ULINT ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedULINT), srcAddr := ExpectedData, n := SIZEOF(ULINT));
+			MEMCPY(destAddr := ADR(_actualULINT), srcAddr := ActualData, n := SIZEOF(ULINT));
+			_result.Passed := _expectedULINT = _actualULINT;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := ULINT_TO_STRING(_expectedULINT);
+				_result.ActualText := ULINT_TO_STRING(_actualULINT);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_REAL) THEN
+		IF (ExpectedSize <> SIZEOF(REAL)) OR (ActualSize <> SIZEOF(REAL)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid REAL ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedREAL), srcAddr := ExpectedData, n := SIZEOF(REAL));
+			MEMCPY(destAddr := ADR(_actualREAL), srcAddr := ActualData, n := SIZEOF(REAL));
+			_result.Passed := Compare_REAL(Expected := _expectedREAL, Actual := _actualREAL, Delta := REAL#0.0, ArgumentError => _result.ArgumentError);
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := Text_REAL(Value := _expectedREAL);
+				_result.ActualText := Text_REAL(Value := _actualREAL);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_LREAL) THEN
+		IF (ExpectedSize <> SIZEOF(LREAL)) OR (ActualSize <> SIZEOF(LREAL)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid LREAL ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedLREAL), srcAddr := ExpectedData, n := SIZEOF(LREAL));
+			MEMCPY(destAddr := ADR(_actualLREAL), srcAddr := ActualData, n := SIZEOF(LREAL));
+			_result.Passed := Compare_LREAL(Expected := _expectedLREAL, Actual := _actualLREAL, Delta := LREAL#0.0, ArgumentError => _result.ArgumentError);
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := Text_LREAL(Value := _expectedLREAL);
+				_result.ActualText := Text_LREAL(Value := _actualLREAL);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_TIME) THEN
+		IF (ExpectedSize <> SIZEOF(TIME)) OR (ActualSize <> SIZEOF(TIME)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid TIME ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedTIME), srcAddr := ExpectedData, n := SIZEOF(TIME));
+			MEMCPY(destAddr := ADR(_actualTIME), srcAddr := ActualData, n := SIZEOF(TIME));
+			_result.Passed := _expectedTIME = _actualTIME;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := TIME_TO_STRING(_expectedTIME);
+				_result.ActualText := TIME_TO_STRING(_actualTIME);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_LTIME) THEN
+		IF (ExpectedSize <> SIZEOF(LTIME)) OR (ActualSize <> SIZEOF(LTIME)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid LTIME ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedLTIME), srcAddr := ExpectedData, n := SIZEOF(LTIME));
+			MEMCPY(destAddr := ADR(_actualLTIME), srcAddr := ActualData, n := SIZEOF(LTIME));
+			_result.Passed := _expectedLTIME = _actualLTIME;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := LTIME_TO_STRING(_expectedLTIME);
+				_result.ActualText := LTIME_TO_STRING(_actualLTIME);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_DATE) THEN
+		IF (ExpectedSize <> SIZEOF(DATE)) OR (ActualSize <> SIZEOF(DATE)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid DATE ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedDATE), srcAddr := ExpectedData, n := SIZEOF(DATE));
+			MEMCPY(destAddr := ADR(_actualDATE), srcAddr := ActualData, n := SIZEOF(DATE));
+			_result.Passed := _expectedDATE = _actualDATE;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := DATE_TO_STRING(_expectedDATE);
+				_result.ActualText := DATE_TO_STRING(_actualDATE);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_DATEANDTIME) THEN
+		IF (ExpectedSize <> SIZEOF(DATE_AND_TIME)) OR (ActualSize <> SIZEOF(DATE_AND_TIME)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid DATE_AND_TIME ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedDATE_AND_TIME), srcAddr := ExpectedData, n := SIZEOF(DATE_AND_TIME));
+			MEMCPY(destAddr := ADR(_actualDATE_AND_TIME), srcAddr := ActualData, n := SIZEOF(DATE_AND_TIME));
+			_result.Passed := _expectedDATE_AND_TIME = _actualDATE_AND_TIME;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := DT_TO_STRING(_expectedDATE_AND_TIME);
+				_result.ActualText := DT_TO_STRING(_actualDATE_AND_TIME);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedClass = TO_DINT(IBaseLibrary.TypeClass.TYPE_TIMEOFDAY) THEN
+		IF (ExpectedSize <> SIZEOF(TIME_OF_DAY)) OR (ActualSize <> SIZEOF(TIME_OF_DAY)) THEN
+			_result.ArgumentError := TRUE;
+			_result.DiagnosticSuffix := 'Invalid TIME_OF_DAY ANY descriptor size';
+		ELSE
+			MEMCPY(destAddr := ADR(_expectedTIME_OF_DAY), srcAddr := ExpectedData, n := SIZEOF(TIME_OF_DAY));
+			MEMCPY(destAddr := ADR(_actualTIME_OF_DAY), srcAddr := ActualData, n := SIZEOF(TIME_OF_DAY));
+			_result.Passed := _expectedTIME_OF_DAY = _actualTIME_OF_DAY;
+
+			IF NOT _result.Passed THEN
+				_result.ExpectedText := TOD_TO_STRING(_expectedTIME_OF_DAY);
+				_result.ActualText := TOD_TO_STRING(_actualTIME_OF_DAY);
+			END_IF
+		END_IF
+
+	ELSIF ExpectedSize <> ActualSize THEN
+		_result.ExpectedText := CONCAT('bytes=', DINT_TO_STRING(ExpectedSize));
+		_result.ActualText := CONCAT('bytes=', DINT_TO_STRING(ActualSize));
+	ELSE
+		_result.Passed := TRUE;
+		_i := 0;
+		WHILE _i < ExpectedSize DO
+			IF ExpectedData[_i] <> ActualData[_i] THEN
+				_result.Passed := FALSE;
+				_result.ExpectedText := BYTE_TO_STRING(ExpectedData[_i]);
+				_result.ActualText := BYTE_TO_STRING(ActualData[_i]);
+				_result.DiagnosticSuffix := CONCAT('First differing representation byte=', DINT_TO_STRING(_i));
+				EXIT;
+			END_IF
+			_i := _i + 1;
+		END_WHILE
+	END_IF
+END_IF
+CompareAny := _result;

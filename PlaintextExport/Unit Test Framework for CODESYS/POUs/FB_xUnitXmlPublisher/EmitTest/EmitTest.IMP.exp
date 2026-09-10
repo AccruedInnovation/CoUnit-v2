@@ -1,0 +1,24 @@
+IF NOT AppendLiteral('<testcase') THEN RETURN; END_IF
+IF NOT Attribute('name', Test.Name) THEN RETURN; END_IF
+IF NOT Attribute('classname', Test.ClassName) THEN RETURN; END_IF
+IF NOT Attribute('assertions', UINT_TO_STRING(Test.NumberOfAsserts)) THEN RETURN; END_IF
+IF NOT AppendLiteral('>') THEN RETURN; END_IF
+CASE Test.State OF
+	E_CoUnitTestState.PASSED: _type := ''; // No result child
+	E_CoUnitTestState.FAILED:
+		IF NOT AppendLiteral('<failure') THEN RETURN; END_IF
+		_type := CONCAT('Type_', F_AssertionTypeToString(Test.FirstFailure.AssertionType));
+		IF NOT Attribute('type', _type) THEN RETURN; END_IF
+		IF NOT Attribute('message', Test.FirstFailure.Message) THEN RETURN; END_IF
+		IF NOT AppendLiteral('/>') THEN RETURN; END_IF
+	E_CoUnitTestState.SKIPPED:
+		IF NOT AppendLiteral('<skipped/>') THEN RETURN; END_IF
+	E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR:
+		IF Test.State = E_CoUnitTestState.ABORTED THEN _error := 'Run aborted'; ELSE _error := 'Framework error'; END_IF
+		IF NOT AppendLiteral('<error') THEN RETURN; END_IF
+		IF NOT Attribute('message', _error) THEN RETURN; END_IF
+		IF NOT AppendLiteral('/>') THEN RETURN; END_IF
+ELSE
+	Fail('nonterminal snapshot test'); RETURN;
+END_CASE
+EmitTest := AppendLiteral('</testcase>');

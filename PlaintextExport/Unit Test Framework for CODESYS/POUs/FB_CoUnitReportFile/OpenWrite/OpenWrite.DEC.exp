@@ -1,0 +1,7 @@
+METHOD PUBLIC OpenWrite : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+END_VAR
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+END_VAR

@@ -1,0 +1,18 @@
+(*
+    Copies a string from the character buffer
+*)
+METHOD Copy : T_MaxString
+VAR_INPUT
+    StartPos : UDINT;
+    EndPos : UDINT;
+END_VAR
+VAR_OUTPUT
+    CopyLen : UDINT;
+    XmlError : E_XmlError;
+END_VAR
+VAR
+    Loop : UDINT;
+    PointerToByteToCopy : POINTER TO BYTE;
+    PointerToBuffer : POINTER TO BYTE;
+    CurPos : UDINT;
+END_VAR

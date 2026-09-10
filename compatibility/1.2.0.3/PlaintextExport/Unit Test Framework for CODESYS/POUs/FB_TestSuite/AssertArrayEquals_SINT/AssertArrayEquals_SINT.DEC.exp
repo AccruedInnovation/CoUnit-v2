@@ -1,0 +1,74 @@
+(*
+ Asserts that two SINT arrays are equal. If they are not, an assertion error is created.
+ 
+ Parameters:
+     | Expecteds – SINT array with expected values
+     | Actuals – SINT array with actual values
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..3] OF SINT := [-128, 127, -34, 62];
+         b : ARRAY[0..3] OF SINT := [-128, 127, -34, 62];
+     END_VAR
+
+     TEST('Test_SINT_Array_Equals');
+     AssertArrayEquals_SINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..0] OF SINT := [-128];
+         b : ARRAY[0..1] OF SINT := [-128, 127];
+     END_VAR
+
+     TEST('Test_SINT_Array_DifferInSize');
+     AssertArrayEquals_SINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();								  
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..0] OF SINT := [-128];
+         b : ARRAY[0..0] OF SINT := [127];
+     END_VAR
+
+     TEST('Test_SINT_Array_DifferInContent');
+     AssertArrayEquals_SINT(Expecteds := a,
+                            Actuals := b,
+                            Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_SINT
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF SINT; // SINT array with expected values
+    Actuals : ARRAY[*] OF SINT; // SINT array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

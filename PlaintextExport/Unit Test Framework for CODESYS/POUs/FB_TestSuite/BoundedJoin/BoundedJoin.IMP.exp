@@ -1,0 +1,45 @@
+Truncated := AlreadyTruncated;
+IF AlreadyTruncated THEN BoundedJoin := LeftText; RETURN; END_IF
+_left := ADR(LeftText);
+_right := ADR(RightText);
+_dest := ADR(BoundedJoin);
+_mark := ADR(_marker);
+_leftLen := 0;
+_rightLen := 0;
+WHILE _leftLen < 255 DO
+	IF _left[_leftLen] = 0 THEN EXIT; END_IF
+	_leftLen := _leftLen + 1;
+END_WHILE
+WHILE _rightLen < 255 DO
+	IF _right[_rightLen] = 0 THEN EXIT; END_IF
+	_rightLen := _rightLen + 1;
+END_WHILE
+_length := _leftLen + _rightLen;
+Truncated := _length > 255;
+_keep := _length;
+IF _length > 255 THEN _keep := 241; END_IF
+_i := 0;
+WHILE _i < _keep DO
+	IF _i < _leftLen THEN _dest[_i] := _left[_i]; ELSE _dest[_i] := _right[_i - _leftLen]; END_IF
+	_i := _i + 1;
+END_WHILE
+IF _length > 255 THEN
+	(* The integration preflight binds the native STRING mode in the shared configuration. *)
+	IF GVL_coUnit.StringIsUtf8 AND (_keep > 0) THEN
+		_start := _keep - 1;
+		WHILE _start > 0 DO
+			IF (_dest[_start] AND BYTE#16#C0) <> BYTE#16#80 THEN EXIT; END_IF
+			_start := _start - 1;
+		END_WHILE
+		_lead := _dest[_start];
+		_needed := 1;
+		IF (_lead AND BYTE#16#E0) = BYTE#16#C0 THEN _needed := 2;
+		ELSIF (_lead AND BYTE#16#F0) = BYTE#16#E0 THEN _needed := 3;
+		ELSIF (_lead AND BYTE#16#F8) = BYTE#16#F0 THEN _needed := 4;
+		END_IF
+		IF (_keep - _start) < _needed THEN _keep := _start; END_IF
+	END_IF
+	FOR _i := 0 TO 13 DO _dest[_keep + _i] := _mark[_i]; END_FOR
+	_keep := _keep + 14;
+END_IF
+_dest[_keep] := 0;

@@ -1,0 +1,73 @@
+(* Asserts that two USINT arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expecteds – USINT array with expected values
+     | Actuals – USINT array with actual values
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..100] OF USINT := [42, 100(33)];
+         b : ARRAY[0..100] OF USINT := [42, 100(33)];
+     END_VAR
+
+     TEST('Test_USINT_Array_Equals');
+     AssertArrayEquals_USINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..100] OF USINT := [101(42)];
+         b : ARRAY[0..70] OF USINT := [71(42)];
+     END_VAR
+
+     TEST('Test_USINT_Array_DifferInSize');
+     AssertArrayEquals_USINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..10] OF USINT := [0,1,2,3,6(4),5];
+         b : ARRAY[0..10] OF USINT := [0,1,2,3,6(5),6];
+     END_VAR
+
+     TEST('Test_USINT_Array_DifferInContent');
+     AssertArrayEquals_USINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_USINT
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF USINT; // USINT array with expected values
+    Actuals : ARRAY[*] OF USINT; // USINT array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

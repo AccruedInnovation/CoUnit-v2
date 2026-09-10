@@ -1,0 +1,96 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+RUN();
+// Force only after RUN has completed its native encoding bind.
+GVL_coUnit.StringIsUtf8 := TRUE;
+DecoderBranchForced := TRUE;
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT Done THEN
+	OraclePass := TRUE;
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (_snapshot.SuiteCount = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = UDINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (_snapshot.Passed = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = UDINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (_snapshot.Skipped = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (_snapshot.Errors = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Total = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].Name = 'Utf8Diagnostic') THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.FAILED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.IsSet) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Tests[1].FirstFailure.AssertionType = E_AssertionType.Type_REAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (FIND(_snapshot.Suites[1].Tests[1].FirstFailure.Message, 'A') > 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	Done := TRUE;
+END_IF
+
+IF Done THEN
+	_bytes := ADR(_snapshot.Suites[1].Tests[1].FirstFailure.Message);
+	DiagnosticByteCount := 0;
+	FOR _byteIndex := 0 TO 255 DO
+		DiagnosticBytes[_byteIndex] := _bytes[_byteIndex];
+		IF (_bytes[_byteIndex] <> 0) AND (DiagnosticByteCount = _byteIndex) THEN DiagnosticByteCount := DiagnosticByteCount + 1; END_IF
+	END_FOR
+END_IF
+IF Done THEN
+	FOR _byteIndex := 0 TO 255 DO
+		IF DiagnosticBytes[_byteIndex] <> _expectedBytes[_byteIndex] THEN OraclePass := FALSE; END_IF
+	END_FOR
+END_IF
+IF Done THEN
+	_hexDigitsPointer := ADR(_hexDigits);
+	FOR _hexBlock := 1 TO 4 DO
+		_hexOutput := ADR(DiagnosticHex[_hexBlock]);
+		FOR _hexIndex := 0 TO 63 DO
+			_hexValue := BYTE_TO_UINT(DiagnosticBytes[(_hexBlock - 1) * 64 + _hexIndex]);
+			_hexOutput[2 * _hexIndex] := _hexDigitsPointer[_hexValue / 16];
+			_hexOutput[2 * _hexIndex + 1] := _hexDigitsPointer[_hexValue MOD 16];
+		END_FOR
+		_hexOutput[128] := 0;
+	END_FOR
+END_IF

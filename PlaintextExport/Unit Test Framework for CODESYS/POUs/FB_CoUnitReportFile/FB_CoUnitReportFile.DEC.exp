@@ -1,0 +1,13 @@
+{attribute 'hide_all_locals'}
+FUNCTION_BLOCK FB_CoUnitReportFile
+VAR
+	_handle : SysFile.SysTypes.RTS_IEC_HANDLE := SysFile.SysTypes.RTS_INVALID_HANDLE;
+	_lastError : UDINT;
+	_effectCount : UDINT;
+	_faultOperation : E_CoUnitFileOperation;
+	_faultOccurrence : UDINT;
+	_faultOccurrence2 : UDINT;
+	_faultError : UDINT := 16#FFFF0001;
+	_occurrence : UDINT;
+	_shortWrite : BOOL;
+END_VAR

@@ -1,0 +1,52 @@
+BeginTest := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := FALSE, TestIndex => _unused, Execute => _execute) THEN RETURN; END_IF
+(* A rejected declaration suppresses the following segment instead of inheriting the prior test. *)
+GVL_coUnit.coUnitRunner.SelectTest(Index := 0, Execute := FALSE, Name := '');
+IF NOT CoUnitCanonicalName(Name := Name, Canonical => _canonical, Disabled => _disabled) THEN
+	GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Empty canonical test name');
+	RETURN;
+END_IF
+_index := FindTest(Name := Name);
+_epoch := GVL_coUnit.coUnitRunner.GetEpoch();
+IF _index = 0 THEN
+	IF NumberOfTests >= GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Test capacity exceeded');
+		RETURN;
+	END_IF
+	IF Ordered AND NumberOfOrderedTests >= GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Ordered test capacity exceeded');
+		RETURN;
+	END_IF
+	_index := NumberOfTests + 1;
+	TestRecords[_index].InUse := TRUE;
+	TestRecords[_index].CanonicalName := _canonical;
+	TestRecords[_index].DefinedDisabled := _disabled;
+	TestRecords[_index].IsOrdered := Ordered;
+	TestRecords[_index].FirstSeenEpoch := _epoch;
+	TestRecords[_index].State := E_CoUnitTestState.OPEN;
+	IF _disabled THEN TestRecords[_index].State := E_CoUnitTestState.SKIPPED; END_IF
+	IF Ordered THEN
+		TestRecords[_index].OrderNumber := NumberOfOrderedTests + 1;
+		NumberOfOrderedTests := NumberOfOrderedTests + 1;
+	END_IF
+	NumberOfTests := _index;
+	IF Ordered AND _disabled THEN AdvanceOrderedCursor(); END_IF
+ELSE
+	IF TestRecords[_index].IsOrdered <> Ordered OR TestRecords[_index].DefinedDisabled <> _disabled THEN
+		GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Conflicting test declaration shape');
+		RETURN;
+	END_IF
+	IF TestRecords[_index].LastSeenEpoch = _epoch THEN
+		IF TestRecords[_index].DuplicateReportedEpoch <> _epoch THEN
+			GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Duplicate test declaration in runner epoch');
+			TestRecords[_index].DuplicateReportedEpoch := _epoch;
+		END_IF
+		RETURN;
+	END_IF
+END_IF
+TestRecords[_index].LastSeenEpoch := _epoch;
+TestRecords[_index].InvocationOrdinal := 0;
+_execute := TestRecords[_index].State = E_CoUnitTestState.OPEN;
+IF Ordered THEN _execute := _execute AND (TestRecords[_index].OrderNumber = OrderedCursor); END_IF
+GVL_coUnit.coUnitRunner.SelectTest(Index := _index, Execute := _execute, Name := _canonical);
+BeginTest := _execute;

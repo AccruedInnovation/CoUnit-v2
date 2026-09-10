@@ -1,0 +1,10 @@
+METHOD AddLogEntry : BOOL
+VAR_INPUT
+	udiClassId : UDINT;
+	udiErrorId : UDINT;
+	udiInfoId : UDINT;
+	sText : T_MaxString;
+END_VAR
+VAR
+	pResult : RTS_IEC_RESULT;
+END_VAR

@@ -1,0 +1,11 @@
+(* TEST ONLY: inject under FB_TestSuite in the isolated same-source qualification project.
+Do not import this method into the shipping library. Caller owns live bounded storage. *)
+METHOD PUBLIC CompareAnyForQualification : ST_CoUnitComparisonResult
+VAR_INPUT
+	ExpectedData : POINTER TO BYTE;
+	ActualData : POINTER TO BYTE;
+	ExpectedSize : DINT;
+	ActualSize : DINT;
+	ExpectedClass : DINT;
+	ActualClass : DINT;
+END_VAR

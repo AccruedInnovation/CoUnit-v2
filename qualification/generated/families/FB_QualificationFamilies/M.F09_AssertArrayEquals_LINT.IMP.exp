@@ -1,0 +1,7 @@
+TEST('F09_AssertArrayEquals_LINT');
+IF NOT IS_TEST_FINISHED('F09_AssertArrayEquals_LINT') THEN
+	_v9e[1] := 1;
+	_v9a[1] := 2;
+	AssertArrayEquals_LINT(Expecteds := _v9e, Actuals := _v9a, Message := 'F09_AssertArrayEquals_LINT');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,1 @@
+AreAllTestSuitesFinished := RunState = E_CoUnitRunState.COMPLETE;

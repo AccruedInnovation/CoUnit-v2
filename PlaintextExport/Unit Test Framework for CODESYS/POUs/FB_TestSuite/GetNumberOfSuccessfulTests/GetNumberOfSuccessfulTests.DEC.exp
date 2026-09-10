@@ -1,0 +1,4 @@
+METHOD INTERNAL GetNumberOfSuccessfulTests : UINT
+VAR
+	_i : UDINT;
+END_VAR

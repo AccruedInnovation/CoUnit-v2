@@ -1,0 +1,141 @@
+IF GVL_coUnit.IgnoreCurrentTest OR GVL_coUnit.CurrentTestIsFinished THEN
+    RETURN;
+END_IF
+
+TestInstancePath := AddTestNameToInstancePath(FindTestSuiteInstancePath());
+(* UPPER_BOUND and LOWER_BOUND require literals for their second parameter,
+   so they can't be called in a dimension-based loop.
+   Thus we copy the array dimensions into arrays which accept variable indexes *)
+LowerBoundExpecteds[1] := LOWER_BOUND(Expecteds, 1);
+UpperBoundExpecteds[1] := UPPER_BOUND(Expecteds, 1);
+LowerBoundExpecteds[2] := LOWER_BOUND(Expecteds, 2);
+UpperBoundExpecteds[2] := UPPER_BOUND(Expecteds, 2);
+LowerBoundExpecteds[3] := LOWER_BOUND(Expecteds, 3);
+UpperBoundExpecteds[3] := UPPER_BOUND(Expecteds, 3);
+LowerBoundActuals[1] := LOWER_BOUND(Actuals, 1);
+UpperBoundActuals[1] := UPPER_BOUND(Actuals, 1);
+LowerBoundActuals[2] := LOWER_BOUND(Actuals, 2);
+UpperBoundActuals[2] := UPPER_BOUND(Actuals, 2);
+LowerBoundActuals[3] := LOWER_BOUND(Actuals, 3);
+UpperBoundActuals[3] := UPPER_BOUND(Actuals, 3);
+
+FOR DimensionIndex := 1 TO 3 DO
+    SizeOfExpecteds[DimensionIndex] := ABS(UpperBoundExpecteds[DimensionIndex] - LowerBoundExpecteds[DimensionIndex]) + 1;
+    SizeOfActuals[DimensionIndex] := ABS(UpperBoundActuals[DimensionIndex] - LowerBoundActuals[DimensionIndex]) + 1;
+
+    IF SizeOfExpecteds[DimensionIndex] <> SizeOfActuals[DimensionIndex] THEN
+        Equals := FALSE;
+        SizeEquals := FALSE;
+    END_IF
+END_FOR
+
+IF SizeEquals THEN
+    (* Even though we know that both arrays are equal in size, the three arrays can start at three completely different
+       indexes in each dimension, which needs to be taken into account. *)
+    FOR Offset[1] := 0 TO SizeOfExpecteds[1] - 1 DO // Iterate Dimension 1
+        FOR Offset[2] := 0 TO SizeOfExpecteds[2] - 1 DO // Iterate Dimension 2
+            FOR Offset[3] := 0 TO SizeOfExpecteds[3] - 1 DO // Iterate Dimension 3
+                // Update index variables
+                FOR DimensionIndex := 1 TO 3 DO
+                    ExpectedArrayIndex[DimensionIndex] := LowerBoundExpecteds[DimensionIndex] + Offset[DimensionIndex];
+                    ActualArrayIndex[DimensionIndex] := LowerBoundActuals[DimensionIndex] + Offset[DimensionIndex];
+                END_FOR
+
+                // Get array element values
+                Expected := Expecteds[ExpectedArrayIndex[1], ExpectedArrayIndex[2], ExpectedArrayIndex[3]];
+                Actual := Actuals[ActualArrayIndex[1], ActualArrayIndex[2], ActualArrayIndex[3]];
+
+                IF ABS(Expected - Actual) > Delta THEN
+                    Equals := FALSE;
+                    EXIT;
+                END_IF
+            END_FOR
+
+            // Check for loop bailout
+            IF NOT Equals THEN
+                EXIT;
+            END_IF
+        END_FOR
+
+        // Check for loop bailout
+        IF NOT Equals THEN
+            EXIT;
+        END_IF
+    END_FOR
+END_IF
+
+AssertArrayResults.ReportResult(ExpectedsSize := DINT_TO_UDINT(SizeOfExpecteds[1] * SizeOfExpecteds[2] * SizeOfExpecteds[3]),
+    ExpectedsTypeClass := IBaseLibrary.TypeClass.TYPE_LREAL,
+    ActualsSize := DINT_TO_UDINT(SizeOfActuals[1] * SizeOfActuals[2] * SizeOfActuals[3]),
+    ActualsTypeClass := IBaseLibrary.TypeClass.TYPE_LREAL,
+    Message := Message,
+    TestInstancePath := TestInstancePath,
+    AlreadyReported => AlreadyReported);
+
+IF NOT AlreadyReported AND NOT Equals THEN
+    SetTestFailed(AssertionType := E_AssertionType.Type_Array3D_LREAL, AssertionMessage := Message);
+
+    IF NOT SizeEquals THEN
+        Message := CONCAT(STR1 := Message, STR2 := ', size of arrays not matching.');
+        ExpectedString := 'SIZE = [';
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(LowerBoundExpecteds[1]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '..');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(UpperBoundExpecteds[1]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ',');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(LowerBoundExpecteds[2]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '..');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(UpperBoundExpecteds[2]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ',');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(LowerBoundExpecteds[3]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '..');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(UpperBoundExpecteds[3]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '] (');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(SizeOfExpecteds[1]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := 'x');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(SizeOfExpecteds[2]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := 'x');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(SizeOfExpecteds[3]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ')');
+        ActualString := 'SIZE = [';
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(LowerBoundActuals[1]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '..');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(UpperBoundActuals[1]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ',');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(LowerBoundActuals[2]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '..');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(UpperBoundActuals[2]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ',');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(LowerBoundActuals[3]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '..');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(UpperBoundActuals[3]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '] (');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(SizeOfActuals[1]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := 'x');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(SizeOfActuals[2]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := 'x');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(SizeOfActuals[3]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ')');
+    ELSE
+        ExpectedString := 'ARRAY[';
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(ExpectedArrayIndex[1]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ',');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(ExpectedArrayIndex[2]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := ',');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := DINT_TO_STRING(ExpectedArrayIndex[3]));
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := '] = ');
+        ExpectedString := CONCAT(STR1 := ExpectedString, STR2 := LREAL_TO_STRING(Expected));
+        ActualString := 'ARRAY[';
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(ActualArrayIndex[1]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ',');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(ActualArrayIndex[2]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := ',');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := DINT_TO_STRING(ActualArrayIndex[3]));
+        ActualString := CONCAT(STR1 := ActualString, STR2 := '] = ');
+        ActualString := CONCAT(STR1 := ActualString, STR2 := LREAL_TO_STRING(Actual));
+    END_IF
+
+    AssertMessageFormatter.LogAssertFailure(Expected := ExpectedString,
+        Actual := ActualString,
+        Message := Message,
+        TestInstancePath := TestInstancePath);
+END_IF

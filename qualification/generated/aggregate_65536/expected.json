@@ -1,0 +1,15 @@
+{
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suite_count": 32,
+  "tests_per_suite": 2048,
+  "total": 65536,
+  "passed": 65536,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "test_name_prefix": "Test",
+  "first_test_index": 1,
+  "last_test_index": 2048,
+  "assertions_per_test": 0
+}

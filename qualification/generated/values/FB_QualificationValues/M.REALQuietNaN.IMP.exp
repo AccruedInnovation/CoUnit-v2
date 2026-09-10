@@ -1,0 +1,8 @@
+TEST('REALQuietNaN');
+IF NOT IS_TEST_FINISHED('REALQuietNaN') THEN
+	_pa := ADR(_fREAL2a);
+	_pb := ADR(_fREAL2b);
+	_pd := ADR(_fREAL2d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALQuietNaN');
+	TEST_FINISHED();
+END_IF

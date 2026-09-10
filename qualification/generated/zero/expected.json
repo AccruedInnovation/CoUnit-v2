@@ -1,0 +1,16 @@
+{
+  "shard": "zero",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#0",
+    "_snapshot.Total = UDINT#0",
+    "_snapshot.Passed = UDINT#0",
+    "_snapshot.Failed = UDINT#0",
+    "_snapshot.Skipped = UDINT#0",
+    "_snapshot.Errors = UDINT#0"
+  ]
+}

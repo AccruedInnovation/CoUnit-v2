@@ -1,0 +1,47 @@
+IF (IN = 0 AND iPrecision = 0) OR iPrecision < 0 THEN RETURN; END_IF 
+
+//get the number of digits
+IF in = 0 THEN
+	m_NumberOfDigits := 0;
+ELSE
+	m_NumberOfDigits := TO_INT(LOG(in))+1;
+END_IF
+
+//if the number of digits is less then iPrecision then use iPrecision 
+//so that the resulting string is filled with zeros
+IF m_NumberOfDigits - 1 < iPrecision THEN
+	m_precision := iPrecision;
+	
+//if the number of digits is grater then iPrecision then use the size of the number of digits
+ELSIF m_NumberOfDigits > iPrecision THEN
+	IF m_NumberOfDigits > 9 THEN //limit the resulting string to 8 chars
+		m_precision := 8;
+	ELSE
+		m_precision := m_NumberOfDigits - 1;
+	END_IF
+END_IF
+
+(* read output adress to pointer *)
+pt := ADR(DWORD_TO_HEXSTR) + TO_DWORD(m_precision);
+(* wirte the closing byte for the string *)
+pt^:= 0;
+
+(* write the 8 hex characters backwards *)
+FOR i := 1 TO m_precision DO;
+	(* decrement the pointer *)
+	pt := pt - 1;
+	(* read the lowest order hex value *)
+	temp := DWORD_TO_BYTE(in AND 16#0000000F);
+	(* convert value to hex character *)
+	IF temp <= 9 THEN 
+		temp := temp + 48; 
+	ELSIF  bLoCase THEN
+		temp := temp + 87;
+	ELSE
+		temp := temp + 55; 
+	END_IF;
+	(* write character to output string *)
+	PT^ := temp;
+	(* shift in for nect hex character *)
+	in := SHR(in,4);
+END_FOR;

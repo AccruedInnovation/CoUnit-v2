@@ -1,0 +1,2 @@
+(* Returns whether the storing of the test results is finished *)
+METHOD PUBLIC GetAreTestResultsAvailable : BOOL

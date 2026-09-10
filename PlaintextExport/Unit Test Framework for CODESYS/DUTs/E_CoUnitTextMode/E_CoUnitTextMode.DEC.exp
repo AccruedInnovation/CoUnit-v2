@@ -1,0 +1,4 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitTextMode : (UNKNOWN, UTF8, LATIN1, WINDOWS1252);
+END_TYPE

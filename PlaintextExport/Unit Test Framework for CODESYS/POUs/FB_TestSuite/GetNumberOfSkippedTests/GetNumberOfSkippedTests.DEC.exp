@@ -1,0 +1,4 @@
+METHOD INTERNAL GetNumberOfSkippedTests : UINT
+VAR
+	_i : UDINT;
+END_VAR

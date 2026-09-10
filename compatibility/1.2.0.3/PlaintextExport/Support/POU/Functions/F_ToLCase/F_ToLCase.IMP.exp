@@ -1,0 +1,7 @@
+PT := ADR(F_ToLCase);
+F_ToLCase := in;
+l := LEN(in);
+FOR pos := 1 TO l DO
+	pt^ := TO_LOWER(pt^);
+	PT := PT + 1;
+END_FOR;

@@ -1,0 +1,5 @@
+TEST('F36_AssertEquals_UDINT');
+IF NOT IS_TEST_FINISHED('F36_AssertEquals_UDINT') THEN
+	AssertEquals_UDINT(Expected := _v36e, Actual := _v36a, Message := 'F36_AssertEquals_UDINT');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,4 @@
+METHOD TestLog
+VAR_INPUT
+	Message : STRING(255);
+END_VAR

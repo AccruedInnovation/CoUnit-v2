@@ -1,0 +1,85 @@
+(* The body of the function block stores the test results *)
+IF StoringTestSuiteResultNumber <= GVL_coUnit.NumberOfInitializedTestSuites AND NOT StoredTestSuiteResults THEN
+    StoringTestSuiteTrigger(CLK := GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.AreAllTestsFinished());
+
+    IF StoringTestSuiteTrigger.Q THEN
+        (* Remove everything except the program name + "." + test suite name *)
+        TestSuiteName := F_RemoveInstancePathAndProjectNameFromTestInstancePath(TestInstancePath :=
+                GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.GetInstancePath());
+
+        (* Store test suite name and ID *)
+        TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].Name := TestSuiteName;
+        TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].Identity := StoringTestSuiteResultNumber - 1;
+        (* Store number of tests in test suite *)
+        TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].NumberOfTests :=
+            GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.GetNumberOfTests();
+
+        (* Store number of failed tests in test suite *)
+        TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].NumberOfFailedTests :=
+            GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.GetNumberOfFailedTests();
+
+        (* Iterate and print all tests in test suite *)
+        FOR TestsInTestSuiteCounter := 1 TO GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.GetNumberOfTests() BY 1 DO
+            TestToBeStored := GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.GetTestByPosition(TestsInTestSuiteCounter);
+            (* Store test name *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestName :=
+                TestToBeStored.GetName();
+
+            (* Store test class name *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestClassName :=
+                F_RemoveInstancePathAndProjectNameFromTestInstancePath(GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^
+                    .GetInstancePath());
+
+            (* Store whether the test has failed *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestIsFailed :=
+                TestToBeStored.IsFailed();
+
+            (* Store whether the test was skipped *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestIsSkipped :=
+                TestToBeStored.IsSkipped();
+
+            (* Store the (first failed) assertion message *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureMessage :=
+                TestToBeStored.GetAssertionMessage();
+
+            (* Store the (first failed) assertion type *)
+            TestSuiteResults.TestSuiteResults[StoringTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureType :=
+                TestToBeStored.GetAssertionType();
+        END_FOR
+
+        IF StoringTestSuiteResultNumber = GVL_coUnit.NumberOfInitializedTestSuites THEN
+            StoredTestSuiteResults := TRUE;
+        ELSE
+            StoringTestSuiteResultNumber := StoringTestSuiteResultNumber + 1;
+        END_IF
+
+        StoringTestSuiteTrigger(CLK := FALSE); // Reset trigger
+    END_IF
+END_IF
+
+(* If all test suites have finished running, store the general test results *)
+(* Take care of the special case where no tests have not yet been defined *)
+IF GVL_coUnit.NumberOfInitializedTestSuites = 0 AND (NOT StoredGeneralTestResults) THEN
+    StoredGeneralTestResults := TRUE;
+    StoredTestSuiteResults := TRUE;
+ELSIF StoringTestSuiteResultNumber = GVL_coUnit.NumberOfInitializedTestSuites AND_THEN
+    GVL_coUnit.TestSuiteAddresses[StoringTestSuiteResultNumber]^.AreAllTestsFinished() AND
+    StoredTestSuiteResults AND
+    (NOT StoredGeneralTestResults) THEN
+    TestSuiteResults.NumberOfTestSuites := GVL_coUnit.NumberOfInitializedTestSuites;
+    TestSuiteResults.NumberOfTestSuites := GVL_coUnit.NumberOfInitializedTestSuites;
+
+    FOR GeneralTestResultsTestSuitesCounter := 1 TO GVL_coUnit.NumberOfInitializedTestSuites BY 1 DO
+        TestSuiteResults.NumberOfTestCases :=
+            TestSuiteResults.NumberOfTestCases + TestSuiteResults.TestSuiteResults[GeneralTestResultsTestSuitesCounter].NumberOfTests;
+
+        TestSuiteResults.NumberOfSuccessfulTestCases := TestSuiteResults.NumberOfSuccessfulTestCases +
+            (TestSuiteResults.TestSuiteResults[GeneralTestResultsTestSuitesCounter].NumberOfTests -
+            TestSuiteResults.TestSuiteResults[GeneralTestResultsTestSuitesCounter].NumberOfFailedTests);
+
+        TestSuiteResults.NumberOfFailedTestCases :=
+            TestSuiteResults.NumberOfFailedTestCases + TestSuiteResults.TestSuiteResults[GeneralTestResultsTestSuitesCounter].NumberOfFailedTests;
+    END_FOR
+
+    StoredGeneralTestResults := TRUE;
+END_IF

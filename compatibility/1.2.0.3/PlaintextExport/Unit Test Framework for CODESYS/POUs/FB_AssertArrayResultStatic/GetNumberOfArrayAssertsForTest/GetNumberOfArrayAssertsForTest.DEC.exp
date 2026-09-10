@@ -1,0 +1,8 @@
+METHOD PUBLIC GetNumberOfArrayAssertsForTest : UINT
+VAR_INPUT
+    CompleteTestInstancePath : T_MaxString;
+END_VAR
+VAR
+    Counter : UINT;
+    NumberOfArrayAsserts : UINT := 0;
+END_VAR

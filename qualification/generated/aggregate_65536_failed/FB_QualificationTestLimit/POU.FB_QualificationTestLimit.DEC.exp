@@ -1,0 +1,5 @@
+FUNCTION_BLOCK FB_QualificationTestLimit EXTENDS FB_TestSuite
+VAR
+	_index : UINT;
+	_name : T_MaxString;
+END_VAR

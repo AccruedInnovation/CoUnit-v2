@@ -1,0 +1,107 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+ObservedState := GVL_coUnit.coUnitRunner.GetRunState();
+ObservedEpoch := GVL_coUnit.coUnitRunner.GetEpoch();
+ObservedSuiteCount := GVL_coUnit.coUnitRunner.GetSuiteCount();
+ThirdRecordCount := _third.GetNumberOfTests();
+IF NOT Start THEN
+	PrestartIdle := ObservedState = E_CoUnitRunState.IDLE AND ObservedEpoch = 0 AND
+		ObservedSuiteCount = 3 AND ThirdRecordCount = 0 AND GVL_LifecycleTrace.EventCount = 0 AND
+		GVL_LifecycleTrace.DisabledBodyVisits = 0 AND GVL_LifecycleTrace.Scan = 0;
+	PrestartIdleObserved := PrestartIdleObserved OR PrestartIdle;
+	RETURN;
+END_IF
+GVL_LifecycleTrace.HoldThird := HoldThird;
+GVL_LifecycleTrace.Scan := GVL_LifecycleTrace.Scan + 1;
+IF GVL_LifecycleTrace.Scan = 1 THEN FirstRunMs := TIME_TO_UDINT(TIME()); END_IF
+(* Same internal path as RUN_IN_SEQUENCE, with explicit test delay instead of a constant override. *)
+GVL_coUnit.coUnitRunner.RunTestSuiteTestsInSequence(TimeBetweenTestSuitesExecution := T#100ms);
+ObservedState := GVL_coUnit.coUnitRunner.GetRunState();
+ObservedEpoch := GVL_coUnit.coUnitRunner.GetEpoch();
+RegistrationOrderObserved := GVL_coUnit.coUnitRunner.GetSuite(Index := 1) = ADR(_first) AND
+	GVL_coUnit.coUnitRunner.GetSuite(Index := 2) = ADR(_disabled) AND
+	GVL_coUnit.coUnitRunner.GetSuite(Index := 3) = ADR(_third);
+BetweenSuitesObserved := BetweenSuitesObserved OR ObservedState = E_CoUnitRunState.BETWEEN_SUITES;
+ThirdRecordCount := _third.GetNumberOfTests();
+ThirdRecordAvailable := _third.GetCanonicalRecord(Index := 1, Record => _record);
+IF ThirdRecordAvailable THEN ThirdRecordState := _record.State; END_IF
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF ObservedState = E_CoUnitRunState.COMPLETE AND NOT Done THEN
+	CompletedScan := GVL_LifecycleTrace.Scan;
+	CompletedMs := TIME_TO_UDINT(TIME());
+	FirstGapMs := GVL_LifecycleTrace.EntryMs[2] - GVL_LifecycleTrace.ExitMs[1];
+	SecondGapMs := GVL_LifecycleTrace.EntryMs[3] - GVL_LifecycleTrace.ExitMs[2];
+	OraclePass := TRUE;
+	IF NOT (PrestartIdleObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (RegistrationOrderObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.EventCount = 3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Order[1] = 1 AND GVL_LifecycleTrace.Order[2] = 2 AND GVL_LifecycleTrace.Order[3] = 3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.EntryScan[1] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (FirstGapMs >= 100) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (SecondGapMs >= 100) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[1] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[2] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.DisabledBodyVisits = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[3] >= 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (CompletedScan = GVL_LifecycleTrace.ExitScan[3]) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (BetweenSuitesObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = 3 AND _snapshot.Passed = 2 AND _snapshot.Skipped = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 16; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = 0 AND _snapshot.Errors = 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 17; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[2].Tests[1].State = E_CoUnitTestState.SKIPPED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 18; END_IF
+	END_IF
+	Done := TRUE;
+END_IF

@@ -1,0 +1,6 @@
+METHOD REALNegativeDelta
+VAR
+	_pa : POINTER TO REAL;
+	_pb : POINTER TO REAL;
+	_pd : POINTER TO REAL;
+END_VAR

@@ -1,0 +1,4 @@
+METHOD INTERNAL RunTestSuiteTestsInSequence
+VAR_INPUT
+	TimeBetweenTestSuitesExecution : TIME;
+END_VAR

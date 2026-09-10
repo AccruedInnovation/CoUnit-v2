@@ -1,0 +1,7 @@
+TEST('F06_AssertArrayEquals_DINT');
+IF NOT IS_TEST_FINISHED('F06_AssertArrayEquals_DINT') THEN
+	_v6e[1] := 1;
+	_v6a[1] := 2;
+	AssertArrayEquals_DINT(Expecteds := _v6e, Actuals := _v6a, Message := 'F06_AssertArrayEquals_DINT');
+	TEST_FINISHED();
+END_IF

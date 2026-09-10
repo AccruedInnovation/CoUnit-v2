@@ -1,0 +1,48 @@
+(*
+ Asserts that two DATEs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – DATE expected value
+     | Actual – DATE actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DATE := DATE#1996-05-06;
+         b : DATE := DATE#1996-05-06;
+     END_VAR
+
+     TEST('Test_DATE_Equals');
+     AssertEquals_DATE(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DATE := DATE#1996-05-06;
+         b : DATE := DATE#2019-01-20;
+     END_VAR
+
+     TEST('Test_DATE_Differ');
+     AssertEquals_DATE(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();						 
+*)
+METHOD PUBLIC AssertEquals_DATE
+VAR_INPUT
+    Expected : DATE; // DATE expected value
+    Actual : DATE; // DATE actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

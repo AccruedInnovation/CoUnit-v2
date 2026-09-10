@@ -1,0 +1,1 @@
+ExecuteRun(Mode := E_CoUnitRunMode.ALL_SUITES, Delay := T#0ms);

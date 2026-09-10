@@ -1,0 +1,7 @@
+METHOD PRIVATE Text_REAL : T_MaxString
+VAR_INPUT
+	Value : REAL;
+END_VAR
+VAR
+	_bits : DWORD;
+END_VAR

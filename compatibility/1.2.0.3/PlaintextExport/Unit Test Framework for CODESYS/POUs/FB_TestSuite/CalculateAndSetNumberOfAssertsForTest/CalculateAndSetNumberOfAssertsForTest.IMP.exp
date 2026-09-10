@@ -1,0 +1,15 @@
+TestInstancePath := AddTestNameToInstancePath(FindTestSuiteInstancePath());
+NumberOfAsserts := AssertResults.GetNumberOfAssertsForTest(CompleteTestInstancePath := TestInstancePath);
+NumberOfArrayAsserts := AssertArrayResults.GetNumberOfArrayAssertsForTest(CompleteTestInstancePath := TestInstancePath);
+TotalNumberOfAsserts := NumberOfAsserts + NumberOfArrayAsserts;
+
+IF TotalNumberOfAsserts > 0 THEN
+    IF NumberOfTests > 0 THEN
+        FOR IteratorCounter := 1 TO NumberOfTests BY 1 DO
+            IF Tests[IteratorCounter].GetName() = TestName THEN
+                Tests[IteratorCounter].SetNumberOfAssertions(NoOfAssertions := TotalNumberOfAsserts);
+                RETURN;
+            END_IF
+        END_FOR
+    END_IF
+END_IF

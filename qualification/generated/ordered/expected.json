@@ -1,0 +1,60 @@
+{
+  "shard": "ordered",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "First",
+        "state": "SKIPPED",
+        "assertions": 0
+      },
+      {
+        "name": "EnabledA",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "Middle",
+        "state": "SKIPPED",
+        "assertions": 0
+      },
+      {
+        "name": "EnabledB",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "Last",
+        "state": "SKIPPED",
+        "assertions": 0
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#5",
+    "_snapshot.Passed = UDINT#2",
+    "_snapshot.Failed = UDINT#0",
+    "_snapshot.Skipped = UDINT#3",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#5",
+    "_snapshot.Suites[1].Tests[1].Name = 'First'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[2].Name = 'EnabledA'",
+    "_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[3].Name = 'Middle'",
+    "_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[4].Name = 'EnabledB'",
+    "_snapshot.Suites[1].Tests[4].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[4].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[5].Name = 'Last'",
+    "_snapshot.Suites[1].Tests[5].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[1].Tests[5].NumberOfAsserts = UINT#0"
+  ]
+}

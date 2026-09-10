@@ -1,0 +1,10 @@
+IF _state = E_CoUnitReportState.WRITTEN OR _state = E_CoUnitReportState.FAILED THEN RETURN; END_IF
+_lastError := ErrorCode;
+IF _lastError = 0 THEN _lastError := _file.GetLastError(); END_IF
+IF _lastError = 0 THEN _lastError := 16#FFFF0004; END_IF
+_file.AbortClose();
+_state := E_CoUnitReportState.FAILED;
+_text := CONCAT('xUnit publication failed: ', Operation);
+_text := CONCAT(_text, CONCAT(' code=', UDINT_TO_STRING(_lastError)));
+WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), '%s', _text);
+WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), 'Path: %s', _path);

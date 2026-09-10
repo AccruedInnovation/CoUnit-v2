@@ -1,0 +1,4 @@
+{attribute 'strict'}
+{attribute 'qualified_only'}
+TYPE E_CoUnitRunDisposition : (UNSET, NORMAL, ABORTED, FRAMEWORK_ERROR);
+END_TYPE

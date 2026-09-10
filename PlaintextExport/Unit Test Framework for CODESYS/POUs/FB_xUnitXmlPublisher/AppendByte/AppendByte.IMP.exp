@@ -1,0 +1,8 @@
+IF _state = E_CoUnitReportState.FAILED THEN RETURN; END_IF
+IF _used >= _capacity THEN
+	IF NOT FlushChunk() THEN RETURN; END_IF
+END_IF
+IF _used >= _capacity OR _used >= SIZEOF(_buffer) THEN Fail('chunk bound'); RETURN; END_IF
+_buffer[_used] := Value;
+_used := _used + 1;
+AppendByte := TRUE;

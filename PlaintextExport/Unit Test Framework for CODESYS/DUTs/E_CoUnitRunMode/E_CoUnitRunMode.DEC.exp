@@ -1,0 +1,4 @@
+{attribute 'strict'}
+{attribute 'qualified_only'}
+TYPE E_CoUnitRunMode : (MODE_UNSET, ALL_SUITES, IN_SEQUENCE);
+END_TYPE

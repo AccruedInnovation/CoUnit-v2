@@ -1,0 +1,59 @@
+{
+  "native_status": "NOT_RUN",
+  "required_hook": "Inject test_hooks/CompareAnyForQualification into FB_TestSuite in disposable project only",
+  "cases": [
+    {
+      "name": "valid_byte",
+      "Passed": true,
+      "ArgumentError": false
+    },
+    {
+      "name": "null_pointer",
+      "Passed": false,
+      "ArgumentError": true
+    },
+    {
+      "name": "negative_size",
+      "Passed": false,
+      "ArgumentError": true
+    },
+    {
+      "name": "wrong_primitive_size",
+      "Passed": false,
+      "ArgumentError": true
+    },
+    {
+      "name": "odd_wstring_size",
+      "Passed": false,
+      "ArgumentError": true
+    },
+    {
+      "name": "unterminated_string",
+      "Passed": false,
+      "ArgumentError": true
+    },
+    {
+      "name": "empty_user_representation",
+      "Passed": true,
+      "ArgumentError": false
+    },
+    {
+      "name": "bounded_terminated_string",
+      "Passed": true,
+      "ArgumentError": false
+    },
+    {
+      "name": "type_mismatch",
+      "Passed": false,
+      "ArgumentError": false
+    },
+    {
+      "name": "unterminated_wstring",
+      "Passed": false,
+      "ArgumentError": true
+    }
+  ],
+  "GuardIntact": true,
+  "Done": true,
+  "OraclePass": true
+}

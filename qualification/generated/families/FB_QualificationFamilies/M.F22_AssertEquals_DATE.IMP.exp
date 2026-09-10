@@ -1,0 +1,5 @@
+TEST('F22_AssertEquals_DATE');
+IF NOT IS_TEST_FINISHED('F22_AssertEquals_DATE') THEN
+	AssertEquals_DATE(Expected := _v22e, Actual := _v22a, Message := 'F22_AssertEquals_DATE');
+	TEST_FINISHED();
+END_IF

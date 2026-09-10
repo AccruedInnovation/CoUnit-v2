@@ -1,0 +1,48 @@
+(*
+ Asserts that two WORDs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – WORD expected value
+     | Actual – WORD actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : WORD := 16#ABCD;
+         b : WORD := 16#ABCD;
+     END_VAR
+
+     TEST('Test_WORD_Equals');
+     AssertEquals_WORD(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : WORD := 16#EF01;
+         b : WORD := 16#2345;
+     END_VAR
+
+     TEST('Test_WORD_Differ');
+     AssertEquals_WORD(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_WORD
+VAR_INPUT
+    Expected : WORD; // WORD expected value
+    Actual : WORD; // WORD actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

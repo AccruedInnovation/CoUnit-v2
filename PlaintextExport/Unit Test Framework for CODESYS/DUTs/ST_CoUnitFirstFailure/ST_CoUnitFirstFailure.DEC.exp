@@ -1,0 +1,9 @@
+TYPE ST_CoUnitFirstFailure :
+STRUCT
+	IsSet : BOOL;
+	AssertionType : E_AssertionType;
+	Message : T_MaxString;
+	ExpectedText : T_MaxString;
+	ActualText : T_MaxString;
+END_STRUCT
+END_TYPE

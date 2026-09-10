@@ -1,0 +1,5 @@
+TEST('ArrayDifferentLowerBounds');
+IF NOT IS_TEST_FINISHED('ArrayDifferentLowerBounds') THEN
+	AssertArrayEquals_UINT(Expecteds := _arrayE, Actuals := _arrayA, Message := 'lower-bounds');
+	TEST_FINISHED();
+END_IF

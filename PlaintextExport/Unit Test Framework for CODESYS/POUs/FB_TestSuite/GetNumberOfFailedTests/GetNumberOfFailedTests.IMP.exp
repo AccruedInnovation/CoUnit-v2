@@ -1,0 +1,4 @@
+GetNumberOfFailedTests := 0;
+FOR _i := 1 TO NumberOfTests DO
+	IF TestRecords[UDINT_TO_UINT(_i)].State = E_CoUnitTestState.FAILED THEN GetNumberOfFailedTests := GetNumberOfFailedTests + 1; END_IF
+END_FOR

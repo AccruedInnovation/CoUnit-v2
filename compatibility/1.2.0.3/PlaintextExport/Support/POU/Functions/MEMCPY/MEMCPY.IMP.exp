@@ -1,0 +1,13 @@
+IF ( srcAddr = 0) OR ( destAddr = 0 ) OR ( n = 0 ) THEN
+	MEMCPY := 0;
+	RETURN;
+END_IF
+
+pSrc := srcAddr;
+pDest := destAddr;
+
+FOR i := 0 TO (n-1) DO
+	pDest[i] := pSrc[i];
+END_FOR
+
+MEMCPY := n;

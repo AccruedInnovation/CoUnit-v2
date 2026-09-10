@@ -1,0 +1,5 @@
+IsTestFinished := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := FALSE, TestIndex => _unused, Execute => _execute) THEN RETURN; END_IF
+_index := FindTest(Name := TestName);
+IF _index = 0 THEN RETURN; END_IF
+IsTestFinished := TestRecords[_index].State <> E_CoUnitTestState.OPEN;

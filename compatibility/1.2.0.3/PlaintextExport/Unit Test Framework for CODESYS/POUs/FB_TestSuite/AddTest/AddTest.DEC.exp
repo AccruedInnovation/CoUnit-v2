@@ -1,0 +1,17 @@
+METHOD INTERNAL AddTest
+VAR_INPUT
+    TestName : T_MaxString;
+    IsTestOrdered : BOOL;
+END_VAR
+VAR
+    IteratorCounter : UINT;
+    ErrorMessage : T_MaxString;
+    TestInstancePath : T_MaxString;
+    FunctionCallResult : DINT;
+    CycleCount : UDINT;
+    TestWithThisNameAlreadyExists : BOOL := FALSE;
+    LowerCasedTestName : T_MaxString;
+    TrimmedTestName : T_MaxString;
+    IgnoreCurrentTestCase : BOOL;
+    NumberOfTestsToAnalyse : UINT;
+END_VAR

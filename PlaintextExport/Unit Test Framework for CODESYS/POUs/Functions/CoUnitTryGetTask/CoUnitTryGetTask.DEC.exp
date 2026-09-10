@@ -1,0 +1,7 @@
+FUNCTION CoUnitTryGetTask : BOOL
+VAR_OUTPUT
+	Handle : CmpIecTask.RTS_IEC_HANDLE;
+END_VAR
+VAR
+	_result : CmpIecTask.RTS_IEC_RESULT;
+END_VAR

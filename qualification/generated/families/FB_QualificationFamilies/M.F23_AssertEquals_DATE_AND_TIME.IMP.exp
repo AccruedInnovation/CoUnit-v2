@@ -1,0 +1,5 @@
+TEST('F23_AssertEquals_DATE_AND_TIME');
+IF NOT IS_TEST_FINISHED('F23_AssertEquals_DATE_AND_TIME') THEN
+	AssertEquals_DATE_AND_TIME(Expected := _v23e, Actual := _v23a, Message := 'F23_AssertEquals_DATE_AND_TIME');
+	TEST_FINISHED();
+END_IF

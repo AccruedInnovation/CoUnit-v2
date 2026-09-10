@@ -1,0 +1,9 @@
+IF NumberOfTests > 0 THEN
+    FOR Counter := 1 TO GetNumberOfTests() BY 1 DO
+        IF Tests[Counter].IsFailed() THEN
+            FailedTestsCount := FailedTestsCount + 1;
+        END_IF
+    END_FOR
+END_IF
+
+GetNumberOfFailedTests := FailedTestsCount;

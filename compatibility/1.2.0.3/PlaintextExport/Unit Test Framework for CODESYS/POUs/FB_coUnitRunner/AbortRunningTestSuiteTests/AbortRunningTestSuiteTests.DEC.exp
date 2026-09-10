@@ -1,0 +1,3 @@
+(* This function sets a flag which makes the runner stop running the tests
+   in the test suites *)
+METHOD INTERNAL AbortRunningTestSuiteTests

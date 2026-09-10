@@ -1,0 +1,5 @@
+METHOD PUBLIC SetBuffer : BOOL;
+VAR_INPUT
+    PointerToBufferAddress : POINTER TO BYTE; // Set buffer address (ADR ...)
+    SizeOfBuffer : UDINT; // Set buffer size (SIZEOF ...)
+END_VAR

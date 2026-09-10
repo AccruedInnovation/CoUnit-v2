@@ -1,0 +1,10 @@
+TEST('FirstFailureCoherent');
+IF NOT IS_TEST_FINISHED('FirstFailureCoherent') THEN
+	_first := _first + 1;
+	IF _first = 1 THEN
+		AssertTrue(Condition := FALSE, Message := 'first-A');
+	ELSE
+		AssertFalse(Condition := TRUE, Message := 'later-B');
+		TEST_FINISHED();
+	END_IF
+END_IF

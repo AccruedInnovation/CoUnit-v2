@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1" failures="1" errors="0" skipped="0">
+  <testsuite name="BadTerminal" tests="1" failures="1" errors="0" skipped="0">
+    <testcase classname="BadTerminal" name="TwoStates" assertions="1"><failure type="Type_BOOL" message="x"/><skipped/></testcase>
+  </testsuite>
+</testsuites>

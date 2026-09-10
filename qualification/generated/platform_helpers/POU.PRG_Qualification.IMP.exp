@@ -1,0 +1,20 @@
+IF NOT Done THEN
+	_project();
+	ProjectBefore := _project.Valid;
+	_task();
+	TaskBefore := _task.Valid;
+	GVL_coUnit.InjectProjectLookupFailure := TRUE;
+	_project();
+	ProjectRejected := NOT _project.Valid;
+	GVL_coUnit.InjectProjectLookupFailure := FALSE;
+	_project();
+	ProjectRecovered := _project.Valid;
+	GVL_coUnit.InjectTaskLookupFailure := TRUE;
+	_task();
+	TaskRejected := NOT _task.Valid;
+	GVL_coUnit.InjectTaskLookupFailure := FALSE;
+	_task();
+	TaskRecovered := _task.Valid;
+	OraclePass := ProjectBefore AND ProjectRejected AND ProjectRecovered AND TaskBefore AND TaskRejected AND TaskRecovered;
+	Done := TRUE;
+END_IF

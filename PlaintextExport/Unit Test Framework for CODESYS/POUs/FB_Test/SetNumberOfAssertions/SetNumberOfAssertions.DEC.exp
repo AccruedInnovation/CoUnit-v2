@@ -1,0 +1,4 @@
+METHOD INTERNAL SetNumberOfAssertions
+VAR_INPUT
+    NoOfAssertions : UINT;
+END_VAR

@@ -1,0 +1,8 @@
+METHOD INTERNAL ConfigureFault : BOOL
+VAR_INPUT
+	Operation : E_CoUnitFileOperation;
+	Occurrence : UDINT;
+	Occurrence2 : UDINT := 0;
+	ErrorCode : UDINT := 16#FFFF0001;
+	ShortWrite : BOOL;
+END_VAR

@@ -1,0 +1,26 @@
+IF Done THEN RETURN; END_IF
+IF NOT _attempted THEN
+	_attempted := TRUE;
+	Started := F_QualificationLogStart();
+	IF NOT Started THEN
+		Stopped := F_QualificationLogStop();
+		Done := TRUE;
+		RETURN;
+	END_IF
+END_IF
+PRG_Qualification();
+IF PRG_Qualification.Done THEN
+	IF WaitForReport THEN
+		_reportState := GVL_coUnit.coUnitRunner.xUnitXmlPublisher.GetReportState();
+		IF (_reportState <> E_CoUnitReportState.WRITTEN) AND (_reportState <> E_CoUnitReportState.FAILED) AND
+			(_reportState <> E_CoUnitReportState.DISABLED) THEN RETURN; END_IF
+	END_IF
+	Stopped := F_QualificationLogStop();
+	CapturedCount := GVL_QualificationLog.Count;
+	CaptureHealthy := Stopped AND NOT GVL_QualificationLog.Overflow AND NOT GVL_QualificationLog.Truncated AND
+		(GVL_QualificationLog.CallbackErrors = 0) AND (GVL_QualificationLog.StartError = CmpErrors.Errors.ERR_OK) AND
+		(GVL_QualificationLog.UnregisterError = CmpErrors.Errors.ERR_OK) AND (GVL_QualificationLog.CloseError = CmpErrors.Errors.ERR_OK);
+	(* Content is independently verified from Bytes/Lengths; this is only execution/capture health. *)
+	OraclePass := PRG_Qualification.OraclePass AND CaptureHealthy;
+	Done := TRUE;
+END_IF

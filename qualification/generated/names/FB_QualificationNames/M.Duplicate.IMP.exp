@@ -1,0 +1,6 @@
+TEST('Duplicate');
+AssertTrue(Condition := TRUE, Message := 'first-definition');
+TEST_FINISHED();
+TEST('Duplicate');
+AssertTrue(Condition := FALSE, Message := 'must-be-suppressed');
+TEST_FINISHED();

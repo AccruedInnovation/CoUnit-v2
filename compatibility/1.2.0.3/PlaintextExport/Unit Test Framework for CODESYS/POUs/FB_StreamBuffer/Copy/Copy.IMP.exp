@@ -1,0 +1,20 @@
+Loop := 0;
+PointerToByteToCopy := ADR(Copy);
+PointerToBuffer := _PointerToStringBuffer + StartPos - 1;
+WHILE (Loop < SIZEOF(Copy)) AND (StartPos - 1 + Loop < _Length) AND (StartPos + Loop < EndPos) DO
+    PointerToByteToCopy^ := PointerToBuffer^;
+    Loop := Loop + 1;
+    PointerToByteToCopy := ADR(Copy) + Loop;
+    PointerToBuffer := _PointerToStringBuffer + StartPos + Loop - 1;
+END_WHILE;
+
+IF Loop = SIZEOF(Copy) THEN
+    XmlError := E_XmlError.ErrorStringLen;
+ELSIF StartPos - 1 + Loop = _Length THEN
+    XmlError := E_XmlError.ErrorMaxBufferLen;
+ELSE
+    XmlError := E_XmlError.OK;
+END_IF;
+
+PointerToByteToCopy^ := 0;
+CopyLen := Loop;

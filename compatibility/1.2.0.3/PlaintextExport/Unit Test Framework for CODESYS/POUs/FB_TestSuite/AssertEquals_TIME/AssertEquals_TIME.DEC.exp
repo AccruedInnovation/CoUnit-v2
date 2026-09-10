@@ -1,0 +1,48 @@
+(*
+ Asserts that two TIMEs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – TIME expected value
+     | Actual – TIME actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : TIME := T#11H34M13S244MS;
+         b : TIME := T#11H34M13S244MS;
+     END_VAR
+
+     TEST('Test_TIME_Equals');
+     AssertEquals_TIME(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : TIME := T#12H34M15S10MS;
+         b : TIME := T#11H34M13S244MS;
+     END_VAR
+
+     TEST('Test_TIME_Differ');
+     AssertEquals_TIME(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_TIME
+VAR_INPUT
+    Expected : TIME; // TIME expected value
+    Actual : TIME; // TIME actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

@@ -1,0 +1,5 @@
+IF NOT AppendLiteral(' ') THEN RETURN; END_IF
+IF NOT AppendLiteral(Name) THEN RETURN; END_IF
+IF NOT AppendLiteral('="') THEN RETURN; END_IF
+IF NOT AppendEscaped(Value) THEN RETURN; END_IF
+Attribute := AppendLiteral('"');

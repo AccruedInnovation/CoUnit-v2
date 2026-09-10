@@ -1,0 +1,48 @@
+(* 
+ Asserts that two BYTEs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – BYTE expected value
+     | Actual – BYTE actual value
+     | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : BYTE := 16#CD;
+         b : BYTE := 16#CD;
+     END_VAR
+
+     TEST('Test_BYTE_Equals');
+     AssertEquals_BYTE(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : BYTE := 16#AB;
+         b : BYTE := 16#CD;
+     END_VAR
+
+     TEST('Test_BYTE_Differ');
+     AssertEquals_BYTE(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_BYTE
+VAR_INPUT
+    Expected : BYTE; // BYTE expected value
+    Actual : BYTE; // BYTE actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

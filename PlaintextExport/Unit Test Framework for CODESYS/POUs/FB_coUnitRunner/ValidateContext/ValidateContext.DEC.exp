@@ -1,0 +1,9 @@
+METHOD INTERNAL ValidateContext : BOOL
+VAR_INPUT
+	Suite : POINTER TO FB_TestSuite;
+	RequireTest : BOOL;
+END_VAR
+VAR_OUTPUT
+	TestIndex : UINT;
+	Execute : BOOL;
+END_VAR

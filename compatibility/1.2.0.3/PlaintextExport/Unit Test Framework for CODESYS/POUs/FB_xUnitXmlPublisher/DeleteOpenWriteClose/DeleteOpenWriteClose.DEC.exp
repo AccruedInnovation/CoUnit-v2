@@ -1,0 +1,5 @@
+(*
+    Deletes the former file (if it exists).
+    Opens the file, writes the buffer and closes it.
+*)
+METHOD PRIVATE DeleteOpenWriteClose : SysFile.SysTypes.RTS_IEC_RESULT

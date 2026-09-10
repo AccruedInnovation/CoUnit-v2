@@ -1,0 +1,44 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	_suite1 : FB_QualificationEmpty;
+	_suite2 : FB_QualificationEmpty;
+	_suite3 : FB_QualificationEmpty;
+	_suite4 : FB_QualificationEmpty;
+	_suite5 : FB_QualificationEmpty;
+	_suite6 : FB_QualificationEmpty;
+	_suite7 : FB_QualificationEmpty;
+	_suite8 : FB_QualificationEmpty;
+	_suite9 : FB_QualificationEmpty;
+	_suite10 : FB_QualificationEmpty;
+	_suite11 : FB_QualificationEmpty;
+	_suite12 : FB_QualificationEmpty;
+	_suite13 : FB_QualificationEmpty;
+	_suite14 : FB_QualificationEmpty;
+	_suite15 : FB_QualificationEmpty;
+	_suite16 : FB_QualificationEmpty;
+	_suite17 : FB_QualificationEmpty;
+	_suite18 : FB_QualificationEmpty;
+	_suite19 : FB_QualificationEmpty;
+	_suite20 : FB_QualificationEmpty;
+	_suite21 : FB_QualificationEmpty;
+	_suite22 : FB_QualificationEmpty;
+	_suite23 : FB_QualificationEmpty;
+	_suite24 : FB_QualificationEmpty;
+	_suite25 : FB_QualificationEmpty;
+	_suite26 : FB_QualificationEmpty;
+	_suite27 : FB_QualificationEmpty;
+	_suite28 : FB_QualificationEmpty;
+	_suite29 : FB_QualificationEmpty;
+	_suite30 : FB_QualificationEmpty;
+	_suite31 : FB_QualificationEmpty;
+	_suite32 : FB_QualificationEmpty;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	_guardMeasured : BOOL;
+	GuardPass : BOOL;
+END_VAR

@@ -1,0 +1,5 @@
+TEST('F30_AssertEquals_LWORD');
+IF NOT IS_TEST_FINISHED('F30_AssertEquals_LWORD') THEN
+	AssertEquals_LWORD(Expected := _v30e, Actual := _v30a, Message := 'F30_AssertEquals_LWORD');
+	TEST_FINISHED();
+END_IF

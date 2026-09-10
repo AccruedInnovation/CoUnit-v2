@@ -1,0 +1,11 @@
+METHOD INTERNAL ExecuteRun
+VAR_INPUT
+	Mode : E_CoUnitRunMode;
+	Delay : TIME;
+END_VAR
+VAR
+	_handle : CmpIecTask.RTS_IEC_HANDLE;
+	_previous : DWORD;
+	_i : UDINT;
+	_complete : BOOL;
+END_VAR

@@ -1,0 +1,26 @@
+{attribute 'hide_all_locals'}
+FUNCTION_BLOCK FB_xUnitXmlPublisher IMPLEMENTS I_TestResultLogger
+VAR
+	TestResults : I_TestResults;
+	_file : FB_CoUnitReportFile;
+	_buffer : ARRAY[0..GVL_Param_coUnit.xUnitBufferSize] OF BYTE; // Spare backing byte permits zero-size admission failure
+	_used : UDINT;
+	_capacity : UDINT;
+	_writtenBytes : ULINT;
+	_state : E_CoUnitReportState := E_CoUnitReportState.PENDING;
+	_phase : UINT;
+	_suiteIndex : UINT := 1;
+	_testIndex : UINT := 1;
+	_path : T_MaxString;
+	_stage : T_MaxString;
+	_backup : T_MaxString;
+	_textMode : E_CoUnitTextMode;
+	_enabled : BOOL;
+	_configured : BOOL;
+	_movedCurrent : BOOL;
+	_pauseAfter : UINT;
+	_paused : BOOL;
+	_lastError : UDINT;
+	_cleanupWarning : BOOL;
+	_flushUnsupported : BOOL;
+END_VAR

@@ -1,0 +1,14 @@
+FOR IteratorCounter := 1 TO GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite BY 1 DO
+    IF F_IsAnyEqualToUnionValue(uExpectedOrActual := AssertResultInstances[IteratorCounter].AssertResult.Expected,
+        ExpectedOrActualSize := ExpectedSize,
+        ExpectedOrActualTypeClass := ExpectedTypeClass,
+        ExpectedOrActualValue := ExpectedValue) AND
+        F_IsAnyEqualToUnionValue(uExpectedOrActual := AssertResultInstances[IteratorCounter].AssertResult.Actual,
+        ExpectedOrActualSize := ActualSize,
+        ExpectedOrActualTypeClass := ActualTypeClass,
+        ExpectedOrActualValue := ActualValue) AND
+        AssertResultInstances[IteratorCounter].AssertResult.Message = Message AND
+        AssertResultInstances[IteratorCounter].AssertResult.Message = TestInstancePath THEN
+        GetDetectionCountThisCycle := AssertResultInstances[IteratorCounter].DetectionCountThisCycle;
+    END_IF
+END_FOR

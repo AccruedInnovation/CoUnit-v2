@@ -1,0 +1,10 @@
+TEST('BranchPassThenFail');
+IF NOT IS_TEST_FINISHED('BranchPassThenFail') THEN
+	_branch := _branch + 1;
+	IF _branch = 1 THEN
+		AssertTrue(Condition := TRUE, Message := 'A');
+	ELSE
+		AssertFalse(Condition := TRUE, Message := 'B');
+		TEST_FINISHED();
+	END_IF
+END_IF

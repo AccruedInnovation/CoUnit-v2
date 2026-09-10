@@ -1,0 +1,68 @@
+IF NOT FirstCycleExecuted THEN
+    GetCurrentTaskIndex();
+    CycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;
+    FirstCycleExecuted := TRUE;
+END_IF
+
+GetCurrentTaskIndex();
+CurrentCycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;
+
+(* Is current cycle the same as the last call to this method?
+   If not, reset the detection count *)
+IF CurrentCycleCount <> CycleCount THEN
+    CopyDetectionCountAndResetDetectionCountInThisCycle();
+END_IF
+
+FOR IteratorCounter := 1 TO TotalArrayAsserts BY 1 DO
+    IF AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ExpectedsSize = ExpectedsSize AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ExpectedsTypeClass = ExpectedsTypeClass AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ActualsSize = ActualsSize AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ActualsTypeClass = ActualsTypeClass AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.Message = Message AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.TestInstancePath = TestInstancePath THEN
+        AssertArrayResultInstances[IteratorCounter].DetectionCountThisCycle :=
+            AssertArrayResultInstances[IteratorCounter].DetectionCountThisCycle + 1;
+
+        FoundOne := TRUE;
+
+        IF AssertArrayResultInstances[IteratorCounter].DetectionCountThisCycle > AssertArrayResultInstances[IteratorCounter].DetectionCount
+            THEN // This assert is new
+            AdditionalIdenticalAssert := TRUE;
+        END_IF
+
+        EXIT;
+    END_IF
+END_FOR
+
+(* If not found anything, create the first *)
+IF NOT FoundOne THEN
+    (* No existing match found, create a new entry *)
+    AddAssertArrayResult(ExpectedsSize,
+        ExpectedsTypeClass,
+        ActualsSize,
+        ActualsTypeClass,
+        Message,
+        TestInstancePath);
+
+    CreateAssertResultInstance(ExpectedsSize,
+        ExpectedsTypeClass,
+        ActualsSize,
+        ActualsTypeClass,
+        Message,
+        TestInstancePath);
+    (* An additional instance of this assert needs to be created *)
+ELSIF AdditionalIdenticalAssert THEN
+    AddAssertArrayResult(ExpectedsSize,
+        ExpectedsTypeClass,
+        ActualsSize,
+        ActualsTypeClass,
+        Message,
+        TestInstancePath);
+    (* In all other cases, this assert has already been reported, we don't need to do anything *)
+ELSE
+    AlreadyReported := TRUE;
+END_IF
+
+(* Update the cycle count *)
+GetCurrentTaskIndex();
+CycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;

@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit final snapshot failure" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SnapshotValid">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Disposition">
+              <type>
+                <derived name="E_CoUnitRunDisposition" />
+              </type>
+            </variable>
+            <variable name="SettledCalls">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_snapshot">
+              <type>
+                <derived name="REFERENCE TO ST_CoUnitRunSnapshot" />
+              </type>
+            </variable>
+            <variable name="Init">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT Init THEN
+	GVL_CoUnitReporting.InjectSnapshotBuildFailure := TRUE;
+	Init := TRUE;
+END_IF
+RUN();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+SnapshotValid := _snapshot.IsValid;
+Disposition := GVL_coUnit.coUnitRunner.GetDisposition();
+IF GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE THEN
+	SettledCalls := SettledCalls + 1;
+	Done := SettledCalls &gt;= 3;
+	OraclePass := Done AND NOT SnapshotValid AND (Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) AND NOT GVL_CoUnitReporting.InjectSnapshotBuildFailure;
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	SnapshotValid : BOOL;
+	Disposition : E_CoUnitRunDisposition;
+	SettledCalls : UDINT;
+END_VAR
+VAR
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	Init : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

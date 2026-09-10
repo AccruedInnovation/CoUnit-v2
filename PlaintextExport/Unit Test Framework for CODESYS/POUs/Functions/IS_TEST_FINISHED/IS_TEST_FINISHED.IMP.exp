@@ -1,0 +1,4 @@
+IS_TEST_FINISHED := FALSE;
+_suite := GVL_coUnit.coUnitRunner.GetActiveSuite();
+IF _suite = 0 THEN RETURN; END_IF
+IS_TEST_FINISHED := _suite^.IsTestFinished(TestName := TestName);

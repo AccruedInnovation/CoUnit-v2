@@ -1,0 +1,30 @@
+iCharPos := Standard.FIND(msgFmtStr, '%s');
+
+IF iCharPos = 0 THEN
+    RETURN;
+END_IF
+
+// add message to registered Device Log
+sText := Standard.REPLACE(msgFmtStr,
+    strArg,
+    2,
+    iCharPos);
+
+IF LEN(stext) > uiMaxSize THEN
+    // log the right side of the message first (be carefull of offset)
+    GVL_Support._CmpCfLog.AddLogEntry(msgCtrlMask,
+        0,
+        0,
+        RIGHT(sText, (LEN(sText) - uiMaxSize)));
+
+    // then the left side
+    GVL_Support._CmpCfLog.AddLogEntry(msgCtrlMask,
+        0,
+        0,
+        LEFT(sText, uiMaxSize));
+ELSE
+    GVL_Support._CmpCfLog.AddLogEntry(msgCtrlMask,
+        0,
+        0,
+        sText);
+END_IF

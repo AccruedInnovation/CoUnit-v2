@@ -1,0 +1,4 @@
+(* 
+    Clears the contents of the entire buffer
+*)
+METHOD PUBLIC ClearBuffer

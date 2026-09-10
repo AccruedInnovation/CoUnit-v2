@@ -1,0 +1,48 @@
+(*
+ Asserts that two BOOLs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – BOOL expected value
+     | Actual – BOOL actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : BOOL := TRUE;
+         b : BOOL := TRUE;
+     END_VAR
+
+     TEST('Test_BOOL_Equals');
+     AssertEquals_BOOL(Expected := a,
+                       Actual := b,
+                       Message := 'Bools differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : BOOL := TRUE;
+         b : BOOL := FALSE;
+     END_VAR
+
+     TEST('Test_BOOL_Differ');
+     AssertEquals_BOOL(Expected := a,
+                       Actual := b,
+                       Message := 'Bools differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_BOOL
+VAR_INPUT
+    Expected : BOOL; // BOOL expected value
+    Actual : BOOL; // BOOL actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+END_VAR

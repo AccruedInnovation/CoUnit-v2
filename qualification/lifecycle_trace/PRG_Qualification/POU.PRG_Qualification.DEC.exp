@@ -1,0 +1,33 @@
+PROGRAM PRG_Qualification
+VAR_INPUT
+	Start : BOOL := FALSE;
+	HoldThird : BOOL := FALSE;
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+	PrestartIdle : BOOL;
+	PrestartIdleObserved : BOOL;
+	RegistrationOrderObserved : BOOL;
+	BetweenSuitesObserved : BOOL;
+	ObservedState : E_CoUnitRunState;
+	ObservedEpoch : ULINT;
+	ObservedSuiteCount : UINT;
+	ThirdRecordCount : UINT;
+	ThirdRecordState : E_CoUnitTestState;
+	ThirdRecordAvailable : BOOL;
+	FirstGapMs : UDINT;
+	SecondGapMs : UDINT;
+	CompletedScan : UDINT;
+	CompletedMs : UDINT;
+	FirstRunMs : UDINT;
+END_VAR
+VAR
+	_first : FB_LifecycleFirst;
+	_disabled : FB_LifecycleDisabled;
+	_third : FB_LifecycleThird;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	_record : ST_CoUnitTestRecord;
+END_VAR

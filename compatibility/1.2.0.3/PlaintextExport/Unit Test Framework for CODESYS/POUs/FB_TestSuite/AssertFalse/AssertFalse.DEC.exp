@@ -1,0 +1,40 @@
+(*
+ Asserts that a condition is false. If it is not, an assertion error is created.
+
+ Parameters:
+     | Condition – Condition to be checked
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := -33;
+         b : INT := -44;
+     END_VAR
+
+     TEST('AssertThatINTsAreNotEqual');
+     AssertFalse(Condition := (a = b),
+                 Message := 'INTs are equal');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := -33;
+         b : INT := -44;
+     END_VAR
+
+     TEST('AssertThatINTsAreEqual');
+     AssertFalse(Condition := (a <> b),
+                 Message := 'INTs are equal');
+     TEST_FINISHED();  
+*)
+METHOD PUBLIC AssertFalse
+VAR_INPUT
+    Condition : BOOL; // Condition to be checked
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR

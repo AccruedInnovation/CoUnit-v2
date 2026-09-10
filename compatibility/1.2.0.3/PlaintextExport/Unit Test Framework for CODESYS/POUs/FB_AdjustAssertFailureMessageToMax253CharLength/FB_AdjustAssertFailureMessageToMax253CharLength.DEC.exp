@@ -1,0 +1,21 @@
+(*
+    This function block is responsible for making sure that the asserted test instance path and test message are not
+    loo long. The total printed message can not be more than 253 characters long.
+*)
+FUNCTION_BLOCK FB_AdjustAssertFailureMessageToMax253CharLength
+VAR_INPUT
+    MsgFmtString : T_MaxString; // Test instance path
+    StringArg : T_MaxString; // Test message
+END_VAR
+VAR_OUTPUT
+    MsgFmtStringProcessed : T_MaxString;
+    StringArgProcessed : T_MaxString;
+END_VAR
+VAR
+    MsgFmtStringTemp : T_MaxString;
+    TestNameTooLong : STRING := '...TestName too long';
+    TestMsgTooLong : STRING := '...TestMsg too long';
+END_VAR
+VAR CONSTANT
+    MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS : INT := 253; // This is actually 254, but if StrArg-argument is used (which it is in TcUnit) it is 253.
+END_VAR

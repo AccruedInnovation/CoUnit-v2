@@ -1,0 +1,12 @@
+(*
+    Add your own preffered fileheader like:
+    XML: <?xml version="1.0" encoding="UTF-8"?>
+    
+    Start with calling this method before appending any other tags!
+
+    XML.WriteDocumentHeader('<?xml version="1.0" encoding="UTF-8"?>');
+*)
+METHOD PUBLIC WriteDocumentHeader
+VAR_INPUT
+    Header : T_MaxString;
+END_VAR

@@ -1,0 +1,4 @@
+(*
+    Appends a string to the buffer
+*)
+PROPERTY Append : T_MaxString

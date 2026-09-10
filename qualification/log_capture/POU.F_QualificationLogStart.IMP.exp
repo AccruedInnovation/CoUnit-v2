@@ -1,0 +1,39 @@
+IF GVL_QualificationLog.Registered OR (GVL_QualificationLog.EventHandle <> SysTypes.RTS_INVALID_HANDLE) THEN
+	GVL_QualificationLog.StartError := 16#FFFF1001;
+	RETURN;
+END_IF
+GVL_QualificationLog.Active := FALSE;
+GVL_QualificationLog.Count := 0;
+GVL_QualificationLog.Overflow := FALSE;
+GVL_QualificationLog.Truncated := FALSE;
+GVL_QualificationLog.CallbackErrors := 0;
+GVL_QualificationLog.LastCopyError := CmpErrors.Errors.ERR_OK;
+GVL_QualificationLog.StartError := CmpErrors.Errors.ERR_OK;
+GVL_QualificationLog.UnregisterError := CmpErrors.Errors.ERR_OK;
+GVL_QualificationLog.CloseError := CmpErrors.Errors.ERR_OK;
+GVL_QualificationLog.ComponentFilter := ComponentFilter;
+GVL_QualificationLog.ObservedComponent := 0;
+GVL_QualificationLog.EventHandle := CmpEventMgr.EventOpen(Result := _result,
+	EventId := DWORD_TO_UDINT(CmpLog.EventIDs.EVT_LogAdd),
+	CmpIdProvider := DWORD_TO_UDINT(CmpLog.EventIDs.CMPID_CmpLog));
+IF (_result <> CmpErrors.Errors.ERR_OK) OR (GVL_QualificationLog.EventHandle = SysTypes.RTS_INVALID_HANDLE) THEN
+	GVL_QualificationLog.StartError := _result;
+	IF _result = CmpErrors.Errors.ERR_OK THEN GVL_QualificationLog.StartError := 16#FFFF1002; END_IF
+ELSE
+	_result := CmpEventMgr.EventRegisterCallbackFunction(hEvent := GVL_QualificationLog.EventHandle,
+		pfCallbackFunction := ADR(F_QualificationLogCallback));
+	IF _result = CmpErrors.Errors.ERR_OK THEN
+		GVL_QualificationLog.Registered := TRUE;
+		GVL_QualificationLog.Active := TRUE;
+		F_QualificationLogStart := TRUE;
+		RETURN;
+	END_IF
+	GVL_QualificationLog.StartError := _result;
+END_IF
+(* Registration failed: release an opened event without losing close-failure evidence. *)
+IF GVL_QualificationLog.EventHandle <> SysTypes.RTS_INVALID_HANDLE THEN
+	GVL_QualificationLog.CloseError := CmpEventMgr.EventClose2(hEvent := GVL_QualificationLog.EventHandle);
+	IF GVL_QualificationLog.CloseError = CmpErrors.Errors.ERR_OK THEN
+		GVL_QualificationLog.EventHandle := SysTypes.RTS_INVALID_HANDLE;
+	END_IF
+END_IF

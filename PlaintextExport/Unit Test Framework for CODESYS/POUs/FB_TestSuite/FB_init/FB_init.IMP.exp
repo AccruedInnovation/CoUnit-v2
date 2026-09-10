@@ -1,0 +1,1 @@
+FB_init := GVL_coUnit.coUnitRunner.RegisterSuite(Suite := THIS);

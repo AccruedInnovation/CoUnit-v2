@@ -1,0 +1,7 @@
+TEST('NamedA');
+IF NOT IS_TEST_FINISHED('NamedA') THEN
+	AssertTrue(Condition := TRUE, Message := 'before-B');
+	TEST_FINISHED_NAMED('NamedB');
+	AssertTrue(Condition := TRUE, Message := 'after-B');
+	TEST_FINISHED();
+END_IF

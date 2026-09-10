@@ -1,0 +1,6 @@
+{attribute 'signature_flag' := '33554432'}
+{attribute 'checksuperglobal'}
+{attribute 'show'}
+{attribute 'no-analysis'}
+TYPE OTCID : UDINT;
+END_TYPE

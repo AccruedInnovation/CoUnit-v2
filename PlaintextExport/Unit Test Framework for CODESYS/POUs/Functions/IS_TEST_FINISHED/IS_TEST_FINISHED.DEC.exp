@@ -1,0 +1,7 @@
+FUNCTION IS_TEST_FINISHED : BOOL
+VAR_INPUT
+	TestName : T_MaxString;
+END_VAR
+VAR
+	_suite : POINTER TO FB_TestSuite;
+END_VAR

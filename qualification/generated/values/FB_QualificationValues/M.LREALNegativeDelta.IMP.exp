@@ -1,0 +1,8 @@
+TEST('LREALNegativeDelta');
+IF NOT IS_TEST_FINISHED('LREALNegativeDelta') THEN
+	_pa := ADR(_fLREAL8a);
+	_pb := ADR(_fLREAL8b);
+	_pd := ADR(_fLREAL8d);
+	AssertEquals_LREAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'LREALNegativeDelta');
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,8 @@
+GetActiveSuite := 0;
+IF NOT CheckViolation() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.RUNNING THEN RETURN; END_IF
+IF ActiveSuite = 0 AND RequireContext THEN
+	FrameworkError(Reason := 'Lifecycle call outside runner-owned suite context');
+	RETURN;
+END_IF
+GetActiveSuite := ActiveSuite;

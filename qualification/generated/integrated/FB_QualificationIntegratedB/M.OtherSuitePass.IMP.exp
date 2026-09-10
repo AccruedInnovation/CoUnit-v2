@@ -1,0 +1,4 @@
+TEST('OtherSuitePass');
+IF NOT IS_TEST_FINISHED('OtherSuitePass') THEN
+	TEST_FINISHED();
+END_IF

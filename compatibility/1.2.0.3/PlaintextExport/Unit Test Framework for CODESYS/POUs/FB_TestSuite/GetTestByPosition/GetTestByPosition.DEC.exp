@@ -1,0 +1,5 @@
+(* This method returns the test at the n'th position, ranging from 1.. NumberOfTests *)
+METHOD INTERNAL GetTestByPosition : FB_Test
+VAR_INPUT
+    Position : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+END_VAR

@@ -1,0 +1,4 @@
+METHOD PRIVATE CopyDetectionCountAndResetDetectionCountInThisCycle
+VAR
+    IteratorCounter : UINT;
+END_VAR

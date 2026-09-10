@@ -1,0 +1,48 @@
+(*
+ Asserts that two USINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – USINT expected value
+     | Actual – USINT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : USINT := 5;
+         b : USINT := 5;
+     END_VAR
+
+     TEST('Test_USINT_Equals');
+     AssertEquals_USINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : USINT := 3;
+         b : USINT := 7;
+     END_VAR
+
+     TEST('Test_USINT_Differ');
+     AssertEquals_USINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_USINT
+VAR_INPUT
+    Expected : USINT; // USINT expected value
+    Actual : USINT; // USINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+END_VAR

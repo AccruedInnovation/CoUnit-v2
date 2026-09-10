@@ -1,0 +1,11 @@
+FUNCTION CoUnitCanonicalName : BOOL
+VAR_INPUT
+	Name : T_MaxString;
+END_VAR
+VAR_OUTPUT
+	Canonical : T_MaxString;
+	Disabled : BOOL;
+END_VAR
+VAR
+	_lower : T_MaxString;
+END_VAR

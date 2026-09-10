@@ -1,0 +1,8 @@
+(*
+    Deletes a file specified by name, if it excists.
+*)
+METHOD PUBLIC Delete  : SysFile.SysTypes.RTS_IEC_RESULT;
+VAR_INPUT
+    (* File name can contain an absolute or relative path to the file. Path entries must be separated with a Slash (/) *)
+    FileName : T_MaxString := 'filepath/output.xml'; 
+END_VAR

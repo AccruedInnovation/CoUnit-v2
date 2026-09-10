@@ -1,0 +1,8 @@
+(* TEST ONLY: call before the fixture. Filter matches Support/CmpCfLog source. *)
+FUNCTION F_QualificationLogStart : BOOL
+VAR_INPUT
+	ComponentFilter : UDINT := 16#11110000 OR ComponentID.CMPID_IecCode OR 16#0123;
+END_VAR
+VAR
+	_result : SysTypes.RTS_IEC_RESULT;
+END_VAR

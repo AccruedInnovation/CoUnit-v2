@@ -1,0 +1,8 @@
+TEST('LREALOppositeInfinity');
+IF NOT IS_TEST_FINISHED('LREALOppositeInfinity') THEN
+	_pa := ADR(_fLREAL5a);
+	_pb := ADR(_fLREAL5b);
+	_pd := ADR(_fLREAL5d);
+	AssertEquals_LREAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'LREALOppositeInfinity');
+	TEST_FINISHED();
+END_IF

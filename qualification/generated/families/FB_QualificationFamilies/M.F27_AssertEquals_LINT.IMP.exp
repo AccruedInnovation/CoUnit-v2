@@ -1,0 +1,5 @@
+TEST('F27_AssertEquals_LINT');
+IF NOT IS_TEST_FINISHED('F27_AssertEquals_LINT') THEN
+	AssertEquals_LINT(Expected := _v27e, Actual := _v27a, Message := 'F27_AssertEquals_LINT');
+	TEST_FINISHED();
+END_IF

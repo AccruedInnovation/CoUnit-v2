@@ -1,0 +1,4 @@
+METHOD INTERNAL SetCanonicalRecord
+VAR_INPUT
+	Record : ST_CoUnitTestRecord;
+END_VAR

@@ -1,0 +1,14 @@
+GVL_LifecycleTrace.Visits[2] := GVL_LifecycleTrace.Visits[2] + 1;
+IF GVL_LifecycleTrace.Visits[2] = 1 THEN
+	IF GVL_LifecycleTrace.EventCount < 3 THEN
+		GVL_LifecycleTrace.EventCount := GVL_LifecycleTrace.EventCount + 1;
+		GVL_LifecycleTrace.Order[GVL_LifecycleTrace.EventCount] := 2;
+	END_IF
+	GVL_LifecycleTrace.EntryMs[2] := TIME_TO_UDINT(TIME());
+	GVL_LifecycleTrace.EntryScan[2] := GVL_LifecycleTrace.Scan;
+END_IF
+TEST('DISABLED_Disabled');
+(* TEST suppresses assertions, not arbitrary caller statements. *)
+GVL_LifecycleTrace.DisabledBodyVisits := GVL_LifecycleTrace.DisabledBodyVisits + 1;
+GVL_LifecycleTrace.ExitMs[2] := TIME_TO_UDINT(TIME());
+GVL_LifecycleTrace.ExitScan[2] := GVL_LifecycleTrace.Scan;

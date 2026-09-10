@@ -1,0 +1,7 @@
+TEST('F13_AssertArrayEquals_SINT');
+IF NOT IS_TEST_FINISHED('F13_AssertArrayEquals_SINT') THEN
+	_v13e[1] := 1;
+	_v13a[1] := 2;
+	AssertArrayEquals_SINT(Expecteds := _v13e, Actuals := _v13a, Message := 'F13_AssertArrayEquals_SINT');
+	TEST_FINISHED();
+END_IF

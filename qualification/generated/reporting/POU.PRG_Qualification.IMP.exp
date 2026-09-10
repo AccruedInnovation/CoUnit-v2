@@ -1,0 +1,45 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+IF NOT Init THEN
+	_snapshot.Disposition := E_CoUnitRunDisposition.NORMAL;
+	_snapshot.SuiteCount := 1;
+	_snapshot.Total := 4;
+	_snapshot.Passed := 1;
+	_snapshot.Failed := 1;
+	_snapshot.Skipped := 1;
+	_snapshot.Errors := 1;
+	_snapshot.Suites[1].Name := SuiteName;
+	_snapshot.Suites[1].Identity := 0;
+	_snapshot.Suites[1].Total := 4;
+	_snapshot.Suites[1].Passed := 1;
+	_snapshot.Suites[1].Failed := 1;
+	_snapshot.Suites[1].Skipped := 1;
+	_snapshot.Suites[1].Errors := 1;
+	_snapshot.Suites[1].Tests[1].Name := 'Pass "quoted"';
+	_snapshot.Suites[1].Tests[1].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[1].State := E_CoUnitTestState.PASSED;
+	_snapshot.Suites[1].Tests[1].NumberOfAsserts := 2;
+	_snapshot.Suites[1].Tests[2].Name := 'Fail & compare';
+	_snapshot.Suites[1].Tests[2].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[2].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[2].NumberOfAsserts := 3;
+	_snapshot.Suites[1].Tests[2].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType := E_AssertionType.Type_DINT;
+	_snapshot.Suites[1].Tests[2].FirstFailure.Message := FailureMessage;
+	_snapshot.Suites[1].Tests[3].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[3].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.SKIPPED;
+	_snapshot.Suites[1].Tests[4].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[4].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.ERROR;
+	_snapshot.IsValid := TRUE;
+	Configured := _publisher.ConfigureTest(Path := Path, Enabled := TRUE, ChunkLimit := ChunkLimit, TextMode := TextMode, FaultOperation := FaultOperation, FaultOccurrence := FaultOccurrence, FaultOccurrence2 := FaultOccurrence2, FaultError := FaultError, ShortWrite := ShortWrite, PauseAfterPhase := PauseAfterPhase);
+	Init := TRUE;
+END_IF
+IF ReleasePause THEN _result := _publisher.Resume(); END_IF
+_result := _publisher.ServiceSnapshot(Snapshot := _snapshot);
+Phase := _publisher.GetPhase();
+ReportState := _publisher.GetReportState();
+FileEffects := _publisher.GetFileEffectCount();
+LastFileError := _publisher.GetLastFileError();
+Done := (ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED);
+OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (_snapshot.Total = 4) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 1) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1);

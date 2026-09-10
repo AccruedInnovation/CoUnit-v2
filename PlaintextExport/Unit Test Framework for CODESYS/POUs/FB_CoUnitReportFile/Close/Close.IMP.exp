@@ -1,0 +1,7 @@
+IF _handle = SysFile.SysTypes.RTS_INVALID_HANDLE THEN _lastError := 16#FFFF0002; RETURN; END_IF
+_allowed := BeforeOperation(E_CoUnitFileOperation.CLOSE);
+(* Even injected close failure releases the real handle; it never authorizes commit. *)
+_result := SysFile.SysFileClose(hFile := _handle);
+_handle := SysFile.SysTypes.RTS_INVALID_HANDLE;
+IF _allowed THEN _lastError := _result; END_IF
+Close := _allowed AND (_result = CmpErrors.Errors.ERR_OK);

@@ -1,0 +1,6 @@
+METHOD PRIVATE Recover : BOOL
+VAR
+	_finalExists : DINT;
+	_backupExists : DINT;
+	_stageExists : DINT;
+END_VAR

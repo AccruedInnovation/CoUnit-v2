@@ -1,0 +1,10 @@
+FUNCTION F_IsAnyEqualToUnionValue : BOOL
+VAR_INPUT
+    uExpectedOrActual : U_ExpectedOrActual;
+    ExpectedOrActualSize : UDINT;
+    ExpectedOrActualTypeClass : IBaseLibrary.TypeClass;
+    ExpectedOrActualValue : POINTER TO BYTE;
+END_VAR
+VAR
+    AnyExpectedOrActual : U_ExpectedOrActual;
+END_VAR

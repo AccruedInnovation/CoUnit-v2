@@ -1,0 +1,72 @@
+GVL_coUnit.IgnoreCurrentTest := FALSE; // Reset the ignore current test flag
+TrimmedTestName := F_LTrim(in := TestName);
+TrimmedTestName := F_RTrim(in := TrimmedTestName);
+LowerCasedTestName := F_ToLCase(in := TrimmedTestName);
+
+(* If test should be disabled, make sure to remove the "disabled_"-part of it from the test name *)
+IF FIND(STR1 := LowerCasedTestName, STR2 := 'disabled_') = 1 THEN
+    IgnoreCurrentTestCase := TRUE;
+    TrimmedTestName := DELETE(STR := TrimmedTestName, LEN := LEN(STR := 'disabled_'), POS := 1);
+END_IF
+
+GetCurrentTaskIndex(); // Gets the task index of where this function block instance is being run in
+(* Check if the test name already exists. Make sure there are no other tests with the same name already
+   added for this test suite *)
+CycleCount := GetCurrentTaskIndex.CurTaskInfo.dwIECCycleCount;
+
+(* Limit the test analyse to the max array limit of 'Tests[]' *)
+IF NumberOfTests > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+    NumberOfTestsToAnalyse := GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite;
+ELSE
+    NumberOfTestsToAnalyse := NumberOfTests;
+END_IF
+
+(* Iterate all the test names that up to this point have been added for this test suite *)
+FOR IteratorCounter := 1 TO NumberOfTests BY 1 DO
+    IF TrimmedTestName = Tests[IteratorCounter].GetName() THEN
+        TestWithThisNameAlreadyExists := TRUE;
+
+        (* Check if a test with this name has already been called in this PLC cycle *)
+        IF TestCycleCountIndex[IteratorCounter] = CycleCount THEN
+            GVL_coUnit.IgnoreCurrentTest := TRUE;
+            (* A test with this name already exists for this test suite and has already been called in this cycle.
+               Send a message notification, but only if we have not done so already. *)
+            TestDuplicateNameTrigger[IteratorCounter](CLK := TRUE);
+
+            IF TestDuplicateNameTrigger[IteratorCounter].Q THEN // Rising edge detected. We have not reported this before
+                TestInstancePath := F_RemoveInstancePathAndProjectNameFromTestInstancePath(TestInstancePath :=
+                        GVL_coUnit.CurrentTestSuiteBeingCalled^.GetInstancePath());
+
+                ErrorMessage := 'Test with name $'%s$' already exists in test suite $'';
+                ErrorMessage := CONCAT(STR1 := ErrorMessage, STR2 := TestInstancePath);
+                ErrorMessage := CONCAT(STR1 := ErrorMessage, STR2 := '$'');
+                Write_Device_Log(MsgCtrlMask := CmpLog.LogClass.LOG_ERROR, MsgFmtStr := ErrorMessage, StrArg := TrimmedTestName);
+            END_IF
+        END_IF
+
+        TestCycleCountIndex[IteratorCounter] := CycleCount;
+    END_IF
+END_FOR
+
+IF NOT TestWithThisNameAlreadyExists THEN
+    (* Test has not been found. Add it. *)
+    Tests[IteratorCounter].SetName(Name := TrimmedTestName);
+    NumberOfTests := NumberOfTests + 1;
+    TestCycleCountIndex[NumberOfTests] := CycleCount;
+
+    IF IgnoreCurrentTestCase THEN
+        Tests[IteratorCounter].SetSkipped();
+    END_IF
+
+    (* Extra information to be added if test is ordered (called by TEST_ORDERED()) *)
+    IF IsTestOrdered THEN
+        NumberOfOrderedTests := NumberOfOrderedTests + 1;
+        Tests[IteratorCounter].SetTestOrder(OrderNumber := NumberOfOrderedTests);
+    END_IF
+END_IF
+
+(* Check if this test should be disabled *)
+IF IgnoreCurrentTestCase THEN
+    GVL_coUnit.IgnoreCurrentTest := TRUE;
+    RETURN;
+END_IF

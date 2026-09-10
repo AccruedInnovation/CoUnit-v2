@@ -1,0 +1,48 @@
+(*
+ Asserts that two UINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – UINT expected value
+     | Actual – UINT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : UINT := 65535;
+         b : UINT := 65535;
+     END_VAR
+
+     TEST('Test_UINT_Equals');
+     AssertEquals_UINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : UINT := 64322;
+         b : UINT := 32312;
+     END_VAR
+
+     TEST('Test_UINT_Differ');
+     AssertEquals_UINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();  
+*)
+METHOD PUBLIC AssertEquals_UINT
+VAR_INPUT
+    Expected : UINT; // UINT expected value
+    Actual : UINT; // UINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

@@ -1,0 +1,10 @@
+AddLogEntry := FALSE;
+pResult := LogAdd2(hLogger := hStdLogger, 
+				udiCmpID := vendorId OR ComponentID.CMPID_IecCode OR cmpId,
+				udiClassID := udiClassId,
+				udiErrorID := udiErrorId, 
+				udiInfoID := udiInfoId, 
+				pszInfo := sText);
+IF pResult = Errors.ERR_OK THEN
+	AddLogEntry := TRUE;
+END_IF;		

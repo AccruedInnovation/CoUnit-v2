@@ -1,0 +1,6 @@
+TEST('DelayedPass');
+IF NOT IS_TEST_FINISHED('DelayedPass') THEN
+	_passScan := _passScan + 1;
+	AssertTrue(Condition := TRUE, Message := 'delayed-pass');
+	IF _passScan = 3 THEN TEST_FINISHED(); END_IF
+END_IF

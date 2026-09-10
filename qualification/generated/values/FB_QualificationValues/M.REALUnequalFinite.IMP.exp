@@ -1,0 +1,8 @@
+TEST('REALUnequalFinite');
+IF NOT IS_TEST_FINISHED('REALUnequalFinite') THEN
+	_pa := ADR(_fREAL1a);
+	_pb := ADR(_fREAL1b);
+	_pd := ADR(_fREAL1d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALUnequalFinite');
+	TEST_FINISHED();
+END_IF

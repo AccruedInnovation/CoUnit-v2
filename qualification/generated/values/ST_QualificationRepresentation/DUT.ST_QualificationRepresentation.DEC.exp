@@ -1,0 +1,6 @@
+TYPE ST_QualificationRepresentation :
+STRUCT
+	A : UDINT;
+	B : UDINT;
+END_STRUCT
+END_TYPE

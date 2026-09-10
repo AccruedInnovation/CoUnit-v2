@@ -1,0 +1,17 @@
+IF RunState = E_CoUnitRunState.FINALIZING THEN
+	(* BuildSnapshot is synchronous: FALSE is a terminal framework defect, never pending. *)
+	SnapshotReady := TestResults.BuildSnapshot(Disposition := RunDisposition);
+	IF NOT SnapshotReady THEN
+		FrameworkError(Reason := 'Final result snapshot rejected');
+		(* A failed snapshot also needs a permanent boundary before execution completes. *)
+		IF NOT SealSnapshot(Disposition => _sealedDisposition) THEN RETURN; END_IF
+	END_IF
+	RunState := E_CoUnitRunState.COMPLETE;
+END_IF
+IF RunState = E_CoUnitRunState.COMPLETE AND SnapshotReady THEN
+	IF NOT ResultsLogged THEN
+		TestResultLogger.LogTestSuiteResults();
+		ResultsLogged := TRUE;
+	END_IF
+	XmlTestResultPublisher.LogTestSuiteResults();
+END_IF

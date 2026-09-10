@@ -1,0 +1,48 @@
+(*
+ Asserts that two LINTs are equal. If they are not, an assertion error is created.
+ 
+ Parameters:
+     | Expected – LINT expected value
+     | Actual – LINT actual value
+     | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LINT := -123456789;
+         b : LINT := -123456789;
+     END_VAR
+
+     TEST('Test_LINT_Equals');
+     AssertEquals_LINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LINT := -451416345;
+         b : LINT := 589532453;
+     END_VAR
+
+     TEST('Test_LINT_Differ');
+     AssertEquals_LINT(Expected := a,
+                       Actual := b,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_LINT
+VAR_INPUT
+    Expected : LINT; // LINT expected value
+    Actual : LINT; // LINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

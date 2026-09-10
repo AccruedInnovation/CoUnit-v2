@@ -1,0 +1,14 @@
+GVL_LifecycleTrace.Visits[3] := GVL_LifecycleTrace.Visits[3] + 1;
+IF GVL_LifecycleTrace.Visits[3] = 1 THEN
+	IF GVL_LifecycleTrace.EventCount < 3 THEN
+		GVL_LifecycleTrace.EventCount := GVL_LifecycleTrace.EventCount + 1;
+		GVL_LifecycleTrace.Order[GVL_LifecycleTrace.EventCount] := 3;
+	END_IF
+	GVL_LifecycleTrace.EntryMs[3] := TIME_TO_UDINT(TIME());
+	GVL_LifecycleTrace.EntryScan[3] := GVL_LifecycleTrace.Scan;
+END_IF
+TEST('Third');
+IF GVL_LifecycleTrace.HoldThird THEN RETURN; END_IF
+TEST_FINISHED();
+GVL_LifecycleTrace.ExitMs[3] := TIME_TO_UDINT(TIME());
+GVL_LifecycleTrace.ExitScan[3] := GVL_LifecycleTrace.Scan;

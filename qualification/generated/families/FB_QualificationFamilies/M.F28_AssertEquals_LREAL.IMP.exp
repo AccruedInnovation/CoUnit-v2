@@ -1,0 +1,5 @@
+TEST('F28_AssertEquals_LREAL');
+IF NOT IS_TEST_FINISHED('F28_AssertEquals_LREAL') THEN
+	AssertEquals_LREAL(Expected := _v28e, Actual := _v28a, Delta := 0.0, Message := 'F28_AssertEquals_LREAL');
+	TEST_FINISHED();
+END_IF

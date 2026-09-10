@@ -1,0 +1,135 @@
+coUnitTestResults REF= TestResults.GetTestSuiteResults();
+
+IF PrintingTestSuiteResultNumber <= GVL_coUnit.NumberOfInitializedTestSuites AND NOT PrintedTestSuitesResults THEN
+    PrintingTestSuiteTrigger(CLK := GVL_coUnit.TestSuiteAddresses[PrintingTestSuiteResultNumber]^.AreAllTestsFinished());
+
+    IF PrintingTestSuiteTrigger.Q THEN
+        StringToPrint :=
+            CONCAT(STR1 := '| Test suite ID=', STR2 := UINT_TO_STRING(coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].Identity));
+
+        StringToPrint := CONCAT(STR1 := StringToPrint, STR2 := ' $'%s$'');
+        (* Print test suite name and ID *)
+        WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+            MsgFmtStr := StringToPrint,
+            StrArg := coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].Name);
+
+        (* Print number of tests/number of failed test in test suite *)
+        StringToPrint := CONCAT(STR1 := '| ID=', STR2 := UINT_TO_STRING(coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].Identity));
+        StringToPrint := CONCAT(STR1 := StringToPrint, STR2 := ' number of tests=');
+        StringToPrint :=
+            CONCAT(STR1 := StringToPrint, STR2 := UINT_TO_STRING(coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests));
+
+        StringToPrint := CONCAT(STR1 := StringToPrint, STR2 := ', number of failed tests=');
+        StringToPrint := CONCAT(STR1 := StringToPrint,
+            STR2 := UINT_TO_STRING(coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfFailedTests));
+
+        WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), MsgFmtStr := StringToPrint, StrArg := '');
+
+        (* Print error if there are too many tests in the test suite *)
+        IF (coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite) THEN
+            MaxNumberOfTestsToPrint := GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite;
+        ELSE
+            MaxNumberOfTestsToPrint := coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests;
+        END_IF
+
+        (* Iterate and print all tests in test suite *)
+        FOR TestsInTestSuiteCounter := 1 TO coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests BY 1 DO
+            (* Print test name *)
+            WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+                MsgFmtStr := '| Test name=%s',
+                StrArg := coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestName);
+
+            (* Print test class name *)
+            WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+                MsgFmtStr := '| Test class name=%s',
+                StrArg := coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestClassName);
+
+            (* Print test result/status (SUCCESS, FAILED, SKIPPED) + number of assertions made *)
+            IF coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestIsFailed THEN
+                StringToPrint := CONCAT(STR1 := '| Test status=', STR2 := TEST_STATUS_FAIL);
+            ELSIF coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].TestIsSkipped THEN
+                StringToPrint := CONCAT(STR1 := '| Test status=', STR2 := TEST_STATUS_SKIP);
+            ELSE
+                StringToPrint := CONCAT(STR1 := '| Test status=', STR2 := TEST_STATUS_PASS);
+            END_IF
+
+            StringToPrint := CONCAT(STR1 := StringToPrint, STR2 := ', number of asserts=');
+            StringToPrint := CONCAT(STR1 := StringToPrint,
+                STR2 := UINT_TO_STRING(coUnitTestResults
+                        .TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].NumberOfAsserts));
+
+            WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), MsgFmtStr := StringToPrint, StrArg := '');
+
+            (* Print assertion/failure message (if existing) *)
+            IF LEN(STR :=
+                    coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureMessage) >
+                0 THEN
+                WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+                    MsgFmtStr := '| Test assert message=%s',
+                    StrArg :=
+                        coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureMessage);
+            END_IF
+
+            (* Print assertion/failure type (if existing) *)
+            IF coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureType <>
+                E_AssertionType.Type_UNDEFINED THEN
+                WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+                    MsgFmtStr := '| Test assert type=%s',
+                    StrArg := F_AssertionTypeToString(AssertionType :=
+                            coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].TestCaseResults[TestsInTestSuiteCounter].FailureType));
+            END_IF
+        END_FOR
+
+        (* Print error message if there are too many tests in the test suite *)
+        IF (coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite) THEN
+            WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+                MsgFmtStr := 'Tests failed because the number of tests (%s',
+                StrArg := CONCAT(STR1 := TO_STRING(coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].NumberOfTests),
+                    STR2 := CONCAT(STR1 := ') in the test suite $'',
+                        STR2 := CONCAT(STR1 := coUnitTestResults.TestSuiteResults[PrintingTestSuiteResultNumber].Name,
+                            STR2 :=
+                                CONCAT(STR1 := '$' are more than is defined in parameter $'GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite$' (',
+                                STR2 := CONCAT(STR1 := UINT_TO_STRING(GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite),
+                                    STR2 := '). Please increase this parameter.'))))));
+        END_IF
+
+        IF PrintingTestSuiteResultNumber = GVL_coUnit.NumberOfInitializedTestSuites THEN
+            PrintedTestSuitesResults := TRUE;
+        ELSE
+            PrintingTestSuiteResultNumber := PrintingTestSuiteResultNumber + 1;
+        END_IF
+
+        PrintingTestSuiteTrigger(CLK := FALSE); // Reset trigger
+    END_IF
+END_IF
+
+(* Log end results once all test suites have finished running *)
+IF PrintingTestSuiteResultNumber = GVL_coUnit.NumberOfInitializedTestSuites AND
+    NOT PrintedFinalTestResults AND
+    TestResults.GetAreTestResultsAvailable() THEN
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '%s',
+        StrArg := '| ==========TESTS FINISHED RUNNING==========');
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '| Test suites: %s',
+        StrArg := UINT_TO_STRING(coUnitTestResults.NumberOfTestSuites));
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '| Tests: %s',
+        StrArg := UINT_TO_STRING(coUnitTestResults.NumberOfTestCases));
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '| Successful tests: %s',
+        StrArg := UINT_TO_STRING(coUnitTestResults.NumberOfSuccessfulTestCases));
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '| Failed tests: %s',
+        StrArg := UINT_TO_STRING(coUnitTestResults.NumberOfFailedTestCases));
+
+    WRITE_DEVICE_LOG(MsgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+        MsgFmtStr := '%s',
+        StrArg := '| ======================================');
+
+    PrintedFinalTestResults := TRUE;
+END_IF

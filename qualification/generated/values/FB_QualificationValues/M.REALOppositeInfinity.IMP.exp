@@ -1,0 +1,8 @@
+TEST('REALOppositeInfinity');
+IF NOT IS_TEST_FINISHED('REALOppositeInfinity') THEN
+	_pa := ADR(_fREAL5a);
+	_pb := ADR(_fREAL5b);
+	_pd := ADR(_fREAL5d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALOppositeInfinity');
+	TEST_FINISHED();
+END_IF

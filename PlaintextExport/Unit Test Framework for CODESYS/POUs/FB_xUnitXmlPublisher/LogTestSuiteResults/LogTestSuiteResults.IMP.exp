@@ -1,0 +1,2 @@
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+LogTestSuiteResults := ServiceSnapshot(Snapshot := _snapshot);

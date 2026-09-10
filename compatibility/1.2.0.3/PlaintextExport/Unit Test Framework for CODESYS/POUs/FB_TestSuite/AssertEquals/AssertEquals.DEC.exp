@@ -1,0 +1,104 @@
+(*  
+Asserts that two objects (of any type) are equal. If they are not, an assertion error is created.
+
+ | STRING/WSTRING's a treated different, they are only compared textual and on datatype.
+ | For REAL and LREAL it’s recommended to use the AssertEquals_REAL or AssertEquals_LREAL respectively 
+ | as these give the possibility to specify a delta between the expected and actual value.
+
+ Parameters:
+     | Expected – Expected value
+     | Actual – Actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := 5;
+         b : INT := 5;
+     END_VAR
+
+     TEST('Test_ANY_Equals');
+     AssertEquals(Expected := a,
+                  Actual := b,
+                  Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := 5;
+         b : UINT := 5;
+     END_VAR
+
+     TEST('Test_ANY_Differ_DataType');
+     AssertEquals(Expected := a,
+                  Actual := b,
+                  Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals
+VAR_INPUT
+    Expected : ANY; // Expected value
+    Actual : ANY; // The value to check against expected
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Count : DINT;
+    ExpectedDataString : STRING(80);
+    ActualDataString : STRING(80);
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+    boolExpected : BOOL;
+    boolActual : BOOL;
+    byteExpected : BYTE;
+    byteActual : BYTE;
+    dateExpected : DATE;
+    dateActual : DATE;
+    dateAndTimeExpected : DATE_AND_TIME;
+    dateAndTimeActual : DATE_AND_TIME;
+    dintExpected : DINT;
+    dintActual : DINT;
+    dwordExpected : DWORD;
+    dwordActual : DWORD;
+    intExpected : INT;
+    intActual : INT;
+    lintExpected : LINT;
+    lintActual : LINT;
+    lrealExpected : LREAL;
+    lrealActual : LREAL;
+    ltimeExpected : LTIME;
+    ltimeActual : LTIME;
+    lwordExpected : LWORD;
+    lwordActual : LWORD;
+    realExpected : REAL;
+    realActual : REAL;
+    sintExpected : SINT;
+    sintActual : SINT;
+    stringExpected : T_MaxString;
+    stringActual : T_MaxString;
+    wstringExpected : WSTRING(255);
+    wstringActual : WSTRING(255);
+    timeExpected : TIME;
+    timeActual : TIME;
+    timeOfDayExpected : TIME_OF_DAY;
+    timeOfDayActual : TIME_OF_DAY;
+    udintExpected : UDINT;
+    udintActual : UDINT;
+    uintExpected : UINT;
+    uintActual : UINT;
+    ulintExpected : ULINT;
+    ulintActual : ULINT;
+    usintExpected : USINT;
+    usintActual : USINT;
+    wordExpected : WORD;
+    wordActual : WORD;
+    (* ANY comparison variables *)
+    DataTypesNotEquals : BOOL; // The data type of the two ANY input parameters are not equal
+    DataSizeNotEquals : BOOL; // The data size of the two ANY input parameters are not equal
+    DataContentNotEquals : BOOL; // The data content of the two ANY input parameters are not equal
+    IteratorCounter : DINT;
+END_VAR

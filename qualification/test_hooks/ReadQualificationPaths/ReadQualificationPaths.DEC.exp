@@ -1,0 +1,23 @@
+METHOD PUBLIC ReadQualificationPaths : BOOL
+VAR_INPUT
+	ExpectedPath : T_MaxString;
+END_VAR
+VAR_OUTPUT
+	PathLength : UINT;
+	StageLength : UINT;
+	BackupLength : UINT;
+	PrefixPreserved : BOOL;
+	SuffixAndNul : BOOL;
+	Distinct : BOOL;
+END_VAR
+VAR
+	_qPath : POINTER TO BYTE;
+	_qExpected : POINTER TO BYTE;
+	_qStage : POINTER TO BYTE;
+	_qBackup : POINTER TO BYTE;
+	_qStageSuffix : STRING(11) := '.counit.tmp';
+	_qBackupSuffix : STRING(11) := '.counit.bak';
+	_qS : POINTER TO BYTE;
+	_qB : POINTER TO BYTE;
+	_qI : UINT;
+END_VAR

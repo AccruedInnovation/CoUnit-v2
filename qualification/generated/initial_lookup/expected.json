@@ -1,0 +1,24 @@
+{
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "LookupRecovered",
+        "state": "PASSED",
+        "assertions": 0
+      }
+    ]
+  ],
+  "FailedCalls": 3,
+  "DiagnosticClaim": 1,
+  "IdlePreserved": true,
+  "EpochPreserved": true,
+  "SuiteAndTestsPreserved": true,
+  "RecoveryComplete": true,
+  "Done": true,
+  "OraclePass": true,
+  "SnapshotDisposition": "NORMAL",
+  "diagnostic_contains": "Current task lookup failed before run start",
+  "diagnostic_occurrences": 1
+}

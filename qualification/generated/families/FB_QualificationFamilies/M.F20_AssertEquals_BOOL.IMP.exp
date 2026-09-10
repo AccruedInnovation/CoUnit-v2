@@ -1,0 +1,5 @@
+TEST('F20_AssertEquals_BOOL');
+IF NOT IS_TEST_FINISHED('F20_AssertEquals_BOOL') THEN
+	AssertEquals_BOOL(Expected := _v20e, Actual := _v20a, Message := 'F20_AssertEquals_BOOL');
+	TEST_FINISHED();
+END_IF

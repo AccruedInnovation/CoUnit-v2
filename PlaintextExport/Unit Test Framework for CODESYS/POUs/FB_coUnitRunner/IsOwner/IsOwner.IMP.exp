@@ -1,0 +1,11 @@
+IsOwner := FALSE;
+IF NOT CoUnitTryGetTask(Handle => _handle) THEN
+	IF BoundTaskValid THEN SignalViolation(); END_IF
+	RETURN;
+END_IF
+IF NOT BoundTaskValid THEN RETURN; END_IF
+IF _handle <> BoundTaskHandle THEN
+	SignalViolation();
+	RETURN;
+END_IF
+IsOwner := TRUE;

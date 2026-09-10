@@ -1,0 +1,48 @@
+(*
+ Asserts that two LTIMEs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – LTIME expected value
+     | Actual – LTIME actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LTIME := LTIME#213503D23H34M33S709MS551US615NS;
+         b : LTIME := LTIME#213503D23H34M33S709MS551US615NS;
+     END_VAR
+
+     TEST('Test_LTIME_Equals');
+     AssertEquals_LTIME(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LTIME := LTIME#213503D23H34M33S709MS551US615NS;
+         b : LTIME := LTIME#1000D15H23M12S34MS2US44NS;
+     END_VAR
+
+     TEST('Test_LTIME_Differ');
+     AssertEquals_LTIME(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_LTIME
+VAR_INPUT
+    Expected : LTIME; // LTIME expected value
+    Actual : LTIME; // LTIME actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

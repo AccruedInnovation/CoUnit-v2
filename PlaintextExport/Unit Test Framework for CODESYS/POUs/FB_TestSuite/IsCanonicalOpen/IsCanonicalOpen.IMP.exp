@@ -1,0 +1,3 @@
+IsCanonicalOpen := FALSE;
+IF Index < 1 OR Index > NumberOfTests THEN RETURN; END_IF
+IsCanonicalOpen := TestRecords[Index].State = E_CoUnitTestState.OPEN;

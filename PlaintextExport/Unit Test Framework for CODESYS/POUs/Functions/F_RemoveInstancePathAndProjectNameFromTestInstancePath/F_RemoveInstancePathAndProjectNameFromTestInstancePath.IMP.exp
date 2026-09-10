@@ -1,0 +1,23 @@
+(* Add the '.' character to the project name for search *)
+GetCurProjInfo();
+(* An empty project name is not a namespace prefix: searching for '.' would discard path components. *)
+IF NOT GetCurProjInfo.Valid OR_ELSE LEN(GetCurProjInfo.PROJECT_INFO.stProject) = 0 THEN
+	F_RemoveInstancePathAndProjectNameFromTestInstancePath := TestInstancePath;
+	RETURN;
+END_IF
+ProjectNameWithDot := CONCAT(STR1 := GetCurProjInfo.PROJECT_INFO.stProject, STR2 := '.');
+(* FIND the character position of the beginning of the first occurence of the project name *)
+CharacterPositionOfProjectName := FIND(STR1 := TestInstancePath, STR2 := ProjectNameWithDot);
+
+IF CharacterPositionOfProjectName > 0 THEN
+    TestInstancePath := DELETE(STR := TestInstancePath, LEN := CharacterPositionOfProjectName - 1 + LEN(ProjectNameWithDot), POS := 1);
+END_IF
+
+(* Check if the project name happens to be the same as namespace, and in that case, remove that as well *)
+CharacterPositionOfProjectName := FIND(STR1 := TestInstancePath, STR2 := ProjectNameWithDot);
+
+IF CharacterPositionOfProjectName > 0 THEN
+    TestInstancePath := DELETE(STR := TestInstancePath, LEN := CharacterPositionOfProjectName - 1 + LEN(STR := ProjectNameWithDot), POS := 1);
+END_IF
+
+F_RemoveInstancePathAndProjectNameFromTestInstancePath := TestInstancePath;

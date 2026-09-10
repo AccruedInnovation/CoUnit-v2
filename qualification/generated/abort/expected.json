@@ -1,0 +1,28 @@
+{
+  "shard": "abort",
+  "native_status": "NOT_RUN",
+  "run_disposition": "ABORTED",
+  "suites": [
+    [
+      {
+        "name": "OpenTest",
+        "state": "ABORTED",
+        "assertions": 1
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.ABORTED",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#1",
+    "_snapshot.Passed = UDINT#0",
+    "_snapshot.Failed = UDINT#0",
+    "_snapshot.Skipped = UDINT#0",
+    "_snapshot.Errors = UDINT#1",
+    "_snapshot.Suites[1].Total = UINT#1",
+    "_snapshot.Suites[1].Tests[1].Name = 'OpenTest'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.ABORTED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1"
+  ]
+}

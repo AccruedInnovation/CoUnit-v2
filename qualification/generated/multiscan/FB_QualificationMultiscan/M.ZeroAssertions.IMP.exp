@@ -1,0 +1,4 @@
+TEST('ZeroAssertions');
+IF NOT IS_TEST_FINISHED('ZeroAssertions') THEN
+	TEST_FINISHED();
+END_IF

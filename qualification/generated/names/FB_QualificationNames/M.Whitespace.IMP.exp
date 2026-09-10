@@ -1,0 +1,4 @@
+TEST('  Trimmed  ');
+IF NOT IS_TEST_FINISHED('Trimmed') THEN
+	TEST_FINISHED();
+END_IF

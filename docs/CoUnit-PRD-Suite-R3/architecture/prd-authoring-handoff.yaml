@@ -1,0 +1,647 @@
+package:
+  id: COUNIT-ARCH-R3
+  revision: 2026-09-09-r3
+  predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  target_maturity: PRODUCTION_INTENDED development/test library
+  completeness: COMPLETE
+  approval_state: APPROVED
+  task_mode: REBASELINE
+  baseline_refs:
+  - README.md
+  - architecture-baseline.md
+  - decisions.md
+  - shared-contracts.md
+  - verification-and-readiness.md
+  canonical_records:
+  - architecture-baseline.md
+  - decisions.md
+  - shared-contracts.md
+  - verification-and-readiness.md
+  - prd-authoring-assignments.md
+  - sources.md
+  source_brief_refs: []
+  governing_authoring_contract: SRC-019
+  blocking_open_items: []
+  approval_source: SRC-020
+systems:
+- SYS-COU-01 CoUnit CODESYS library
+- SYS-COU-02 CI/human file consumer
+interfaces:
+- IF-COU-001
+- IF-COU-002
+- IF-COU-003
+- IF-COU-004
+- IF-COU-005
+capability_increments:
+- CAP-COU-01
+- CAP-COU-02
+- CAP-COU-03
+- CAP-COU-04
+requirement_allocation:
+- requirements:
+  - REQ-COU-001
+  contributions:
+    PRD-COU-01: runner/test API
+    PRD-COU-02: assertion API
+    PRD-COU-03: result/config API
+  final_acceptance_owner: PRD-COU-04
+- requirements:
+  - REQ-COU-004
+  contributions:
+    PRD-COU-01: suite/test writes
+    PRD-COU-02: assertion bookkeeping writes
+  final_acceptance_owner: PRD-COU-04
+- requirements:
+  - REQ-COU-031
+  contributions:
+    PRD-COU-01: task/project platform calls
+    PRD-COU-03: file/log platform calls
+  final_acceptance_owner: PRD-COU-04
+- requirements:
+  - all other REQ-COU-001..037
+  source: prd-authoring-assignments.md exact allocations
+  final_acceptance_owner: PRD-COU-04
+prd_assignments:
+- id: PRD-COU-01
+  architecture_baseline:
+    id: COUNIT-ARCH-R3
+    revision: 2026-09-09-r3
+    predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  capability_ids:
+  - CAP-COU-01
+  outcome: Repaired runner/suite/test lifecycle with bounded storage, one execution
+    authority, safe task binding and truthful terminal state.
+  scope:
+    in:
+    - runner lifecycle
+    - suite/test registration and execution
+    - ordered/skip/finish
+    - abort/error finalization
+    - task/project platform calls
+    out:
+    - assertion comparison internals
+    - xUnit writer internals
+    - multi-task runs
+    - production-control execution
+    parent: CoUnit reliability rebaseline
+  allocated_requirement_ids:
+  - REQ-COU-001..006
+  - REQ-COU-009..014
+  - REQ-COU-031
+  - REQ-COU-033
+  - REQ-COU-035
+  contribution_obligations:
+  - 'REQ-COU-001: runner/test public surfaces only'
+  - 'REQ-COU-004: suite/test bounded writes'
+  - 'REQ-COU-031: task/project platform calls'
+  - provide active test context to PRD-COU-02
+  - provide terminal state to PRD-COU-03
+  fixed_refs:
+  - id: ADR-COU-001..006,008,015
+    location: decisions.md#decision-ledger
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: IF-COU-001/002; ISC-COU-001/004; SDE-COU-001/002
+    location: shared-contracts.md
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: REQ-COU-001..006,009..014,031,033,035
+    location: architecture-baseline.md#12-requirements
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  delegated_design:
+  - private enum/helper names
+  - bounded lookup mechanics
+  - exact task-identity API binding after source recovery
+  required_elaboration:
+  - source-object map
+  - exact transition table
+  - registration guards
+  - ordered cursor/sentinel
+  - named finish/abort mapping
+  - task/project adapter details
+  - fixtures and worker slices
+  dependencies:
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: SRC-001
+    contract_ref: sources.md / SRC-001 / sources/CoUnitPlaintextExport.zip
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001 (PASS)
+    producer: R3 architecture package
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: R3 execution contracts
+    contract_ref: shared-contracts.md IF-COU-001/002; ISC-COU-001/004
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001
+    producer: CoUnit architecture owner
+  - type: CREATED_BY_THIS_PRD
+    source: PRD-COU-01 design/implementation outputs
+    contract_ref: this assignment acceptance obligations
+    required_availability_phase: implementation integration
+    gate: GATE-COU-003
+    producer: PRD-COU-01
+  acceptance_obligations:
+  - VER-COU-001/002/004..007/022/026..030
+  - QAS-COU-001/003/010/011
+  - SCN-COU-002/003/007/008
+  - no out-of-bounds write, cross-task mutation, resumed partial run, or unfinished
+    success
+  integration_owner: CoUnit architecture owner
+  final_acceptance_owner: PRD-COU-04 technical; CoUnit release/architecture owner
+    release
+  authoring_environment:
+    source_baseline: CoUnit 1.2.0.3 plaintext snapshot SRC-001 at sources/CoUnitPlaintextExport.zip;
+      SHA-256 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+    repository_status: Active implementation repository/path not supplied; OPEN-COU-001
+      is later-stage detail.
+    allowed_effects: &id001
+    - inspect supplied/readable sources
+    - author PRD/design/test specifications
+    forbidden_effects: &id002
+    - production source mutation from this handoff
+    - deployment
+    - release claim without qualification
+    reading_route:
+      read_now:
+      - README.md
+      - prd-authoring-assignments.md#prd-cou-01--execution-core-and-lifecycle
+      - architecture-baseline.md §§4-6,10,12-15
+      - decisions.md ADR-COU-001..006,008,015
+      - shared-contracts.md IF-COU-001/002, ISC-COU-001/004, SDE-COU-001/002
+      - verification-and-readiness.md relevant VER/SCN/gates
+      retrieve_for_check:
+      - SRC-001 runner/suite/test/GVL/public run-test/task-project objects
+      background:
+      - TcUnit evidence only for named defect
+    context_need: package-first bounded set plus named source objects; fit not measured
+  review_policy:
+    local:
+    - execution state and bounds
+    boundary:
+    - public API↔runner
+    - runner↔suite
+    - platform task lookup
+    integrated:
+    - normal
+    - sequence
+    - abort/error
+    - restart
+    - cross-task
+    recipient: R3 same-context self-check completed; fresh worker-consumption review
+      required at PRD stage
+  open_items:
+  - OPEN-COU-001
+  readiness:
+    status: READY_FOR_PRD
+    reasons:
+    - packaged exact source available
+    - R3 explicit approval established
+    - shared lifecycle contracts settled
+    evidence_refs:
+    - verification-and-readiness.md §§4,6A,7,9
+    - architecture-review.md R3 closure
+    approval_dependencies: []
+    authoring_permission_ref: SRC-020
+- id: PRD-COU-02
+  architecture_baseline:
+    id: COUNIT-ARCH-R3
+    revision: 2026-09-09-r3
+    predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  capability_ids:
+  - CAP-COU-02
+  outcome: Design all existing assertion families through a safe common comparison/outcome
+    path with constant-size bookkeeping, correct type metadata, first-failure logging,
+    safe REAL/LREAL and generic ANY handling, and the approved maximum-per-invocation
+    assertion count.
+  scope:
+    in:
+    - typed scalar/array wrappers
+    - common outcome reporter
+    - invocation-local ordinal and MaxAssertionsPerInvocation
+    - assertion invocation guard
+    - first failure and first-failure detailed logging
+    - removal/migration of obsolete assertion trackers
+    - formatting/truncation
+    out:
+    - public API redesign
+    - persistent assertion call-site identity registry
+    - result-file publishing
+    - multi-task runs
+    parent: CoUnit reliability rebaseline
+  allocated_requirement_ids:
+  - REQ-COU-001
+  - REQ-COU-004
+  - REQ-COU-007..008
+  - REQ-COU-015..021
+  - REQ-COU-034
+  - REQ-COU-037
+  contribution_obligations:
+  - consume active test/context and invocation-boundary guarantees from PRD-COU-01
+    / IF-COU-002
+  - provide first-failure and max-per-invocation count to PRD-COU-03
+  - preserve public assertion signatures unless an approved compatibility change says
+    otherwise
+  - do not reintroduce per-assertion identity/history without architecture change
+  fixed_refs:
+  - id: ADR-COU-001,008..009,013,017; ADR-COU-007 supersession history only
+    location: decisions.md#decision-ledger
+    controlling_revision: 2026-09-09-r3
+    authority: R3 active decisions approved via SRC-020; ADR-COU-007 is CONTRADICTED
+      history only
+  - id: IF-COU-003; ISC-COU-002
+    location: shared-contracts.md
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: REQ-COU-007..008,015..021,034,037
+    location: architecture-baseline.md#12-requirements
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  delegated_design:
+  - helper names/decomposition
+  - typed comparator sharing
+  - bounded formatter lengths
+  - counter representation large enough to guard configured limit before narrowing
+    to legacy UINT
+  - obsolete tracker removal/wrapper mechanics
+  required_elaboration:
+  - exact assertion-family map
+  - comparison routes
+  - authorized identity data flow
+  - bounds
+  - first failure
+  - float/ANY matrices
+  - obsolete tracker migration
+  - regression fixtures
+  dependencies:
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: SRC-001
+    contract_ref: sources.md / SRC-001 / sources/CoUnitPlaintextExport.zip
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001 (PASS)
+    producer: R3 architecture package
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: R3 assertion semantic contract
+    contract_ref: decisions.md ADR-COU-017; shared-contracts.md IF-COU-003
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-002 (PASS)
+    producer: CoUnit architecture owner
+  - type: PRODUCED_BY_PREDECESSOR
+    source: PRD-COU-01 active-context implementation
+    contract_ref: IF-COU-002 accepted implementation binding
+    required_availability_phase: implementation integration
+    gate: GATE-COU-003
+    producer: PRD-COU-01
+  acceptance_obligations:
+  - VER-COU-003/008..014/032
+  - QAS-COU-002/004/012
+  - SCN-COU-001/005
+  - no invalid access, runtime exception, raw-value identity history, or branch identity
+    alias
+  integration_owner: CoUnit architecture owner for assertion identity; PRD-COU-02
+    local integration
+  final_acceptance_owner: PRD-COU-04 technical; CoUnit release owner release
+  authoring_environment:
+    source_baseline: CoUnit 1.2.0.3 plaintext snapshot SRC-001 at sources/CoUnitPlaintextExport.zip;
+      SHA-256 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+    repository_status: Active implementation repository/path not supplied; OPEN-COU-001
+      is later-stage detail.
+    allowed_effects: *id001
+    forbidden_effects: *id002
+    reading_route:
+      read_now:
+      - README.md
+      - prd-authoring-assignments.md#prd-cou-02--assertion-engine-and-safe-comparison
+      - architecture-baseline.md §§6-8,12-15
+      - decisions.md ADR-COU-001,007..009,013
+      - shared-contracts.md IF-COU-003, ISC-COU-002
+      - verification-and-readiness.md OPEN-COU-008/VER-COU-032
+      retrieve_for_check:
+      - SRC-001 assertion methods/tracker DUTs/failure setters/formatter interfaces
+      background:
+      - upstream issue only for named regression
+    context_need: package-first bounded set plus named assertion objects; fit not
+      measured
+  review_policy:
+    local:
+    - assertion-family semantics
+    boundary:
+    - assertion engine↔test state
+    integrated:
+    - changing-value multi-scan
+    - branch-changing multi-scan
+    recipient: R3 same-context self-check completed; fresh worker-consumption review
+      required at PRD stage
+  open_items:
+  - OPEN-COU-001
+  readiness:
+    status: READY_FOR_PRD
+    reasons:
+    - packaged exact source available
+    - R3 explicit approval established
+    - ADR-COU-017 and IF-COU-003 settle assertion bookkeeping/count semantics
+    evidence_refs:
+    - verification-and-readiness.md §§4,6A,7,9
+    - architecture-review.md R3 closure
+    approval_dependencies: []
+    authoring_permission_ref: SRC-020
+- id: PRD-COU-03
+  architecture_baseline:
+    id: COUNIT-ARCH-R3
+    revision: 2026-09-09-r3
+    predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  capability_ids:
+  - CAP-COU-03
+  outcome: One reconciled final result truth, reliable Device Log, and streamed well-formed
+    xUnit with externally safe publication currentness.
+  scope:
+    in:
+    - final snapshot
+    - legacy projection
+    - counts
+    - Device Log
+    - XML escaping
+    - streaming writer
+    - file/log platform calls
+    - publication commit and restart cleanup
+    out:
+    - test execution algorithm
+    - assertion comparison
+    - public API redesign
+    - multi-task runs
+    parent: CoUnit reliability rebaseline
+  allocated_requirement_ids:
+  - REQ-COU-001
+  - REQ-COU-022..031
+  - REQ-COU-036
+  contribution_obligations:
+  - 'REQ-COU-001: public result/config surfaces'
+  - 'REQ-COU-031: file/log platform calls'
+  - consume terminal state from PRD-COU-01
+  - consume authorized assertion count from PRD-COU-02
+  - preserve test truth across publication failure
+  fixed_refs:
+  - id: ADR-COU-001,010..012,016..017
+    location: decisions.md#decision-ledger
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: IF-COU-004/005; ISC-COU-003/004; SDE-COU-003
+    location: shared-contracts.md
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: REQ-COU-022..031,036
+    location: architecture-baseline.md#12-requirements
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  delegated_design:
+  - private snapshot/XML names
+  - chunk size mechanics
+  - target-specific commit mechanism that proves IF-COU-005
+  required_elaboration:
+  - snapshot/legacy schema
+  - XML escaping/code-point policy
+  - chunk writer
+  - file/log error map
+  - staging/commit/restart procedure
+  - stale-staging handling
+  - fault injection/parser fixtures
+  - worker slices
+  dependencies:
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: SRC-001
+    contract_ref: sources.md / SRC-001 / sources/CoUnitPlaintextExport.zip
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001 (PASS)
+    producer: R3 architecture package
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: R3 result/publication contracts
+    contract_ref: shared-contracts.md IF-COU-004/005; ISC-COU-003/004; SDE-COU-003
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001
+    producer: CoUnit architecture owner
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: R3 ADR-COU-017 / IF-COU-003
+    contract_ref: decisions.md ADR-COU-017; shared-contracts.md IF-COU-003
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-002 (PASS)
+    producer: CoUnit architecture owner
+  - type: PRODUCED_BY_PREDECESSOR
+    source: PRD-COU-01/02 accepted implementation outputs
+    contract_ref: their accepted interface/result outputs
+    required_availability_phase: implementation integration
+    gate: GATE-COU-003
+    producer: PRD-COU-01/02
+  acceptance_obligations:
+  - VER-COU-015..021/029/031
+  - QAS-COU-005..008/013
+  - SCN-COU-004/006
+  - no failed output current, no partial-current XML, no test-truth rewrite
+  integration_owner: CoUnit architecture owner for report/currentness; PRD-COU-03
+    publisher integration
+  final_acceptance_owner: PRD-COU-04 technical; CoUnit release owner release
+  authoring_environment:
+    source_baseline: CoUnit 1.2.0.3 plaintext snapshot SRC-001 at sources/CoUnitPlaintextExport.zip;
+      SHA-256 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+    repository_status: Active implementation repository/path not supplied; OPEN-COU-001
+      is later-stage detail.
+    allowed_effects: *id001
+    forbidden_effects: *id002
+    reading_route:
+      read_now:
+      - README.md
+      - prd-authoring-assignments.md#prd-cou-03--results-logging-and-xunit-publication
+      - architecture-baseline.md §§7-10,12-15
+      - decisions.md ADR-COU-001,010..012,016
+      - shared-contracts.md IF-COU-004/005, ISC-COU-003/004, SDE-COU-003
+      - verification-and-readiness.md SCN-COU-004/006, VER-COU-031
+      retrieve_for_check:
+      - SRC-001 result/log/XML/file objects and JUnit schema
+      background:
+      - SRC-014..016 as support only
+    context_need: package-first bounded set plus named publisher objects; fit not
+      measured
+  review_policy:
+    local:
+    - snapshot and publisher
+    boundary:
+    - snapshot↔publishers
+    - publisher↔filesystem/file consumer
+    - platform file/log calls
+    integrated:
+    - I/O failure
+    - restart during write
+    - count reconciliation
+    recipient: R3 same-context self-check completed; fresh worker-consumption review
+      required at PRD stage
+  open_items:
+  - OPEN-COU-001
+  - OPEN-COU-003
+  readiness:
+    status: READY_FOR_PRD
+    reasons:
+    - packaged exact source available
+    - R3 explicit approval established
+    - assertion count and external report-currentness semantics settled
+    evidence_refs:
+    - verification-and-readiness.md §§4,6A,7,9
+    - architecture-review.md R3 closure
+    approval_dependencies: []
+    authoring_permission_ref: SRC-020
+- id: PRD-COU-04
+  architecture_baseline:
+    id: COUNIT-ARCH-R3
+    revision: 2026-09-09-r3
+    predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  capability_ids:
+  - CAP-COU-04
+  outcome: Repeatable regression, source-compatibility and native CODESYS qualification
+    evidence for the integrated repaired library.
+  scope:
+    in:
+    - regression fixtures
+    - boundary tests
+    - public API compile cohort
+    - runtime matrix
+    - report parser/oracles
+    - restart/currentness tests
+    - integrated acceptance report
+    out:
+    - implementation ownership of PRD-01/02/03 behavior
+    - release approval
+    - physical production-control validation
+    parent: CoUnit reliability rebaseline
+  allocated_requirement_ids:
+  - REQ-COU-032
+  contribution_obligations:
+  - final integrated verification of REQ-COU-001..037 without taking producer ownership
+  - verify same accepted revisions
+  - verify public compatibility across PRD-01/02/03 surfaces
+  - verify accepted ADR-COU-017 assertion semantics and report-currentness end to
+    end
+  fixed_refs:
+  - id: REQ-COU-001..037; QAS-COU-001..013; FE-COU-001..011; CAP-COU-01..04
+    location: architecture-baseline.md §§12-15
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: ADR-COU-001..006; ADR-COU-008..017; ADR-COU-007 supersession history only
+    location: decisions.md#decision-ledger
+    controlling_revision: 2026-09-09-r3
+    authority: R3 active decisions approved via SRC-020; ADR-COU-007 is CONTRADICTED
+      history only
+  - id: IF-COU-001..005; ISC-COU-001..004; SDE-COU-001..003
+    location: shared-contracts.md
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  - id: VER-COU-001..032; SCN-COU-001..008
+    location: verification-and-readiness.md §§1-3
+    controlling_revision: 2026-09-09-r3
+    authority: R3 approved; EXPLICIT_APPROVAL via SRC-020
+  delegated_design:
+  - qualification project layout
+  - fixture names/scripts/evidence layout
+  - runtime-matrix rows within accepted support claim
+  required_elaboration:
+  - defect-to-test map
+  - exact fixtures/oracles
+  - existing-source compile cohort
+  - capacity cases
+  - branch-changing assertion case
+  - publication failure/restart case
+  - native compile/runtime matrix
+  - final evidence report
+  dependencies:
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: COUNIT-ARCH-R3
+    contract_ref: README.md and canonical records
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001 (PASS)
+    producer: R3 architecture package
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: SRC-001 and representative packaged tests
+    contract_ref: sources.md / SRC-001 / sources/CoUnitPlaintextExport.zip
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-001 (PASS)
+    producer: R3 architecture package
+  - type: SUPPLIED_WITH_ARCHITECTURE
+    source: ADR-COU-017 assertion contract
+    contract_ref: decisions.md ADR-COU-017; shared-contracts.md IF-COU-003
+    required_availability_phase: PRD authoring
+    gate: GATE-COU-002 (PASS)
+    producer: CoUnit architecture owner
+  - type: PRODUCED_BY_PREDECESSOR
+    source: PRD-COU-01/02/03 accepted implementations
+    contract_ref: accepted candidate outputs under same R3 contracts
+    required_availability_phase: qualification execution
+    gate: GATE-COU-003
+    producer: PRD-COU-01/02/03
+  acceptance_obligations:
+  - VER-COU-023..025
+  - final integrated disposition of VER-COU-001..032
+  - no support claim without exact environment evidence
+  - no local-pass aggregation over blocking spanning failure
+  integration_owner: PRD-COU-04 for qualification assembly
+  final_acceptance_owner: CoUnit release/architecture owner
+  authoring_environment:
+    source_baseline: CoUnit 1.2.0.3 plaintext snapshot SRC-001 at sources/CoUnitPlaintextExport.zip;
+      SHA-256 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+    repository_status: Active implementation repository/path not supplied; OPEN-COU-001
+      is later-stage detail.
+    allowed_effects: *id001
+    forbidden_effects: *id002
+    reading_route:
+      read_now:
+      - README.md
+      - prd-authoring-assignments.md#prd-cou-04--regression-compatibility-and-integrated-qualification
+      - architecture-baseline.md §§12-15
+      - verification-and-readiness.md §§1-4,9-10
+      - shared-contracts.md all IF/ISC/SDE
+      - decisions.md all active accepted decisions plus ADR-COU-007 supersession history
+      retrieve_for_check:
+      - SRC-001 exact source/test cohort from packaged source
+      - target compiler/runtime details at qualification planning/execution
+      background:
+      - upstream TcUnit material only for named regression provenance
+    context_need: package-wide acceptance set plus check-specific source/runtime retrieval;
+      fit not measured
+  review_policy:
+    local:
+    - verification design
+    boundary:
+    - all IF contracts plus platform adapter
+    integrated:
+    - SCN-COU-001..008
+    - same-revision evidence joining
+    recipient: R3 same-context self-check completed; fresh worker-consumption review
+      required at PRD stage
+  open_items:
+  - OPEN-COU-001
+  - OPEN-COU-002
+  readiness:
+    status: READY_FOR_PRD
+    reasons:
+    - packaged exact source/test baseline available
+    - R3 explicit approval established
+    - all architecture-stage shared semantics settled
+    - native compiler/runtime matrix is a future qualification gate
+    evidence_refs:
+    - verification-and-readiness.md §§4,6A,7,9
+    - architecture-review.md R3 closure
+    approval_dependencies: []
+    authoring_permission_ref: SRC-020
+gates:
+- GATE-COU-001
+- GATE-COU-002
+- GATE-COU-003
+- GATE-COU-004
+blockers: []
+proposed_decisions_requiring_approval: []
+id_mappings:
+- predecessor: COUNIT-ARCH-R1
+  successor: COUNIT-ARCH-R2
+  relationship: reviewed successor; object IDs preserved unless explicitly added
+- predecessor: COUNIT-ARCH-R2
+  successor: COUNIT-ARCH-R3
+  relationship: approved closure successor; IDs preserved; ADR-COU-017 added
+accepted_decisions:
+- ADR-COU-001..006
+- ADR-COU-008..017
+- ADR-COU-017 successor to ADR-COU-007

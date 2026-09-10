@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit observed qualification wrapper" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="PRG_QualificationObserved" pouType="program">
+        <interface>
+          <inputVars>
+            <variable name="WaitForReport">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="FALSE" />
+              </initialValue>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Started">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Stopped">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="CaptureHealthy">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="CapturedCount">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_attempted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_reportState">
+              <type>
+                <derived name="E_CoUnitReportState" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF Done THEN RETURN; END_IF
+IF NOT _attempted THEN
+	_attempted := TRUE;
+	Started := F_QualificationLogStart();
+	IF NOT Started THEN
+		Stopped := F_QualificationLogStop();
+		Done := TRUE;
+		RETURN;
+	END_IF
+END_IF
+PRG_Qualification();
+IF PRG_Qualification.Done THEN
+	IF WaitForReport THEN
+		_reportState := GVL_coUnit.coUnitRunner.xUnitXmlPublisher.GetReportState();
+		IF (_reportState &lt;&gt; E_CoUnitReportState.WRITTEN) AND (_reportState &lt;&gt; E_CoUnitReportState.FAILED) AND
+			(_reportState &lt;&gt; E_CoUnitReportState.DISABLED) THEN RETURN; END_IF
+	END_IF
+	Stopped := F_QualificationLogStop();
+	CapturedCount := GVL_QualificationLog.Count;
+	CaptureHealthy := Stopped AND NOT GVL_QualificationLog.Overflow AND NOT GVL_QualificationLog.Truncated AND
+		(GVL_QualificationLog.CallbackErrors = 0) AND (GVL_QualificationLog.StartError = CmpErrors.Errors.ERR_OK) AND
+		(GVL_QualificationLog.UnregisterError = CmpErrors.Errors.ERR_OK) AND (GVL_QualificationLog.CloseError = CmpErrors.Errors.ERR_OK);
+	(* Content is independently verified from Bytes/Lengths; this is only execution/capture health. *)
+	OraclePass := PRG_Qualification.OraclePass AND CaptureHealthy;
+	Done := TRUE;
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Optional wrapper: schedule this program instead of PRG_Qualification. *)
+PROGRAM PRG_QualificationObserved
+VAR_INPUT
+	WaitForReport : BOOL := FALSE;
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	Started : BOOL;
+	Stopped : BOOL;
+	CaptureHealthy : BOOL;
+	CapturedCount : UINT;
+END_VAR
+VAR
+	_attempted : BOOL;
+	_reportState : E_CoUnitReportState;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Folder Name="LogCapture">
+            <Object Name="PRG_QualificationObserved" ObjectId="" />
+          </Folder>
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

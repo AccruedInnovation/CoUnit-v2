@@ -1,0 +1,5 @@
+METHOD INTERNAL AdvanceOrderedCursor
+VAR
+	_i : UDINT;
+	_found : BOOL;
+END_VAR

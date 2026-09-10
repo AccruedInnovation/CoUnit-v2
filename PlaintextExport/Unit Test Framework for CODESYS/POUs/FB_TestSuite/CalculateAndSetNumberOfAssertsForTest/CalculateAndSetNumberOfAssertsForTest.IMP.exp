@@ -1,0 +1,2 @@
+(* Compatibility entry: each admitted assertion already commits the canonical maximum.
+The final result projector reads TestRecords directly; there is no history to calculate. *)

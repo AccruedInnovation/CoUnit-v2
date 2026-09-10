@@ -1,0 +1,6 @@
+METHOD FB_Init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL;
+	bInCopyCode : BOOL;
+	iTestResults : I_TestResults;
+END_VAR

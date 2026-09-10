@@ -1,0 +1,8 @@
+(* 
+    Writes the contents of the buffer into a file.
+*)
+METHOD Write : SysFile.SysTypes.RTS_IEC_RESULT;
+VAR_INPUT
+    BufferPointer : POINTER TO BYTE; // Call with ADR();
+    Size : UDINT; // Call with SIZEOF();
+END_VAR

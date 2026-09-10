@@ -1,0 +1,11 @@
+Probe := -1;
+Size := 0;
+IF NOT BeforeOperation(E_CoUnitFileOperation.PROBE) THEN RETURN; END_IF
+_size := SysFile.SysFileGetSize(szFileName := Path, pResult := ADR(_result));
+_lastError := _result;
+IF _result = CmpErrors.Errors.ERR_OK THEN
+	Size := TO_ULINT(_size);
+	Probe := 1;
+ELSIF _result = CmpErrors.Errors.ERR_NO_OBJECT THEN
+	Probe := 0;
+END_IF

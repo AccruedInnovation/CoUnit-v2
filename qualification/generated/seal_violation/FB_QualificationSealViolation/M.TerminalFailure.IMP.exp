@@ -1,0 +1,5 @@
+TEST('TerminalFailure');
+IF NOT IS_TEST_FINISHED('TerminalFailure') THEN
+	AssertTrue(Condition := FALSE, Message := 'sealed-first-failure');
+	TEST_FINISHED();
+END_IF

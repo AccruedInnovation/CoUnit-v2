@@ -1,0 +1,21 @@
+{
+  "errors": 1,
+  "failures": 1,
+  "skipped": 1,
+  "tests": 4,
+  "suites": [
+    {
+      "name": "Suite & <A>",
+      "tests": 4,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 1,
+      "cases": [
+        {"classname": "Suite & <A>", "name": "Pass \"quoted\"", "status": "passed", "assertions": 2},
+        {"classname": "Suite & <A>", "name": "Fail & compare", "status": "failure", "assertions": 3, "failure": {"type": "Type_DINT", "message": "expected <3 & 4> but got \"5\""}},
+        {"classname": "Suite & <A>", "name": "Disabled", "status": "skipped", "assertions": 0},
+        {"classname": "Suite & <A>", "name": "Framework error", "status": "error", "assertions": 0, "error": {"message": "task lookup failed"}}
+      ]
+    }
+  ]
+}

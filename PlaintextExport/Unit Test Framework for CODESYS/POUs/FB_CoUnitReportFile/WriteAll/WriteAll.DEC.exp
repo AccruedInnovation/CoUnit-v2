@@ -1,0 +1,11 @@
+METHOD PUBLIC WriteAll : BOOL
+VAR_INPUT
+	Bytes : POINTER TO BYTE;
+	Count : UDINT;
+END_VAR
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+	_written : SysFile.SysTypes.RTS_IEC_SIZE;
+	_requested : UDINT;
+	_allowed : BOOL;
+END_VAR

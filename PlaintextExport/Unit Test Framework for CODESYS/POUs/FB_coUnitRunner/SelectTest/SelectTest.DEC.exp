@@ -1,0 +1,6 @@
+METHOD INTERNAL SelectTest
+VAR_INPUT
+	Index : UINT;
+	Execute : BOOL;
+	Name : T_MaxString;
+END_VAR

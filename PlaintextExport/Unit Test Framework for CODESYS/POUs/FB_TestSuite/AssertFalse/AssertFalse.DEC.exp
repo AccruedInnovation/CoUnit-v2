@@ -1,0 +1,10 @@
+METHOD PUBLIC AssertFalse
+VAR_INPUT
+	Condition : BOOL;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

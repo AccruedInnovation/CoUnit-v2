@@ -1,0 +1,18 @@
+(* This function block holds results of the complete test run, i.e. results for all test suites *)
+FUNCTION_BLOCK FB_TestResults IMPLEMENTS I_TestResults
+VAR
+    (* Test results *)
+    TestSuiteResults : ST_TestSuiteResults;
+    (* Misc variables *)
+    StoringTestSuiteResultNumber : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+    StoringTestSuiteTrigger : R_TRIG;
+    StoredTestSuiteResults : BOOL;
+    StoredGeneralTestResults : BOOL;
+END_VAR
+VAR_TEMP
+    TestSuiteName : T_MaxString;
+    TestName : T_MaxString;
+    TestsInTestSuiteCounter : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+    TestToBeStored : FB_Test;
+    GeneralTestResultsTestSuitesCounter : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+END_VAR

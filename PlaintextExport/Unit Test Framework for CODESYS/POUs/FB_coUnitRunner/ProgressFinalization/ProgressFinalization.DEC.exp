@@ -1,0 +1,4 @@
+METHOD INTERNAL ProgressFinalization
+VAR
+	_sealedDisposition : E_CoUnitRunDisposition;
+END_VAR

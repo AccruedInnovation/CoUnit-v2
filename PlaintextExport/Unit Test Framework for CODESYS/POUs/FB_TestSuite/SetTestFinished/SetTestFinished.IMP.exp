@@ -1,0 +1,8 @@
+SetTestFinished := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := FALSE, TestIndex => _unused, Execute => _execute) THEN RETURN; END_IF
+_index := FindTest(Name := TestName);
+IF _index = 0 THEN
+	GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Named finish test was not registered');
+	RETURN;
+END_IF
+SetTestFinished := FinishIndex(Index := _index);

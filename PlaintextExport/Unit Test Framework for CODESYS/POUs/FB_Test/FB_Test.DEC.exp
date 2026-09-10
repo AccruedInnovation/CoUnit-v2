@@ -1,0 +1,15 @@
+(*
+    This function block holds all data that defines a test.
+*)
+FUNCTION_BLOCK FB_Test
+VAR
+    TestName : T_MaxString;
+    TestIsFinished : BOOL;
+    TestIsSkipped : BOOL; // This is set to true, if test is disabled (by putting the string "disabled_" in front of the test name
+    NumberOfAssertions : UINT;
+    TestOrderNumber : UINT;
+    (* Failure parameters. If TestIsFailed is TRUE, the other parameters will hold values as well *)
+    TestIsFailed : BOOL; // Indication of whether this test has at least one failed assert
+    AssertionMessage : T_MaxString; // Assertion message for the first assertion in this test
+    AssertionType : E_AssertionType; // Assertion type for the first assertion in this test
+END_VAR

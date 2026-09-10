@@ -1,0 +1,5 @@
+METHOD PRIVATE Attribute : BOOL
+VAR_INPUT
+	Name : T_MaxString;
+	Value : T_MaxString;
+END_VAR

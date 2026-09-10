@@ -1,0 +1,5 @@
+TotalAsserts := TotalAsserts + 1;
+AssertResults[TotalAsserts].Expected := F_AnyToUnionValue(AnySize := ExpectedSize, AnyTypeClass := ExpectedTypeClass, AnyValue := ExpectedValue);
+AssertResults[TotalAsserts].Actual := F_AnyToUnionValue(AnySize := ActualSize, AnyTypeClass := ActualTypeClass, AnyValue := ActualValue);
+AssertResults[TotalAsserts].Message := Message;
+AssertResults[TotalAsserts].TestInstancePath := TestInstancePath;

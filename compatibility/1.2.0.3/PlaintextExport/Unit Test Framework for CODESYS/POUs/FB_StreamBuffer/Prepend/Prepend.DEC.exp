@@ -1,0 +1,2 @@
+// Prepends a string to the buffer
+PROPERTY Prepend : T_MaxString

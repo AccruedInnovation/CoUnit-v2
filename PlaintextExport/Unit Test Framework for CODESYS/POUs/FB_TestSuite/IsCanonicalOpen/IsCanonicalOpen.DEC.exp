@@ -1,0 +1,4 @@
+METHOD INTERNAL IsCanonicalOpen : BOOL
+VAR_INPUT
+	Index : UINT;
+END_VAR

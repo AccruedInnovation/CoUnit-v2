@@ -1,0 +1,13 @@
+METHOD INTERNAL BeginTest : BOOL
+VAR_INPUT
+	Name : T_MaxString;
+	Ordered : BOOL;
+END_VAR
+VAR
+	_index : UINT;
+	_unused : UINT;
+	_execute : BOOL;
+	_canonical : T_MaxString;
+	_disabled : BOOL;
+	_epoch : ULINT;
+END_VAR

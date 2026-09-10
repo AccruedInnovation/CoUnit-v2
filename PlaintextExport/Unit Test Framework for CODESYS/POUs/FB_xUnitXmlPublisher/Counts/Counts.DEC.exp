@@ -1,0 +1,7 @@
+METHOD PRIVATE Counts : BOOL
+VAR_INPUT
+	Total : UDINT;
+	Failed : UDINT;
+	Errors : UDINT;
+	Skipped : UDINT;
+END_VAR

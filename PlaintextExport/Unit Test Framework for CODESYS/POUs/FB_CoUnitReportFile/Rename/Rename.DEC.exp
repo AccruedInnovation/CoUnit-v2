@@ -1,0 +1,8 @@
+METHOD PUBLIC Rename : BOOL
+VAR_INPUT
+	OldPath : T_MaxString;
+	NewPath : T_MaxString;
+END_VAR
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+END_VAR

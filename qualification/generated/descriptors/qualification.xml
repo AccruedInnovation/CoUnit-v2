@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit descriptor negative matrix" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="GuardIntact">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="CasePassed">
+              <type>
+                <array>
+                  <dimension lower="1" upper="10" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="ObservedPassed">
+              <type>
+                <array>
+                  <dimension lower="1" upper="10" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="ObservedArgumentError">
+              <type>
+                <array>
+                  <dimension lower="1" upper="10" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_underTest">
+              <type>
+                <derived name="FB_TestSuite" />
+              </type>
+            </variable>
+            <variable name="_bytes">
+              <type>
+                <array>
+                  <dimension lower="0" upper="6" />
+                  <baseType>
+                    <BYTE />
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <simpleValue value="[16#AA, 65, 66, 67, 68, 0, 16#BB]" />
+              </initialValue>
+            </variable>
+            <variable name="_comparison">
+              <type>
+                <derived name="ST_CoUnitComparisonResult" />
+              </type>
+            </variable>
+            <variable name="_i">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT Done THEN
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 1, ActualSize := 1, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE));
+	ObservedPassed[1] := _comparison.Passed;
+	ObservedArgumentError[1] := _comparison.ArgumentError;
+	CasePassed[1] := (_comparison.Passed = TRUE) AND (_comparison.ArgumentError = FALSE);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := 0, ActualData := ADR(_bytes[1]), ExpectedSize := 1, ActualSize := 1, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE));
+	ObservedPassed[2] := _comparison.Passed;
+	ObservedArgumentError[2] := _comparison.ArgumentError;
+	CasePassed[2] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[2] := CasePassed[2] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := -1, ActualSize := 1, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE));
+	ObservedPassed[3] := _comparison.Passed;
+	ObservedArgumentError[3] := _comparison.ArgumentError;
+	CasePassed[3] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[3] := CasePassed[3] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 1, ActualSize := 1, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_DINT), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_DINT));
+	ObservedPassed[4] := _comparison.Passed;
+	ObservedArgumentError[4] := _comparison.ArgumentError;
+	CasePassed[4] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[4] := CasePassed[4] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 3, ActualSize := 3, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING));
+	ObservedPassed[5] := _comparison.Passed;
+	ObservedArgumentError[5] := _comparison.ArgumentError;
+	CasePassed[5] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[5] := CasePassed[5] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 4, ActualSize := 4, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_STRING), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_STRING));
+	ObservedPassed[6] := _comparison.Passed;
+	ObservedArgumentError[6] := _comparison.ArgumentError;
+	CasePassed[6] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[6] := CasePassed[6] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 0, ActualSize := 0, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_USERDEF), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_USERDEF));
+	ObservedPassed[7] := _comparison.Passed;
+	ObservedArgumentError[7] := _comparison.ArgumentError;
+	CasePassed[7] := (_comparison.Passed = TRUE) AND (_comparison.ArgumentError = FALSE);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 5, ActualSize := 5, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_STRING), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_STRING));
+	ObservedPassed[8] := _comparison.Passed;
+	ObservedArgumentError[8] := _comparison.ArgumentError;
+	CasePassed[8] := (_comparison.Passed = TRUE) AND (_comparison.ArgumentError = FALSE);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 1, ActualSize := 1, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_BYTE), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WORD));
+	ObservedPassed[9] := _comparison.Passed;
+	ObservedArgumentError[9] := _comparison.ArgumentError;
+	CasePassed[9] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = FALSE);
+	_comparison := _underTest.CompareAnyForQualification(ExpectedData := ADR(_bytes[1]), ActualData := ADR(_bytes[1]), ExpectedSize := 4, ActualSize := 4, ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING));
+	ObservedPassed[10] := _comparison.Passed;
+	ObservedArgumentError[10] := _comparison.ArgumentError;
+	CasePassed[10] := (_comparison.Passed = FALSE) AND (_comparison.ArgumentError = TRUE);
+	CasePassed[10] := CasePassed[10] AND (LEN(_comparison.DiagnosticSuffix) &gt; 0);
+	GuardIntact := (_bytes[0] = 16#AA) AND (_bytes[1] = 65) AND (_bytes[2] = 66) AND (_bytes[3] = 67) AND (_bytes[4] = 68) AND (_bytes[5] = 0) AND (_bytes[6] = 16#BB);
+	OraclePass := GuardIntact;
+	FOR _i := 1 TO 10 DO OraclePass := OraclePass AND CasePassed[_i]; END_FOR
+	Done := TRUE;
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	GuardIntact : BOOL;
+	CasePassed : ARRAY[1..10] OF BOOL;
+	ObservedPassed : ARRAY[1..10] OF BOOL;
+	ObservedArgumentError : ARRAY[1..10] OF BOOL;
+END_VAR
+VAR
+	_underTest : FB_TestSuite;
+	_bytes : ARRAY[0..6] OF BYTE := [16#AA, 65, 66, 67, 68, 0, 16#BB];
+	_comparison : ST_CoUnitComparisonResult;
+	_i : UINT;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

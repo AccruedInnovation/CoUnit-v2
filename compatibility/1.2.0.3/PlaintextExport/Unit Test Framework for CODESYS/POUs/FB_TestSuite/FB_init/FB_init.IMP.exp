@@ -1,0 +1,2 @@
+GVL_coUnit.NumberOfInitializedTestSuites := GVL_coUnit.NumberOfInitializedTestSuites + 1;
+GVL_coUnit.TestSuiteAddresses[GVL_coUnit.NumberOfInitializedTestSuites] := THIS;

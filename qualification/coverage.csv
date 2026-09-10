@@ -1,0 +1,41 @@
+id,fixture_or_action,independent_oracle,status,remaining_native_observation,evidence_in_native_archive
+VER-COU-001,suites_max;suites_overflow,32 committed registrations and 33rd rejected with framework error,PASS,None for qualified Windows-1252 simulator row,suites_max-run2.json;suites_overflow-run2.json
+VER-COU-002,tests_max;tests_overflow,2048 committed named records and no extra record,PASS,None for qualified Windows-1252 simulator row,tests_max-run2.json;tests_overflow-run2.json
+VER-COU-003,assertions_max;assertions_overflow,2048 count preserved and overflow terminal ERROR,PASS,None for qualified Windows-1252 simulator row,assertions_max-run2.json;assertions_overflow-run3.json
+VER-COU-004,zero;multiscan;suites_max,Finite COMPLETE and exact independent inventory,PASS,None for qualified Windows-1252 simulator row,zero-run1.json;multiscan-run2.json;suites_max-run2.json
+VER-COU-005,sequence;aggregate_65536,Finite final suite and exact counts,PASS,None for qualified Windows-1252 simulator row,sequence-run2.json;lifecycle-trace2.json;aggregate_65536-run2.json
+VER-COU-006,ordered,First/middle/last skips terminal and later enabled cases pass,PASS,None for qualified Windows-1252 simulator row,ordered-run2.json;lifecycle-trace2.json
+VER-COU-007,names,NamedB terminal with zero assertions and NamedA retains two,PASS,None for qualified Windows-1252 simulator row,names-run2.json
+VER-COU-008,multiscan,10000 invocations final failure with count1,PASS,None for qualified Windows-1252 simulator row,multiscan-run2.json
+VER-COU-009,families,44 exact canonical assertion family enum expectations,PASS,None for qualified Windows-1252 simulator row,families-run3.json
+VER-COU-010,values StringThenReal,First STRING failure retained while later REAL call executes without exception,PASS,None for qualified Windows-1252 simulator row,values-run2.json
+VER-COU-011,values,REAL/LREAL raw-bit finite NaN infinity and bad delta matrix,PASS,None for qualified Windows-1252 simulator row,values-run2.json
+VER-COU-012,values;descriptors,280-byte/code-unit equal strings plus null negative wrong-size odd-size unterminated bounds,PASS,None for qualified Windows-1252 simulator row,values-run2.json;descriptors-special1.json
+VER-COU-013,values,Equal/different same-layout two-UDINT representation,PASS,None for qualified Windows-1252 simulator row,values-run2.json
+VER-COU-014,multiscan,First failure type/message and count remain coherent,PASS,None for qualified Windows-1252 simulator row,multiscan-run2.json
+VER-COU-015,reporting;aggregate_65536;multiscan;abort,Independent mixed terminal counts and full 65536 aggregate,PASS,None for qualified Windows-1252 simulator row,aggregate_65536-run2.json;aggregate_65536_failed-run3.json;publication-normal-3-check.json;abort-run2.json
+VER-COU-016,multiscan;families;aggregate_65536,Zero/one/three and branch maximum counts,PASS,None for qualified Windows-1252 simulator row,multiscan-run2.json;aggregate_65536-run2.json
+VER-COU-017,device_log,Exact plain first-only substitution 498-byte full suffix and bounded UTF8 chunks,PASS,None for qualified Windows-1252 simulator row,device-log-native5.json;device-log-capture.json
+VER-COU-018,LogExtendedResults TRUE/FALSE variants,Only optional verbosity differs with identical final truth,PASS,None for qualified Windows-1252 simulator row,verbosity-pair-check.json
+VER-COU-019,reporting plus raw-byte encoding inputs;utf8_diagnostic,Independent parser logical Unicode and exact truncation bytes,PASS,None for qualified Windows-1252 simulator row,utf8_diagnostic-special1.json;utf8-diagnostic-capture.json;edge-cp1252-1/run-evidence.json;edge-utf8-1/run-evidence.json
+VER-COU-020,reporting ChunkLimit64;aggregate_65536,Complete XML larger than chunk and exact independent inventory,PASS,None for qualified Windows-1252 simulator row,publication-normal-3-check.json;aggregate_65536-run2.json
+VER-COU-021,reporting fault operation occurrence matrix,FAILED before commit with prior current preserved and unchanged test truth,PASS,None for qualified Windows-1252 simulator row,publication-write-2-check.json;publication-flush-not-supported-2-check.json;publication-flush-not-implemented-2-check.json
+VER-COU-022,cross_task,Foreign name absent and owner final FRAMEWORK_ERROR with original record,PASS,None for qualified Windows-1252 simulator row,cross_task-run3.json
+VER-COU-023,check_public_api.py plus existing consumer,60 declarations plus exact unchanged consumer native compile,PASS,None for qualified Windows-1252 simulator row,consumer-native6.json;reports/consumer-6.xml
+VER-COU-024,All mapped native shards,All applicable inherited defects stay fixed,PASS,None for qualified Windows-1252 simulator row,final-source-build.json
+VER-COU-025,check_runtime_matrix.py,All ten required statuses and exact bindings for SUPPORTED,PASS,None for qualified Windows-1252 simulator row,host-environment.json;probe.json;aggregate_65536-run2.json
+VER-COU-026,mode_switch,Framework error preserves open test as ERROR with count1,PASS,None for qualified Windows-1252 simulator row,mode_switch-run2.json
+VER-COU-027,task_lookup;initial_lookup;platform_helpers,Prebind failures preserve IDLE epoch0 and one diagnostic; helpers recover,PASS,None for qualified Windows-1252 simulator row,initial_lookup-observed1.json;task_lookup-run2.json;platform_helpers-special1.json
+VER-COU-028,names;ordered,Whitespace and case-insensitive disabled prefix canonicalized; duplicate suppressed,PASS,None for qualified Windows-1252 simulator row,names-log-True.json;names-run2.json
+VER-COU-029,abort;mode_switch;task_lookup;snapshot_failure;seal_violation,Open tests terminalize truthfully; late seal violation preserves terminal truth and aligns dispositions,PASS,None for qualified Windows-1252 simulator row,abort-run2.json;mode_switch-run2.json;snapshot_failure-observed1.json;seal_violation-observed1.json
+VER-COU-030,Restart multiscan application while open,Fresh IDLE and restarted counters; no old final truth,PASS,None for qualified Windows-1252 simulator row,lifecycle-hold1.json;lifecycle-reset1.json
+VER-COU-031,reporting pauses6/7/8 and currentness faults,Prior complete report or absent final; stale stage never current,PASS,None for qualified Windows-1252 simulator row,edge-pause6-1/recovered-complete-evidence.json;edge-pause7-1/recovered-complete-evidence.json;edge-pause8-1/recovered-complete-evidence.json
+VER-COU-032,multiscan,Branch B becomes first failure at same ordinal and final count1,PASS,None for qualified Windows-1252 simulator row,multiscan-run2.json
+SCN-COU-001,integrated,Two suites with delayed pass repeated changing failure and disabled case,PASS,None for qualified Windows-1252 simulator row,integrated-run2.json
+SCN-COU-002,ordered,Disabled middle and edge tests never block successors,PASS,None for qualified Windows-1252 simulator row,ordered-run2.json
+SCN-COU-003,sequence,Three suites finish in registration order with only inter-suite delay,PASS,None for qualified Windows-1252 simulator row,lifecycle-trace2.json
+SCN-COU-004,reporting precommit fault,Completed test truth preserved and report FAILED,PASS,None for qualified Windows-1252 simulator row,publication-write-2-check.json
+SCN-COU-005,multiscan,Branch-changing ordinal1 failure and companion first-failure coherence,PASS,None for qualified Windows-1252 simulator row,multiscan-run2.json
+SCN-COU-006,reporting pauses/faults,Partial stage never current and next run recovers,PASS,None for qualified Windows-1252 simulator row,edge-pause6-1/recovered-complete-evidence.json;edge-pause7-1/recovered-complete-evidence.json;edge-pause8-1/recovered-complete-evidence.json
+SCN-COU-007,multiscan restart,New IDLE run with no old suite/test/assertion state,PASS,None for qualified Windows-1252 simulator row,lifecycle-hold1.json;lifecycle-reset1.json
+SCN-COU-008,capacity shards plus cross_task,All capacity and foreign-task failures contained,PASS,None for qualified Windows-1252 simulator row,suites_overflow-run2.json;tests_overflow-run2.json;assertions_overflow-run3.json;cross_task-run3.json

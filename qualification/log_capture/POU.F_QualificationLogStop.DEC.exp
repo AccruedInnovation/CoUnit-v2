@@ -1,0 +1,10 @@
+(* TEST ONLY: unregister before closing; failed cleanup stays visible and retryable. *)
+FUNCTION F_QualificationLogStop : BOOL
+VAR
+	_entry : UINT;
+	_byteIndex : UINT;
+	_digits : STRING(16) := '0123456789abcdef';
+	_hex : POINTER TO BYTE;
+	_dest : POINTER TO BYTE;
+	_value : BYTE;
+END_VAR

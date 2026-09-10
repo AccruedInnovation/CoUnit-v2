@@ -1,0 +1,1 @@
+GVL_coUnit.coUnitRunner.RunTestSuiteTestsInSequence(TimeBetweenTestSuitesExecution := GVL_Param_coUnit.TimeBetweenTestSuitesExecution);

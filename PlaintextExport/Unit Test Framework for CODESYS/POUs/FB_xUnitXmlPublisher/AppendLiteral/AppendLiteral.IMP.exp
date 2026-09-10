@@ -1,0 +1,6 @@
+_p := ADR(Value);
+FOR _i := 0 TO 255 DO
+	IF _p[_i] = 0 THEN AppendLiteral := TRUE; RETURN; END_IF
+	IF _i = 255 THEN Fail('unterminated literal'); RETURN; END_IF
+	IF NOT AppendByte(_p[_i]) THEN RETURN; END_IF
+END_FOR

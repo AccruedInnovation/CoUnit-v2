@@ -1,0 +1,35 @@
+IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+_shapeMatches := TRUE;
+_expectedLower[1] := LOWER_BOUND(Expecteds, 1);
+_actualLower[1] := LOWER_BOUND(Actuals, 1);
+_extent[1] := DINT_TO_LINT(UPPER_BOUND(Expecteds, 1)) - DINT_TO_LINT(_expectedLower[1]) + 1;
+_actualExtent[1] := DINT_TO_LINT(UPPER_BOUND(Actuals, 1)) - DINT_TO_LINT(_actualLower[1]) + 1;
+IF _extent[1] <> _actualExtent[1] THEN _shapeMatches := FALSE; END_IF
+IF NOT _shapeMatches THEN
+	_result.ExpectedText := 'extents=';
+	_result.ActualText := 'extents=';
+	_result.ExpectedText := CONCAT(_result.ExpectedText, LINT_TO_STRING(_extent[1]));
+	_result.ActualText := CONCAT(_result.ActualText, LINT_TO_STRING(_actualExtent[1]));
+ELSE
+	_result.Passed := TRUE;
+	_offset[1] := 0;
+	WHILE _offset[1] < _extent[1] DO
+		_elementEqual := Expecteds[LINT_TO_DINT(DINT_TO_LINT(_expectedLower[1]) + _offset[1])] = Actuals[LINT_TO_DINT(DINT_TO_LINT(_actualLower[1]) + _offset[1])];
+		IF NOT _elementEqual THEN
+			_result.Passed := FALSE;
+			_result.ExpectedText := BOOL_TO_STRING(Expecteds[LINT_TO_DINT(DINT_TO_LINT(_expectedLower[1]) + _offset[1])]);
+			_result.ActualText := BOOL_TO_STRING(Actuals[LINT_TO_DINT(DINT_TO_LINT(_actualLower[1]) + _offset[1])]);
+			_result.DiagnosticSuffix := 'First mismatch at logical offset=';
+			_result.DiagnosticSuffix := CONCAT(_result.DiagnosticSuffix, LINT_TO_STRING(_offset[1]));
+			EXIT;
+		END_IF
+		IF NOT _result.Passed THEN EXIT; END_IF
+		_offset[1] := _offset[1] + 1;
+	END_WHILE
+END_IF
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_Array_BOOL, Message := Message, Comparison := _result);

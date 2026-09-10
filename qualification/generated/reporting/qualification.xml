@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit publication qualification" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <inputVars>
+            <variable name="Path">
+              <type>
+                <derived name="T_MaxString" />
+              </type>
+              <initialValue>
+                <simpleValue value="'counit_qualification/report.xml'" />
+              </initialValue>
+            </variable>
+            <variable name="TextMode">
+              <type>
+                <derived name="E_CoUnitTextMode" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitTextMode.UNKNOWN" />
+              </initialValue>
+            </variable>
+            <variable name="ChunkLimit">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="64" />
+              </initialValue>
+            </variable>
+            <variable name="FaultOperation">
+              <type>
+                <derived name="E_CoUnitFileOperation" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFileOperation.NONE" />
+              </initialValue>
+            </variable>
+            <variable name="FaultOccurrence">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="FaultOccurrence2">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="FaultError">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="16#FFFF0001" />
+              </initialValue>
+            </variable>
+            <variable name="ShortWrite">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="PauseAfterPhase">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="ExpectedState">
+              <type>
+                <derived name="E_CoUnitReportState" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitReportState.WRITTEN" />
+              </initialValue>
+            </variable>
+            <variable name="ReleasePause">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SuiteName">
+              <type>
+                <derived name="T_MaxString" />
+              </type>
+              <initialValue>
+                <simpleValue value="'Suite &amp; &lt;A&gt;'" />
+              </initialValue>
+            </variable>
+            <variable name="FailureMessage">
+              <type>
+                <derived name="T_MaxString" />
+              </type>
+              <initialValue>
+                <simpleValue value="'expected &lt;3 &amp; 4&gt; but got &quot;5&quot;'" />
+              </initialValue>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Configured">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Phase">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="FileEffects">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="LastFileError">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="ReportState">
+              <type>
+                <derived name="E_CoUnitReportState" />
+              </type>
+            </variable>
+            <variable name="SnapshotBytes">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_snapshot">
+              <type>
+                <derived name="ST_CoUnitRunSnapshot" />
+              </type>
+            </variable>
+            <variable name="_results">
+              <type>
+                <derived name="FB_TestResults" />
+              </type>
+            </variable>
+            <variable name="_publisher">
+              <type>
+                <derived name="FB_xUnitXmlPublisher(_results)" />
+              </type>
+            </variable>
+            <variable name="_result">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Init">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+IF NOT Init THEN
+	_snapshot.Disposition := E_CoUnitRunDisposition.NORMAL;
+	_snapshot.SuiteCount := 1;
+	_snapshot.Total := 4;
+	_snapshot.Passed := 1;
+	_snapshot.Failed := 1;
+	_snapshot.Skipped := 1;
+	_snapshot.Errors := 1;
+	_snapshot.Suites[1].Name := SuiteName;
+	_snapshot.Suites[1].Identity := 0;
+	_snapshot.Suites[1].Total := 4;
+	_snapshot.Suites[1].Passed := 1;
+	_snapshot.Suites[1].Failed := 1;
+	_snapshot.Suites[1].Skipped := 1;
+	_snapshot.Suites[1].Errors := 1;
+	_snapshot.Suites[1].Tests[1].Name := 'Pass "quoted"';
+	_snapshot.Suites[1].Tests[1].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[1].State := E_CoUnitTestState.PASSED;
+	_snapshot.Suites[1].Tests[1].NumberOfAsserts := 2;
+	_snapshot.Suites[1].Tests[2].Name := 'Fail &amp; compare';
+	_snapshot.Suites[1].Tests[2].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[2].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[2].NumberOfAsserts := 3;
+	_snapshot.Suites[1].Tests[2].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType := E_AssertionType.Type_DINT;
+	_snapshot.Suites[1].Tests[2].FirstFailure.Message := FailureMessage;
+	_snapshot.Suites[1].Tests[3].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[3].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.SKIPPED;
+	_snapshot.Suites[1].Tests[4].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[4].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.ERROR;
+	_snapshot.IsValid := TRUE;
+	Configured := _publisher.ConfigureTest(Path := Path, Enabled := TRUE, ChunkLimit := ChunkLimit, TextMode := TextMode, FaultOperation := FaultOperation, FaultOccurrence := FaultOccurrence, FaultOccurrence2 := FaultOccurrence2, FaultError := FaultError, ShortWrite := ShortWrite, PauseAfterPhase := PauseAfterPhase);
+	Init := TRUE;
+END_IF
+IF ReleasePause THEN _result := _publisher.Resume(); END_IF
+_result := _publisher.ServiceSnapshot(Snapshot := _snapshot);
+Phase := _publisher.GetPhase();
+ReportState := _publisher.GetReportState();
+FileEffects := _publisher.GetFileEffectCount();
+LastFileError := _publisher.GetLastFileError();
+Done := (ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED);
+OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (_snapshot.Total = 4) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 1) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1);
+</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_INPUT
+	Path : T_MaxString := 'counit_qualification/report.xml';
+	TextMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
+	ChunkLimit : UDINT := 64;
+	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	FaultOccurrence : UDINT := 0;
+	FaultOccurrence2 : UDINT := 0;
+	FaultError : UDINT := 16#FFFF0001;
+	ShortWrite : BOOL;
+	PauseAfterPhase : UINT;
+	ExpectedState : E_CoUnitReportState := E_CoUnitReportState.WRITTEN;
+	ReleasePause : BOOL;
+	SuiteName : T_MaxString := 'Suite &amp; &lt;A&gt;';
+	FailureMessage : T_MaxString := 'expected &lt;3 &amp; 4&gt; but got "5"';
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	Configured : BOOL;
+	Phase : UINT;
+	FileEffects : UDINT;
+	LastFileError : UDINT;
+	ReportState : E_CoUnitReportState;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	_snapshot : ST_CoUnitRunSnapshot;
+	_results : FB_TestResults;
+	_publisher : FB_xUnitXmlPublisher(_results);
+	_result : BOOL;
+	Init : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

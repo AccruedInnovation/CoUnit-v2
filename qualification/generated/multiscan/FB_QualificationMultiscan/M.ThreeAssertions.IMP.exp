@@ -1,0 +1,7 @@
+TEST('ThreeAssertions');
+IF NOT IS_TEST_FINISHED('ThreeAssertions') THEN
+	AssertTrue(Condition := TRUE, Message := 'one');
+	AssertTrue(Condition := TRUE, Message := 'two');
+	AssertTrue(Condition := TRUE, Message := 'three');
+	TEST_FINISHED();
+END_IF

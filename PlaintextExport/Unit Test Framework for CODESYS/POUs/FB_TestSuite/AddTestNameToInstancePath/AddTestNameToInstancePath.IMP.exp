@@ -1,0 +1,3 @@
+AddTestNameToInstancePath := TestInstancePath;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => _index, Execute => _execute) THEN RETURN; END_IF
+AddTestNameToInstancePath := CONCAT(CONCAT(TestInstancePath, '@'), TestRecords[_index].CanonicalName);

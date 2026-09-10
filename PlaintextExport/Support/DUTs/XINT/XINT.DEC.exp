@@ -1,0 +1,2 @@
+TYPE XINT : DINT; // x64 => 64 bit signed integer
+END_TYPE

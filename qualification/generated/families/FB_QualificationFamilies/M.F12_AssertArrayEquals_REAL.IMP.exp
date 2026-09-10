@@ -1,0 +1,7 @@
+TEST('F12_AssertArrayEquals_REAL');
+IF NOT IS_TEST_FINISHED('F12_AssertArrayEquals_REAL') THEN
+	_v12e[1] := 1;
+	_v12a[1] := 2;
+	AssertArrayEquals_REAL(Expecteds := _v12e, Actuals := _v12a, Delta := 0.0, Message := 'F12_AssertArrayEquals_REAL');
+	TEST_FINISHED();
+END_IF

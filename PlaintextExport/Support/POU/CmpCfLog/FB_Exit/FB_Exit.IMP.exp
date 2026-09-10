@@ -1,0 +1,4 @@
+CMRemoveComponent(hCmp);
+CmpLog.LogClose(hStdLogger);
+CmpLog.LogDelete(hStdLogger);
+FB_exit := TRUE;

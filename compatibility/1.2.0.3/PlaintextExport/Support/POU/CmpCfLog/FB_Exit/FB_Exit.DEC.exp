@@ -1,0 +1,4 @@
+METHOD FB_Exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)	
+END_VAR

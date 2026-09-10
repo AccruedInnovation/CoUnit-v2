@@ -1,0 +1,73 @@
+(* Asserts that two INT arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expecteds – INT array with expected values
+     | Actuals – INT array with actual values
+     | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[-5..1] OF INT := [64, 98, -32768, 32767, 5478, -378, 42];
+         b : ARRAY[1..7] OF INT := [64, 98, -32768, 32767, 5478, -378, 42];
+     END_VAR
+ 
+     TEST('Test_INT_Array_Equals');
+     AssertArrayEquals_INT(Expecteds := a,
+                           Actuals := b,
+                           Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[-4..3] OF INT := [64, 98, -32768, 32767, 5478, -378, 42, 6234];
+         b : ARRAY[1..5] OF INT := [64, 98, -32768, 32767, 5478];
+     END_VAR
+ 
+     TEST('Test_INT_Array_DifferInSize');
+     AssertArrayEquals_INT(Expecteds := a,
+                           Actuals := b,
+                           Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[-8..-6] OF INT := [42, -23, -32768];
+         b : ARRAY[1..3] OF INT := [42, 24, -32768];
+     END_VAR
+ 
+     TEST('Test_INT_Array_DifferInContent');
+     AssertArrayEquals_INT(Expecteds := a,
+                           Actuals := b,
+                           Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_INT
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF INT; // INT array with expected values
+    Actuals : ARRAY[*] OF INT; // INT array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

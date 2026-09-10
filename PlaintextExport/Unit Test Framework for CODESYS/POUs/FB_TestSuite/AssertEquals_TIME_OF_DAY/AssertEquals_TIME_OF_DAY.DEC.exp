@@ -1,0 +1,11 @@
+METHOD PUBLIC AssertEquals_TIME_OF_DAY
+VAR_INPUT
+	Expected : TIME_OF_DAY;
+	Actual : TIME_OF_DAY;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

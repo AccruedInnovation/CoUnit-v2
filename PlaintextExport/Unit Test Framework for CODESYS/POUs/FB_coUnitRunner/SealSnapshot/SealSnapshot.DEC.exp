@@ -1,0 +1,7 @@
+METHOD INTERNAL SealSnapshot : BOOL
+VAR_OUTPUT
+	Disposition : E_CoUnitRunDisposition;
+END_VAR
+VAR
+	_previous : DWORD;
+END_VAR

@@ -1,0 +1,8 @@
+TYPE ST_AssertResult :
+STRUCT
+    Expected : U_ExpectedOrActual;
+    Actual : U_ExpectedOrActual;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_STRUCT
+END_TYPE

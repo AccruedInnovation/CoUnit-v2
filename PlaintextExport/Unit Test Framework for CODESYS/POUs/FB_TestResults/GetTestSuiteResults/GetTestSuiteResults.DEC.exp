@@ -1,0 +1,1 @@
+METHOD PUBLIC GetTestSuiteResults : REFERENCE TO ST_TestSuiteResults

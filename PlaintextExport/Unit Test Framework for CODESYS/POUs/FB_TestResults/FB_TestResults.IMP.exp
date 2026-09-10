@@ -1,0 +1,1 @@
+(* Finalization is explicit through BuildSnapshot; scans do not mutate final results. *)

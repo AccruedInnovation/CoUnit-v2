@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "native_version": "2.0.0.0",
+  "candidate_revision": "dc1097f4069433efb9ed3cae4833dac51367e0ec + CoUnit 2.0.0 working tree",
+  "candidate_hash": "38d5f2acf0f9671f0e63d21cdec4f8fd64612d6b80fdabafa58fdc86510db9ef",
+  "hash_subject": "counit_2.0.0.library (SHA-256)",
+  "source_sections": 599,
+  "source_binding": "restoration.json: exact normalized DEC/IMP read-back before closing candidate",
+  "environment": "Windows 11 x64 local CODESYS simulator; Windows-1252 STRING compiler mode",
+  "accepted_consumer": "consumer-native6.json; reports/consumer-6.xml",
+  "qualification_date": "2026-09-10",
+  "native_utf8_compiler_row": "UNQUALIFIED"
+}

@@ -1,0 +1,7 @@
+TEST('F11_AssertArrayEquals_LWORD');
+IF NOT IS_TEST_FINISHED('F11_AssertArrayEquals_LWORD') THEN
+	_v11e[1] := 1;
+	_v11a[1] := 2;
+	AssertArrayEquals_LWORD(Expecteds := _v11e, Actuals := _v11a, Message := 'F11_AssertArrayEquals_LWORD');
+	TEST_FINISHED();
+END_IF

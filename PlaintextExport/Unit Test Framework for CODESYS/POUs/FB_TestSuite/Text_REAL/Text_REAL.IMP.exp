@@ -1,0 +1,8 @@
+MEMCPY(destAddr := ADR(_bits), srcAddr := ADR(Value), n := SIZEOF(REAL));
+IF (_bits AND DWORD#16#7F800000) = DWORD#16#7F800000 THEN
+	IF (_bits AND DWORD#16#007FFFFF) <> 0 THEN Text_REAL := 'NaN';
+	ELSIF (_bits AND DWORD#16#80000000) <> 0 THEN Text_REAL := '-Infinity';
+	ELSE Text_REAL := '+Infinity'; END_IF
+ELSE
+	Text_REAL := REAL_TO_STRING(Value);
+END_IF

@@ -1,0 +1,11 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_XmlError :
+(
+    Ok := 0,
+    ErrorMaxBufferLen := 1,
+    ErrorStringLen := 2,
+    Error := 3
+) BYTE;
+END_TYPE

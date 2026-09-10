@@ -1,0 +1,11 @@
+METHOD PUBLIC AssertEquals_DWORD
+VAR_INPUT
+	Expected : DWORD;
+	Actual : DWORD;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

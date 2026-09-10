@@ -1,0 +1,18 @@
+(* Limit the test analyse to the max array limit of 'Tests[]' *)
+IF NumberOfTests > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+    NumberOfTestsToAnalyse := GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite;
+ELSE
+    NumberOfTestsToAnalyse := NumberOfTests;
+END_IF
+
+IF NumberOfTests > 0 THEN
+    FOR IteratorCounter := 1 TO NumberOfTests BY 1 DO
+        IF Tests[IteratorCounter].GetName() = TestName THEN
+            Tests[IteratorCounter].SetFinished();
+            SetTestFinished := TRUE;
+            RETURN;
+        END_IF
+
+        SetTestFinished := FALSE;
+    END_FOR
+END_IF

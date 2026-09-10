@@ -1,0 +1,559 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit supplemental lifecycle trace" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_LifecycleFirst" pouType="functionBlock">
+        <interface>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">GVL_LifecycleTrace.Visits[1] := GVL_LifecycleTrace.Visits[1] + 1;
+IF GVL_LifecycleTrace.Visits[1] = 1 THEN
+	IF GVL_LifecycleTrace.EventCount &lt; 3 THEN
+		GVL_LifecycleTrace.EventCount := GVL_LifecycleTrace.EventCount + 1;
+		GVL_LifecycleTrace.Order[GVL_LifecycleTrace.EventCount] := 1;
+	END_IF
+	GVL_LifecycleTrace.EntryMs[1] := TIME_TO_UDINT(TIME());
+	GVL_LifecycleTrace.EntryScan[1] := GVL_LifecycleTrace.Scan;
+END_IF
+TEST('First');
+TEST_FINISHED();
+GVL_LifecycleTrace.ExitMs[1] := TIME_TO_UDINT(TIME());
+GVL_LifecycleTrace.ExitScan[1] := GVL_LifecycleTrace.Scan;</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_LifecycleFirst EXTENDS FB_TestSuite</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_LifecycleDisabled" pouType="functionBlock">
+        <interface>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">GVL_LifecycleTrace.Visits[2] := GVL_LifecycleTrace.Visits[2] + 1;
+IF GVL_LifecycleTrace.Visits[2] = 1 THEN
+	IF GVL_LifecycleTrace.EventCount &lt; 3 THEN
+		GVL_LifecycleTrace.EventCount := GVL_LifecycleTrace.EventCount + 1;
+		GVL_LifecycleTrace.Order[GVL_LifecycleTrace.EventCount] := 2;
+	END_IF
+	GVL_LifecycleTrace.EntryMs[2] := TIME_TO_UDINT(TIME());
+	GVL_LifecycleTrace.EntryScan[2] := GVL_LifecycleTrace.Scan;
+END_IF
+TEST('DISABLED_Disabled');
+(* TEST suppresses assertions, not arbitrary caller statements. *)
+GVL_LifecycleTrace.DisabledBodyVisits := GVL_LifecycleTrace.DisabledBodyVisits + 1;
+GVL_LifecycleTrace.ExitMs[2] := TIME_TO_UDINT(TIME());
+GVL_LifecycleTrace.ExitScan[2] := GVL_LifecycleTrace.Scan;</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_LifecycleDisabled EXTENDS FB_TestSuite</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_LifecycleThird" pouType="functionBlock">
+        <interface>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">GVL_LifecycleTrace.Visits[3] := GVL_LifecycleTrace.Visits[3] + 1;
+IF GVL_LifecycleTrace.Visits[3] = 1 THEN
+	IF GVL_LifecycleTrace.EventCount &lt; 3 THEN
+		GVL_LifecycleTrace.EventCount := GVL_LifecycleTrace.EventCount + 1;
+		GVL_LifecycleTrace.Order[GVL_LifecycleTrace.EventCount] := 3;
+	END_IF
+	GVL_LifecycleTrace.EntryMs[3] := TIME_TO_UDINT(TIME());
+	GVL_LifecycleTrace.EntryScan[3] := GVL_LifecycleTrace.Scan;
+END_IF
+TEST('Third');
+IF GVL_LifecycleTrace.HoldThird THEN RETURN; END_IF
+TEST_FINISHED();
+GVL_LifecycleTrace.ExitMs[3] := TIME_TO_UDINT(TIME());
+GVL_LifecycleTrace.ExitScan[3] := GVL_LifecycleTrace.Scan;</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_LifecycleThird EXTENDS FB_TestSuite</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <inputVars>
+            <variable name="Start">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="FALSE" />
+              </initialValue>
+            </variable>
+            <variable name="HoldThird">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="FALSE" />
+              </initialValue>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCheck">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="SnapshotBytes">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="PrestartIdle">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="PrestartIdleObserved">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="RegistrationOrderObserved">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="BetweenSuitesObserved">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="ObservedState">
+              <type>
+                <derived name="E_CoUnitRunState" />
+              </type>
+            </variable>
+            <variable name="ObservedEpoch">
+              <type>
+                <ULINT />
+              </type>
+            </variable>
+            <variable name="ObservedSuiteCount">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="ThirdRecordCount">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="ThirdRecordState">
+              <type>
+                <derived name="E_CoUnitTestState" />
+              </type>
+            </variable>
+            <variable name="ThirdRecordAvailable">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FirstGapMs">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="SecondGapMs">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="CompletedScan">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="CompletedMs">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="FirstRunMs">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_first">
+              <type>
+                <derived name="FB_LifecycleFirst" />
+              </type>
+            </variable>
+            <variable name="_disabled">
+              <type>
+                <derived name="FB_LifecycleDisabled" />
+              </type>
+            </variable>
+            <variable name="_third">
+              <type>
+                <derived name="FB_LifecycleThird" />
+              </type>
+            </variable>
+            <variable name="_snapshot">
+              <type>
+                <derived name="REFERENCE TO ST_CoUnitRunSnapshot" />
+              </type>
+            </variable>
+            <variable name="_record">
+              <type>
+                <derived name="ST_CoUnitTestRecord" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+ObservedState := GVL_coUnit.coUnitRunner.GetRunState();
+ObservedEpoch := GVL_coUnit.coUnitRunner.GetEpoch();
+ObservedSuiteCount := GVL_coUnit.coUnitRunner.GetSuiteCount();
+ThirdRecordCount := _third.GetNumberOfTests();
+IF NOT Start THEN
+	PrestartIdle := ObservedState = E_CoUnitRunState.IDLE AND ObservedEpoch = 0 AND
+		ObservedSuiteCount = 3 AND ThirdRecordCount = 0 AND GVL_LifecycleTrace.EventCount = 0 AND
+		GVL_LifecycleTrace.DisabledBodyVisits = 0 AND GVL_LifecycleTrace.Scan = 0;
+	PrestartIdleObserved := PrestartIdleObserved OR PrestartIdle;
+	RETURN;
+END_IF
+GVL_LifecycleTrace.HoldThird := HoldThird;
+GVL_LifecycleTrace.Scan := GVL_LifecycleTrace.Scan + 1;
+IF GVL_LifecycleTrace.Scan = 1 THEN FirstRunMs := TIME_TO_UDINT(TIME()); END_IF
+(* Same internal path as RUN_IN_SEQUENCE, with explicit test delay instead of a constant override. *)
+GVL_coUnit.coUnitRunner.RunTestSuiteTestsInSequence(TimeBetweenTestSuitesExecution := T#100ms);
+ObservedState := GVL_coUnit.coUnitRunner.GetRunState();
+ObservedEpoch := GVL_coUnit.coUnitRunner.GetEpoch();
+RegistrationOrderObserved := GVL_coUnit.coUnitRunner.GetSuite(Index := 1) = ADR(_first) AND
+	GVL_coUnit.coUnitRunner.GetSuite(Index := 2) = ADR(_disabled) AND
+	GVL_coUnit.coUnitRunner.GetSuite(Index := 3) = ADR(_third);
+BetweenSuitesObserved := BetweenSuitesObserved OR ObservedState = E_CoUnitRunState.BETWEEN_SUITES;
+ThirdRecordCount := _third.GetNumberOfTests();
+ThirdRecordAvailable := _third.GetCanonicalRecord(Index := 1, Record =&gt; _record);
+IF ThirdRecordAvailable THEN ThirdRecordState := _record.State; END_IF
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF ObservedState = E_CoUnitRunState.COMPLETE AND NOT Done THEN
+	CompletedScan := GVL_LifecycleTrace.Scan;
+	CompletedMs := TIME_TO_UDINT(TIME());
+	FirstGapMs := GVL_LifecycleTrace.EntryMs[2] - GVL_LifecycleTrace.ExitMs[1];
+	SecondGapMs := GVL_LifecycleTrace.EntryMs[3] - GVL_LifecycleTrace.ExitMs[2];
+	OraclePass := TRUE;
+	IF NOT (PrestartIdleObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (RegistrationOrderObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.EventCount = 3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Order[1] = 1 AND GVL_LifecycleTrace.Order[2] = 2 AND GVL_LifecycleTrace.Order[3] = 3) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.EntryScan[1] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (FirstGapMs &gt;= 100) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (SecondGapMs &gt;= 100) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[1] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[2] = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.DisabledBodyVisits = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (GVL_LifecycleTrace.Visits[3] &gt;= 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (CompletedScan = GVL_LifecycleTrace.ExitScan[3]) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (BetweenSuitesObserved) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = 3 AND _snapshot.Passed = 2 AND _snapshot.Skipped = 1) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 16; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = 0 AND _snapshot.Errors = 0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 17; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[2].Tests[1].State = E_CoUnitTestState.SKIPPED) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 18; END_IF
+	END_IF
+	Done := TRUE;
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_INPUT
+	Start : BOOL := FALSE;
+	HoldThird : BOOL := FALSE;
+END_VAR
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+	PrestartIdle : BOOL;
+	PrestartIdleObserved : BOOL;
+	RegistrationOrderObserved : BOOL;
+	BetweenSuitesObserved : BOOL;
+	ObservedState : E_CoUnitRunState;
+	ObservedEpoch : ULINT;
+	ObservedSuiteCount : UINT;
+	ThirdRecordCount : UINT;
+	ThirdRecordState : E_CoUnitTestState;
+	ThirdRecordAvailable : BOOL;
+	FirstGapMs : UDINT;
+	SecondGapMs : UDINT;
+	CompletedScan : UDINT;
+	CompletedMs : UDINT;
+	FirstRunMs : UDINT;
+END_VAR
+VAR
+	_first : FB_LifecycleFirst;
+	_disabled : FB_LifecycleDisabled;
+	_third : FB_LifecycleThird;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	_record : ST_CoUnitTestRecord;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/globalvars" handleUnknown="implementation">
+      <globalVars name="GVL_LifecycleTrace">
+        <variable name="Scan">
+          <type>
+            <UDINT />
+          </type>
+        </variable>
+        <variable name="EventCount">
+          <type>
+            <UINT />
+          </type>
+        </variable>
+        <variable name="Order">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="EntryMs">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UDINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="ExitMs">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UDINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="EntryScan">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UDINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="ExitScan">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UDINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="Visits">
+          <type>
+            <array>
+              <dimension lower="1" upper="3" />
+              <baseType>
+                <UDINT />
+              </baseType>
+            </array>
+          </type>
+        </variable>
+        <variable name="DisabledBodyVisits">
+          <type>
+            <UDINT />
+          </type>
+        </variable>
+        <variable name="HoldThird">
+          <type>
+            <BOOL />
+          </type>
+        </variable>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+VAR_GLOBAL
+	Scan : UDINT;
+	EventCount : UINT;
+	Order : ARRAY[1..3] OF UINT;
+	EntryMs : ARRAY[1..3] OF UDINT;
+	ExitMs : ARRAY[1..3] OF UDINT;
+	EntryScan : ARRAY[1..3] OF UDINT;
+	ExitScan : ARRAY[1..3] OF UDINT;
+	Visits : ARRAY[1..3] OF UDINT;
+	DisabledBodyVisits : UDINT;
+	HoldThird : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </globalVars>
+    </data>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="LifecycleTrace">
+          <Object Name="GVL_LifecycleTrace" ObjectId="" />
+          <Object Name="FB_LifecycleFirst" ObjectId="" />
+          <Object Name="FB_LifecycleDisabled" ObjectId="" />
+          <Object Name="FB_LifecycleThird" ObjectId="" />
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

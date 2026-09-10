@@ -1,0 +1,4 @@
+{attribute 'strict'}
+{attribute 'qualified_only'}
+TYPE E_CoUnitRunState : (IDLE, RUNNING, BETWEEN_SUITES, FINALIZING, COMPLETE);
+END_TYPE

@@ -1,0 +1,15 @@
+WHILE OrderedCursor <= NumberOfOrderedTests DO
+	_found := FALSE;
+	FOR _i := 1 TO NumberOfTests DO
+		IF TestRecords[UDINT_TO_UINT(_i)].IsOrdered AND TestRecords[UDINT_TO_UINT(_i)].OrderNumber = OrderedCursor THEN
+			_found := TRUE;
+			IF TestRecords[UDINT_TO_UINT(_i)].State = E_CoUnitTestState.OPEN THEN RETURN; END_IF
+			EXIT;
+		END_IF
+	END_FOR
+	IF NOT _found THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Ordered cursor has no test record');
+		RETURN;
+	END_IF
+	OrderedCursor := OrderedCursor + 1;
+END_WHILE

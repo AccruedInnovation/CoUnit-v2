@@ -1,0 +1,48 @@
+(*
+ Asserts that two UDINTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – UDINT expected value
+     | Actual – UDINT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : UDINT := 21845123;
+         b : UDINT := 21845123;
+     END_VAR
+
+     TEST('Test_UDINT_Equals');
+     AssertEquals_UDINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : UDINT := 34124214;
+         b : UDINT := 52343244;
+     END_VAR
+
+     TEST('Test_UDINT_Differ');
+     AssertEquals_UDINT(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_UDINT
+VAR_INPUT
+    Expected : UDINT; // UDINT expected value
+    Actual : UDINT; // UDINT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

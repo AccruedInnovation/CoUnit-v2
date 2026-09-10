@@ -1,0 +1,173 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+IF NOT _guardMeasured THEN
+	GuardPass := GVL_coUnit.coUnitRunner.RejectQualificationSuite();
+	_guardMeasured := TRUE;
+END_IF
+RUN();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT Done THEN
+	OraclePass := TRUE;
+	IF NOT (_snapshot.IsValid) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 1; END_IF
+	END_IF
+	IF NOT (_snapshot.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 2; END_IF
+	END_IF
+	IF NOT (_snapshot.SuiteCount = UINT#32) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 3; END_IF
+	END_IF
+	IF NOT (_snapshot.Total = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 4; END_IF
+	END_IF
+	IF NOT (_snapshot.Passed = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 5; END_IF
+	END_IF
+	IF NOT (_snapshot.Failed = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 6; END_IF
+	END_IF
+	IF NOT (_snapshot.Skipped = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 7; END_IF
+	END_IF
+	IF NOT (_snapshot.Errors = UDINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 8; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[1].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 9; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[2].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 10; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[3].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 11; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[4].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 12; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[5].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 13; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[6].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 14; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[7].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 15; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[8].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 16; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[9].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 17; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[10].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 18; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[11].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 19; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[12].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 20; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[13].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 21; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[14].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 22; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[15].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 23; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[16].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 24; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[17].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 25; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[18].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 26; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[19].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 27; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[20].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 28; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[21].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 29; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[22].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 30; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[23].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 31; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[24].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 32; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[25].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 33; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[26].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 34; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[27].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 35; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[28].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 36; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[29].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 37; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[30].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 38; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[31].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 39; END_IF
+	END_IF
+	IF NOT (_snapshot.Suites[32].Total = UINT#0) THEN
+		OraclePass := FALSE;
+		IF FailedCheck = 0 THEN FailedCheck := 40; END_IF
+	END_IF
+	Done := TRUE;
+END_IF
+
+IF Done THEN OraclePass := OraclePass AND GuardPass; END_IF

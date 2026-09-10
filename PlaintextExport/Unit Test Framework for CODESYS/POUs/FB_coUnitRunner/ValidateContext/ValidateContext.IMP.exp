@@ -1,0 +1,20 @@
+ValidateContext := FALSE;
+TestIndex := 0;
+Execute := FALSE;
+IF NOT CheckViolation() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.RUNNING THEN RETURN; END_IF
+IF ActiveSuite = 0 OR_ELSE ActiveSuite <> Suite THEN
+	FrameworkError(Reason := 'Operation outside runner-owned suite context');
+	RETURN;
+END_IF
+IF RequireTest THEN
+	IF ActiveTestIndex = 0 THEN RETURN; END_IF
+	IF ActiveTestIndex > ActiveSuite^.GetNumberOfTests() THEN
+		FrameworkError(Reason := 'Invalid active test index');
+		RETURN;
+	END_IF
+END_IF
+TestIndex := ActiveTestIndex;
+Execute := ShouldExecuteCurrentTest;
+IF ActiveTestIndex > 0 THEN Execute := Execute AND ActiveSuite^.IsCanonicalOpen(Index := ActiveTestIndex); END_IF
+ValidateContext := TRUE;

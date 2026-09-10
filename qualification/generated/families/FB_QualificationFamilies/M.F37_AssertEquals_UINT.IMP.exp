@@ -1,0 +1,5 @@
+TEST('F37_AssertEquals_UINT');
+IF NOT IS_TEST_FINISHED('F37_AssertEquals_UINT') THEN
+	AssertEquals_UINT(Expected := _v37e, Actual := _v37a, Message := 'F37_AssertEquals_UINT');
+	TEST_FINISHED();
+END_IF

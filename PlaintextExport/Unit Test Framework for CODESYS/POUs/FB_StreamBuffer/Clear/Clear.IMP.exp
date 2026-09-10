@@ -1,0 +1,9 @@
+IF (_PointerToStringBuffer = 0) OR (_BufferSize = 0) THEN
+    RETURN;
+END_IF
+
+FOR Count := 0 TO (_BufferSize - 1) DO
+    _PointerToStringBuffer[Count] := 0;
+END_FOR
+
+_Length := 0;

@@ -1,0 +1,7 @@
+METHOD INTERNAL GetCanonicalRecord : BOOL
+VAR_INPUT
+	Index : UINT;
+END_VAR
+VAR_OUTPUT
+	Record : ST_CoUnitTestRecord;
+END_VAR

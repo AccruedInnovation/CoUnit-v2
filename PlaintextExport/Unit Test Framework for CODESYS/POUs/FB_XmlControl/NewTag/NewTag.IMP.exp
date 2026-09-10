@@ -1,0 +1,9 @@
+IF TagOpen THEN
+    XmlBuffer.Append := TAG_CLOSE;
+END_IF;
+
+XmlBuffer.Append := TAG_OPEN;
+XmlBuffer.Append := Name;
+TagOpen := TRUE;
+TagListBuffer.Append := FORWARD_SLASH;
+TagListBuffer.Append := Name;

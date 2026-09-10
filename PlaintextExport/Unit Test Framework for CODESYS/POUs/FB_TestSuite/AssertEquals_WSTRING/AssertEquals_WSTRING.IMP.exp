@@ -1,0 +1,8 @@
+IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := FALSE;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := '';
+_result.ActualText := '';
+_result.DiagnosticSuffix := '';
+_result := CompareAny(ExpectedData := ADR(Expected), ActualData := ADR(Actual), ExpectedSize := SIZEOF(Expected), ActualSize := SIZEOF(Actual), ExpectedClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING), ActualClass := TO_DINT(IBaseLibrary.TypeClass.TYPE_WSTRING));
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_WSTRING, Message := Message, Comparison := _result);

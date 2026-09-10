@@ -1,0 +1,48 @@
+(*
+ Asserts that two DWORDs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – DWORD expected value
+     | Actual – DWORD actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DWORD := 16#7890ABCD;
+         b : DWORD := 16#7890ABCD;
+     END_VAR
+
+     TEST('Test_DWORD_Equals');
+     AssertEquals_DWORD(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DWORD := 16#12345678;
+         b : DWORD := 16#90ABCDEF;
+     END_VAR
+
+     TEST('Test_DWORD_Differ');
+     AssertEquals_DWORD(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_DWORD
+VAR_INPUT
+    Expected : DWORD; // DWORD expected value
+    Actual : DWORD; // DWORD actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

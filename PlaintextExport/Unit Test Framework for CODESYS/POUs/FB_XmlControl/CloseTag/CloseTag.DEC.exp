@@ -1,0 +1,10 @@
+(*
+    Closes a Tag:
+    XML: <MyTag />'
+
+    Method: XML.CloseTag();
+*)
+METHOD PUBLIC CloseTag : T_MaxString
+VAR
+    ClosedTag : T_MaxString;
+END_VAR

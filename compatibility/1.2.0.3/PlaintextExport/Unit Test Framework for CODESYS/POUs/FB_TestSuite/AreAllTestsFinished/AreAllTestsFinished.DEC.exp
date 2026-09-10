@@ -1,0 +1,8 @@
+(* 
+    A test is considered finished if it is finished running (i.e. set by TEST_FINISHED) or if it is skipped/disabled
+*)
+METHOD PUBLIC AreAllTestsFinished : BOOL
+VAR
+    Counter : UINT;
+    NumberOfTestsToAnalyse : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+END_VAR

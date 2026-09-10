@@ -1,0 +1,23 @@
+// Check if any of the two strings are too long (or the combination of them)
+// All OK
+IF (LEN(STR := MsgFmtString) + LEN(STR := StringArg)) <= MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS THEN
+    MsgFmtStringProcessed := MsgFmtString;
+    StringArgProcessed := StringArg;
+    // If test instance path is longer than 253 chars, shorten it down to 253 characters and additionally with the length of the '...TestName too long'. Add the text '...TestName too long' to the test instance path. Leave no characters for the message.
+ELSIF LEN(STR := MsgFmtString) > MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS THEN
+    MsgFmtStringTemp := LEFT(STR := MsgFmtString, SIZE := (MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS - LEN(STR := TestNameTooLong)));
+    MsgFmtStringProcessed := CONCAT(STR1 := MsgFmtStringTemp, STR2 := TestNameTooLong);
+    StringArgProcessed := '';
+    // If test message is too long (so we cant fit the text "...TestMsg too long") to the end of it, shorten it so that we can.
+ELSIF (MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS - LEN(STR := TestMsgTooLong)) >= LEN(STR := MsgFmtString) THEN
+    MsgFmtStringProcessed := MsgFmtString;
+    StringArgProcessed :=
+        LEFT(STR := StringArg, SIZE := (MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS - LEN(STR := TestMsgTooLong) - LEN(STR := MsgFmtStringProcessed)));
+
+    StringArgProcessed := CONCAT(STR1 := StringArgProcessed, STR2 := TestMsgTooLong);
+    // If test instance path is too long (length is between 233 and 253 characters long), shorten it and add the text '...TestName too long'. Leave no characters for the message
+ELSE
+    MsgFmtStringTemp := LEFT(STR := MsgFmtString, SIZE := (MSG_FMT_STRING_MAX_NUMBER_OF_CHARACTERS - LEN(STR := TestNameTooLong)));
+    MsgFmtStringProcessed := CONCAT(STR1 := MsgFmtStringTemp, STR2 := TestNameTooLong);
+    StringArgProcessed := '';
+END_IF

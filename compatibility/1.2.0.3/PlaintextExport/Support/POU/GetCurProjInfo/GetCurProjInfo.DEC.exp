@@ -1,0 +1,13 @@
+{attribute 'hide'}
+(*
+    reads the application info from the current application
+*)
+FUNCTION_BLOCK GetCurProjInfo
+VAR_OUTPUT
+	PROJECT_INFO : CmpApp.PROJECT_INFO;
+END_VAR
+VAR
+	pCurApp : POINTER TO APPLICATION;
+	pResult : POINTER TO RTS_IEC_RESULT;
+	pCurProjInfo : POINTER TO CmpApp.PROJECT_INFO;
+END_VAR

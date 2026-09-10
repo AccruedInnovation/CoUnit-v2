@@ -1,0 +1,47 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	ObservedTotal : UDINT;
+	SnapshotBytes : UDINT;
+	FirstBadSuite : UINT;
+	FirstBadTest : UINT;
+END_VAR
+VAR
+	_suite1 : FB_QualificationTestLimit;
+	_suite2 : FB_QualificationTestLimit;
+	_suite3 : FB_QualificationTestLimit;
+	_suite4 : FB_QualificationTestLimit;
+	_suite5 : FB_QualificationTestLimit;
+	_suite6 : FB_QualificationTestLimit;
+	_suite7 : FB_QualificationTestLimit;
+	_suite8 : FB_QualificationTestLimit;
+	_suite9 : FB_QualificationTestLimit;
+	_suite10 : FB_QualificationTestLimit;
+	_suite11 : FB_QualificationTestLimit;
+	_suite12 : FB_QualificationTestLimit;
+	_suite13 : FB_QualificationTestLimit;
+	_suite14 : FB_QualificationTestLimit;
+	_suite15 : FB_QualificationTestLimit;
+	_suite16 : FB_QualificationTestLimit;
+	_suite17 : FB_QualificationTestLimit;
+	_suite18 : FB_QualificationTestLimit;
+	_suite19 : FB_QualificationTestLimit;
+	_suite20 : FB_QualificationTestLimit;
+	_suite21 : FB_QualificationTestLimit;
+	_suite22 : FB_QualificationTestLimit;
+	_suite23 : FB_QualificationTestLimit;
+	_suite24 : FB_QualificationTestLimit;
+	_suite25 : FB_QualificationTestLimit;
+	_suite26 : FB_QualificationTestLimit;
+	_suite27 : FB_QualificationTestLimit;
+	_suite28 : FB_QualificationTestLimit;
+	_suite29 : FB_QualificationTestLimit;
+	_suite30 : FB_QualificationTestLimit;
+	_suite31 : FB_QualificationTestLimit;
+	_suite32 : FB_QualificationTestLimit;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	_suiteIndex : UINT;
+	_testIndex : UINT;
+	_expectedName : T_MaxString;
+END_VAR

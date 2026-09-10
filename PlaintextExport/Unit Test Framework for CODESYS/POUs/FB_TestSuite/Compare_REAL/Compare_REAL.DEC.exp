@@ -1,0 +1,18 @@
+METHOD PRIVATE Compare_REAL : BOOL
+VAR_INPUT
+	Expected : REAL;
+	Actual : REAL;
+	Delta : REAL;
+END_VAR
+VAR_OUTPUT
+	ArgumentError : BOOL;
+END_VAR
+VAR
+	_expectedBits : DWORD;
+	_actualBits : DWORD;
+	_deltaBits : DWORD;
+	_expectedInf : BOOL;
+	_actualInf : BOOL;
+	_a : REAL;
+	_b : REAL;
+END_VAR

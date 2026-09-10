@@ -1,0 +1,16 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+	RunDisposition : E_CoUnitRunDisposition;
+	SnapshotDisposition : E_CoUnitRunDisposition;
+	SealInjectionConsumed : BOOL;
+END_VAR
+VAR
+	_sealInjected : BOOL;
+	_suite1 : FB_QualificationSealViolation;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+
+END_VAR

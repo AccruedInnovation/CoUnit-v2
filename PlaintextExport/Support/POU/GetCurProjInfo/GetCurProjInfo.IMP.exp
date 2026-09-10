@@ -1,0 +1,10 @@
+Valid := FALSE;
+IF GVL_coUnit.InjectProjectLookupFailure THEN RETURN; END_IF
+pCurApp := CmpApp.AppGetCurrent(pResult := ADR(_result));
+IF _result <> 0 THEN RETURN; END_IF
+IF pCurApp = 0 THEN RETURN; END_IF
+pCurProjInfo := CmpApp.AppGetApplicationInfo(pApp := pCurApp, pResult := ADR(_result));
+IF _result <> 0 THEN RETURN; END_IF
+IF pCurProjInfo = 0 THEN RETURN; END_IF
+PROJECT_INFO := pCurProjInfo^;
+Valid := TRUE;

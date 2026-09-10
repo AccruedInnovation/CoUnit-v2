@@ -1,0 +1,13 @@
+{attribute 'hide'}
+(*
+    reads the taskinfo from the current task
+*)
+FUNCTION_BLOCK GetCurTaskInfo
+VAR
+	pCurTask : CmpIecTask.RTS_IEC_HANDLE;
+	pResult : CmpIecTask.RTS_IEC_RESULT;
+	pCurTaskInfo : POINTER TO CmpIecTask.Task_Info2;
+END_VAR
+VAR_OUTPUT
+	CurTaskInfo : CmpIecTask.Task_Info2;
+END_VAR

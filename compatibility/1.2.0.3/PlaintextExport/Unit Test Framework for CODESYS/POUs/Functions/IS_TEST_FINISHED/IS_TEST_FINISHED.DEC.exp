@@ -1,0 +1,9 @@
+(* Check if a certain test in the current suite is finished *)
+FUNCTION IS_TEST_FINISHED : BOOL
+VAR_INPUT
+    TestName : T_MaxString;
+END_VAR
+VAR
+    Counter : UINT;
+    CurrentTest : FB_Test;
+END_VAR

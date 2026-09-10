@@ -1,0 +1,6 @@
+FUNCTION F_AnyToUnionValue : U_ExpectedOrActual
+VAR_INPUT
+    AnySize : UDINT;
+    AnyTypeClass : IBaseLibrary.TypeClass;
+    AnyValue : POINTER TO BYTE;
+END_VAR

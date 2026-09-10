@@ -1,0 +1,7 @@
+TEST('F08_AssertArrayEquals_INT');
+IF NOT IS_TEST_FINISHED('F08_AssertArrayEquals_INT') THEN
+	_v8e[1] := 1;
+	_v8a[1] := 2;
+	AssertArrayEquals_INT(Expecteds := _v8e, Actuals := _v8a, Message := 'F08_AssertArrayEquals_INT');
+	TEST_FINISHED();
+END_IF

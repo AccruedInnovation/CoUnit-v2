@@ -1,0 +1,7 @@
+CheckViolation := FALSE;
+IF NOT IsOwner() THEN RETURN; END_IF
+IF NOT SnapshotSealed AND CrossTaskViolationLatch <> 0 THEN
+	FrameworkError(Reason := 'Cross-task or task-identity violation');
+	RETURN;
+END_IF
+CheckViolation := TRUE;

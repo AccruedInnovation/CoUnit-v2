@@ -1,0 +1,18 @@
+Loop := 0;
+Search := 0;
+PointerToBuffer := _PointerToStringBuffer + StartPos;
+PointerToSearch := ADR(SearchString);
+WHILE (PointerToSearch^ <> 0) AND Loop + StartPos < _Length DO
+    IF PointerToBuffer^ <> PointerToSearch^ THEN
+        Loop := Loop + 1;
+        PointerToBuffer := _PointerToStringBuffer + StartPos + Loop;
+        PointerToSearch := ADR(SearchString);
+        Search := 0;
+    ELSE
+        Search := Search + 1;
+        PointerToBuffer := _PointerToStringBuffer + StartPos + Loop + Search;
+        PointerToSearch := ADR(SearchString) + Search;
+    END_IF;
+END_WHILE;
+
+Find := Loop + 1 + StartPos;

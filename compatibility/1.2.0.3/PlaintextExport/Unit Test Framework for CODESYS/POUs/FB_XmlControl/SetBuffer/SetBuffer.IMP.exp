@@ -1,0 +1,4 @@
+XmlBuffer.SetBuffer(PointerToBufferAddress := PointerToBuffer, SizeOfBuffer := SizeOfBuffer);
+TagListBuffer.SetBuffer(PointerToBufferAddress := ADR(Tags), SizeOfBuffer := SIZEOF(Tags));
+TagListSeekBuffer.SetBuffer(PointerToBufferAddress := ADR(TagsSeek), SizeOfBuffer := SIZEOF(TagsSeek));
+TagBuffer.SetBuffer(PointerToBufferAddress := ADR(Tag), SizeOfBuffer := SIZEOF(Tag));

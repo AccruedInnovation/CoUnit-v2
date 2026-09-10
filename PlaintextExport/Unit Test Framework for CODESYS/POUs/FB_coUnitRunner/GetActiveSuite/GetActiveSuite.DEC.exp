@@ -1,0 +1,4 @@
+METHOD INTERNAL GetActiveSuite : POINTER TO FB_TestSuite
+VAR_INPUT
+	RequireContext : BOOL := FALSE;
+END_VAR

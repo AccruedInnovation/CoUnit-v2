@@ -1,0 +1,5 @@
+ActiveTestIndex := Index;
+ShouldExecuteCurrentTest := Execute;
+GVL_coUnit.CurrentTestNameBeingCalled := Name;
+GVL_coUnit.IgnoreCurrentTest := NOT Execute;
+GVL_coUnit.CurrentTestIsFinished := NOT Execute;

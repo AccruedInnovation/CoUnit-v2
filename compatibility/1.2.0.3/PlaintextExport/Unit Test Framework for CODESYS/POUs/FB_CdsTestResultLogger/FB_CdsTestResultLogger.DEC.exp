@@ -1,0 +1,15 @@
+(*
+	This function block reports the results from the tests using CmpLog functionality.
+	This sends the results into a DeviceLog named coUnit of a CODESYS device.
+    (which can print Errors, Warnings and Messages).
+*)
+FUNCTION_BLOCK FB_CdsTestResultLogger IMPLEMENTS I_TestResultLogger
+VAR
+    TestResults : I_TestResults;
+    PrintingTestSuiteResultNumber : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+    PrintingTestSuiteTrigger : R_TRIG;
+    (* This flag is set once the final end result has printed *)
+    PrintedFinalTestResults : BOOL;
+    (* This flag is set once the test suites result have been printed *)
+    PrintedTestSuitesResults : BOOL;
+END_VAR

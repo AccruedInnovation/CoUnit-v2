@@ -1,0 +1,7 @@
+METHOD PUBLIC LogTestSuiteResults : BOOL
+VAR
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+	_s : UINT;
+	_t : UINT;
+	_text : T_MaxString;
+END_VAR

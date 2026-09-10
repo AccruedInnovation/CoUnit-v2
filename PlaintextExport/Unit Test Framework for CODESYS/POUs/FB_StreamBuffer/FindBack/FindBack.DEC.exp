@@ -1,0 +1,10 @@
+METHOD PUBLIC FindBack : UDINT
+VAR_INPUT
+    SearchString : T_MaxString;
+END_VAR
+VAR
+    Loop : UDINT;
+    Search : UDINT;
+    PointerToBuffer : POINTER TO BYTE;
+    PointerToSearch : POINTER TO BYTE;
+END_VAR

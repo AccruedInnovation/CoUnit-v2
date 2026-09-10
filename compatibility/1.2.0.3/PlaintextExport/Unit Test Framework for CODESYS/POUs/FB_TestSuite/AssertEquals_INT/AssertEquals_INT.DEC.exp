@@ -1,0 +1,48 @@
+(*
+ Asserts that two INTs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – INT expected value
+     | Actual – INT actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := -12345;
+         b : INT := -12345;
+     END_VAR
+
+     TEST('Test_INT_Equals');
+     AssertEquals_INT(Expected := a,
+                      Actual := b,
+                      Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : INT := -32000;
+         b : INT := 15423;
+     END_VAR
+
+     TEST('Test_INT_Differ');
+     AssertEquals_INT(Expected := a,
+                      Actual := b,
+                      Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_INT
+VAR_INPUT
+    Expected : INT; // INT expected value
+    Actual : INT; // INT actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

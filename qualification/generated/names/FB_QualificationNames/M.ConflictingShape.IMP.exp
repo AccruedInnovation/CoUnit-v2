@@ -1,0 +1,6 @@
+TEST('Shape');
+AssertTrue(Condition := TRUE, Message := 'original-shape');
+TEST_FINISHED();
+TEST_ORDERED('Shape');
+AssertTrue(Condition := FALSE, Message := 'conflicting-shape-must-be-suppressed');
+TEST_FINISHED();

@@ -1,0 +1,7 @@
+(*  
+    Clears the buffer and sets the length to 0
+*)
+METHOD PUBLIC Clear
+VAR
+    Count : UDINT;
+END_VAR

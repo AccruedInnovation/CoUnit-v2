@@ -1,0 +1,7 @@
+TEST('F03_AssertArray3dEquals_REAL');
+IF NOT IS_TEST_FINISHED('F03_AssertArray3dEquals_REAL') THEN
+	_v3e[1, 1, 1] := 1;
+	_v3a[1, 1, 1] := 2;
+	AssertArray3dEquals_REAL(Expecteds := _v3e, Actuals := _v3a, Delta := 0.0, Message := 'F03_AssertArray3dEquals_REAL');
+	TEST_FINISHED();
+END_IF

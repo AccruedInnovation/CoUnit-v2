@@ -1,0 +1,16 @@
+TEST('AssertionLimit');
+IF NOT IS_TEST_FINISHED('AssertionLimit') THEN
+	FOR _index := 1 TO 2049 DO
+		IF _index = 2049 THEN
+		ReadQualificationGuard(Count => CountBefore, OrderedCount => OrderedBefore, Cursor => CursorBefore, LastRecord => LastBefore);
+		BudgetBefore := GVL_coUnit.coUnitRunner.ReadQualificationBudget();
+		END_IF
+		AssertTrue(Condition := TRUE, Message := 'bounded-call');
+		IF _index = 2049 THEN
+		ReadQualificationGuard(Count => CountAfter, OrderedCount => OrderedAfter, Cursor => CursorAfter, LastRecord => LastAfter);
+		BudgetAfter := GVL_coUnit.coUnitRunner.ReadQualificationBudget();
+		GuardPass := CountBefore = 1 AND CountAfter = CountBefore AND OrderedAfter = OrderedBefore AND CursorAfter = CursorBefore AND BudgetBefore = 2048 AND BudgetAfter = BudgetBefore AND LastAfter.FirstFailure.IsSet = LastBefore.FirstFailure.IsSet AND LastAfter.CanonicalName = LastBefore.CanonicalName AND LastAfter.InUse = LastBefore.InUse AND LastAfter.IsOrdered = LastBefore.IsOrdered AND LastAfter.OrderNumber = LastBefore.OrderNumber AND LastAfter.DefinedDisabled = LastBefore.DefinedDisabled AND LastAfter.InvocationOrdinal = LastBefore.InvocationOrdinal AND LastAfter.MaxAssertionsPerInvocation = LastBefore.MaxAssertionsPerInvocation AND LastAfter.HasFailure = LastBefore.HasFailure;
+		END_IF
+	END_FOR
+	TEST_FINISHED();
+END_IF

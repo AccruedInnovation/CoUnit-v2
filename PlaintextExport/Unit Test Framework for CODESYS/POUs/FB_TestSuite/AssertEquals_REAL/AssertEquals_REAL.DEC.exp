@@ -1,0 +1,12 @@
+METHOD PUBLIC AssertEquals_REAL
+VAR_INPUT
+	Expected : REAL;
+	Actual : REAL;
+	Delta : REAL;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

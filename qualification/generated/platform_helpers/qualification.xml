@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit task project failures" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="ProjectBefore">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="ProjectRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="ProjectRecovered">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="TaskBefore">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="TaskRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="TaskRecovered">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_project">
+              <type>
+                <derived name="GetCurProjInfo" />
+              </type>
+            </variable>
+            <variable name="_task">
+              <type>
+                <derived name="GetCurTaskInfo" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT Done THEN
+	_project();
+	ProjectBefore := _project.Valid;
+	_task();
+	TaskBefore := _task.Valid;
+	GVL_coUnit.InjectProjectLookupFailure := TRUE;
+	_project();
+	ProjectRejected := NOT _project.Valid;
+	GVL_coUnit.InjectProjectLookupFailure := FALSE;
+	_project();
+	ProjectRecovered := _project.Valid;
+	GVL_coUnit.InjectTaskLookupFailure := TRUE;
+	_task();
+	TaskRejected := NOT _task.Valid;
+	GVL_coUnit.InjectTaskLookupFailure := FALSE;
+	_task();
+	TaskRecovered := _task.Valid;
+	OraclePass := ProjectBefore AND ProjectRejected AND ProjectRecovered AND TaskBefore AND TaskRejected AND TaskRecovered;
+	Done := TRUE;
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	ProjectBefore : BOOL;
+	ProjectRejected : BOOL;
+	ProjectRecovered : BOOL;
+	TaskBefore : BOOL;
+	TaskRejected : BOOL;
+	TaskRecovered : BOOL;
+END_VAR
+VAR
+	_project : GetCurProjInfo;
+	_task : GetCurTaskInfo;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

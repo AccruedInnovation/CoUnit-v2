@@ -1,0 +1,22 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	Active : BOOL;
+	Registered : BOOL;
+	EventHandle : SysTypes.RTS_IEC_HANDLE := SysTypes.RTS_INVALID_HANDLE;
+	ComponentFilter : UDINT;
+	Count : UINT;
+	Entries : ARRAY[1..128] OF STRING(127);
+	HexEntries : ARRAY[1..128] OF STRING(254);
+	Bytes : ARRAY[1..128, 0..127] OF BYTE;
+	Lengths : ARRAY[1..128] OF UINT;
+	Classes : ARRAY[1..128] OF DINT;
+	LastLogHandle : SysTypes.RTS_IEC_HANDLE;
+	ObservedComponent : UDINT;
+	Overflow : BOOL;
+	Truncated : BOOL;
+	CallbackErrors : UDINT;
+	LastCopyError : SysTypes.RTS_IEC_RESULT;
+	StartError : SysTypes.RTS_IEC_RESULT;
+	UnregisterError : SysTypes.RTS_IEC_RESULT;
+	CloseError : SysTypes.RTS_IEC_RESULT;
+END_VAR

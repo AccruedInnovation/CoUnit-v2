@@ -1,0 +1,25 @@
+//save current buffer to temporary buffer
+pByteBuffer := pStrBuf;
+
+FOR i := 0 TO (udiBufsize - 1) DO
+    TempBuf[i] := pByteBuffer[i];
+END_FOR
+
+pByteIn := ADR(Prepend);
+pByteBuffer := pStrBuf;
+WHILE pByteIn^ <> 0 AND (udiLength < udiBufSize) DO
+    pByteBuffer^ := pByteIn^;
+    udiLength := udiLength + 1;
+    pByteIn := pByteIn + 1;
+    pByteBuffer := pByteBuffer + 1;
+END_WHILE;
+
+pTempBuf := ADR(TempBuf);
+WHILE pTempBuf^ <> 0 AND (udiLength < udiBufSize) DO
+    pByteBuffer^ := pTempBuf^;
+    pTempBuf := pTempBuf + 1;
+    pByteBuffer := pByteBuffer + 1;
+END_WHILE;
+
+pByteBuffer := pStrBuf + udiLength; (* String End *)
+pByteBuffer^ := 0; (* nul terminated string *)

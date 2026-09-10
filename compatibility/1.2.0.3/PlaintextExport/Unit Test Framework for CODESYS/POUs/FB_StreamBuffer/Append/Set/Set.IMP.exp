@@ -1,0 +1,11 @@
+ByteIn := ADR(Append);
+ByteBuffer := _PointerToStringBuffer + _Length; // set start address
+WHILE ByteIn^ <> 0 AND (_Length < _BufferSize) DO
+    ByteBuffer^ := ByteIn^; //Copy the 1st byte
+    _Length := _Length + 1; // set new buffer length
+    ByteIn := ByteIn + 1; // calculate new start address 
+    ByteBuffer := ByteBuffer + 1; // calculate new start address 
+END_WHILE;
+
+ByteBuffer := _PointerToStringBuffer + _Length; // String End
+ByteBuffer^ := 0; // null terminated string

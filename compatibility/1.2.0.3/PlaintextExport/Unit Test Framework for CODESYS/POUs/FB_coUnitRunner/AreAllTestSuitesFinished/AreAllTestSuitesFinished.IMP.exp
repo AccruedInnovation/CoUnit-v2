@@ -1,0 +1,1 @@
+AreAllTestSuitesFinished := AllTestSuitesFinished OR IsReportWrittenToDisk;

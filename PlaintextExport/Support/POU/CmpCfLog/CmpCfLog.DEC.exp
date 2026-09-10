@@ -1,0 +1,17 @@
+{attribute 'hide'}
+(*
+    Registers a Log component in devicelog and accept log messages
+*)   
+FUNCTION_BLOCK CmpCfLog
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	hCmp : RTS_IEC_HANDLE;
+	hStdLogger : RTS_IEC_HANDLE;
+	Result : RTS_IEC_RESULT;	
+	vendorId : UDINT := 16#11110000;
+	cmpId : UDINT := 16#0123;
+	pResult: POINTER TO CmpLog.RTS_IEC_RESULT;
+END_VAR

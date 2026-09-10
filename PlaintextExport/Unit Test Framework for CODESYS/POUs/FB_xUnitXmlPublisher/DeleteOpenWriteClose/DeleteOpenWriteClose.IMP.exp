@@ -1,0 +1,2 @@
+(* Compatibility-only private name: direct current-path writes are retired. *)
+DeleteOpenWriteClose := CmpErrors.Errors.ERR_NOT_SUPPORTED;

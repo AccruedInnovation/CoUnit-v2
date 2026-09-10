@@ -1,0 +1,48 @@
+(*
+ Asserts that two DATE_AND_TIMEs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – DATE_AND_TIME expected value
+     | Actual – DATE_AND_TIME actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DATE_AND_TIME := DATE_AND_TIME#2019-01-20-13:54:30;
+         b : DATE_AND_TIME := DATE_AND_TIME#2019-01-20-13:54:30;
+     END_VAR
+
+     TEST('Test_DATE_AND_TIME_Equals');
+     AssertEquals_DATE_AND_TIME(Expected := a,
+                                Actual := b,
+                                Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : DATE_AND_TIME := DATE_AND_TIME#1996-05-06-15:36:30;
+         b : DATE_AND_TIME := DATE_AND_TIME#1972-03-29-00:00:00;
+     END_VAR
+
+     TEST('Test_DATE_AND_TIME_Differ');
+     AssertEquals_DATE_AND_TIME(Expected := a,
+                                Actual := b,
+                                Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_DATE_AND_TIME
+VAR_INPUT
+    Expected : DATE_AND_TIME; // DATE_AND_TIME expected value
+    Actual : DATE_AND_TIME; // DATE_AND_TIME actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

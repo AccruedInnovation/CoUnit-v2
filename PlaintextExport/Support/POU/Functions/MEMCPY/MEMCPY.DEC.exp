@@ -1,0 +1,15 @@
+{attribute 'hide'}
+(*
+    Copies buffer with size of N bytes from source to destination
+*) 
+FUNCTION MEMCPY : UDINT
+VAR_INPUT
+	destAddr : CAA.PVOID;
+	srcAddr : CAA.PVOID;
+	n : UDINT;
+END_VAR
+VAR
+	pSrc : POINTER TO BYTE;
+	pDest : POINTER TO BYTE;
+	i : UDINT;
+END_VAR

@@ -1,0 +1,5 @@
+METHOD PUBLIC Close : BOOL
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+	_allowed : BOOL;
+END_VAR

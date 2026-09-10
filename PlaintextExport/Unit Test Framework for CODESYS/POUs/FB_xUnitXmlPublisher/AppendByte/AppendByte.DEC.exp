@@ -1,0 +1,4 @@
+METHOD PRIVATE AppendByte : BOOL
+VAR_INPUT
+	Value : BYTE;
+END_VAR

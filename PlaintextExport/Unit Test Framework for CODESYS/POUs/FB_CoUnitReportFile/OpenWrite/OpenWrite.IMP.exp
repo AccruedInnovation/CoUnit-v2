@@ -1,0 +1,6 @@
+IF _handle <> SysFile.SysTypes.RTS_INVALID_HANDLE THEN _lastError := 16#FFFF0002; RETURN; END_IF
+IF NOT BeforeOperation(E_CoUnitFileOperation.OPEN) THEN RETURN; END_IF
+_handle := SysFile.SysFileOpen(szFile := Path, am := SysFile.ACCESS_MODE.AM_WRITE, pResult := ADR(_result));
+_lastError := _result;
+OpenWrite := (_result = CmpErrors.Errors.ERR_OK) AND (_handle <> SysFile.SysTypes.RTS_INVALID_HANDLE);
+IF NOT OpenWrite AND _lastError = 0 THEN _lastError := 16#FFFF0002; END_IF

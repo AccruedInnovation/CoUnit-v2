@@ -1,0 +1,8 @@
+TEST('REALInfinityFinite');
+IF NOT IS_TEST_FINISHED('REALInfinityFinite') THEN
+	_pa := ADR(_fREAL6a);
+	_pb := ADR(_fREAL6b);
+	_pd := ADR(_fREAL6d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALInfinityFinite');
+	TEST_FINISHED();
+END_IF

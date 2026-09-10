@@ -1,0 +1,16 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	PlainResult : DINT;
+	SubstitutionResult : DINT;
+	LongResult : DINT;
+	FirstOnlyResult : DINT;
+	Utf8Result : DINT;
+END_VAR
+VAR
+	_longFormat : T_MaxString;
+	_longArgument : T_MaxString;
+	_utf8Format : T_MaxString;
+	_bytes : POINTER TO BYTE;
+END_VAR

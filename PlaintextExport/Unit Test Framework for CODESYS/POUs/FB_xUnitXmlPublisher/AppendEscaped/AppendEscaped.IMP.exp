@@ -1,0 +1,74 @@
+_p := ADR(Value);
+WHILE _i < 255 DO
+	IF _p[_i] = 0 THEN AppendEscaped := TRUE; RETURN; END_IF
+	_cp := BYTE_TO_UDINT(_p[_i]);
+	_taken := 1;
+	IF _textMode = E_CoUnitTextMode.UTF8 AND _cp >= 16#80 THEN
+		_need := 0;
+		IF _cp >= 16#C2 AND _cp <= 16#DF THEN _need := 2; _min := 16#80; _cp := _cp AND 16#1F;
+		ELSIF _cp >= 16#E0 AND _cp <= 16#EF THEN _need := 3; _min := 16#800; _cp := _cp AND 16#0F;
+		ELSIF _cp >= 16#F0 AND _cp <= 16#F4 THEN _need := 4; _min := 16#10000; _cp := _cp AND 16#07;
+		END_IF
+		_valid := _need > 0;
+		IF _valid THEN
+			FOR _j := 1 TO _need - 1 DO
+				IF _i + _j >= 255 THEN _valid := FALSE; EXIT; END_IF
+				IF _p[_i + _j] = 0 THEN _valid := FALSE; EXIT; END_IF
+				IF (_p[_i + _j] AND 16#C0) <> 16#80 THEN _valid := FALSE; EXIT; END_IF
+				_cp := SHL(_cp, 6) OR BYTE_TO_UDINT(_p[_i + _j] AND 16#3F);
+				_taken := _taken + 1;
+			END_FOR
+			IF _cp < _min OR _cp > 16#10FFFF OR (_cp >= 16#D800 AND _cp <= 16#DFFF) THEN _valid := FALSE; END_IF
+		END_IF
+		IF NOT _valid THEN _cp := 16#FFFD; END_IF
+	ELSIF _textMode = E_CoUnitTextMode.WINDOWS1252 AND _cp >= 16#80 AND _cp <= 16#9F THEN
+		CASE _cp OF
+			16#80: _cp := 16#20AC;
+			16#82: _cp := 16#201A;
+			16#83: _cp := 16#0192;
+			16#84: _cp := 16#201E;
+			16#85: _cp := 16#2026;
+			16#86: _cp := 16#2020;
+			16#87: _cp := 16#2021;
+			16#88: _cp := 16#02C6;
+			16#89: _cp := 16#2030;
+			16#8A: _cp := 16#0160;
+			16#8B: _cp := 16#2039;
+			16#8C: _cp := 16#0152;
+			16#8E: _cp := 16#017D;
+			16#91: _cp := 16#2018;
+			16#92: _cp := 16#2019;
+			16#93: _cp := 16#201C;
+			16#94: _cp := 16#201D;
+			16#95: _cp := 16#2022;
+			16#96: _cp := 16#2013;
+			16#97: _cp := 16#2014;
+			16#98: _cp := 16#02DC;
+			16#99: _cp := 16#2122;
+			16#9A: _cp := 16#0161;
+			16#9B: _cp := 16#203A;
+			16#9C: _cp := 16#0153;
+			16#9E: _cp := 16#017E;
+			16#9F: _cp := 16#0178;
+		ELSE _cp := 16#FFFD;
+		END_CASE
+	END_IF
+	IF (_cp < 16#20 AND _cp <> 9 AND _cp <> 10 AND _cp <> 13) OR
+		(_cp >= 16#D800 AND _cp <= 16#DFFF) OR _cp = 16#FFFE OR _cp = 16#FFFF OR _cp > 16#10FFFF THEN _cp := 16#FFFD; END_IF
+	CASE _cp OF
+		16#26: _ok := AppendLiteral('&amp;');
+		16#3C: _ok := AppendLiteral('&lt;');
+		16#3E: _ok := AppendLiteral('&gt;');
+		16#22: _ok := AppendLiteral('&quot;');
+		16#27: _ok := AppendLiteral('&apos;');
+		(* Preserve attribute whitespace through XML parser normalization. *)
+		9: _ok := AppendLiteral('&#9;');
+		10: _ok := AppendLiteral('&#10;');
+		13: _ok := AppendLiteral('&#13;');
+	ELSE _ok := AppendCodePoint(_cp);
+	END_CASE
+	IF NOT _ok THEN RETURN; END_IF
+	_i := _i + _taken;
+END_WHILE
+IF _p[255] <> 0 THEN Fail('unterminated dynamic text'); RETURN; END_IF
+AppendEscaped := TRUE;

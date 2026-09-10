@@ -1,0 +1,4 @@
+METHOD INTERNAL SetName
+VAR_INPUT
+    Name : T_MaxString;
+END_VAR

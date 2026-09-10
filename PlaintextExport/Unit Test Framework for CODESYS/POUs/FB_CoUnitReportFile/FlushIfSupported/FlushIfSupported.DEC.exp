@@ -1,0 +1,6 @@
+(* Result: 1 success, 0 explicitly unsupported, -1 error. *)
+METHOD PUBLIC FlushIfSupported : DINT
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+	_allowed : BOOL;
+END_VAR

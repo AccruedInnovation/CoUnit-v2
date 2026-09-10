@@ -1,0 +1,6 @@
+AreAllTestsFinished := FALSE;
+IF NOT HasBeenInvoked THEN RETURN; END_IF
+FOR _i := 1 TO NumberOfTests DO
+	IF TestRecords[UDINT_TO_UINT(_i)].State = E_CoUnitTestState.OPEN THEN RETURN; END_IF
+END_FOR
+AreAllTestsFinished := TRUE;

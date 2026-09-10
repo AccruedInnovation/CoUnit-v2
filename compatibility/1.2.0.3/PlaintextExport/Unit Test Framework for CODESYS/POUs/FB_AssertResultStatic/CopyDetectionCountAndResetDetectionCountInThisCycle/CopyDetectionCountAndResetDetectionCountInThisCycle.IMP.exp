@@ -1,0 +1,4 @@
+FOR IteratorCounter := 1 TO GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite BY 1 DO
+    AssertResultInstances[IteratorCounter].DetectionCount := AssertResultInstances[IteratorCounter].DetectionCountThisCycle;
+    AssertResultInstances[IteratorCounter].DetectionCountThisCycle := 0;
+END_FOR

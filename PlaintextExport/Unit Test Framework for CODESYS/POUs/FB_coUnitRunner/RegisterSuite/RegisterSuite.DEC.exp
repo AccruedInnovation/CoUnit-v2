@@ -1,0 +1,4 @@
+METHOD INTERNAL RegisterSuite : BOOL
+VAR_INPUT
+	Suite : POINTER TO FB_TestSuite;
+END_VAR

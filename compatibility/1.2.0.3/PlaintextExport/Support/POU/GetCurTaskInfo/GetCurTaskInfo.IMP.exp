@@ -1,0 +1,3 @@
+pCurTask := CmpIecTask.IECTaskGetCurrent( pResult := ADR(pResult) );
+pCurTaskInfo := CmpIecTask.IECTaskGetInfo3( hIecTask := pCurTask, pResult := ADR(pResult) );
+CurTaskInfo := pCurTaskInfo^;

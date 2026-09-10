@@ -1,0 +1,32 @@
+IF Comparison.Passed THEN RETURN; END_IF
+IF (TestIndex = 0) OR (TestIndex > NumberOfTests) THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Invalid assertion outcome index');
+	RETURN;
+END_IF
+TestRecords[TestIndex].HasFailure := TRUE;
+IF TestRecords[TestIndex].FirstFailure.IsSet THEN RETURN; END_IF
+_message := Message;
+_messageTruncated := FALSE;
+IF Comparison.ArgumentError THEN
+	_message := BoundedJoin(LeftText := 'Invalid assertion argument: ', RightText := Message, AlreadyTruncated := _messageTruncated, Truncated => _messageTruncated);
+END_IF
+IF LEN(Comparison.DiagnosticSuffix) > 0 THEN
+	_message := BoundedJoin(LeftText := _message, RightText := ' | ', AlreadyTruncated := _messageTruncated, Truncated => _messageTruncated);
+	_message := BoundedJoin(LeftText := _message, RightText := Comparison.DiagnosticSuffix, AlreadyTruncated := _messageTruncated, Truncated => _messageTruncated);
+END_IF
+TestRecords[TestIndex].FirstFailure.AssertionType := AssertionType;
+TestRecords[TestIndex].FirstFailure.Message := _message;
+TestRecords[TestIndex].FirstFailure.ExpectedText := Comparison.ExpectedText;
+TestRecords[TestIndex].FirstFailure.ActualText := Comparison.ActualText;
+TestRecords[TestIndex].FirstFailure.IsSet := TRUE;
+(* Commit truth before the non-authoritative, first-failure-only diagnostic effect. *)
+_logTruncated := FALSE;
+_log := BoundedJoin(LeftText := 'FAILED: ', RightText := TestRecords[TestIndex].CanonicalName, AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := CONCAT(' #', UDINT_TO_STRING(Ordinal)), AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := ' | ', AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := _message, AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := ' | expected=', AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := Comparison.ExpectedText, AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := ' | actual=', AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_log := BoundedJoin(LeftText := _log, RightText := Comparison.ActualText, AlreadyTruncated := _logTruncated, Truncated => _logTruncated);
+_logResult := WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), msgFmtStr := '%s', strArg := _log);

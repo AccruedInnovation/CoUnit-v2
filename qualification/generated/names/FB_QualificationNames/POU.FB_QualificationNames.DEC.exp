@@ -1,0 +1,8 @@
+FUNCTION_BLOCK FB_QualificationNames EXTENDS FB_TestSuite
+VAR_OUTPUT
+	ShapePreserved : BOOL;
+END_VAR
+VAR
+	_shape : ST_CoUnitTestRecord;
+	_found : BOOL;
+END_VAR

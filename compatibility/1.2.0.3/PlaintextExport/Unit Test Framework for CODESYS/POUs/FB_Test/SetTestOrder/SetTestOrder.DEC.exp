@@ -1,0 +1,5 @@
+(* Sets in which order/sequence relative to the order tests should this test be executed/evaluated. *)
+METHOD INTERNAL SetTestOrder
+VAR_INPUT
+    OrderNumber : UINT(0..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+END_VAR

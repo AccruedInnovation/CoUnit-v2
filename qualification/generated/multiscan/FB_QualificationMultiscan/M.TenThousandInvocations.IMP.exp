@@ -1,0 +1,7 @@
+TEST('TenThousandInvocations');
+IF NOT IS_TEST_FINISHED('TenThousandInvocations') THEN
+	_long := _long + 1;
+	_good := _long < 10000;
+	AssertTrue(Condition := _good, Message := 'last-invocation');
+	IF _long >= 10000 THEN TEST_FINISHED(); END_IF
+END_IF

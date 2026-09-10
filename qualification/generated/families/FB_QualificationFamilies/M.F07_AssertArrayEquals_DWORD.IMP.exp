@@ -1,0 +1,7 @@
+TEST('F07_AssertArrayEquals_DWORD');
+IF NOT IS_TEST_FINISHED('F07_AssertArrayEquals_DWORD') THEN
+	_v7e[1] := 1;
+	_v7a[1] := 2;
+	AssertArrayEquals_DWORD(Expecteds := _v7e, Actuals := _v7a, Message := 'F07_AssertArrayEquals_DWORD');
+	TEST_FINISHED();
+END_IF

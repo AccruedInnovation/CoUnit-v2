@@ -1,0 +1,4 @@
+METHOD INTERNAL CalculateAndSetNumberOfAssertsForTest
+VAR_INPUT
+	TestName : T_MaxString;
+END_VAR

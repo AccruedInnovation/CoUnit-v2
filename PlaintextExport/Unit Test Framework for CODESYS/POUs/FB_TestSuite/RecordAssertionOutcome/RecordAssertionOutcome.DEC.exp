@@ -1,0 +1,15 @@
+METHOD PRIVATE RecordAssertionOutcome
+VAR_INPUT
+	TestIndex : UINT;
+	Ordinal : UDINT;
+	AssertionType : E_AssertionType;
+	Message : T_MaxString;
+	Comparison : ST_CoUnitComparisonResult;
+END_VAR
+VAR
+	_message : T_MaxString;
+	_log : T_MaxString;
+	_logResult : DINT;
+	_messageTruncated : BOOL;
+	_logTruncated : BOOL;
+END_VAR

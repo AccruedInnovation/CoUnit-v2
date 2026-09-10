@@ -1,0 +1,5 @@
+TEST('F26_AssertEquals_INT');
+IF NOT IS_TEST_FINISHED('F26_AssertEquals_INT') THEN
+	AssertEquals_INT(Expected := _v26e, Actual := _v26a, Message := 'F26_AssertEquals_INT');
+	TEST_FINISHED();
+END_IF

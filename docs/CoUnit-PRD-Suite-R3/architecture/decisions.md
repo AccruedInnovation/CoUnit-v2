@@ -1,0 +1,48 @@
+# Decision Ledger — R3
+
+## R3 authority rule
+
+R1 labelled most material choices `ACTIVE_DELEGATED` under an unspecified historical request. R2 correctly refused to rely on that missing delegation. `SRC-020` now supplies explicit architecture-owner approval of R2 and the recommended `OPEN-COU-008` closure. R3 therefore marks the unchanged sound R2 choices `ACTIVE_ACCEPTED` under `EXPLICIT_APPROVAL`. This approval is prospective for R3; it does not rewrite the historical authority of R1.
+
+`ADR-COU-007` remains `CONTRADICTED`. `ADR-COU-017` is its approved successor. `ADR-COU-016`, introduced as an R2 repair, is now `ACTIVE_ACCEPTED`.
+
+| ID | Decision | R3 status | Origin | Authority basis | Owner | Source/evidence | Rationale / consequences / reconsideration |
+|---|---|---|---|---|---|---|---|
+| `ADR-COU-001` | Preserve established public test-authoring entry points/signatures and normal source behavior; repair primarily internally. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-003`; `SRC-020` | Existing test source is a core asset. Reconsider only through an explicit compatibility decision backed by the recovered assignment/source baseline. |
+| `ADR-COU-002` | One execution task owns one run; reject concurrent cross-task use. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-003`; `SRC-020` | Contains global-state risk without adding multi-task architecture. Reconsider if multi-task execution becomes an approved outcome. |
+| `ADR-COU-003` | Runner solely owns run state, suite registration and suite invocation. | `ACTIVE_ACCEPTED` | derived/new in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Gives completion and invocation one authority. Reconsider only if a later shared execution model assigns these duties elsewhere. |
+| `ADR-COU-004` | Use explicit execution state plus separate run disposition; do not infer completion from temporary counters. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-006`, `SRC-010`; `SRC-020` | Separates framework completion from test failure. Reconsider only with a replacement model that preserves these distinctions. |
+| `ADR-COU-005` | Use framework-owned execution epoch for run/test invocation sequencing rather than runtime task-cycle count as semantic identity. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Keeps lifecycle identity inside CoUnit. Runtime task data remains for binding/validation. |
+| `ADR-COU-006` | Canonicalize test name once, use stable suite/test indices, and make skipped tests terminal. | `ACTIVE_ACCEPTED` | derived/new in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-006`, `SRC-012`; `SRC-020` | Gives lookup/finish/result logic one identity and prevents skip deadlock. |
+| `ADR-COU-007` | R1: use `(test index, assertion ordinal)` as the assertion de-duplication position key. | `CONTRADICTED` | newly selected in R1 | `APPROVAL_REQUIRED` | CoUnit architecture owner | R1 architecture §7; `RF-COU-003`; `OPEN-COU-008` | Two distinct assertions in mutually exclusive scan-dependent branches can both occupy ordinal 1 and alias. Preserve the bounded/no-raw-history goal, but do not implement this key until a replacement semantic identity/count rule is selected. |
+| `ADR-COU-008` | Every configured maximum is a hard pre-write bound; exhaustion becomes a framework error. | `ACTIVE_ACCEPTED` | derived in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-006`; `SRC-020` | Safety/integrity rule derived from fixed storage. The supplied `SRC-001` confirms fixed-size assertion/result storage; PRD-02/04 still own implementation and runtime bound checks. |
+| `ADR-COU-009` | Centralize typed comparison/reporting; use explicit REAL/LREAL tolerance, NaN and infinity rules. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-013`, `SRC-018`; `SRC-020` | Removes copy/paste drift and runtime-fault behavior. Reconsider only if recovered compatibility obligations require different value semantics. |
+| `ADR-COU-010` | Build one canonical final result snapshot after execution stops; legacy results are projections. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Publishers consume one immutable truth. Reconsider only with another design that keeps one authority and no partial-result ambiguity. |
+| `ADR-COU-011` | Stream xUnit output through bounded storage with writer-owned escaping and explicit publication state. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`, `SRC-014..016`; `SRC-020` | Avoids fixed whole-document truncation and unsafe XML insertion. Exact writer layout stays local to PRD-03. |
+| `ADR-COU-012` | Keep Device Log and xUnit as separate publishers; publication failure does not rewrite test truth. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Test correctness and report delivery are different facts. |
+| `ADR-COU-013` | Preserve generic `ANY` bytewise equality for same-type/same-size unsupported values, bounded and documented as representation equality. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Preserves R1's stated compatibility intent without claiming semantic equality. The supplied `SRC-001` confirms the generic `ANY` assertion surface; exact native behavior remains a PRD-02/04 qualification duty. |
+| `ADR-COU-014` | Do not import TcUnit 1.3.1 wholesale; use it as supporting defect/regression evidence. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-006..015`; `SRC-020` | Keeps CoUnit ownership and avoids inheriting unrelated/upstream state mechanics. Reconsider if product scope changes to direct TcUnit convergence. |
+| `ADR-COU-015` | Current-run framework state is non-retained; restart/reinitialization starts a fresh run, not a resume. | `ACTIVE_ACCEPTED` | newly selected in R1 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | R1 claim; `SRC-001`; `SRC-020` | Avoids unsupported partial-run recovery. Reconsider only with an explicit durable-resume contract. |
+| `ADR-COU-016` | The external "current xUnit report" changes only at semantic publication commit; failed/in-progress output cannot replace it with a partial artifact. | `ACTIVE_ACCEPTED` | derived in R2 review | `EXPLICIT_APPROVAL` | CoUnit architecture owner | `OUT-COU-06`, `FE-COU-005`, `REQ-COU-030`, `RF-COU-004` | Repairs R1's internal-status-only gap. Mechanism may be temp-and-replace, run-unique artifact plus current locator, or another proven target-specific method. Reconsider mechanism, not the invariant, when platform evidence changes. |
+| `ADR-COU-017` | Remove persistent per-assertion de-duplication identity. Evaluate every executable assertion on every test-body invocation; use one atomic first-failure event per test for detailed failure logging; define `NumberOfAssertions`/`NumberOfAsserts` as the maximum executable assertion calls observed in any single invocation of that test body during the run; retain `MaxNumberOfAssertsForEachTestSuite` as a hard bound on calls in one suite-body invocation. | `ACTIVE_ACCEPTED` | newly selected in R3 | `EXPLICIT_APPROVAL` | CoUnit architecture owner | `SRC-001`, `SRC-020`, `RF-COU-003`, `SCN-COU-005` | No reliable caller identity exists in the current assertion API, while the source already retains only first-failure test result fields. This removes the whole identity/history failure class and keeps normal calls source-compatible. Reconsider only if a future approved API adds an explicit stable assertion ID and a product need justifies distinct-call-site counting/logging. |
+
+R3 does not need to prove R1's historical delegation. `SRC-020` supplies the operative explicit approval for this successor. Historical R1 authority labels remain historical only.
+
+## Supersession and contradiction report
+
+### Preserved R1 replacements
+
+- Temporary/persistent suite-finished counting remains replaced by the explicit state model in `ADR-COU-004`.
+- Continuous partial-result ownership remains replaced by `ADR-COU-010`.
+- Whole-document XML buffering remains replaced by `ADR-COU-011`.
+- Runtime cycle count remains non-semantic lifecycle data under `ADR-COU-005`.
+
+### Changed by R2/R3
+
+- R1's assertion-position key remains rejected; R3 closes the replacement under `ADR-COU-017` by eliminating persistent assertion identity rather than inventing another key.
+- R1's phrase "partial output cannot be treated as successful" is strengthened by `ADR-COU-016`: the **external current artifact** also cannot become partial or ambiguous.
+- R1's historical delegated-authority labels remain historical; R3 relies on `SRC-020` explicit approval instead.
+
+### Preserved behavior target
+
+R3 preserves `FB_TestSuite` extension, normal test/assertion calls, case-insensitive `DISABLED_`, normal `RUN()`, ordered `RUN_IN_SEQUENCE()`, Device Log, xUnit output and existing configuration concepts. The supplied `SRC-001` now supports source-level compatibility review; native compile/runtime compatibility remains a later qualification claim.

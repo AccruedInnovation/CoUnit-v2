@@ -1,0 +1,17 @@
+SealSnapshot := FALSE;
+Disposition := E_CoUnitRunDisposition.UNSET;
+IF NOT IsOwner() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.FINALIZING THEN RETURN; END_IF
+IF SnapshotSealed THEN RETURN; END_IF
+(* This is the integrity/commit linearization point. The latch stays set for the rest of this run. *)
+_previous := TEST_AND_SET(CrossTaskViolationLatch);
+SnapshotSealed := TRUE;
+IF _previous <> 0 THEN
+	IF RunDisposition <> E_CoUnitRunDisposition.FRAMEWORK_ERROR THEN
+		FrameworkErrorReason := 'Task/context violation before final snapshot seal';
+		Diagnostic(Reason := FrameworkErrorReason);
+	END_IF
+	RunDisposition := E_CoUnitRunDisposition.FRAMEWORK_ERROR;
+END_IF
+Disposition := RunDisposition;
+SealSnapshot := TRUE;

@@ -1,0 +1,5 @@
+TEST('F33_AssertEquals_STRING');
+IF NOT IS_TEST_FINISHED('F33_AssertEquals_STRING') THEN
+	AssertEquals_STRING(Expected := _v33e, Actual := _v33a, Message := 'F33_AssertEquals_STRING');
+	TEST_FINISHED();
+END_IF

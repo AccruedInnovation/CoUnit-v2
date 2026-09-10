@@ -1,0 +1,5 @@
+TEST('F40_AssertEquals_WORD');
+IF NOT IS_TEST_FINISHED('F40_AssertEquals_WORD') THEN
+	AssertEquals_WORD(Expected := _v40e, Actual := _v40a, Message := 'F40_AssertEquals_WORD');
+	TEST_FINISHED();
+END_IF

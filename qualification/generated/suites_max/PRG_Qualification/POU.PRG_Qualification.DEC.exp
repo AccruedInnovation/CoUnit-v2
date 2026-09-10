@@ -1,0 +1,43 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	_suite1 : FB_QualificationSuite0;
+	_suite2 : FB_QualificationSuite1;
+	_suite3 : FB_QualificationSuite2;
+	_suite4 : FB_QualificationSuite3;
+	_suite5 : FB_QualificationSuite4;
+	_suite6 : FB_QualificationSuite5;
+	_suite7 : FB_QualificationSuite6;
+	_suite8 : FB_QualificationSuite7;
+	_suite9 : FB_QualificationSuite8;
+	_suite10 : FB_QualificationSuite9;
+	_suite11 : FB_QualificationSuite10;
+	_suite12 : FB_QualificationSuite11;
+	_suite13 : FB_QualificationSuite12;
+	_suite14 : FB_QualificationSuite13;
+	_suite15 : FB_QualificationSuite14;
+	_suite16 : FB_QualificationSuite15;
+	_suite17 : FB_QualificationSuite16;
+	_suite18 : FB_QualificationSuite17;
+	_suite19 : FB_QualificationSuite18;
+	_suite20 : FB_QualificationSuite19;
+	_suite21 : FB_QualificationSuite20;
+	_suite22 : FB_QualificationSuite21;
+	_suite23 : FB_QualificationSuite22;
+	_suite24 : FB_QualificationSuite23;
+	_suite25 : FB_QualificationSuite24;
+	_suite26 : FB_QualificationSuite25;
+	_suite27 : FB_QualificationSuite26;
+	_suite28 : FB_QualificationSuite27;
+	_suite29 : FB_QualificationSuite28;
+	_suite30 : FB_QualificationSuite29;
+	_suite31 : FB_QualificationSuite30;
+	_suite32 : FB_QualificationSuite31;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+
+END_VAR

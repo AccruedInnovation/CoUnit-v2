@@ -1,0 +1,4 @@
+IF TEST_ORDERED('DISABLED_Middle') THEN
+	_bodyVisits := _bodyVisits + 1;
+	TEST_FINISHED();
+END_IF

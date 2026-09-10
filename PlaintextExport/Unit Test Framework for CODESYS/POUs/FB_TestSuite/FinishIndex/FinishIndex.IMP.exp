@@ -1,0 +1,11 @@
+FinishIndex := FALSE;
+IF Index < 1 OR Index > NumberOfTests THEN RETURN; END_IF
+IF TestRecords[Index].State = E_CoUnitTestState.OPEN THEN
+	IF TestRecords[Index].HasFailure THEN
+		TestRecords[Index].State := E_CoUnitTestState.FAILED;
+	ELSE
+		TestRecords[Index].State := E_CoUnitTestState.PASSED;
+	END_IF
+	IF TestRecords[Index].IsOrdered THEN AdvanceOrderedCursor(); END_IF
+END_IF
+FinishIndex := TRUE;

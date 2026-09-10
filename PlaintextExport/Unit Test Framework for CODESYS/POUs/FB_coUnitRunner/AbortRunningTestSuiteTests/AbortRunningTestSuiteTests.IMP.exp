@@ -1,0 +1,8 @@
+IF NOT CheckViolation() THEN RETURN; END_IF
+IF RunState <> E_CoUnitRunState.RUNNING AND RunState <> E_CoUnitRunState.BETWEEN_SUITES THEN RETURN; END_IF
+RunDisposition := E_CoUnitRunDisposition.ABORTED;
+FOR _i := 1 TO SuiteCount DO
+	Suites[UDINT_TO_UINT(_i)]^.TerminalizeOpen(State := E_CoUnitTestState.ABORTED);
+END_FOR
+RunState := E_CoUnitRunState.FINALIZING;
+ClearContext();

@@ -1,0 +1,8 @@
+{attribute 'hide'}
+(*
+    Removes leading spaces from the character string and returns the reduced character string.
+ *)
+FUNCTION F_LTrim : T_MaxString
+VAR_INPUT
+	in : T_MaxString;
+END_VAR

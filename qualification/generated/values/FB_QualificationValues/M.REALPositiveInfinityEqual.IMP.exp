@@ -1,0 +1,8 @@
+TEST('REALPositiveInfinityEqual');
+IF NOT IS_TEST_FINISHED('REALPositiveInfinityEqual') THEN
+	_pa := ADR(_fREAL4a);
+	_pb := ADR(_fREAL4b);
+	_pd := ADR(_fREAL4d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALPositiveInfinityEqual');
+	TEST_FINISHED();
+END_IF

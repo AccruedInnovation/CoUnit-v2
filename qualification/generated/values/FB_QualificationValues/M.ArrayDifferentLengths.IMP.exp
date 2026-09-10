@@ -1,0 +1,5 @@
+TEST('ArrayDifferentLengths');
+IF NOT IS_TEST_FINISHED('ArrayDifferentLengths') THEN
+	AssertArrayEquals_UINT(Expecteds := _arrayE, Actuals := _arrayLong, Message := 'ArrayDifferentLengths');
+	TEST_FINISHED();
+END_IF

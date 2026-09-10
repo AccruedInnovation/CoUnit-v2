@@ -1,0 +1,23 @@
+RegisterSuite := FALSE;
+(* FB_init registration runs in the runtime initialization phase, before task binding. *)
+IF BoundTaskValid THEN
+	IF NOT IsOwner() THEN RETURN; END_IF
+	FrameworkError(Reason := 'Suite registration after run start');
+	RETURN;
+END_IF
+IF RunState <> E_CoUnitRunState.IDLE THEN RETURN; END_IF
+IF Suite = 0 THEN
+	IF NOT InitializationError THEN FrameworkErrorReason := 'Invalid suite registration pointer'; END_IF
+	InitializationError := TRUE;
+	RETURN;
+END_IF
+IF SuiteCount >= GVL_Param_coUnit.MaxNumberOfTestSuites THEN
+	IF NOT InitializationError THEN FrameworkErrorReason := 'Suite capacity exceeded'; END_IF
+	InitializationError := TRUE;
+	RETURN;
+END_IF
+Suites[SuiteCount + 1] := Suite;
+SuiteCount := SuiteCount + 1;
+GVL_coUnit.TestSuiteAddresses[SuiteCount] := Suite;
+GVL_coUnit.NumberOfInitializedTestSuites := SuiteCount;
+RegisterSuite := TRUE;

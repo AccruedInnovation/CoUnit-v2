@@ -1,0 +1,10 @@
+_bytes := ADR(_probe);
+GVL_CoUnitReporting.StringEncodingMode := E_CoUnitTextMode.UNKNOWN;
+IF _bytes[0] = 16#C3 AND _bytes[1] = 16#A9 AND _bytes[2] = 16#E2 AND
+	_bytes[3] = 16#82 AND _bytes[4] = 16#AC AND _bytes[5] = 0 THEN
+	GVL_CoUnitReporting.StringEncodingMode := E_CoUnitTextMode.UTF8;
+ELSIF _bytes[0] = 16#E9 AND _bytes[1] = 16#80 AND _bytes[2] = 0 THEN
+	GVL_CoUnitReporting.StringEncodingMode := E_CoUnitTextMode.WINDOWS1252;
+END_IF
+GVL_coUnit.StringIsUtf8 := GVL_CoUnitReporting.StringEncodingMode = E_CoUnitTextMode.UTF8;
+CoUnitBindStringEncoding := GVL_CoUnitReporting.StringEncodingMode <> E_CoUnitTextMode.UNKNOWN;

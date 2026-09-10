@@ -1,0 +1,4 @@
+FUNCTION_BLOCK FB_QualificationOrdered EXTENDS FB_TestSuite
+VAR
+	_bodyVisits : UINT;
+END_VAR

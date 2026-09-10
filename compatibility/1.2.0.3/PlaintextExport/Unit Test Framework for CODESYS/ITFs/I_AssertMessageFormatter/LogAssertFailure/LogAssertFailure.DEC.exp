@@ -1,0 +1,7 @@
+METHOD LogAssertFailure
+VAR_INPUT
+    Expected : T_MaxString;
+    Actual : T_MaxString;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_VAR

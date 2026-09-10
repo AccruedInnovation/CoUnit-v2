@@ -1,0 +1,4 @@
+METHOD INTERNAL SignalViolation
+VAR
+	_previous : DWORD;
+END_VAR

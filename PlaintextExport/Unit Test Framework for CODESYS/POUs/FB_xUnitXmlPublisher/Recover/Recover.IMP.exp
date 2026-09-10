@@ -1,0 +1,15 @@
+_finalExists := _file.Probe(_path);
+IF _finalExists < 0 THEN Fail('probe current'); RETURN; END_IF
+_backupExists := _file.Probe(_backup);
+IF _backupExists < 0 THEN Fail('probe backup'); RETURN; END_IF
+IF _finalExists = 0 AND _backupExists = 1 THEN
+	IF NOT _file.Rename(_backup, _path) THEN Fail('restore backup during recovery'); RETURN; END_IF
+ELSIF _finalExists = 1 AND _backupExists = 1 THEN
+	IF NOT _file.DeleteIfPresent(_backup) THEN Fail('remove old backup'); RETURN; END_IF
+END_IF
+_stageExists := _file.Probe(_stage);
+IF _stageExists < 0 THEN Fail('probe staging'); RETURN; END_IF
+IF _stageExists = 1 THEN
+	IF NOT _file.DeleteIfPresent(_stage) THEN Fail('remove old staging'); RETURN; END_IF
+END_IF
+Recover := TRUE;

@@ -1,0 +1,4 @@
+THIS^.prvCreateNewLogger();
+hStdLogger := LogOpen(GVL_Support._ST_Logger.LogOptions.szName,0);
+hCmp := CMAddComponent('coUnit', vendorId OR ComponentID.CMPID_IecCode OR cmpId, 16#03050000, ADR(Result));
+FB_Init := TRUE;

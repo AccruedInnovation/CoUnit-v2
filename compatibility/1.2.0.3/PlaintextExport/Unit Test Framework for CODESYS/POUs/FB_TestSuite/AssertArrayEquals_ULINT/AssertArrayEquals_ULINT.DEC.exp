@@ -1,0 +1,73 @@
+(*
+ Asserts that two ULINT arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expecteds – ULINT array with expected values
+     | Actuals – ULINT array with actual values
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..3] OF ULINT := [0, 18_446_744_073_709_551_615, 9_400_000_000_000, 3_213_000_444_000];
+         b : ARRAY[0..3] OF ULINT := [0, 18_446_744_073_709_551_615, 9_400_000_000_000, 3_213_000_444_000];
+     END_VAR
+
+     TEST('Test_ULINT_Array_Equals');
+     AssertArrayEquals_ULINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..1] OF ULINT := [0, 9_400_000_000_000];
+         b : ARRAY[0..0] OF ULINT := [0];
+     END_VAR
+
+     TEST('Test_ULINT_Array_DifferInSize');
+     AssertArrayEquals_ULINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[0..1] OF ULINT := [3_213_000_444_000, 9_400_000_000_000];
+         b : ARRAY[0..1] OF ULINT := [3_213_000_444_000, 18_446_744_073_709_551_615];
+     END_VAR
+
+     TEST('Test_ULINT_Array_DifferInContent');
+     AssertArrayEquals_ULINT(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_ULINT
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF ULINT; // ULINT array with expected values
+    Actuals : ARRAY[*] OF ULINT; // ULINT array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

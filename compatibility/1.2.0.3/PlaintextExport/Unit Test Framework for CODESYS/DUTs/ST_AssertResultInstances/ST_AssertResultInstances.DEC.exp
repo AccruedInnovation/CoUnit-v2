@@ -1,0 +1,7 @@
+TYPE ST_AssertResultInstances :
+STRUCT
+    AssertResult : ST_AssertResult;
+    DetectionCount : UINT; // Number of instances of the "AssertResult"
+    DetectionCountThisCycle : UINT; // Number of instance of the "AssertResult" in this specific PLC-cycle
+END_STRUCT
+END_TYPE

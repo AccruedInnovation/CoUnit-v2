@@ -1,0 +1,15 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	ProjectBefore : BOOL;
+	ProjectRejected : BOOL;
+	ProjectRecovered : BOOL;
+	TaskBefore : BOOL;
+	TaskRejected : BOOL;
+	TaskRecovered : BOOL;
+END_VAR
+VAR
+	_project : GetCurProjInfo;
+	_task : GetCurTaskInfo;
+END_VAR

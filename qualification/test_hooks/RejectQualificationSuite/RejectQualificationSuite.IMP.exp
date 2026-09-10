@@ -1,0 +1,13 @@
+RejectQualificationSuite := FALSE;
+IF SuiteCount <> GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
+_count := SuiteCount;
+_last := Suites[SuiteCount];
+_active := ActiveSuite;
+_index := ActiveSuiteIndex;
+_sequence := SequenceSuiteIndex;
+_accepted := RegisterSuite(Suite := _last);
+RejectQualificationSuite := NOT _accepted AND (SuiteCount = _count)
+	AND (Suites[_count] = _last) AND (ActiveSuite = _active)
+	AND (ActiveSuiteIndex = _index) AND (SequenceSuiteIndex = _sequence)
+	AND (GVL_coUnit.NumberOfInitializedTestSuites = _count)
+	AND (GVL_coUnit.TestSuiteAddresses[_count] = _last);

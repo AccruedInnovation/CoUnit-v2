@@ -1,0 +1,10 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	(* Set once by the accepted run owner from compiler-encoded bytes. *)
+	{attribute 'hide'}
+	StringEncodingMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
+	{attribute 'hide'}
+	InjectSnapshotBuildFailure : BOOL := FALSE;
+	{attribute 'hide'}
+	InjectSnapshotSealViolation : BOOL := FALSE;
+END_VAR

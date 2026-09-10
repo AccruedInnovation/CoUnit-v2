@@ -1,0 +1,4 @@
+IF NOT GVL_coUnit.coUnitRunner.IsOwner() THEN RETURN; END_IF
+IF Position < 1 OR Position > NumberOfTests THEN RETURN; END_IF
+_testProjection.SetCanonicalRecord(Record := TestRecords[Position]);
+GetTestByPosition := _testProjection;

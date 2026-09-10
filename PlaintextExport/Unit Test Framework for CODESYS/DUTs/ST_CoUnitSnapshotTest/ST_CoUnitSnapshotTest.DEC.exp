@@ -1,0 +1,9 @@
+TYPE ST_CoUnitSnapshotTest :
+STRUCT
+	Name : T_MaxString;
+	ClassName : T_MaxString;
+	State : E_CoUnitTestState;
+	NumberOfAsserts : UINT;
+	FirstFailure : ST_CoUnitFirstFailure;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,58 @@
+F_QualificationLogCallback := CmpErrors.Errors.ERR_OK;
+IF NOT GVL_QualificationLog.Active THEN RETURN; END_IF
+IF pEventParam = 0 THEN
+	GVL_QualificationLog.CallbackErrors := GVL_QualificationLog.CallbackErrors + 1;
+	RETURN;
+END_IF
+IF (pEventParam^.EventId <> CmpLog.EventIDs.EVT_LogAdd) OR
+	(pEventParam^.CmpIdProvider <> CmpLog.EventIDs.CMPID_CmpLog) OR
+	(pEventParam^.usParamId <> CmpLog.EventIDs.EVTPARAMID_CmpLogAdd) OR
+	(pEventParam^.usVersion <> CmpLog.EventIDs.EVTVERSION_CmpLogAdd) THEN
+	GVL_QualificationLog.CallbackErrors := GVL_QualificationLog.CallbackErrors + 1;
+	RETURN;
+END_IF
+IF pEventParam^.pParameter = 0 THEN
+	GVL_QualificationLog.CallbackErrors := GVL_QualificationLog.CallbackErrors + 1;
+	RETURN;
+END_IF
+_event := pEventParam^.pParameter;
+IF _event^.CmpId <> GVL_QualificationLog.ComponentFilter THEN RETURN; END_IF
+IF _event^.pszInfo = 0 THEN
+	GVL_QualificationLog.CallbackErrors := GVL_QualificationLog.CallbackErrors + 1;
+	RETURN;
+END_IF
+IF GVL_QualificationLog.Count >= 128 THEN
+	GVL_QualificationLog.Overflow := TRUE;
+	RETURN;
+END_IF
+_index := GVL_QualificationLog.Count + 1;
+(* LogAdd2's runtime event uses a format plus native argument list, not final pszInfo text.
+   CmpLog >= 3.5.21 provides this ABI-owned resolver (CODESYS CDS-63087). *)
+_copyBytes := SIZEOF(_resolved);
+_arguments := _event^.pargList;
+_copyResult := CmpLog.LogCopyInfo(hLogger := _event^.hLog, pszInfo := _event^.pszInfo,
+	pargList := _arguments, pszString := ADR(_resolved), pdiMaxStringLen := ADR(_copyBytes));
+IF _copyResult <> CmpErrors.Errors.ERR_OK THEN
+	GVL_QualificationLog.LastCopyError := _copyResult;
+	IF _copyResult = CmpErrors.Errors.ERR_BUFFERSIZE THEN GVL_QualificationLog.Truncated := TRUE;
+	ELSE GVL_QualificationLog.CallbackErrors := GVL_QualificationLog.CallbackErrors + 1; END_IF
+	RETURN;
+END_IF
+_source := ADR(_resolved);
+_dest := ADR(GVL_QualificationLog.Entries[_index]);
+_length := 0;
+FOR _i := 0 TO 127 DO
+	IF _source[_i] = 0 THEN EXIT; END_IF
+	IF _i = 127 THEN GVL_QualificationLog.Truncated := TRUE; EXIT; END_IF
+	_dest[_i] := _source[_i];
+	GVL_QualificationLog.Bytes[_index, _i] := _source[_i];
+	_length := _length + 1;
+END_FOR
+_dest[_length] := 0;
+GVL_QualificationLog.Bytes[_index, _length] := 0;
+GVL_QualificationLog.Lengths[_index] := _length;
+GVL_QualificationLog.Classes[_index] := _event^.iClassID;
+GVL_QualificationLog.LastLogHandle := _event^.hLog;
+GVL_QualificationLog.ObservedComponent := _event^.CmpId;
+(* Commit the record after its complete byte/text payload. Read after Stop succeeds. *)
+GVL_QualificationLog.Count := _index;

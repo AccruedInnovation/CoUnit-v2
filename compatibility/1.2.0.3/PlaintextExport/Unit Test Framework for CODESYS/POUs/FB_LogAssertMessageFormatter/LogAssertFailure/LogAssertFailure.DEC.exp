@@ -1,0 +1,15 @@
+METHOD LogAssertFailure
+VAR_INPUT
+    Expected : T_MaxString;
+    Actual : T_MaxString;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR
+    AdjustAssertFailureMessageToMax253CharLength : FB_AdjustAssertFailureMessageToMax253CharLength;
+    TestInstancePathCleaned : T_MaxString;
+    TestInstancePathFinal : T_MaxString;
+    ReturnValue : DINT;
+    TestInstancePathProcessed : T_MaxString;
+    MessageProcessed : T_MaxString;
+END_VAR

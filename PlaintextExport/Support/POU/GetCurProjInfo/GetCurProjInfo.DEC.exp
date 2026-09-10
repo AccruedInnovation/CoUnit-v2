@@ -1,0 +1,11 @@
+{attribute 'hide'}
+FUNCTION_BLOCK GetCurProjInfo
+VAR_OUTPUT
+	PROJECT_INFO : CmpApp.PROJECT_INFO;
+	Valid : BOOL;
+END_VAR
+VAR
+	pCurApp : POINTER TO APPLICATION;
+	_result : RTS_IEC_RESULT;
+	pCurProjInfo : POINTER TO CmpApp.PROJECT_INFO;
+END_VAR

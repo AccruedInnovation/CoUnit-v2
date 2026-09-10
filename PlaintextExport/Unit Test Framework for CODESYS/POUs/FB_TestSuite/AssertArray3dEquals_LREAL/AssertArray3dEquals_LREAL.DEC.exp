@@ -1,0 +1,22 @@
+METHOD PUBLIC AssertArray3dEquals_LREAL
+VAR_IN_OUT
+	Expecteds : ARRAY[*, *, *] OF LREAL;
+	Actuals : ARRAY[*, *, *] OF LREAL;
+END_VAR
+VAR_INPUT
+	Delta : LREAL;
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+	_expectedLower : ARRAY[1..3] OF DINT;
+	_actualLower : ARRAY[1..3] OF DINT;
+	_extent : ARRAY[1..3] OF LINT;
+	_actualExtent : ARRAY[1..3] OF LINT;
+	_offset : ARRAY[1..3] OF LINT;
+	_shapeMatches : BOOL;
+	_elementEqual : BOOL;
+	_argumentError : BOOL;
+END_VAR

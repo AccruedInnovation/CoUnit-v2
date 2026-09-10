@@ -1,0 +1,6 @@
+FOR _index := 1 TO 2048 DO
+	_name := CONCAT('Test', UINT_TO_STRING(_index));
+	TEST(_name);
+	AssertTrue(Condition := FALSE, Message := 'aggregate-failure');
+	TEST_FINISHED();
+END_FOR

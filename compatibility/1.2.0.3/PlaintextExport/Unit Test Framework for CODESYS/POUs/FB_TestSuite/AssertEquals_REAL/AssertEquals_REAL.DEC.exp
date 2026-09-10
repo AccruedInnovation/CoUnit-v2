@@ -1,0 +1,52 @@
+(*
+ Asserts that two REALs are equal to within a positive delta. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – REAL expected value
+     | Actual – REAL actual value
+     | Delta – The maximum delta between the absolute value of expected and actual for which both numbers are still considered equal
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : REAL := 1234.5;
+         b : REAL := 1234.4;
+     END_VAR
+
+     TEST('Test_REAL_Equals');
+     AssertEquals_REAL(Expected := a,
+                       Actual := b,
+                       Delta := 0.1,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : REAL := 1234.5;
+         b : REAL := 1234.4;
+     END_VAR
+
+     TEST('Test_REAL_Differ');
+     AssertEquals_REAL(Expected := a,
+                       Actual := b,
+                       Delta := 0.05,
+                       Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_REAL
+VAR_INPUT
+    Expected : REAL; // REAL expected value
+    Actual : REAL; // REAL actual value
+    Delta : REAL; // The maximum delta between the absolute value of expected and actual for which both numbers are still considered equal
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

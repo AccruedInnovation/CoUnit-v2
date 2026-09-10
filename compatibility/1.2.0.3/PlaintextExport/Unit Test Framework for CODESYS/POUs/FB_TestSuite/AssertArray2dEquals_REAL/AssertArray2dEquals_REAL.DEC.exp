@@ -1,0 +1,62 @@
+(*
+Asserts that two REAL 2D-arrays are equal to within a positive delta. If they are not, an assertion error is created.
+
+ Parameters:
+    | Expecteds – REAL 2d array with expected values
+    | Actuals – REAL 2d array with actual values
+	| Delta - REAL The maximum delta between the value of expected and actual for which both numbers are still considered equal, proportional to the Expected value in that array cell
+    | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+	  <insert positive testexample here>
+
+    TEST_FINISHED();
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+	  <insert failing testexample1 here>
+
+    TEST_FINISHED();
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+	  <insert failing testexample2 here>
+
+    TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArray2dEquals_REAL
+VAR_IN_OUT
+    Expecteds : ARRAY[*, *] OF REAL; // REAL 2d array with expected values
+    Actuals : ARRAY[*, *] OF REAL; // REAL 2d array with actual values
+END_VAR
+VAR_INPUT
+    Delta : REAL; // The maximum delta between the value of expected and actual for which both numbers are still considered equal, proportional to the Expected value in that array cell
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    DimensionIndex : USINT; // Index when looping through Dimensions
+    LowerBoundExpecteds : ARRAY[1..2] OF DINT; // Lower bounds of Expecteds array in each dimension
+    UpperBoundExpecteds : ARRAY[1..2] OF DINT; // Upper bounds of Expecteds array in each dimension
+    LowerBoundActuals : ARRAY[1..2] OF DINT; // Lower bounds of Actuals array in each dimension
+    UpperBoundActuals : ARRAY[1..2] OF DINT; // Upper bounds of Actuals array in each dimension
+    SizeOfExpecteds : ARRAY[1..2] OF DINT; // Size of Expecteds array in each dimension
+    SizeOfActuals : ARRAY[1..2] OF DINT; // Size of Actuals array in each dimension
+    Offset : ARRAY[1..2] OF DINT; // Current Array index offsets from Lower Bound in each dimension
+    ExpectedArrayIndex : ARRAY[1..2] OF DINT; // Array of current Expected array indexes when looping through arrays
+    ActualArrayIndex : ARRAY[1..2] OF DINT; // Array of current Actual array indexes when looping through arrays
+    Expected : REAL; // Single expected value
+    Actual : REAL; // Single actual value
+END_VAR

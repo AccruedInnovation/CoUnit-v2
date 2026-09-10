@@ -1,0 +1,11 @@
+FlushIfSupported := -1;
+IF _handle = SysFile.SysTypes.RTS_INVALID_HANDLE THEN _lastError := 16#FFFF0002; RETURN; END_IF
+_allowed := BeforeOperation(E_CoUnitFileOperation.FLUSH);
+IF _allowed THEN
+	_result := SysFile.SysFileFlush(hFile := _handle);
+	_lastError := _result;
+END_IF
+IF _lastError = CmpErrors.Errors.ERR_OK THEN FlushIfSupported := 1;
+ELSIF _lastError = CmpErrors.Errors.ERR_NOTIMPLEMENTED OR _lastError = CmpErrors.Errors.ERR_NOT_SUPPORTED THEN
+	FlushIfSupported := 0;
+END_IF

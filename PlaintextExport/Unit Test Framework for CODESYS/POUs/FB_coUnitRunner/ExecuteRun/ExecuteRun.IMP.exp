@@ -1,0 +1,101 @@
+(* The one-shot atomic claim makes simultaneous first RUN calls fail closed. *)
+IF NOT CoUnitTryGetTask(Handle => _handle) THEN
+	IF BoundTaskValid THEN
+		SignalViolation();
+	ELSE
+		_previous := TEST_AND_SET(InitialLookupDiagnosticClaim);
+		IF _previous = 0 THEN Diagnostic(Reason := 'Current task lookup failed before run start'); END_IF
+	END_IF
+	RETURN;
+END_IF
+IF NOT BoundTaskValid THEN
+	_previous := TEST_AND_SET(StartClaim);
+	IF _previous <> 0 THEN
+		SignalViolation();
+		RETURN;
+	END_IF
+	BoundTaskHandle := _handle;
+	BoundTaskValid := TRUE;
+	RunMode := Mode;
+	DelayTime := Delay;
+END_IF
+IF NOT IsOwner() THEN RETURN; END_IF
+IF RunState = E_CoUnitRunState.COMPLETE THEN
+	IF (Mode <> RunMode OR PostCommitViolationLatch <> 0) AND NOT PostCompleteMisuseReported THEN
+		Diagnostic(Reason := 'Rejected mode/task misuse after immutable run completion');
+		PostCompleteMisuseReported := TRUE;
+	END_IF
+	ProgressFinalization();
+	RETURN;
+END_IF
+IF NOT CheckViolation() THEN
+	ProgressFinalization();
+	RETURN;
+END_IF
+IF TopLevelActive THEN
+	FrameworkError(Reason := 'Recursive top-level runner invocation');
+	RETURN;
+END_IF
+IF RunState = E_CoUnitRunState.IDLE THEN
+	IF NOT CoUnitBindStringEncoding() THEN
+		FrameworkError(Reason := 'Unsupported native STRING encoding');
+	END_IF
+END_IF
+IF InitializationError THEN
+	FrameworkError(Reason := FrameworkErrorReason);
+END_IF
+IF Mode <> RunMode THEN
+	FrameworkError(Reason := 'Run mode cannot change');
+END_IF
+IF RunState = E_CoUnitRunState.FINALIZING THEN
+	ProgressFinalization();
+	RETURN;
+END_IF
+IF Epoch = ULINT#18446744073709551615 THEN
+	FrameworkError(Reason := 'Runner epoch exhausted');
+	ProgressFinalization();
+	RETURN;
+END_IF
+Epoch := Epoch + 1;
+TopLevelActive := TRUE;
+IF RunState = E_CoUnitRunState.IDLE THEN RunState := E_CoUnitRunState.RUNNING; END_IF
+IF RunState = E_CoUnitRunState.BETWEEN_SUITES THEN
+	DelayTimer(IN := TRUE, PT := DelayTime);
+	IF DelayTimer.Q THEN
+		DelayTimer(IN := FALSE, PT := DelayTime);
+		RunState := E_CoUnitRunState.RUNNING;
+	END_IF
+END_IF
+IF RunState = E_CoUnitRunState.RUNNING THEN
+	IF RunMode = E_CoUnitRunMode.ALL_SUITES THEN
+		FOR _i := 1 TO SuiteCount DO
+			IF NOT Suites[UDINT_TO_UINT(_i)]^.AreAllTestsFinished() THEN InvokeSuite(Index := UDINT_TO_UINT(_i)); END_IF
+			IF RunState <> E_CoUnitRunState.RUNNING THEN EXIT; END_IF
+		END_FOR
+		_complete := TRUE;
+		FOR _i := 1 TO SuiteCount DO
+			IF NOT Suites[UDINT_TO_UINT(_i)]^.AreAllTestsFinished() THEN _complete := FALSE; END_IF
+		END_FOR
+	ELSE
+		IF SequenceSuiteIndex <= SuiteCount THEN
+			IF NOT Suites[UDINT_TO_UINT(SequenceSuiteIndex)]^.AreAllTestsFinished() THEN
+				InvokeSuite(Index := UDINT_TO_UINT(SequenceSuiteIndex));
+			END_IF
+			IF RunState = E_CoUnitRunState.RUNNING AND_THEN Suites[UDINT_TO_UINT(SequenceSuiteIndex)]^.AreAllTestsFinished() THEN
+				SequenceSuiteIndex := SequenceSuiteIndex + 1;
+				IF SequenceSuiteIndex <= SuiteCount AND DelayTime > T#0ms THEN
+					RunState := E_CoUnitRunState.BETWEEN_SUITES;
+					DelayTimer(IN := TRUE, PT := DelayTime);
+				END_IF
+			END_IF
+		END_IF
+		_complete := SequenceSuiteIndex > SuiteCount;
+	END_IF
+	IF _complete AND RunState = E_CoUnitRunState.RUNNING THEN
+		RunDisposition := E_CoUnitRunDisposition.NORMAL;
+		RunState := E_CoUnitRunState.FINALIZING;
+	END_IF
+END_IF
+TopLevelActive := FALSE;
+ClearContext();
+ProgressFinalization();

@@ -1,0 +1,12 @@
+(* Result: 1 exists, 0 missing, -1 error. Missing is the exact platform code. *)
+METHOD PUBLIC Probe : DINT
+VAR_INPUT
+	Path : T_MaxString;
+END_VAR
+VAR_OUTPUT
+	Size : ULINT;
+END_VAR
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+	_size : SysFile.SysTypes.RTS_IEC_SIZE;
+END_VAR

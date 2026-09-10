@@ -1,0 +1,4 @@
+(*
+    Closes the current opened file.
+*)
+METHOD PUBLIC Close : SysFile.SysTypes.RTS_IEC_RESULT

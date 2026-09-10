@@ -1,0 +1,4 @@
+IF NOT BeforeOperation(E_CoUnitFileOperation.RENAME) THEN RETURN; END_IF
+_result := SysFile.SysFileRename(szOldFileName := OldPath, szNewFileName := NewPath);
+_lastError := _result;
+Rename := _result = CmpErrors.Errors.ERR_OK;

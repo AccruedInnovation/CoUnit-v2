@@ -1,0 +1,11 @@
+METHOD PUBLIC AssertEquals_WSTRING
+VAR_INPUT
+	Expected : WSTRING(255);
+	Actual : WSTRING(255);
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+END_VAR

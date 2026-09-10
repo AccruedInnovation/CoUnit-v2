@@ -1,0 +1,5 @@
+TEST('F41_AssertEquals_WSTRING');
+IF NOT IS_TEST_FINISHED('F41_AssertEquals_WSTRING') THEN
+	AssertEquals_WSTRING(Expected := _v41e, Actual := _v41a, Message := 'F41_AssertEquals_WSTRING');
+	TEST_FINISHED();
+END_IF

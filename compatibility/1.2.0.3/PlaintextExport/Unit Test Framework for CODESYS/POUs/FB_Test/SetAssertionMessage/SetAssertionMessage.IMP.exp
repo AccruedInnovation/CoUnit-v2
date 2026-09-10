@@ -1,0 +1,3 @@
+IF LEN(STR := AssertionMessage) = 0 THEN
+    AssertionMessage := AssertMessage;
+END_IF

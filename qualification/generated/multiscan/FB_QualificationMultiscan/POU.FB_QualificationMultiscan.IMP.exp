@@ -1,0 +1,6 @@
+BranchPassThenFail();
+FirstFailureCoherent();
+TenThousandInvocations();
+ZeroAssertions();
+ThreeAssertions();
+LaterFailureExecuted := _first >= 2;

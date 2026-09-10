@@ -1,0 +1,3 @@
+CompareAnyForQualification := CompareAny(ExpectedData := ExpectedData, ActualData := ActualData,
+	ExpectedSize := ExpectedSize, ActualSize := ActualSize,
+	ExpectedClass := ExpectedClass, ActualClass := ActualClass);

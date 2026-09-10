@@ -1,0 +1,48 @@
+(*
+ Asserts that two STRINGs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – STRING expected value
+     | Actual – STRING actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : STRING := 'Hello there';
+         b : STRING := 'Hello there';
+     END_VAR
+
+     TEST('Test_STRING_Equals');
+     AssertEquals_STRING(Expected := a,
+                         Actual := b,
+                         Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : STRING := 'This is a string';
+         b : STRING := 'This is another string';
+     END_VAR
+
+     TEST('Test_STRING_Differ');
+     AssertEquals_STRING(Expected := a,
+                         Actual := b,
+                         Message := 'Values differ');
+     TEST_FINISHED(); 
+*)
+METHOD PUBLIC AssertEquals_STRING
+VAR_INPUT
+    Expected : T_MaxString; // STRING expected value
+    Actual : T_MaxString; // STRING actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

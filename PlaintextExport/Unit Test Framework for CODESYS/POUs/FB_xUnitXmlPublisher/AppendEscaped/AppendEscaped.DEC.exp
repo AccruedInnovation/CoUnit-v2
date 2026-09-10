@@ -1,0 +1,15 @@
+METHOD PRIVATE AppendEscaped : BOOL
+VAR_INPUT
+	Value : T_MaxString;
+END_VAR
+VAR
+	_p : POINTER TO BYTE;
+	_i : UINT;
+	_j : UINT;
+	_need : UINT;
+	_taken : UINT;
+	_cp : UDINT;
+	_min : UDINT;
+	_valid : BOOL;
+	_ok : BOOL;
+END_VAR

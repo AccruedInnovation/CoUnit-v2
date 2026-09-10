@@ -1,0 +1,31 @@
+Compare_REAL := FALSE;
+ArgumentError := FALSE;
+MEMCPY(destAddr := ADR(_expectedBits), srcAddr := ADR(Expected), n := SIZEOF(REAL));
+MEMCPY(destAddr := ADR(_actualBits), srcAddr := ADR(Actual), n := SIZEOF(REAL));
+MEMCPY(destAddr := ADR(_deltaBits), srcAddr := ADR(Delta), n := SIZEOF(REAL));
+IF ((_deltaBits AND DWORD#16#7F800000) = DWORD#16#7F800000) AND ((_deltaBits AND DWORD#16#007FFFFF) <> 0) THEN
+	ArgumentError := TRUE;
+	RETURN;
+END_IF
+IF ((_deltaBits AND DWORD#16#80000000) <> 0) AND ((_deltaBits AND NOT DWORD#16#80000000) <> 0) THEN
+	ArgumentError := TRUE;
+	RETURN;
+END_IF
+IF (((_expectedBits AND DWORD#16#7F800000) = DWORD#16#7F800000) AND ((_expectedBits AND DWORD#16#007FFFFF) <> 0))
+	OR (((_actualBits AND DWORD#16#7F800000) = DWORD#16#7F800000) AND ((_actualBits AND DWORD#16#007FFFFF) <> 0)) THEN RETURN; END_IF
+_expectedInf := (_expectedBits AND NOT DWORD#16#80000000) = DWORD#16#7F800000;
+_actualInf := (_actualBits AND NOT DWORD#16#80000000) = DWORD#16#7F800000;
+IF _expectedInf OR _actualInf THEN
+	Compare_REAL := _expectedInf AND _actualInf AND ((_expectedBits AND DWORD#16#80000000) = (_actualBits AND DWORD#16#80000000));
+	RETURN;
+END_IF
+IF _deltaBits = DWORD#16#7F800000 THEN Compare_REAL := TRUE; RETURN; END_IF
+IF Expected = Actual THEN Compare_REAL := TRUE; RETURN; END_IF
+IF (_expectedBits AND DWORD#16#80000000) <> (_actualBits AND DWORD#16#80000000) THEN
+	_a := ABS(Expected);
+	_b := ABS(Actual);
+	IF Delta < _a THEN RETURN; END_IF
+	Compare_REAL := _b <= (Delta - _a);
+ELSE
+	Compare_REAL := ABS(Expected - Actual) <= Delta;
+END_IF

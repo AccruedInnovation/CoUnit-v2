@@ -1,0 +1,49 @@
+{
+  "shard": "seal_violation",
+  "native_status": "NOT_RUN",
+  "run_disposition": "FRAMEWORK_ERROR",
+  "suites": [
+    [
+      {
+        "name": "TerminalPass",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "TerminalFailure",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_BOOL",
+        "message": "sealed-first-failure"
+      },
+      {
+        "name": "TerminalSkip",
+        "state": "SKIPPED",
+        "assertions": 0
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#3",
+    "_snapshot.Passed = UDINT#1",
+    "_snapshot.Failed = UDINT#1",
+    "_snapshot.Skipped = UDINT#1",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#3",
+    "_snapshot.Suites[1].Tests[1].Name = 'TerminalPass'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[2].Name = 'TerminalFailure'",
+    "_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType = E_AssertionType.Type_BOOL",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.Message = 'sealed-first-failure'",
+    "_snapshot.Suites[1].Tests[3].Name = 'TerminalSkip'",
+    "_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.SKIPPED",
+    "_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#0"
+  ]
+}

@@ -1,0 +1,6 @@
+IF _state = E_CoUnitReportState.FAILED THEN RETURN; END_IF
+IF _used = 0 THEN FlushChunk := TRUE; RETURN; END_IF
+IF NOT _file.WriteAll(Bytes := ADR(_buffer), Count := _used) THEN Fail('write staging'); RETURN; END_IF
+_writtenBytes := _writtenBytes + _used;
+_used := 0;
+FlushChunk := TRUE;

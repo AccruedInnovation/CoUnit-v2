@@ -1,0 +1,5 @@
+METHOD INTERNAL GetNumberOfSkippedTests : UINT
+VAR
+    Counter : UINT;
+    SkippedTestsCount : UINT;
+END_VAR

@@ -1,0 +1,75 @@
+(* Asserts that two DWORD arrays are equal. If they are not, an assertion error is created.
+
+ Parameters:
+    | Expecteds – DWORD array with expected values
+    | Actuals – DWORD array with actual values
+    | Message – The identifying message for the assertion error
+ 
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[2..3] OF DWORD := [16#6789ABCD, 16#EF012345];
+         b : ARRAY[1..2] OF DWORD := [16#6789ABCD, 16#EF012345];
+     END_VAR
+ 
+     TEST('Test_DWORD_Array_Equals');
+     AssertArrayEquals_DWORD(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();								   
+
+ Failing example 1:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[-2..1] OF DWORD := [16#6789ABCD, 16#EF012345, 16#67890ABC, 16#DDDDDDDD];
+         b : ARRAY[-3..-2] OF DWORD := [16#6789ABCD, 16#EF012345];
+     END_VAR
+ 
+     TEST('Test_DWORD_Array_DifferInSize');
+     AssertArrayEquals_DWORD(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+ 	   TEST_FINISHED();								   
+
+ Failing example 2:
+
+ .. code-block:: codesys
+
+     VAR
+         a : ARRAY[-2..1] OF DWORD := [16#6789ABCD, 16#EFAA2346, 16#ABABABAB, 16#EEEEEEEE];
+         b : ARRAY[-2..1] OF DWORD := [16#6789ABCD, 16#EF012345, 16#ABABABAB, 16#EEEEEEEE];
+     END_VAR
+ 
+     TEST('Test_DWORD_Array_DifferInContent');
+     AssertArrayEquals_DWORD(Expecteds := a,
+                             Actuals := b,
+                             Message := 'Arrays differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertArrayEquals_DWORD
+VAR_IN_OUT
+    Expecteds : ARRAY[*] OF DWORD; // DWORD array with expected values
+    Actuals : ARRAY[*] OF DWORD; // DWORD array with actual values
+END_VAR
+VAR_INPUT
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    Equals : BOOL := TRUE;
+    SizeEquals : BOOL := TRUE;
+    Index : DINT;
+    ExpectedString : STRING;
+    ActualString : STRING;
+    AlreadyReported : BOOL;
+    TestInstancePath : T_MaxString;
+    SizeOfExpecteds : DINT;
+    SizeOfActuals : DINT;
+    ExpectedDWordString : STRING;
+    ActualDWordString : STRING;
+    ExpectedsIndex : DINT;
+    ActualsIndex : DINT;
+END_VAR

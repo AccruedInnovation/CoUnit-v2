@@ -1,0 +1,10 @@
+METHOD INTERNAL RunTestSuiteTests
+VAR
+    Counter : UINT := 0;
+    BusyPrinting : BOOL;
+    (* We need to hold a temporary state of the statistics (failed, successful, total number of test cases etc)
+       as we don't consider the tests to be completely finished until all test suites have executed completely.
+       The reason we want to do it this way is because a test suite can run over several cycles. Only once all tests
+       are finished (which might take many cycles), do we gather correct statistics *)
+    NumberOfTestSuitesFinished : UINT := 0;
+END_VAR

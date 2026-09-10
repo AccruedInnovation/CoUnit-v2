@@ -1,0 +1,38 @@
+(*
+    Organizes parsing and composing of XML data. Data can be treated as STRING or char array.
+    Buffer size of file can be set via GVL_Param_coUnit (xUnitBufferSize)
+*)
+FUNCTION_BLOCK FB_XmlControl
+VAR
+    XmlBuffer : FB_StreamBuffer;
+    TagListBuffer : FB_StreamBuffer;
+    Tags : T_MaxString;
+    TagListSeekBuffer : FB_StreamBuffer;
+    TagsSeek : STRING;
+    TagBuffer : FB_StreamBuffer;
+    Tag : T_MaxString;
+    TagOpen : BOOL;
+    Select : UDINT;
+    SearchPosition : UDINT;
+END_VAR
+VAR CONSTANT
+    TAG_OPEN : STRING(1) := '<';
+    TAG_CLOSE : STRING(1) := '>';
+    END_TAG_CLOSE : STRING(2) := '/>';
+    SPACE : STRING(1) := ' ';
+    EQUALS : STRING(1) := '=';
+    QUOTE : STRING(1) := '"';
+    BACK_SLASH : STRING(1) := '\';
+    FORWARD_SLASH : STRING(1) := '/';
+    OPEN_COMMENT : STRING(5) := '<!-- ';
+    CLOSE_COMMENT : STRING(4) := ' -->';
+    TAB : STRING(2) := '$T';
+    CR_LF : STRING(4) := '$R$N';
+    // $OD : ASCII code for carriage return (CR)
+    // $$ : to add a $R
+    // $' : to add ' (apostrophe)
+    // $L or $l : line feed
+    // $N or $n : new line
+    // $P or $p : next page
+    // $R or $r : end of line
+END_VAR

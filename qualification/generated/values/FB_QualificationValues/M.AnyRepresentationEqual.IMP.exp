@@ -1,0 +1,8 @@
+TEST('AnyRepresentationEqual');
+IF NOT IS_TEST_FINISHED('AnyRepresentationEqual') THEN
+	_userE.A := 1;
+	_userE.B := 2;
+	_userA := _userE;
+	AssertEquals(Expected := _userE, Actual := _userA, Message := 'same-representation');
+	TEST_FINISHED();
+END_IF

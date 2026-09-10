@@ -1,0 +1,74 @@
+package:
+  id: COUNIT-ARCH-R3
+  revision: 2026-09-09-r3
+  predecessor: COUNIT-ARCH-R2/2026-09-09-r2
+  completeness: COMPLETE
+  approval: APPROVED
+  approval_source: SRC-020
+artifacts:
+- path: package-manifest.yaml
+  role: package identity, artifact inventory and required-input summary
+  kind: canonical inventory
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: README.md
+  role: entry point/status/reading routes
+  kind: canonical entry
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: architecture-baseline.md
+  role: architecture, requirements, QAS, FE, capability baseline
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: decisions.md
+  role: decision/authority/supersession record
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: shared-contracts.md
+  role: IF/ISC/SDE contracts
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: verification-and-readiness.md
+  role: VER/SCN/gates/open items/readiness/review evidence
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: prd-authoring-assignments.md
+  role: 18-field human PRD authoring assignments
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: prd-authoring-handoff.yaml
+  role: machine-readable projection of PRD handoff
+  kind: projection
+  availability: SUPPLIED_WITH_ARCHITECTURE
+  canonical_source: prd-authoring-assignments.md + canonical records
+- path: sources.md
+  role: source register/access limits
+  kind: canonical
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: architecture-review.md
+  role: R1/R2 adversarial review record plus R3 closure/requalification evidence
+  kind: review evidence
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: CHANGELOG.md
+  role: revision history
+  kind: canonical history
+  availability: SUPPLIED_WITH_ARCHITECTURE
+- path: sources/CoUnitPlaintextExport.zip
+  role: exact CoUnit 1.2.0.3 plaintext source baseline SRC-001
+  kind: supplied source evidence
+  availability: SUPPLIED_WITH_ARCHITECTURE
+  sha256: 458aab0070f01c7751f63bd7b0980ce7dc260a9607731646a900afedef1c6d48
+missing_required_inputs: []
+notes:
+- No product code or production artifacts changed.
+- R3 authorizes PRD elaboration only; implementation and release gates remain separate.
+- No recursive/self-hashing manifest is used; source digest is retained because it
+  binds a required external baseline.
+resolved_architecture_gates:
+- id: OPEN-COU-006
+  disposition: FIXED_AND_RECHECKED
+  evidence: package-relative SRC-001 digest match
+- id: OPEN-COU-007
+  disposition: FIXED_AND_RECHECKED
+  evidence: SRC-020 explicit approval
+- id: OPEN-COU-008
+  disposition: FIXED_AND_RECHECKED
+  evidence: ADR-COU-017 + IF-COU-003 + analytical branch probe

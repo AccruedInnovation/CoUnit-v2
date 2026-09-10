@@ -1,0 +1,14 @@
+{attribute 'hide'}
+(*
+    The F_ToLCase function converts a specified string to lowercase.
+    Contains portions of OSCAT BASIC
+*)
+FUNCTION F_ToLCase : T_MaxString
+VAR_INPUT
+	in : T_MaxString;
+END_VAR
+VAR
+	PT : POINTER TO BYTE;
+	pos: INT;
+	l: INT;
+END_VAR

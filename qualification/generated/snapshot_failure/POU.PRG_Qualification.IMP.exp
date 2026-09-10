@@ -1,0 +1,13 @@
+IF NOT Init THEN
+	GVL_CoUnitReporting.InjectSnapshotBuildFailure := TRUE;
+	Init := TRUE;
+END_IF
+RUN();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+SnapshotValid := _snapshot.IsValid;
+Disposition := GVL_coUnit.coUnitRunner.GetDisposition();
+IF GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE THEN
+	SettledCalls := SettledCalls + 1;
+	Done := SettledCalls >= 3;
+	OraclePass := Done AND NOT SnapshotValid AND (Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) AND NOT GVL_CoUnitReporting.InjectSnapshotBuildFailure;
+END_IF

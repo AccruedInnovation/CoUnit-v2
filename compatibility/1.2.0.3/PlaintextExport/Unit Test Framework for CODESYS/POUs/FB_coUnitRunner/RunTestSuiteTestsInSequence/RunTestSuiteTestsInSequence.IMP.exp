@@ -1,0 +1,41 @@
+TimerBetweenExecutionOfTestSuites(PT := TimeBetweenTestSuitesExecution);
+
+(* Run TcUnit test suites *)
+IF NOT AllTestSuitesFinished THEN
+    IF GVL_coUnit.NumberOfInitializedTestSuites = 0 THEN
+        AllTestSuitesFinished := TRUE;
+    ELSIF GVL_coUnit.NumberOfInitializedTestSuites > 0 THEN
+        IF TimerBetweenExecutionOfTestSuites.Q THEN
+            TimerBetweenExecutionOfTestSuites.IN := FALSE;
+        END_IF
+
+        IF GVL_coUnit.TestSuiteAddresses[CurrentlyRunningTestSuite]^.AreAllTestsFinished() THEN
+            IF CurrentlyRunningTestSuite <> GVL_coUnit.NumberOfInitializedTestSuites THEN
+                NumberOfTestSuitesFinished := NumberOfTestSuitesFinished + 1;
+                CurrentlyRunningTestSuite := CurrentlyRunningTestSuite + 1;
+                TimerBetweenExecutionOfTestSuites.IN := TRUE;
+            END_IF
+        ELSIF NOT TimerBetweenExecutionOfTestSuites.Q THEN
+            GVL_coUnit.CurrentTestSuiteBeingCalled := GVL_coUnit.TestSuiteAddresses[CurrentlyRunningTestSuite];
+            GVL_coUnit.CurrentTestSuiteBeingCalled^.SetHasStartedRunning();
+            GVL_coUnit.CurrentTestSuiteBeingCalled^();
+        END_IF
+
+        (* Check if some event triggered an abortion of running the tests, in that case abort it now.
+           This can be accomplished by setting the result of the test suites run to finished. *)
+        IF AbortRunningTestSuites THEN
+            NumberOfTestSuitesFinished := GVL_coUnit.NumberOfInitializedTestSuites;
+        END_IF
+
+        IF NumberOfTestSuitesFinished = GVL_coUnit.NumberOfInitializedTestSuites THEN
+            AllTestSuitesFinished := TRUE;
+        END_IF
+    END_IF
+END_IF
+
+(* Store test suite results continuously *)
+TestResults();
+(* Log test suite results continuously *)
+TestResultLogger.LogTestSuiteResults();
+(* publish the xUnit Xml file once if enabled *)
+IsReportWrittenToDisk := XmlTestResultPublisher.LogTestSuiteResults();

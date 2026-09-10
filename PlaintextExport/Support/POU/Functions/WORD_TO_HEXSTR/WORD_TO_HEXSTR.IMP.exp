@@ -1,0 +1,15 @@
+IF (IN = 0 AND iPrecision = 0) OR iPrecision < 0 THEN RETURN; END_IF 
+
+m_Format := Standard.CONCAT('%0', TO_STRING(iPrecision));
+
+IF bLoCase THEN
+	m_Format := Standard.CONCAT(m_Format, 'x');
+ELSE
+	m_Format := Standard.CONCAT(m_Format, 'X');
+END_IF
+
+IECStringUtils.Printf(  cbpFormat := ADR(m_Format),
+						uiResultCapacity := 255,
+						pValue := ADR(in),
+						typeClass := __SYSTEM.TYPE_CLASS.TYPE_WORD,
+						cbpResult := ADR(WORD_TO_HEXSTR));

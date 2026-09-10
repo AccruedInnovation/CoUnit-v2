@@ -1,0 +1,4 @@
+METHOD INTERNAL GetSuite : POINTER TO FB_TestSuite
+VAR_INPUT
+	Index : UINT;
+END_VAR

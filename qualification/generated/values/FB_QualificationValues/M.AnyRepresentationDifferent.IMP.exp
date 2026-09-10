@@ -1,0 +1,9 @@
+TEST('AnyRepresentationDifferent');
+IF NOT IS_TEST_FINISHED('AnyRepresentationDifferent') THEN
+	_userE.A := 1;
+	_userE.B := 2;
+	_userA := _userE;
+	_userA.B := 3;
+	AssertEquals(Expected := _userE, Actual := _userA, Message := 'AnyRepresentationDifferent');
+	TEST_FINISHED();
+END_IF

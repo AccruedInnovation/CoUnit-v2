@@ -1,0 +1,6 @@
+(* it's possible to do TO_STRING on enumerations,
+   but for backward compability we need to do it manually *)
+FUNCTION F_AssertionTypeToString : T_MaxString
+VAR_INPUT
+    AssertionType : E_AssertionType;
+END_VAR

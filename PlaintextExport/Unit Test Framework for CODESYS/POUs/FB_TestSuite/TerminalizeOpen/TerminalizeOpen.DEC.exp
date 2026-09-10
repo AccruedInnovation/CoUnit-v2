@@ -1,0 +1,7 @@
+METHOD INTERNAL TerminalizeOpen
+VAR_INPUT
+	State : E_CoUnitTestState;
+END_VAR
+VAR
+	_i : UDINT;
+END_VAR

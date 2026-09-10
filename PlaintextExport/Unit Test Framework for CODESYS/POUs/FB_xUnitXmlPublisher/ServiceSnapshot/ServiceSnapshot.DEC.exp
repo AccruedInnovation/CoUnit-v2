@@ -1,0 +1,13 @@
+(* Internal entry also used by isolated qualification fixtures. Snapshot remains immutable. *)
+METHOD INTERNAL ServiceSnapshot : BOOL
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR
+VAR
+	_exists : DINT;
+	_flushResult : DINT;
+	_size : ULINT;
+	_commitError : UDINT;
+	_restoreOk : BOOL;
+	_dispositionText : T_MaxString;
+END_VAR

@@ -1,0 +1,6 @@
+F_LTrim := in;
+
+(* beginning blanks need to be stripped off *)
+WHILE LEFT(F_LTrim,1) = ' ' DO
+	F_LTrim := DELETE(F_LTrim,1,1);
+END_WHILE;

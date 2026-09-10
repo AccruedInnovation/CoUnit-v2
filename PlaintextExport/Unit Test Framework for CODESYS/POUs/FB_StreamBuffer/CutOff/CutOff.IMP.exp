@@ -1,0 +1,23 @@
+Loop := 0;
+PointerToByteToCut := ADR(CutOff);
+PointerToByteBuffer := _PointerToStringBuffer + StartPos - 1;
+WHILE PointerToByteBuffer^ <> 0 AND (Loop < SIZEOF(CutOff)) AND StartPos - 1 + Loop < _Length DO
+    PointerToByteToCut^ := PointerToByteBuffer^;
+    Loop := Loop + 1;
+    PointerToByteToCut := ADR(CutOff) + Loop;
+    PointerToByteBuffer := _PointerToStringBuffer + StartPos - 1 + Loop;
+END_WHILE;
+
+IF PointerToByteBuffer^ = 0 THEN
+    XmlError := E_XmlError.OK;
+ELSIF Loop = SIZEOF(CutOff) THEN
+    XmlError := E_XmlError.ErrorStringLen;
+ELSIF StartPos - 1 + Loop = _Length THEN
+    XmlError := E_XmlError.ErrorMaxBufferLen;
+END_IF;
+
+PointerToByteToCut^ := 0;
+_Length := StartPos - 1;
+PointerToByteBuffer := _PointerToStringBuffer + StartPos - 1;
+PointerToByteBuffer^ := 0;
+CutLen := Loop;

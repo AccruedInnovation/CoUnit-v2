@@ -1,0 +1,9 @@
+METHOD PRIVATE AddAssertArrayResult
+VAR_INPUT
+    ExpectedsSize : UDINT;
+    ExpectedsTypeClass : IBaseLibrary.TypeClass;
+    ActualsSize : UDINT;
+    ActualsTypeClass : IBaseLibrary.TypeClass;
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_VAR

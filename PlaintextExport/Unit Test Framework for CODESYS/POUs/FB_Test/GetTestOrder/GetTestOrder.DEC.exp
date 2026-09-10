@@ -1,0 +1,2 @@
+(* Gets in which order/sequence relative to the order tests should this test be executed/evaluated. *)
+METHOD INTERNAL GetTestOrder : UINT(0..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);

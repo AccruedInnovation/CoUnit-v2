@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit initial task lookup failure" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_QualificationInitialLookup" pouType="functionBlock">
+        <interface>
+          <localVars />
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">LookupRecovered();</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="LookupRecovered" ObjectId="" qualifiedName="FB_QualificationInitialLookup.LookupRecovered">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">TEST('LookupRecovered');
+IF NOT IS_TEST_FINISHED('LookupRecovered') THEN
+	TEST_FINISHED();
+END_IF</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD LookupRecovered
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_QualificationInitialLookup EXTENDS FB_TestSuite
+VAR
+
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCalls">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="DiagnosticClaim">
+              <type>
+                <DWORD />
+              </type>
+            </variable>
+            <variable name="IdlePreserved">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="EpochPreserved">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="SuiteAndTestsPreserved">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="RecoveryComplete">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SnapshotDisposition">
+              <type>
+                <derived name="E_CoUnitRunDisposition" />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_suite">
+              <type>
+                <derived name="FB_QualificationInitialLookup" />
+              </type>
+            </variable>
+            <variable name="_snapshot">
+              <type>
+                <derived name="REFERENCE TO ST_CoUnitRunSnapshot" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF FailedCalls &lt; 3 THEN
+	GVL_coUnit.InjectTaskLookupFailure := TRUE;
+	RUN();
+	GVL_coUnit.InjectTaskLookupFailure := FALSE;
+	FailedCalls := FailedCalls + 1;
+	DiagnosticClaim := GVL_coUnit.coUnitRunner.GetInitialLookupDiagnosticClaim();
+	IdlePreserved := IdlePreserved AND (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.IDLE);
+	EpochPreserved := EpochPreserved AND (GVL_coUnit.coUnitRunner.GetEpoch() = 0);
+	SuiteAndTestsPreserved := SuiteAndTestsPreserved AND (GVL_coUnit.coUnitRunner.GetSuiteCount() = 1) AND (_suite.GetNumberOfTests() = 0);
+ELSE
+	RUN();
+	_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+	SnapshotDisposition := _snapshot.Disposition;
+	Done := GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE;
+	RecoveryComplete := Done AND _snapshot.IsValid AND (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) AND (_snapshot.SuiteCount = 1) AND (_snapshot.Total = 1) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 0) AND (_snapshot.Errors = 0) AND (_snapshot.Skipped = 0);
+	OraclePass := RecoveryComplete AND IdlePreserved AND EpochPreserved AND SuiteAndTestsPreserved AND (DiagnosticClaim = 1);
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCalls : UINT;
+	DiagnosticClaim : DWORD;
+	IdlePreserved : BOOL := TRUE;
+	EpochPreserved : BOOL := TRUE;
+	SuiteAndTestsPreserved : BOOL := TRUE;
+	RecoveryComplete : BOOL;
+	SnapshotDisposition : E_CoUnitRunDisposition;
+END_VAR
+VAR
+	_suite : FB_QualificationInitialLookup;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="Qualification">
+          <Object Name="FB_QualificationInitialLookup" ObjectId="">
+            <Object Name="LookupRecovered" ObjectId="" />
+          </Object>
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

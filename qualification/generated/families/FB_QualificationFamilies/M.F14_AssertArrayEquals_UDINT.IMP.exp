@@ -1,0 +1,7 @@
+TEST('F14_AssertArrayEquals_UDINT');
+IF NOT IS_TEST_FINISHED('F14_AssertArrayEquals_UDINT') THEN
+	_v14e[1] := 1;
+	_v14a[1] := 2;
+	AssertArrayEquals_UDINT(Expecteds := _v14e, Actuals := _v14a, Message := 'F14_AssertArrayEquals_UDINT');
+	TEST_FINISHED();
+END_IF

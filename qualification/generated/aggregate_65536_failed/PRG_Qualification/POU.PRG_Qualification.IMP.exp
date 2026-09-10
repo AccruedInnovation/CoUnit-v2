@@ -1,0 +1,18 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+RUN_IN_SEQUENCE();
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT Done THEN
+	ObservedTotal := _snapshot.Total;
+	OraclePass := _snapshot.IsValid AND (_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL) AND (_snapshot.SuiteCount = 32) AND (_snapshot.Total = UDINT#65536) AND (_snapshot.Passed = 0) AND (_snapshot.Failed = UDINT#65536) AND (_snapshot.Errors = 0) AND (_snapshot.Skipped = 0);
+	FOR _suiteIndex := 1 TO 32 DO
+		IF _snapshot.Suites[_suiteIndex].Total <> 2048 THEN OraclePass := FALSE; END_IF
+		FOR _testIndex := 1 TO 2048 DO
+			_expectedName := CONCAT('Test', UINT_TO_STRING(_testIndex));
+			IF (_snapshot.Suites[_suiteIndex].Tests[_testIndex].Name <> _expectedName) OR (_snapshot.Suites[_suiteIndex].Tests[_testIndex].State <> E_CoUnitTestState.FAILED) OR (_snapshot.Suites[_suiteIndex].Tests[_testIndex].NumberOfAsserts <> 1) THEN
+				OraclePass := FALSE;
+				IF FirstBadSuite = 0 THEN FirstBadSuite := _suiteIndex; FirstBadTest := _testIndex; END_IF
+			END_IF
+		END_FOR
+	END_FOR
+	Done := TRUE;
+END_IF

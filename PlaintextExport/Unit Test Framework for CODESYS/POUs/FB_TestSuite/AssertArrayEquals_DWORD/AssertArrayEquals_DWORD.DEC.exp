@@ -1,0 +1,21 @@
+METHOD PUBLIC AssertArrayEquals_DWORD
+VAR_IN_OUT
+	Expecteds : ARRAY[*] OF DWORD;
+	Actuals : ARRAY[*] OF DWORD;
+END_VAR
+VAR_INPUT
+	Message : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+	_expectedLower : ARRAY[1..1] OF DINT;
+	_actualLower : ARRAY[1..1] OF DINT;
+	_extent : ARRAY[1..1] OF LINT;
+	_actualExtent : ARRAY[1..1] OF LINT;
+	_offset : ARRAY[1..1] OF LINT;
+	_shapeMatches : BOOL;
+	_elementEqual : BOOL;
+	_argumentError : BOOL;
+END_VAR

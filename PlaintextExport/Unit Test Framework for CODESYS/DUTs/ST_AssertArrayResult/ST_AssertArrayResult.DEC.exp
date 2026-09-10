@@ -1,0 +1,10 @@
+TYPE ST_AssertArrayResult :
+STRUCT
+    ExpectedsSize : UDINT; // Size in bytes of the expecteds-array
+    ExpectedsTypeClass : IBaseLibrary.TypeClass; // The data type of the expecteds-array
+    ActualsSize : UDINT; // Size in bytes of the actuals-array
+    ActualsTypeClass : IBaseLibrary.TypeClass; // The data type of the actuals-array
+    Message : T_MaxString;
+    TestInstancePath : T_MaxString;
+END_STRUCT
+END_TYPE

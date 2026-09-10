@@ -1,0 +1,8 @@
+IF FileHandle <> SysFile.SysTypes.RTS_INVALID_HANDLE THEN
+    SysFile.SysFileWrite(hFile := FileHandle,
+        pbyBuffer := BufferPointer,
+        ulSize := Size,
+        pResult := ADR(Write));
+ELSE
+    Write := SysDir.CmpErrors.Errors.ERR_INVALID_HANDLE;
+END_IF

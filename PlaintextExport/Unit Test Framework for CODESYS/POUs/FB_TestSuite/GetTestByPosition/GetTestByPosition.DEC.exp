@@ -1,0 +1,4 @@
+METHOD INTERNAL GetTestByPosition : FB_Test
+VAR_INPUT
+	Position : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+END_VAR

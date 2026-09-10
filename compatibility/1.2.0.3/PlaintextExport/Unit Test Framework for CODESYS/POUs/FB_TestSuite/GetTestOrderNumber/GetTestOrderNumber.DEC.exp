@@ -1,0 +1,8 @@
+METHOD INTERNAL GetTestOrderNumber : UINT;
+VAR_INPUT
+    TestName : T_MaxString;
+END_VAR
+VAR
+    IteratorCounter : UINT;
+    NumberOfTestsToAnalyse : UINT;
+END_VAR

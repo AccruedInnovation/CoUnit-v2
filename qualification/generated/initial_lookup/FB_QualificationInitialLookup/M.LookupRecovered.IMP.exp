@@ -1,0 +1,4 @@
+TEST('LookupRecovered');
+IF NOT IS_TEST_FINISHED('LookupRecovered') THEN
+	TEST_FINISHED();
+END_IF

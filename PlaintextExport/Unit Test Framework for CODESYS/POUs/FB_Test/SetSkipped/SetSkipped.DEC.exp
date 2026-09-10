@@ -1,0 +1,2 @@
+(* Sets the test case to skipped *)
+METHOD INTERNAL SetSkipped

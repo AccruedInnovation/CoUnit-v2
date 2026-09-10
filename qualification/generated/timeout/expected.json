@@ -1,0 +1,8 @@
+{
+  "shard": "timeout",
+  "native_status": "NOT_RUN",
+  "Done": false,
+  "expected_host_outcome": "EXECUTION_TIMEOUT",
+  "report": "No fresh completed report",
+  "recovery": "Stop/reinitialize disposable application; preserve timeout evidence"
+}

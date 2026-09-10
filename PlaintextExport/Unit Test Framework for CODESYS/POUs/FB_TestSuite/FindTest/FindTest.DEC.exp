@@ -1,0 +1,9 @@
+METHOD INTERNAL FindTest : UINT
+VAR_INPUT
+	Name : T_MaxString;
+END_VAR
+VAR
+	_canonical : T_MaxString;
+	_disabled : BOOL;
+	_i : UDINT;
+END_VAR

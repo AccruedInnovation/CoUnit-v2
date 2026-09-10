@@ -1,0 +1,13 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UDINT;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	_injected : BOOL;
+	_suite1 : FB_QualificationOpen;
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+
+END_VAR

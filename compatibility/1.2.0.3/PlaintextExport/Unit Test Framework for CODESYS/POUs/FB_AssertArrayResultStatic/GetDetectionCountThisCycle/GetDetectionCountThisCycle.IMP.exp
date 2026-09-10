@@ -1,0 +1,10 @@
+FOR IteratorCounter := 1 TO GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite BY 1 DO
+    IF AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ExpectedsSize = ExpectedsSize AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ExpectedsTypeClass = ExpectedsTypeClass AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ActualsSize = ActualsSize AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.ActualsTypeClass = ActualsTypeClass AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.Message = Message AND
+        AssertArrayResultInstances[IteratorCounter].AssertArrayResult.TestInstancePath = TestInstancePath THEN
+        GetDetectionCountThisCycle := AssertArrayResultInstances[IteratorCounter].DetectionCountThisCycle;
+    END_IF
+END_FOR

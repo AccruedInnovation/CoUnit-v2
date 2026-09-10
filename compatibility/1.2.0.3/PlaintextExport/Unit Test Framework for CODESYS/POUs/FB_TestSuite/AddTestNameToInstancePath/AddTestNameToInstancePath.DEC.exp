@@ -1,0 +1,7 @@
+METHOD INTERNAL AddTestNameToInstancePath : T_MaxString
+VAR_INPUT
+    TestInstancePath : T_MaxString;
+END_VAR
+VAR
+    CompleteTestInstancePath : T_MaxString;
+END_VAR

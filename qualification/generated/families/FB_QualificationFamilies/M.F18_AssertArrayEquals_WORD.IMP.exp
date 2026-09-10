@@ -1,0 +1,7 @@
+TEST('F18_AssertArrayEquals_WORD');
+IF NOT IS_TEST_FINISHED('F18_AssertArrayEquals_WORD') THEN
+	_v18e[1] := 1;
+	_v18a[1] := 2;
+	AssertArrayEquals_WORD(Expecteds := _v18e, Actuals := _v18a, Message := 'F18_AssertArrayEquals_WORD');
+	TEST_FINISHED();
+END_IF

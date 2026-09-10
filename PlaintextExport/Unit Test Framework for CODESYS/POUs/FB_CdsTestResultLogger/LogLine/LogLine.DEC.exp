@@ -1,0 +1,9 @@
+METHOD PRIVATE LogLine : BOOL
+VAR_INPUT
+	Mask : DWORD;
+	Format : T_MaxString;
+	Argument : T_MaxString;
+END_VAR
+VAR
+	_result : DINT;
+END_VAR

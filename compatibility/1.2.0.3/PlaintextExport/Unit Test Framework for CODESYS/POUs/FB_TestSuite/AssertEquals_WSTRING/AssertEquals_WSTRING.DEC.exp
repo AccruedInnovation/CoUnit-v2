@@ -1,0 +1,48 @@
+(*
+ Asserts that two WSTRINGs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – WSTRING expected value
+     | Actual – WSTRING actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : WSTRING := 'Hello there';
+         b : WSTRING := 'Hello there';
+     END_VAR
+
+     TEST('Test_WSTRING_Equals');
+     AssertEquals_WSTRING(Expected := a,
+                          Actual := b,
+                          Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : WSTRING := 'This is a string';
+         b : WSTRING := 'This is another string';
+     END_VAR
+
+     TEST('Test_WSTRING_Differ');
+     AssertEquals_WSTRING(Expected := a,
+                          Actual := b,
+                          Message := 'Values differ');
+     TEST_FINISHED(); 
+*)
+METHOD PUBLIC AssertEquals_WSTRING
+VAR_INPUT
+    Expected : WSTRING(255); // WSTRING expected value
+    Actual : WSTRING(255); // WSTRING actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

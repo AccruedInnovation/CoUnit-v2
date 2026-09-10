@@ -1,0 +1,6 @@
+{attribute 'signature_flag' := '33554432'}
+{attribute 'checksuperglobal'}
+{attribute 'show'}
+{attribute 'no-analysis'}
+TYPE UXINT : ULINT; // x64 => 64 bit unsigned integer
+END_TYPE 

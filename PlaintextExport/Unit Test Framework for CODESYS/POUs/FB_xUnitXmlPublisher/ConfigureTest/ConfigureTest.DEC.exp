@@ -1,0 +1,14 @@
+(* Internal qualification seam. Configure before the first publication service. *)
+METHOD INTERNAL ConfigureTest : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+	Enabled : BOOL;
+	ChunkLimit : UDINT;
+	TextMode : E_CoUnitTextMode;
+	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	FaultOccurrence : UDINT := 0;
+	ShortWrite : BOOL := FALSE;
+	PauseAfterPhase : UINT := 0;
+	FaultOccurrence2 : UDINT := 0;
+	FaultError : UDINT := 16#FFFF0001;
+END_VAR

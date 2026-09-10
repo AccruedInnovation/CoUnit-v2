@@ -1,0 +1,7 @@
+TEST('ChangingFailure');
+IF NOT IS_TEST_FINISHED('ChangingFailure') THEN
+	_failScan := _failScan + 1;
+	_good := _failScan < 3;
+	AssertTrue(Condition := _good, Message := 'third-scan-failure');
+	IF _failScan = 3 THEN TEST_FINISHED(); END_IF
+END_IF

@@ -1,0 +1,9 @@
+IF _configured OR _phase <> 0 THEN RETURN; END_IF
+_path := Path;
+_enabled := Enabled;
+_capacity := ChunkLimit;
+_textMode := TextMode;
+_pauseAfter := PauseAfterPhase;
+ConfigureTest := _file.ConfigureFault(Operation := FaultOperation, Occurrence := FaultOccurrence,
+	Occurrence2 := FaultOccurrence2, ErrorCode := FaultError, ShortWrite := ShortWrite);
+_configured := ConfigureTest;

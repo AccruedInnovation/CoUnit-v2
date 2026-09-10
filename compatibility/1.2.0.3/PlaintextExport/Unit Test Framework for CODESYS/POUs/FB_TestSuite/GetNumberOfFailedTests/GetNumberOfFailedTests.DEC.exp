@@ -1,0 +1,5 @@
+METHOD INTERNAL GetNumberOfFailedTests : UINT
+VAR
+    Counter : UINT;
+    FailedTestsCount : UINT;
+END_VAR

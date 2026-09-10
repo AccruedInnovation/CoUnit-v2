@@ -1,0 +1,5 @@
+IF GVL_Support._ST_Logger.hLog = 0 THEN
+	GVL_Support._ST_Logger.hLog := CmpLog.LogCreate(ADR(GVL_Support._ST_Logger.LogOptions), GVL_Support._ST_Logger.pResult);
+END_IF
+
+GVL_Support._ST_Logger.Created := GVL_Support._ST_Logger.hLog <> 0;

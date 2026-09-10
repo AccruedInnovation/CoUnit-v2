@@ -1,0 +1,5 @@
+(* This atomic operation orders the violation against SealSnapshot. No foreign state reads are required. *)
+_previous := TEST_AND_SET(CrossTaskViolationLatch);
+IF _previous <> 0 THEN
+	_previous := TEST_AND_SET(PostCommitViolationLatch);
+END_IF

@@ -1,0 +1,17 @@
+TYPE ST_CoUnitTestRecord :
+STRUCT
+	InUse : BOOL;
+	CanonicalName : T_MaxString;
+	DefinedDisabled : BOOL;
+	IsOrdered : BOOL;
+	OrderNumber : UINT;
+	State : E_CoUnitTestState;
+	HasFailure : BOOL;
+	FirstSeenEpoch : ULINT;
+	LastSeenEpoch : ULINT;
+	DuplicateReportedEpoch : ULINT;
+	InvocationOrdinal : UDINT;
+	MaxAssertionsPerInvocation : UDINT;
+	FirstFailure : ST_CoUnitFirstFailure;
+END_STRUCT
+END_TYPE

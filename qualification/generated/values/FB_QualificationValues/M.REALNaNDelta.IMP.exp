@@ -1,0 +1,8 @@
+TEST('REALNaNDelta');
+IF NOT IS_TEST_FINISHED('REALNaNDelta') THEN
+	_pa := ADR(_fREAL7a);
+	_pb := ADR(_fREAL7b);
+	_pd := ADR(_fREAL7d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALNaNDelta');
+	TEST_FINISHED();
+END_IF

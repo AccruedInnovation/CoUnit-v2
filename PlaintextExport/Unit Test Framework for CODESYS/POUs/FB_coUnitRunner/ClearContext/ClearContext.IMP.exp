@@ -1,0 +1,8 @@
+ActiveSuite := 0;
+ActiveSuiteIndex := 0;
+ActiveTestIndex := 0;
+ShouldExecuteCurrentTest := FALSE;
+GVL_coUnit.CurrentTestSuiteBeingCalled := 0;
+GVL_coUnit.CurrentTestNameBeingCalled := '';
+GVL_coUnit.CurrentTestIsFinished := FALSE;
+GVL_coUnit.IgnoreCurrentTest := TRUE;

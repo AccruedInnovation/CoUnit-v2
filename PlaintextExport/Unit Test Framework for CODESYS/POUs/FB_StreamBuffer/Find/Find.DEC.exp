@@ -1,0 +1,15 @@
+(* 
+    Find a searchstring in the buffer and returns its position.
+    It's possible to add a preffered startposition within buffer
+*)
+METHOD PUBLIC Find : UDINT
+VAR_INPUT
+    SearchString : STRING;
+    StartPos : UDINT;
+END_VAR
+VAR
+    Loop : UDINT;
+    Search : UDINT;
+    PointerToBuffer : POINTER TO BYTE;
+    PointerToSearch : POINTER TO BYTE;
+END_VAR

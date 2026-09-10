@@ -1,0 +1,7 @@
+TotalArrayAsserts := TotalArrayAsserts + 1;
+AssertArrayResults[TotalArrayAsserts].ExpectedsSize := ExpectedsSize;
+AssertArrayResults[TotalArrayAsserts].ExpectedsTypeClass := ExpectedsTypeClass;
+AssertArrayResults[TotalArrayAsserts].ActualsSize := ActualsSize;
+AssertArrayResults[TotalArrayAsserts].ActualsTypeClass := ActualsTypeClass;
+AssertArrayResults[TotalArrayAsserts].Message := Message;
+AssertArrayResults[TotalArrayAsserts].TestInstancePath := TestInstancePath;

@@ -1,0 +1,3 @@
+TerminalPass();
+TerminalFailure();
+TerminalSkip();

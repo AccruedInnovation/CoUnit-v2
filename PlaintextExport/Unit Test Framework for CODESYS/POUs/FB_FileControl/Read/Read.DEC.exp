@@ -1,0 +1,11 @@
+(*
+    Reads a file from disk into the buffer
+*)
+METHOD Read : SysFile.SysTypes.RTS_IEC_RESULT;
+VAR_INPUT
+    BufferPointer : POINTER TO BYTE; // Call with ADR();
+    Size : UDINT; // Call with SIZEOF(); 
+END_VAR
+VAR_OUTPUT
+    FileSize : SysFile.SysTypes.RTS_IEC_SIZE;
+END_VAR

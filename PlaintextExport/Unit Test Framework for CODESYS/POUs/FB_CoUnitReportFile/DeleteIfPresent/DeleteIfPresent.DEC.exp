@@ -1,0 +1,8 @@
+METHOD PUBLIC DeleteIfPresent : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+END_VAR
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+	_exists : DINT;
+END_VAR

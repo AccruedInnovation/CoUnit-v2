@@ -1,0 +1,7 @@
+TEST('F16_AssertArrayEquals_ULINT');
+IF NOT IS_TEST_FINISHED('F16_AssertArrayEquals_ULINT') THEN
+	_v16e[1] := 1;
+	_v16a[1] := 2;
+	AssertArrayEquals_ULINT(Expecteds := _v16e, Actuals := _v16a, Message := 'F16_AssertArrayEquals_ULINT');
+	TEST_FINISHED();
+END_IF

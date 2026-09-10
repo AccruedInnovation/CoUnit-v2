@@ -1,0 +1,4 @@
+IF TEST_ORDERED('EnabledA') THEN
+	_bodyVisits := _bodyVisits + 1;
+	TEST_FINISHED();
+END_IF

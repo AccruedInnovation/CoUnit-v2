@@ -1,0 +1,78 @@
+{
+  "shard": "multiscan",
+  "native_status": "NOT_RUN",
+  "run_disposition": "NORMAL",
+  "suites": [
+    [
+      {
+        "name": "BranchPassThenFail",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_BOOL",
+        "message": "B"
+      },
+      {
+        "name": "FirstFailureCoherent",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_BOOL",
+        "message": "first-A"
+      },
+      {
+        "name": "TenThousandInvocations",
+        "state": "FAILED",
+        "assertions": 1,
+        "failure_type": "Type_BOOL",
+        "message": "last-invocation"
+      },
+      {
+        "name": "ZeroAssertions",
+        "state": "PASSED",
+        "assertions": 0
+      },
+      {
+        "name": "ThreeAssertions",
+        "state": "PASSED",
+        "assertions": 3
+      }
+    ]
+  ],
+  "checks": [
+    "_snapshot.IsValid",
+    "_snapshot.Disposition = E_CoUnitRunDisposition.NORMAL",
+    "_snapshot.SuiteCount = UINT#1",
+    "_snapshot.Total = UDINT#5",
+    "_snapshot.Passed = UDINT#2",
+    "_snapshot.Failed = UDINT#3",
+    "_snapshot.Skipped = UDINT#0",
+    "_snapshot.Errors = UDINT#0",
+    "_snapshot.Suites[1].Total = UINT#5",
+    "_snapshot.Suites[1].Tests[1].Name = 'BranchPassThenFail'",
+    "_snapshot.Suites[1].Tests[1].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[1].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[1].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[1].FirstFailure.AssertionType = E_AssertionType.Type_BOOL",
+    "_snapshot.Suites[1].Tests[1].FirstFailure.Message = 'B'",
+    "_snapshot.Suites[1].Tests[2].Name = 'FirstFailureCoherent'",
+    "_snapshot.Suites[1].Tests[2].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[2].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType = E_AssertionType.Type_BOOL",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.Message = 'first-A'",
+    "_snapshot.Suites[1].Tests[3].Name = 'TenThousandInvocations'",
+    "_snapshot.Suites[1].Tests[3].State = E_CoUnitTestState.FAILED",
+    "_snapshot.Suites[1].Tests[3].NumberOfAsserts = UINT#1",
+    "_snapshot.Suites[1].Tests[3].FirstFailure.IsSet",
+    "_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType = E_AssertionType.Type_BOOL",
+    "_snapshot.Suites[1].Tests[3].FirstFailure.Message = 'last-invocation'",
+    "_snapshot.Suites[1].Tests[4].Name = 'ZeroAssertions'",
+    "_snapshot.Suites[1].Tests[4].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[4].NumberOfAsserts = UINT#0",
+    "_snapshot.Suites[1].Tests[5].Name = 'ThreeAssertions'",
+    "_snapshot.Suites[1].Tests[5].State = E_CoUnitTestState.PASSED",
+    "_snapshot.Suites[1].Tests[5].NumberOfAsserts = UINT#3",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.ExpectedText = 'TRUE'",
+    "_snapshot.Suites[1].Tests[2].FirstFailure.ActualText = 'FALSE'",
+    "_suite1.LaterFailureExecuted"
+  ]
+}

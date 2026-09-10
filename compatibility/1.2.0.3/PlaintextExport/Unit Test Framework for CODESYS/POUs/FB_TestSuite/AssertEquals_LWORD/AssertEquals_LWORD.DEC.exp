@@ -1,0 +1,48 @@
+(*
+ Asserts that two LWORDs are equal. If they are not, an assertion error is created.
+
+ Parameters:
+     | Expected – LWORD expected value
+     | Actual – LWORD actual value
+     | Message – The identifying message for the assertion error
+
+ Positive example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LWORD := 16#0123456789ABCDEF;
+         b : LWORD := 16#0123456789ABCDEF;
+     END_VAR
+
+     TEST('Test_LWORD_Equals');
+     AssertEquals_LWORD(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+
+ Failing example:
+
+ .. code-block:: codesys
+
+     VAR
+         a : LWORD := 16#0123656789ABCBEC;
+         b : LWORD := 16#0123256789ABCAEE;
+     END_VAR
+
+     TEST('Test_LWORD_Differ');
+     AssertEquals_LWORD(Expected := a,
+                        Actual := b,
+                        Message := 'Values differ');
+     TEST_FINISHED();
+*)
+METHOD PUBLIC AssertEquals_LWORD
+VAR_INPUT
+    Expected : LWORD; // LWORD expected value
+    Actual : LWORD; // LWORD actual value
+    Message : T_MaxString; // The identifying message for the assertion error
+END_VAR
+VAR
+    TestInstancePath : T_MaxString;
+    AlreadyReported : BOOL;
+END_VAR

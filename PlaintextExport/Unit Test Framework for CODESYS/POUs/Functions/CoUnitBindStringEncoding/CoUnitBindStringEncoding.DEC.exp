@@ -1,0 +1,6 @@
+(* The run owner binds only recognized compiler encodings before invoking any suite. *)
+FUNCTION CoUnitBindStringEncoding : BOOL
+VAR
+	_probe : STRING(8) := 'é€';
+	_bytes : POINTER TO BYTE;
+END_VAR

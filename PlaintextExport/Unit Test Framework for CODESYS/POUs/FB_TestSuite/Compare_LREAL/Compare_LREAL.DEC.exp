@@ -1,0 +1,18 @@
+METHOD PRIVATE Compare_LREAL : BOOL
+VAR_INPUT
+	Expected : LREAL;
+	Actual : LREAL;
+	Delta : LREAL;
+END_VAR
+VAR_OUTPUT
+	ArgumentError : BOOL;
+END_VAR
+VAR
+	_expectedBits : LWORD;
+	_actualBits : LWORD;
+	_deltaBits : LWORD;
+	_expectedInf : BOOL;
+	_actualInf : BOOL;
+	_a : LREAL;
+	_b : LREAL;
+END_VAR

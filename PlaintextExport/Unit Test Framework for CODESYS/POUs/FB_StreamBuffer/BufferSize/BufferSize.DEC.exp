@@ -1,0 +1,4 @@
+(*
+    Read current Buffersize
+*)
+PROPERTY BufferSize : UDINT

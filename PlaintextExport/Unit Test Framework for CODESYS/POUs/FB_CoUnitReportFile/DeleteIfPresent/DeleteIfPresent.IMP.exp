@@ -1,0 +1,11 @@
+_exists := Probe(Path := Path);
+IF _exists < 0 THEN RETURN; END_IF
+IF _exists = 0 THEN
+	_lastError := CmpErrors.Errors.ERR_OK;
+	DeleteIfPresent := TRUE;
+	RETURN;
+END_IF
+IF NOT BeforeOperation(E_CoUnitFileOperation.DELETE) THEN RETURN; END_IF
+_result := SysFile.SysFileDelete(szFileName := Path);
+_lastError := _result;
+DeleteIfPresent := _result = CmpErrors.Errors.ERR_OK;

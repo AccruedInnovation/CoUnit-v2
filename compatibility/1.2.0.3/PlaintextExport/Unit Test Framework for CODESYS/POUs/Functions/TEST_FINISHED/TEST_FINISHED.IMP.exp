@@ -1,0 +1,17 @@
+// Grab the currently running test name
+TestName := GVL_coUnit.CurrentTestNameBeingCalled;
+TEST_FINISHED := FALSE;
+
+(* Find the test suite and:
+   1. Set the test in that test suite as finished
+   2. Calculate and set the number of asserts made for that test
+*)
+FOR Counter := 1 TO GVL_coUnit.NumberOfInitializedTestSuites BY 1 DO
+    IF GVL_coUnit.TestSuiteAddresses[Counter] = GVL_coUnit.CurrentTestSuiteBeingCalled THEN
+        GVL_coUnit.TestSuiteAddresses[Counter]^.SetTestFinished(TestName := GVL_coUnit.CurrentTestNameBeingCalled);
+        GVL_coUnit.TestSuiteAddresses[Counter]^.CalculateAndSetNumberOfAssertsForTest(TestName := GVL_coUnit.CurrentTestNameBeingCalled);
+        GVL_coUnit.CurrentTestIsFinished := TRUE;
+        TEST_FINISHED := TRUE;
+        RETURN;
+    END_IF
+END_FOR

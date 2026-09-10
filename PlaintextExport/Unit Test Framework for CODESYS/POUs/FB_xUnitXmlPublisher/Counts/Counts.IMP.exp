@@ -1,0 +1,4 @@
+IF NOT Attribute('tests', UDINT_TO_STRING(Total)) THEN RETURN; END_IF
+IF NOT Attribute('failures', UDINT_TO_STRING(Failed)) THEN RETURN; END_IF
+IF NOT Attribute('errors', UDINT_TO_STRING(Errors)) THEN RETURN; END_IF
+Counts := Attribute('skipped', UDINT_TO_STRING(Skipped));

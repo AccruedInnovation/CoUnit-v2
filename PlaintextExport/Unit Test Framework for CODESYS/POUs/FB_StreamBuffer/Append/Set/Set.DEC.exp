@@ -1,0 +1,4 @@
+VAR
+    ByteIn : POINTER TO BYTE;
+    ByteBuffer : POINTER TO BYTE;
+END_VAR

@@ -1,0 +1,8 @@
+METHOD PRIVATE BeginAssertion : BOOL
+VAR_OUTPUT
+	TestIndex : UINT;
+	Ordinal : UDINT;
+END_VAR
+VAR
+	_execute : BOOL;
+END_VAR

@@ -1,0 +1,5 @@
+TEST('F34_AssertEquals_TIME');
+IF NOT IS_TEST_FINISHED('F34_AssertEquals_TIME') THEN
+	AssertEquals_TIME(Expected := _v34e, Actual := _v34a, Message := 'F34_AssertEquals_TIME');
+	TEST_FINISHED();
+END_IF

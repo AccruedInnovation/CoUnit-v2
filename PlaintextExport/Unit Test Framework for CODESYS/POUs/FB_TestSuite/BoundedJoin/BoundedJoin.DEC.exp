@@ -1,0 +1,24 @@
+METHOD PRIVATE BoundedJoin : T_MaxString
+VAR_INPUT
+	LeftText : T_MaxString;
+	RightText : T_MaxString;
+	AlreadyTruncated : BOOL;
+END_VAR
+VAR_OUTPUT
+	Truncated : BOOL;
+END_VAR
+VAR
+	_left : POINTER TO BYTE;
+	_right : POINTER TO BYTE;
+	_dest : POINTER TO BYTE;
+	_marker : T_MaxString := '...<truncated>';
+	_mark : POINTER TO BYTE;
+	_leftLen : UINT;
+	_rightLen : UINT;
+	_length : UINT;
+	_keep : UINT;
+	_i : UINT;
+	_start : UINT;
+	_needed : UINT;
+	_lead : BYTE;
+END_VAR

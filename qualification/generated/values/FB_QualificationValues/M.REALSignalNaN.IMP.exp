@@ -1,0 +1,8 @@
+TEST('REALSignalNaN');
+IF NOT IS_TEST_FINISHED('REALSignalNaN') THEN
+	_pa := ADR(_fREAL3a);
+	_pb := ADR(_fREAL3b);
+	_pd := ADR(_fREAL3d);
+	AssertEquals_REAL(Expected := _pa^, Actual := _pb^, Delta := _pd^, Message := 'REALSignalNaN');
+	TEST_FINISHED();
+END_IF

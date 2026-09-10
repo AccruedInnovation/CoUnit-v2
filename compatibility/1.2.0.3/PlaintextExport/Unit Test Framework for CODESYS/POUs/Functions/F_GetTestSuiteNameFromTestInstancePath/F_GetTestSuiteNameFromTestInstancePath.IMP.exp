@@ -1,0 +1,5 @@
+TestSuiteName := F_RemoveInstancePathAndProjectNameFromTestInstancePath(TestInstancePath := TestInstancePath);
+(* Remove everything except the test suite name *)
+FindPosition := FIND(STR1 := TestSuiteName, '.');
+TestSuiteName := RIGHT(STR := TestSuiteName, SIZE := LEN(STR := TestSuiteName) - FindPosition);
+F_GetTestSuiteNameFromTestInstancePath := TestSuiteName;

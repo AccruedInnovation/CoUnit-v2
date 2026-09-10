@@ -1,0 +1,8 @@
+{attribute 'hide'}
+(*
+    Truncates all trailing spaces from the specified value and returns the result.
+*)
+FUNCTION F_RTrim : T_MaxString
+VAR_INPUT
+	in : T_MaxString;
+END_VAR

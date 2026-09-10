@@ -1,0 +1,104 @@
+ServiceSnapshot := _state = E_CoUnitReportState.WRITTEN;
+IF _state = E_CoUnitReportState.WRITTEN OR _state = E_CoUnitReportState.FAILED OR
+	_state = E_CoUnitReportState.DISABLED OR _paused THEN RETURN; END_IF
+IF NOT _configured THEN
+	_enabled := GVL_Param_coUnit.xUnitEnablePublish;
+	_path := GVL_coUnit.xUnitFilePath;
+	_capacity := GVL_Param_coUnit.xUnitBufferSize;
+	IF GVL_coUnit.StringIsUtf8 THEN _textMode := E_CoUnitTextMode.UTF8;
+	ELSE _textMode := GVL_CoUnitReporting.StringEncodingMode; END_IF
+	_configured := TRUE;
+END_IF
+IF NOT _enabled THEN _state := E_CoUnitReportState.DISABLED; RETURN; END_IF
+IF NOT Snapshot.IsValid THEN RETURN; END_IF
+CASE _phase OF
+	0:
+		IF _capacity < 16 OR _capacity > GVL_Param_coUnit.xUnitBufferSize THEN Fail('invalid chunk size'); RETURN; END_IF
+		IF _textMode <> E_CoUnitTextMode.UTF8 AND _textMode <> E_CoUnitTextMode.LATIN1 AND
+			_textMode <> E_CoUnitTextMode.WINDOWS1252 THEN Fail('STRING encoding is not bound'); RETURN; END_IF
+		IF NOT BuildPaths() THEN Fail('path byte capacity'); RETURN; END_IF
+		IF NOT ValidateSnapshot(Snapshot := Snapshot) THEN Fail('snapshot consistency'); RETURN; END_IF
+		IF NOT Recover() THEN RETURN; END_IF
+		IF NOT _file.OpenWrite(_stage) THEN Fail('open staging'); RETURN; END_IF
+		_state := E_CoUnitReportState.WRITING;
+		_phase := 1;
+	1:
+		IF NOT AppendLiteral('<?xml version="1.0" encoding="UTF-8"?><testsuites') THEN RETURN; END_IF
+		IF NOT Counts(Snapshot.Total, Snapshot.Failed, Snapshot.Errors, Snapshot.Skipped) THEN RETURN; END_IF
+		CASE Snapshot.Disposition OF
+			E_CoUnitRunDisposition.NORMAL: _dispositionText := 'NORMAL';
+			E_CoUnitRunDisposition.ABORTED: _dispositionText := 'ABORTED';
+			E_CoUnitRunDisposition.FRAMEWORK_ERROR: _dispositionText := 'FRAMEWORK_ERROR';
+		ELSE Fail('invalid run disposition'); RETURN;
+		END_CASE
+		IF NOT Attribute('counit-run-disposition', _dispositionText) THEN RETURN; END_IF
+		IF NOT AppendLiteral('>') THEN RETURN; END_IF
+		_phase := 2;
+	2:
+		IF _suiteIndex <= Snapshot.SuiteCount THEN
+			IF NOT AppendLiteral('<testsuite') THEN RETURN; END_IF
+			IF NOT Attribute('id', UINT_TO_STRING(Snapshot.Suites[_suiteIndex].Identity)) THEN RETURN; END_IF
+			IF NOT Attribute('name', Snapshot.Suites[_suiteIndex].Name) THEN RETURN; END_IF
+			IF NOT Counts(Snapshot.Suites[_suiteIndex].Total, Snapshot.Suites[_suiteIndex].Failed,
+				Snapshot.Suites[_suiteIndex].Errors, Snapshot.Suites[_suiteIndex].Skipped) THEN RETURN; END_IF
+			IF NOT AppendLiteral('>') THEN RETURN; END_IF
+			_testIndex := 1;
+			_phase := 3;
+		ELSE
+			IF NOT AppendLiteral('</testsuites>') THEN RETURN; END_IF
+			IF NOT FlushChunk() THEN RETURN; END_IF
+			_flushResult := _file.FlushIfSupported();
+			IF _flushResult < 0 THEN Fail('flush staging'); RETURN; END_IF
+			_flushUnsupported := _flushResult = 0;
+			IF NOT _file.Close() THEN Fail('close staging'); RETURN; END_IF
+			_exists := _file.Probe(Path := _stage, Size => _size);
+			IF _exists <> 1 OR _size <> _writtenBytes THEN Fail('closed staging size'); RETURN; END_IF
+			_phase := 6;
+		END_IF
+	3, 4:
+		IF _testIndex <= Snapshot.Suites[_suiteIndex].Total THEN
+			IF NOT EmitTest(Test := Snapshot.Suites[_suiteIndex].Tests[_testIndex]) THEN RETURN; END_IF
+			_testIndex := _testIndex + 1;
+			_phase := 4;
+		ELSE
+			IF NOT AppendLiteral('</testsuite>') THEN RETURN; END_IF
+			_phase := 5;
+		END_IF
+	5:
+		_suiteIndex := _suiteIndex + 1;
+		_phase := 2;
+	6:
+		_exists := _file.Probe(_path);
+		IF _exists < 0 THEN Fail('probe current before commit'); RETURN; END_IF
+		IF _exists = 1 THEN
+			IF NOT _file.Rename(_path, _backup) THEN Fail('preserve current'); RETURN; END_IF
+			_movedCurrent := TRUE;
+		END_IF
+		_phase := 7;
+	7:
+		IF NOT _file.Rename(_stage, _path) THEN
+			_commitError := _file.GetLastError();
+			IF _movedCurrent THEN
+				_restoreOk := _file.Rename(_backup, _path);
+				IF NOT _restoreOk THEN
+					WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), 'xUnit restore failed; current absent: %s', _path);
+				END_IF
+			END_IF
+			Fail(Operation := 'commit staging', ErrorCode := _commitError);
+			RETURN;
+		END_IF
+		(* The only semantic commit point: the closed complete stage now owns P. *)
+		_state := E_CoUnitReportState.WRITTEN;
+		_phase := 8;
+		WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), 'xUnit results exported: %s', _path);
+		IF _pauseAfter <> 8 THEN
+			IF NOT _file.DeleteIfPresent(_backup) THEN
+				_cleanupWarning := TRUE;
+				_lastError := _file.GetLastError();
+				WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_WARNING), 'xUnit backup cleanup failed: %s', _backup);
+			END_IF
+			_phase := 9;
+		END_IF
+END_CASE
+IF _pauseAfter <> 0 AND _phase = _pauseAfter THEN _paused := TRUE; END_IF
+ServiceSnapshot := _state = E_CoUnitReportState.WRITTEN;

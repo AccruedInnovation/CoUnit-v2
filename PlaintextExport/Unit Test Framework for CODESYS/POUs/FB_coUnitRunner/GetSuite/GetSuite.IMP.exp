@@ -1,0 +1,4 @@
+GetSuite := 0;
+IF NOT IsOwner() THEN RETURN; END_IF
+IF Index < 1 OR Index > SuiteCount THEN RETURN; END_IF
+GetSuite := Suites[Index];

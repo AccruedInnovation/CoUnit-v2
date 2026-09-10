@@ -1,0 +1,38 @@
+(* This function block is responsible for holding the internal state of the test suite.
+   Every test suite can have one or more tests, and every test can do one or more asserts.
+   It's also responsible for providing all the assert-methods for asserting different data types.
+   Only failed assertions are recorded.
+*)
+{attribute 'call_after_init'}
+{attribute 'reflection'}
+FUNCTION_BLOCK FB_TestSuite
+VAR
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    InstancePath : T_MaxString;
+    (* We need to have access to specific information of the current task that this test suite
+    is executed in. This is for instance necessary when we need to know whether a test is
+    defined already. The definition of a test that is defined already is that we call on it
+    with the same name twice in the same cycle *)
+    GetCurrentTaskIndex : GetCurTaskInfo;
+    NumberOfTests : UINT(0..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite) := 0;
+    Tests : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF FB_Test;
+    (* Rising trigger of whether we have already notified the user of that the test name pointed to by the current
+       position is a duplicate *)
+    TestDuplicateNameTrigger : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF R_TRIG;
+    (* Last cycle count index for a specific test. Used to detect whether this test has already been defined in the
+       current test suite *)
+    TestCycleCountIndex : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF UDINT;
+    AssertResults : FB_AssertResultStatic;
+    AssertArrayResults : FB_AssertArrayResultStatic;
+    (* Prints the failed asserts to DeviceLog to display the assert message. 
+       This assert formatter can be replaced with something else than the DeviceLog *)
+    LogAssertMessageFormatter : FB_LogAssertMessageFormatter;
+    AssertMessageFormatter : I_AssertMessageFormatter := LogAssertMessageFormatter;
+    (* Indication whether this test suite has started running its tests *)
+    HasStartedRunning : BOOL;
+    (* Number of ordered tests (created by TEST_ORDERED()) that this test suite contains *)
+    NumberOfOrderedTests : UINT(0..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+    (* First Cycle indicator *)
+    FirstCycle : BOOL := TRUE;
+END_VAR

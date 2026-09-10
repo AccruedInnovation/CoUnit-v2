@@ -1,0 +1,9 @@
+DeleteOpenWriteClose := SysDir.CmpErrors.Errors.ERR_OK;
+IF Initialised() THEN
+    DeleteOpenWriteClose := MAX(DeleteOpenWriteClose, File.Delete(Filename := GVL_coUnit.xUnitFilePath));
+    DeleteOpenWriteClose := MAX(DeleteOpenWriteClose, File.Open(Filename := GVL_coUnit.xUnitFilePath, FileAccessMode := AccessMode));
+    DeleteOpenWriteClose := MAX(DeleteOpenWriteClose, File.Write(BufferPointer := ADR(Buffer), Xml.Length));
+    DeleteOpenWriteClose := MAX(DeleteOpenWriteClose, File.Close());
+ELSE
+    DeleteOpenWriteClose := SysDir.CmpErrors.Errors.ERR_NOBUFFER;
+END_IF;

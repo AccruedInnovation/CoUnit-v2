@@ -1,0 +1,18 @@
+FUNCTION_BLOCK FB_QualificationTestLimit EXTENDS FB_TestSuite
+VAR_OUTPUT
+	GuardPass : BOOL;
+	CountBefore : UINT;
+	OrderedBefore : UINT;
+	CursorBefore : UDINT;
+	BudgetBefore : UDINT;
+	LastBefore : ST_CoUnitTestRecord;
+	CountAfter : UINT;
+	OrderedAfter : UINT;
+	CursorAfter : UDINT;
+	BudgetAfter : UDINT;
+	LastAfter : ST_CoUnitTestRecord;
+END_VAR
+VAR
+	_index : UINT;
+	_name : T_MaxString;
+END_VAR

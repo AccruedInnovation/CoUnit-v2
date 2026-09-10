@@ -1,0 +1,7 @@
+METHOD PRIVATE Text_LREAL : T_MaxString
+VAR_INPUT
+	Value : LREAL;
+END_VAR
+VAR
+	_bits : LWORD;
+END_VAR

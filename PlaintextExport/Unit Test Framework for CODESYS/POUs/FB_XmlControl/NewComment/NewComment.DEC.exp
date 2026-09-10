@@ -1,0 +1,10 @@
+(*
+    Adds a comment;
+    XML: <!-- MyComment -->
+
+    XML.NewComment(Comment: = 'MyComment');
+*)
+METHOD PUBLIC NewComment
+VAR_INPUT
+    Comment : T_MaxString;
+END_VAR

@@ -1,0 +1,5 @@
+(* Best-effort handle cleanup preserves the primary failure diagnostic. *)
+METHOD PUBLIC AbortClose : BOOL
+VAR
+	_result : SysFile.SysTypes.RTS_IEC_RESULT;
+END_VAR
