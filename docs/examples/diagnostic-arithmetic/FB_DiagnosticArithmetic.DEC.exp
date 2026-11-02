@@ -1,0 +1,1 @@
+FUNCTION_BLOCK FB_DiagnosticArithmetic EXTENDS CoUnit.FB_TestSuite

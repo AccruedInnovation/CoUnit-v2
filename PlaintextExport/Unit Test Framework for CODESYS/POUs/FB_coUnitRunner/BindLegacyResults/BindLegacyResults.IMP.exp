@@ -1,0 +1,1 @@
+BindLegacyResults := TestResults.BindLegacyResults(Destination := Destination);

@@ -1,0 +1,44 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	_stage : UINT;
+	_now : LTIME;
+	_key : ST_CoUnitFixtureKey;
+	_staleKey : ST_CoUnitFixtureKey;
+	_temporal : FB_CoUnitExpectation;
+	_temporalResult : E_CoUnitTemporalResult;
+	_fixture : FB_CoUnitFixture;
+	_fixtureKey : ST_CoUnitFixtureKey;
+	_callback : FB_UpgradeCallback;
+	_temporalBoundary : BOOL;
+	_staleRejected : BOOL;
+	_pulseOnce : BOOL;
+	_stableTerminal : BOOL;
+	_holdFalseStarted : BOOL;
+	_holdViolationAtDeadline : BOOL;
+	_holdTrueBoundary : BOOL;
+	_stepPass : BOOL;
+	_lateEventuallyFails : BOOL;
+	_sameKeyRestartRejected : BOOL;
+	_cancelled : BOOL;
+	_setupFailureSuppressedBody : BOOL;
+	_partialSetupCleaned : BOOL;
+	_primaryCausePreserved : BOOL;
+	_cleanupTimeoutVisible : BOOL;
+	_sameFixtureRestartRejected : BOOL;
+	_lateSetupCallbackSkipped : BOOL;
+	_lateCleanupSkipped : BOOL;
+	_exactPhaseBoundary : BOOL;
+	_holdTrueOvershoot : BOOL;
+	_holdFalseOvershoot : BOOL;
+	_binding : I_CoUnitFixture;
+	_invalidBinding : REFERENCE TO I_CoUnitFixture;
+	_otherCallback : FB_UpgradeCallback;
+	_fixtureBindingStable : BOOL;
+	_nullBindingRejected : BOOL;
+	_invalidBindingRejected : BOOL;
+END_VAR

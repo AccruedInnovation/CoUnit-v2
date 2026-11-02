@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit upgrade qualification: upgrade_legacy" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_UpgradeLegacyGuarded" pouType="functionBlock">
+        <interface>
+          <outputVars>
+            <variable name="DisabledEffects">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="ActiveEffects">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="ActiveCompleted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </outputVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">Disabled();
+Active();</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Disabled" ObjectId="" qualifiedName="FB_UpgradeLegacyGuarded.Disabled">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">IF TEST_GUARDED('DISABLED_GuardedOff') THEN
+	DisabledEffects := DisabledEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'legacy/disabled', Message := 'unreachable', ExpectedText := '', ActualText := '', Detail := '');
+	TEST_FINISHED();
+END_IF</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Disabled</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Active" ObjectId="" qualifiedName="FB_UpgradeLegacyGuarded.Active">
+              <interface />
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">IF TEST_GUARDED('GuardedActive') THEN
+	ActiveEffects := ActiveEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'legacy/active', Message := 'guarded active', ExpectedText := 'one visit', ActualText := 'one visit', Detail := '');
+	ActiveCompleted := TRUE;
+	TEST_FINISHED();
+END_IF</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Active</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_UpgradeLegacyGuarded EXTENDS FB_TestSuite
+VAR_OUTPUT
+	DisabledEffects : UINT;
+	ActiveEffects : UINT;
+	ActiveCompleted : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCheck">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="Suite">
+              <type>
+                <derived name="FB_UpgradeLegacyGuarded" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">RUN();
+IF Suite.ActiveCompleted THEN
+	Done := TRUE;
+	OraclePass := (Suite.DisabledEffects = 0) AND (Suite.ActiveEffects = 1);
+	IF NOT OraclePass THEN FailedCheck := 1; END_IF
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	Suite : FB_UpgradeLegacyGuarded;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="UpgradeCore">
+          <Object Name="FB_UpgradeLegacyGuarded" ObjectId="">
+            <Object Name="Disabled" ObjectId="" />
+            <Object Name="Active" ObjectId="" />
+          </Object>
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

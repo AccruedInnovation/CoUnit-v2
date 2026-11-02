@@ -1,0 +1,35 @@
+ServicePhaseHeader := FALSE;
+IF NOT AppendLiteral(Value := '{"format_version":2,"run_disposition":') THEN RETURN; END_IF
+CASE Snapshot.Disposition OF
+	E_CoUnitRunDisposition.UNSET: Fail(Operation := 'invalid run disposition'); RETURN;
+	E_CoUnitRunDisposition.NORMAL: _dispositionText := 'NORMAL';
+	E_CoUnitRunDisposition.ABORTED: _dispositionText := 'ABORTED';
+	E_CoUnitRunDisposition.FRAMEWORK_ERROR: _dispositionText := 'FRAMEWORK_ERROR';
+ELSE
+	Fail(Operation := 'invalid run disposition');
+	RETURN;
+END_CASE
+IF NOT AppendJsonString(Value := _dispositionText) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"schema_version":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UINT_TO_STRING(Snapshot.SchemaVersion)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"framework_version":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Snapshot.FrameworkVersion) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"run_id":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Snapshot.RunId) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"build_id":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Snapshot.BuildId) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"target_id":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Snapshot.TargetId) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"generation":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ULINT_TO_STRING(Snapshot.Generation)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"clock_mode":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Snapshot.ClockMode) THEN RETURN; END_IF
+IF LEN(Snapshot.TerminationReason) > 0 THEN
+	IF NOT AppendLiteral(Value := ',"termination_reason":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Snapshot.TerminationReason) THEN RETURN; END_IF
+END_IF
+IF NOT AppendLiteral(Value := ',') THEN RETURN; END_IF
+IF NOT AppendCounts(Total := Snapshot.Total, Failed := Snapshot.Failed, Errors := Snapshot.Errors, Skipped := Snapshot.Skipped) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"suites":[') THEN RETURN; END_IF
+_phase := 2;
+ServicePhaseHeader := TRUE;

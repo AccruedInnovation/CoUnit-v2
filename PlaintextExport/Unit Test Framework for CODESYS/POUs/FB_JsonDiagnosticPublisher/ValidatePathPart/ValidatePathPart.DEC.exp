@@ -1,0 +1,13 @@
+METHOD PRIVATE ValidatePathPart : BOOL
+VAR_INPUT
+	PathBytes : POINTER TO BYTE;
+	Position : UINT;
+	CurrentByte : BYTE;
+END_VAR
+VAR_IN_OUT
+	SegmentStart : UINT;
+	Separator : BYTE;
+END_VAR
+VAR
+	_segmentLength : UINT;
+END_VAR

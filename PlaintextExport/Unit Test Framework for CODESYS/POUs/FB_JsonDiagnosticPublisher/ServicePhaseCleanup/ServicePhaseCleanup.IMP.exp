@@ -1,0 +1,9 @@
+ServicePhaseCleanup := FALSE;
+IF NOT _file.DeleteIfPresent(Path := _backup) THEN
+	_cleanupWarning := TRUE;
+	_lastError := _file.GetLastError();
+	WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_WARNING),
+		msgFmtStr := 'JSON report backup cleanup failed: %s', strArg := _backup);
+END_IF
+_phase := 9;
+ServicePhaseCleanup := TRUE;

@@ -1,0 +1,36 @@
+ServicePhaseSuite := FALSE;
+IF _suiteIndex <= Snapshot.SuiteCount THEN
+	IF _suiteIndex = 0 OR _suiteIndex > Snapshot.SuiteCount OR
+		_suiteIndex > GVL_Param_coUnit.MaxNumberOfTestSuites THEN
+		Fail(Operation := 'suite index outside snapshot bounds');
+		RETURN;
+	END_IF
+	IF Snapshot.Suites[_suiteIndex].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+		Fail(Operation := 'suite test count outside snapshot bounds');
+		RETURN;
+	END_IF
+	IF _suiteIndex > 1 AND_THEN NOT AppendLiteral(Value := ',') THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := '{"identity":') THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := UINT_TO_STRING(Snapshot.Suites[_suiteIndex].Identity)) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"name":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Snapshot.Suites[_suiteIndex].Name) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"suite_id":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Snapshot.Suites[_suiteIndex].SuiteId) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',') THEN RETURN; END_IF
+	IF NOT AppendCounts(Total := Snapshot.Suites[_suiteIndex].Total, Failed := Snapshot.Suites[_suiteIndex].Failed,
+		Errors := Snapshot.Suites[_suiteIndex].Errors, Skipped := Snapshot.Suites[_suiteIndex].Skipped) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"cases":[') THEN RETURN; END_IF
+	_testIndex := 1;
+	_phase := 3;
+ELSE
+	IF NOT AppendLiteral(Value := ']}') THEN RETURN; END_IF
+	IF NOT FlushChunk() THEN RETURN; END_IF
+	_flushResult := _file.FlushIfSupported();
+	IF _flushResult < 0 THEN Fail(Operation := 'flush staging'); RETURN; END_IF
+	_flushUnsupported := _flushResult = 0;
+	IF NOT _file.Close() THEN Fail(Operation := 'close staging'); RETURN; END_IF
+	_exists := _file.Probe(Path := _stage, Size => _size);
+	IF _exists <> 1 OR _size <> _writtenBytes THEN Fail(Operation := 'closed staging size'); RETURN; END_IF
+	_phase := 6;
+END_IF
+ServicePhaseSuite := TRUE;

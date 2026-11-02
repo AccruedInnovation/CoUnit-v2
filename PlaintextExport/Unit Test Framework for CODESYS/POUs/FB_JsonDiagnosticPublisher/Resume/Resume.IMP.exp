@@ -1,0 +1,3 @@
+_paused := FALSE;
+_pauseAfter := 0;
+Resume := TRUE;

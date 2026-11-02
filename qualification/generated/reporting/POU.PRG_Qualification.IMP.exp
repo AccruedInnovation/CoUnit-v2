@@ -1,17 +1,24 @@
 SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+JsonPublisherBytes := SIZEOF(_jsonPublisher);
 IF NOT Init THEN
+	FOR _fixtureIndex := 1 TO 6 DO
+		_snapshot.Suites[1].Tests[_fixtureIndex].Name REF= _backing[_fixtureIndex].CanonicalName;
+		_snapshot.Suites[1].Tests[_fixtureIndex].ClassName REF= _snapshot.Suites[1].Name;
+		_snapshot.Suites[1].Tests[_fixtureIndex].LaterDetail REF= _backing[_fixtureIndex].LaterDetail;
+		_snapshot.Suites[1].Tests[_fixtureIndex].FirstFailure REF= _backing[_fixtureIndex].FirstFailure;
+	END_FOR
 	_snapshot.Disposition := E_CoUnitRunDisposition.NORMAL;
 	_snapshot.SuiteCount := 1;
-	_snapshot.Total := 4;
+	_snapshot.Total := 6;
 	_snapshot.Passed := 1;
-	_snapshot.Failed := 1;
+	_snapshot.Failed := 3;
 	_snapshot.Skipped := 1;
 	_snapshot.Errors := 1;
 	_snapshot.Suites[1].Name := SuiteName;
 	_snapshot.Suites[1].Identity := 0;
-	_snapshot.Suites[1].Total := 4;
+	_snapshot.Suites[1].Total := 6;
 	_snapshot.Suites[1].Passed := 1;
-	_snapshot.Suites[1].Failed := 1;
+	_snapshot.Suites[1].Failed := 3;
 	_snapshot.Suites[1].Skipped := 1;
 	_snapshot.Suites[1].Errors := 1;
 	_snapshot.Suites[1].Tests[1].Name := 'Pass "quoted"';
@@ -25,21 +32,59 @@ IF NOT Init THEN
 	_snapshot.Suites[1].Tests[2].FirstFailure.IsSet := TRUE;
 	_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType := E_AssertionType.Type_DINT;
 	_snapshot.Suites[1].Tests[2].FirstFailure.Message := FailureMessage;
-	_snapshot.Suites[1].Tests[3].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ExpectedText := '3';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[3].Name := 'String scalar mismatch';
 	_snapshot.Suites[1].Tests[3].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.SKIPPED;
-	_snapshot.Suites[1].Tests[4].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[3].NumberOfAsserts := 1;
+	_snapshot.Suites[1].Tests[3].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType := E_AssertionType.Type_STRING;
+	_snapshot.Suites[1].Tests[3].FirstFailure.Message := 'string mismatch';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ExpectedText := 'left <& "quoted"';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ActualText := 'right &> "quoted"';
+	_snapshot.Suites[1].Tests[4].Name := 'Array mismatch';
 	_snapshot.Suites[1].Tests[4].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.ERROR;
+	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[4].NumberOfAsserts := 2;
+	_snapshot.Suites[1].Tests[4].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[4].FirstFailure.AssertionType := E_AssertionType.Type_Array_UINT;
+	_snapshot.Suites[1].Tests[4].FirstFailure.Message := 'array mismatch';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ExpectedText := '4';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[5].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[5].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[5].State := E_CoUnitTestState.SKIPPED;
+	_snapshot.Suites[1].Tests[5].NumberOfAsserts := 0;
+	_snapshot.Suites[1].Tests[6].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[6].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[6].State := E_CoUnitTestState.ERROR;
 	_snapshot.IsValid := TRUE;
+	GVL_coUnit.xUnitFilePath := Path;
 	Configured := _publisher.ConfigureTest(Path := Path, Enabled := TRUE, ChunkLimit := ChunkLimit, TextMode := TextMode, FaultOperation := FaultOperation, FaultOccurrence := FaultOccurrence, FaultOccurrence2 := FaultOccurrence2, FaultError := FaultError, ShortWrite := ShortWrite, PauseAfterPhase := PauseAfterPhase);
+	JsonConfigured := _jsonPublisher.ConfigureTest(Path := JsonPath, Enabled := JsonEnabled, TextMode := TextMode,
+		FaultOperation := JsonFaultOperation, FaultOccurrence := JsonFaultOccurrence, FaultOccurrence2 := JsonFaultOccurrence2,
+		FaultError := JsonFaultError, ShortWrite := JsonShortWrite, PauseAfterPhase := JsonPauseAfterPhase);
 	Init := TRUE;
 END_IF
-IF ReleasePause THEN _result := _publisher.Resume(); END_IF
+IF ReleasePause THEN
+	_result := _publisher.Resume();
+	_jsonResult := _jsonPublisher.Resume();
+END_IF
 _result := _publisher.ServiceSnapshot(Snapshot := _snapshot);
+_jsonResult := _jsonPublisher.ServiceSnapshot(Snapshot := _snapshot);
 Phase := _publisher.GetPhase();
 ReportState := _publisher.GetReportState();
 FileEffects := _publisher.GetFileEffectCount();
 LastFileError := _publisher.GetLastFileError();
-Done := (ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED);
-OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (_snapshot.Total = 4) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 1) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1);
+JsonPhase := _jsonPublisher.GetPhase();
+JsonReportState := _jsonPublisher.GetReportState();
+JsonFileEffects := _jsonPublisher.GetFileEffectCount();
+JsonLastFileError := _jsonPublisher.GetLastFileError();
+JsonCleanupWarning := _jsonPublisher.GetCleanupWarning();
+JsonFlushUnsupported := _jsonPublisher.GetFlushUnsupported();
+Done := ((ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED)) AND
+	((JsonReportState = E_CoUnitReportState.WRITTEN) OR (JsonReportState = E_CoUnitReportState.FAILED) OR (JsonReportState = E_CoUnitReportState.DISABLED));
+OraclePass := Done AND (ReportState = ExpectedState) AND (JsonReportState = JsonExpectedState) AND _snapshot.IsValid AND
+	(_snapshot.Total = 6) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 3) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1) AND
+	((JsonEnabled) OR (JsonFileEffects = 0));

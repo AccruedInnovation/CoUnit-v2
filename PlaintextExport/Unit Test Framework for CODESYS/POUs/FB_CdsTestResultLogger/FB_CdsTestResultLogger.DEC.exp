@@ -2,5 +2,7 @@ FUNCTION_BLOCK FB_CdsTestResultLogger IMPLEMENTS I_TestResultLogger
 VAR
 	TestResults : I_TestResults;
 	_printed : BOOL;
+	_logSuite : UDINT := 1;
+	_logTest : UDINT := 1;
 	_loggingFailed : BOOL;
 END_VAR

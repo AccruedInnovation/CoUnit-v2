@@ -1,0 +1,5 @@
+METHOD Describe
+VAR
+	_identityOk : BOOL;
+	_unusedHandle : UINT;
+END_VAR

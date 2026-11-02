@@ -1,0 +1,7 @@
+METHOD PRIVATE AppendTestFailure : BOOL
+VAR_IN_OUT CONSTANT
+	Test : ST_CoUnitSnapshotTest;
+END_VAR
+VAR
+	_type : T_MaxString;
+END_VAR

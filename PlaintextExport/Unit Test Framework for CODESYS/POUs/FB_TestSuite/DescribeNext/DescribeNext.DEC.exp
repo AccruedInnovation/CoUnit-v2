@@ -1,0 +1,2 @@
+(* Override to declare at most one case per call; return FALSE while more steps remain. *)
+METHOD DescribeNext : BOOL

@@ -1,0 +1,17 @@
+IF BeginCase(Handle := _handleA) THEN
+	RowAEffects := RowAEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'upgrade/row/a', Message := 'Row A', ExpectedText := 'unused', ActualText := 'unused', Detail := 'A must remain unselected');
+	TEST_FINISHED();
+END_IF
+IF BeginCase(Handle := _handleB) THEN
+	RowBEffects := RowBEffects + 1;
+	RowBScans := RowBScans + 1;
+	AssertResult(Passed := (RowAEffects = 0) AND (DisabledEffects = 0) AND (RowBEffects = RowBScans) AND (RowBScans <= 3), CheckId := 'upgrade/row/b', Message := 'Only the selected row may produce effects', ExpectedText := 'RowA=0; disabled=0; RowB=scan', ActualText := CONCAT(CONCAT(UINT_TO_STRING(RowAEffects), '/'), CONCAT(UINT_TO_STRING(DisabledEffects), CONCAT('/', UINT_TO_STRING(RowBEffects)))), Detail := 'three cyclic invocations');
+	IF RowBScans >= 3 THEN
+		TEST_FINISHED();
+	END_IF
+END_IF
+IF BeginCase(Handle := _handleDisabled) THEN
+	DisabledEffects := DisabledEffects + 1;
+	TEST_FINISHED();
+END_IF

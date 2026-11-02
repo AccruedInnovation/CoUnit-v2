@@ -1,0 +1,19 @@
+FUNCTION_BLOCK FB_CoUnitFixture
+VAR_OUTPUT
+	Phase : E_CoUnitFixturePhase := E_CoUnitFixturePhase.IDLE;
+	Complete : BOOL;
+	PrimaryCause : E_CoUnitFixtureCause := E_CoUnitFixtureCause.NONE;
+	CleanupOutcome : E_CoUnitFixtureOutcome := E_CoUnitFixtureOutcome.NOT_RUN;
+	PhaseDeadline : LTIME;
+END_VAR
+VAR
+	_key : ST_CoUnitFixtureKey;
+	_fixture : I_CoUnitFixture;
+	_phaseTimeout : LTIME;
+	_lastNow : LTIME;
+	_cleanupBudget : LTIME;
+	_cleanupDeadline : LTIME;
+	_setupEntered : BOOL;
+	_callback : E_CoUnitFixtureCallback;
+	_startValid : BOOL;
+END_VAR

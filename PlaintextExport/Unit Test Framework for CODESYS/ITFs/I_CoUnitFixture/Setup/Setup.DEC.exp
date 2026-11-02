@@ -1,0 +1,5 @@
+METHOD Setup : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR

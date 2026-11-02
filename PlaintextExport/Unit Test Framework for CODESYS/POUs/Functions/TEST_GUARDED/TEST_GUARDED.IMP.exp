@@ -1,0 +1,4 @@
+TEST_GUARDED := FALSE;
+_suite := GVL_coUnit.coUnitRunner.GetActiveSuite(RequireContext := TRUE);
+IF _suite = 0 THEN RETURN; END_IF
+TEST_GUARDED := _suite^.BeginGuarded(Name := TestName);

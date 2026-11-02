@@ -1,0 +1,8 @@
+METHOD PUBLIC Start : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Fixture : REFERENCE TO I_CoUnitFixture;
+	Now : LTIME;
+	PhaseTimeout : LTIME;
+	CleanupBudget : LTIME;
+END_VAR

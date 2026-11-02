@@ -1,0 +1,6 @@
+IF TEST_GUARDED('GuardedActive') THEN
+	ActiveEffects := ActiveEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'legacy/active', Message := 'guarded active', ExpectedText := 'one visit', ActualText := 'one visit', Detail := '');
+	ActiveCompleted := TRUE;
+	TEST_FINISHED();
+END_IF

@@ -1,0 +1,4 @@
+BindLegacyResults := FALSE;
+IF _buildAttempted OR TestSuiteResults <> 0 OR GVL_coUnit.coUnitRunner.GetRunState() <> E_CoUnitRunState.IDLE THEN RETURN; END_IF
+TestSuiteResults := ADR(Destination);
+BindLegacyResults := TRUE;

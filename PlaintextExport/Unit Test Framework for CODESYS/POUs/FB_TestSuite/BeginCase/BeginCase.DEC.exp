@@ -1,0 +1,10 @@
+(* Direct within-run handle: no name search and no persistent identity inferred from the handle. *)
+METHOD BeginCase : BOOL
+VAR_INPUT
+	Handle : UINT;
+END_VAR
+VAR
+	_unused : UINT;
+	_execute : BOOL;
+	_epoch : ULINT;
+END_VAR

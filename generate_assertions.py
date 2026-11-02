@@ -218,9 +218,18 @@ IF (_bits AND {bits}#16#{exponent}) = {bits}#16#{exponent} THEN
 	ELSIF (_bits AND {bits}#16#{sign}) <> 0 THEN Text_{typ} := '-Infinity';
 	ELSE Text_{typ} := '+Infinity'; END_IF
 ELSE
-	Text_{typ} := {typ}_TO_STRING(Value);
+	_hexPtr := ADR(_hex);
+	_digitsPtr := ADR(_digits);
+	FOR _i := 0 TO {7 if typ == 'REAL' else 15} DO
+		_nibble := {bits}_TO_USINT(SHR(_bits, {28 if typ == 'REAL' else 60} - (_i * 4)) AND {bits}#16#F);
+		_hexPtr[_i] := _digitsPtr[_nibble];
+	END_FOR
+	_hexPtr[{8 if typ == 'REAL' else 16}] := 0;
+	Text_{typ} := BoundedJoin(LeftText := {typ}_TO_STRING(Value), RightText := ' [bits=16#', AlreadyTruncated := FALSE, Truncated => _truncated);
+	Text_{typ} := BoundedJoin(LeftText := Text_{typ}, RightText := _hex, AlreadyTruncated := _truncated, Truncated => _truncated);
+	Text_{typ} := BoundedJoin(LeftText := Text_{typ}, RightText := ']', AlreadyTruncated := _truncated, Truncated => _truncated);
 END_IF
-""")
+""", ["_hex : STRING(16)", "_digits : STRING(16) := '0123456789ABCDEF'", "_hexPtr : POINTER TO BYTE", "_digitsPtr : POINTER TO BYTE", "_i : USINT", "_nibble : USINT", "_truncated : BOOL"])
 
 
 def text_value(typ, value):
@@ -420,12 +429,45 @@ IF _extent[{d}] <> _actualExtent[{d}] THEN _shapeMatches := FALSE; END_IF
             body += "_result.Passed := Expected = Actual;\n"
         body += f"IF NOT _result.Passed THEN\n\t_result.ExpectedText := {text_value(typ, 'Expected')};\n\t_result.ActualText := {text_value(typ, 'Actual')};\nEND_IF\n"
     if typ in ("REAL", "LREAL"):
-        body += "IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; END_IF\n"
+        body += f"IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; ELSIF NOT _result.Passed THEN\n\tIF LEN(_result.DiagnosticSuffix) > 0 THEN\n\t\t_result.DiagnosticSuffix := BoundedJoin(LeftText := _result.DiagnosticSuffix, RightText := ' | Delta=', AlreadyTruncated := FALSE, Truncated => _truncated);\n\tELSE\n\t\t_result.DiagnosticSuffix := 'Delta=';\n\tEND_IF\n\t_result.DiagnosticSuffix := BoundedJoin(LeftText := _result.DiagnosticSuffix, RightText := Text_{typ}(Value := Delta), AlreadyTruncated := _truncated, Truncated => _truncated);\nEND_IF\n"
+        locals_.append("_truncated : BOOL")
     assert enum in assertion_types, (name, enum)
     body += f"RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.{enum}, Message := Message, Comparison := _result);\n"
     assert body.count("BeginAssertion(") == 1 and body.count("RecordAssertionOutcome(") == 1
     assert not re.search(r"\bAssert\w*\s*\(", body), name
     method(name, original_header(row) + block("VAR", locals_), body)
+
+method("AssertResult", """METHOD PUBLIC AssertResult
+VAR_INPUT
+	Passed : BOOL;
+	CheckId : T_MaxString;
+	Message : T_MaxString;
+	ExpectedText : T_MaxString;
+	ActualText : T_MaxString;
+	Detail : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+	_checkMessage : T_MaxString;
+	_truncated : BOOL;
+END_VAR
+""", """IF NOT BeginAssertion(TestIndex => _testIndex, Ordinal => _ordinal) THEN RETURN; END_IF
+_result.Passed := Passed;
+_result.ArgumentError := FALSE;
+_result.ExpectedText := ExpectedText;
+_result.ActualText := ActualText;
+_result.DiagnosticSuffix := '';
+_truncated := FALSE;
+_checkMessage := BoundedJoin(LeftText := CheckId, RightText := ': ', AlreadyTruncated := FALSE, Truncated => _truncated);
+_checkMessage := BoundedJoin(LeftText := _checkMessage, RightText := Message, AlreadyTruncated := _truncated, Truncated => _truncated);
+IF LEN(Detail) > 0 THEN
+	_checkMessage := BoundedJoin(LeftText := _checkMessage, RightText := ' | ', AlreadyTruncated := _truncated, Truncated => _truncated);
+	_checkMessage := BoundedJoin(LeftText := _checkMessage, RightText := Detail, AlreadyTruncated := _truncated, Truncated => _truncated);
+END_IF
+RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_BOOL, Message := _checkMessage, Comparison := _result);
+""")
 
 method("CalculateAndSetNumberOfAssertsForTest", """METHOD INTERNAL CalculateAndSetNumberOfAssertsForTest
 VAR_INPUT

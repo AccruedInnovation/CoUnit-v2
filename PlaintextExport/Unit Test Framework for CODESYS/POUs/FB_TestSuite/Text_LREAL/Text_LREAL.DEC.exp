@@ -2,6 +2,15 @@ METHOD PRIVATE Text_LREAL : T_MaxString
 VAR_INPUT
 	Value : LREAL;
 END_VAR
+VAR_OUTPUT
+	_hex : STRING(16);
+	_digits : STRING(16) := '0123456789ABCDEF';
+	_hexPtr : POINTER TO BYTE;
+	_digitsPtr : POINTER TO BYTE;
+	_i : USINT;
+	_nibble : USINT;
+	_truncated : BOOL;
+END_VAR
 VAR
 	_bits : LWORD;
 END_VAR

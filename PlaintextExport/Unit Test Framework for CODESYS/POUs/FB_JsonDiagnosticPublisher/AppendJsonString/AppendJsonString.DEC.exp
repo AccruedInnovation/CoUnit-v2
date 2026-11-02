@@ -1,0 +1,10 @@
+METHOD PRIVATE AppendJsonString : BOOL
+VAR_INPUT
+	Value : T_MaxString;
+END_VAR
+VAR
+	_p : POINTER TO BYTE;
+	_i : UINT;
+	_taken : UINT;
+	_cp : UDINT;
+END_VAR

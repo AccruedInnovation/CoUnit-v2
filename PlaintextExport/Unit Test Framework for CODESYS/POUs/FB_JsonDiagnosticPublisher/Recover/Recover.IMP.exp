@@ -1,0 +1,29 @@
+Recover := FALSE;
+(* Artifact sizes qualify recovery failure messages; existence still selects the recovery action. *)
+_finalExists := _file.Probe(Path := _path, Size => _finalSize);
+IF _finalExists < 0 THEN Fail(Operation := 'probe current'); RETURN; END_IF
+_backupExists := _file.Probe(Path := _backup, Size => _backupSize);
+IF _backupExists < 0 THEN Fail(Operation := 'probe backup'); RETURN; END_IF
+IF _finalExists = 0 AND _backupExists = 1 THEN
+	IF NOT _file.Rename(OldPath := _backup, NewPath := _path) THEN
+		FailRecoveryArtifact(Size := _backupSize, Operation := 'restore backup during recovery',
+			EmptyOperation := 'restore empty backup during recovery');
+		RETURN;
+	END_IF
+ELSIF _finalExists = 1 AND _backupExists = 1 THEN
+	IF NOT _file.DeleteIfPresent(Path := _backup) THEN
+		FailRecoveryArtifact(Size := _finalSize, Operation := 'remove old backup',
+			EmptyOperation := 'remove old backup with empty current');
+		RETURN;
+	END_IF
+END_IF
+_stageExists := _file.Probe(Path := _stage, Size => _stageSize);
+IF _stageExists < 0 THEN Fail(Operation := 'probe staging'); RETURN; END_IF
+IF _stageExists = 1 THEN
+	IF NOT _file.DeleteIfPresent(Path := _stage) THEN
+		FailRecoveryArtifact(Size := _stageSize, Operation := 'remove old staging',
+			EmptyOperation := 'remove empty old staging');
+		RETURN;
+	END_IF
+END_IF
+Recover := TRUE;

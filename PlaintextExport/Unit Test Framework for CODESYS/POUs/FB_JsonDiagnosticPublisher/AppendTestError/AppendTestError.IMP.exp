@@ -1,0 +1,21 @@
+AppendTestError := FALSE;
+IF Test.State = E_CoUnitTestState.ABORTED THEN _error := 'Run aborted'; ELSE _error := 'Framework error'; END_IF
+IF NOT AppendLiteral(Value := ',"error":{"message":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := _error) THEN RETURN; END_IF
+IF LEN(TerminationReason) > 0 THEN
+	IF NOT AppendLiteral(Value := ',"termination_reason":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := TerminationReason) THEN RETURN; END_IF
+END_IF
+IF Test.FirstFailure.IsSet THEN
+	IF NOT AppendLiteral(Value := ',"first_failure":{"type":') THEN RETURN; END_IF
+	_type := CONCAT(STR1 := 'Type_', STR2 := F_AssertionTypeToString(AssertionType := Test.FirstFailure.AssertionType));
+	IF NOT AppendJsonString(Value := _type) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"message":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Test.FirstFailure.Message) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"expected":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Test.FirstFailure.ExpectedText) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"actual":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Test.FirstFailure.ActualText) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := '}') THEN RETURN; END_IF
+END_IF
+AppendTestError := AppendLiteral(Value := '}');

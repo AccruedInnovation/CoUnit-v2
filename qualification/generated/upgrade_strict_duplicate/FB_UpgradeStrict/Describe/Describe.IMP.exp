@@ -1,0 +1,3 @@
+_ok := SetCatalogIdentity(SuiteId := 'strict-duplicate');
+_h1 := DefineCase(CaseId := 'case', Name := 'Same', RowKey := 'row', Tags := '', Disabled := FALSE);
+_h2 := DefineCase(CaseId := 'case', Name := 'SameAgain', RowKey := 'row', Tags := '', Disabled := FALSE);

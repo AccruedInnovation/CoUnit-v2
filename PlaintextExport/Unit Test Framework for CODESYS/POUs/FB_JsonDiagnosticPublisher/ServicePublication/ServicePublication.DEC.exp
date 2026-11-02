@@ -1,0 +1,4 @@
+METHOD PUBLIC ServicePublication
+VAR
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+END_VAR

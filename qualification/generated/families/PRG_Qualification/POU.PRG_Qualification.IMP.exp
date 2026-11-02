@@ -731,7 +731,7 @@ IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT D
 		OraclePass := FALSE;
 		IF FailedCheck = 0 THEN FailedCheck := 182; END_IF
 	END_IF
-	IF NOT (_snapshot.Suites[1].Tests[29].FirstFailure.Message = 'F28_AssertEquals_LREAL') THEN
+	IF NOT (FIND(_snapshot.Suites[1].Tests[29].FirstFailure.Message, 'F28_AssertEquals_LREAL') > 0) THEN
 		OraclePass := FALSE;
 		IF FailedCheck = 0 THEN FailedCheck := 183; END_IF
 	END_IF
@@ -803,7 +803,7 @@ IF (GVL_coUnit.coUnitRunner.GetRunState() = E_CoUnitRunState.COMPLETE) AND NOT D
 		OraclePass := FALSE;
 		IF FailedCheck = 0 THEN FailedCheck := 200; END_IF
 	END_IF
-	IF NOT (_snapshot.Suites[1].Tests[32].FirstFailure.Message = 'F31_AssertEquals_REAL') THEN
+	IF NOT (FIND(_snapshot.Suites[1].Tests[32].FirstFailure.Message, 'F31_AssertEquals_REAL') > 0) THEN
 		OraclePass := FALSE;
 		IF FailedCheck = 0 THEN FailedCheck := 201; END_IF
 	END_IF

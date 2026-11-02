@@ -1,5 +1,38 @@
 FUNCTION_BLOCK FB_coUnitRunner
 VAR
+	_terminalizing : BOOL;
+	_terminalSuite : UDINT := 1;
+	_terminalState : E_CoUnitTestState;
+	_lastProgressSuite : UINT;
+	_lastProgressCase : UINT;
+	_lastProgressPhase : E_CoUnitFixturePhase;
+	_lastProgressStep : STRING(63);
+	_lastProgressAt : LTIME;
+	_progressEpoch : ULINT;
+	_publicTotal : UDINT;
+	_publicStarted : UDINT;
+	_publicPassed : UDINT;
+	_publicFailed : UDINT;
+	_publicSkipped : UDINT;
+	_publicErrors : UDINT;
+	_controlledMode : BOOL;
+	_catalogReady : BOOL;
+	_startRequested : BOOL;
+	_cancelRequested : BOOL;
+	_cleanupIncomplete : BOOL;
+	_publicRunId : STRING(63);
+	_publicBuildId : STRING(64);
+	_publicTargetId : STRING(63);
+	_generation : ULINT;
+	_lastPublicRequest : ULINT;
+	_selectedCount : UDINT;
+	_catalogPreparing : BOOL;
+	_catalogCursor : UINT;
+	_catalogStartedAt : LTIME;
+	_runStartedAt : LTIME;
+	_cancelStartedAt : LTIME;
+	_runTimeout : TIME;
+	_cleanupTimeout : TIME;
 	RunState : E_CoUnitRunState := E_CoUnitRunState.IDLE;
 	RunDisposition : E_CoUnitRunDisposition := E_CoUnitRunDisposition.UNSET;
 	RunMode : E_CoUnitRunMode := E_CoUnitRunMode.MODE_UNSET;
@@ -29,6 +62,7 @@ VAR
 	TestResultLogger : I_TestResultLogger := CdsTestResultLogger;
 	xUnitXmlPublisher : FB_xUnitXmlPublisher(TestResults);
 	XmlTestResultPublisher : I_TestResultLogger := xUnitXmlPublisher;
+	DiagnosticJsonPublisher : FB_JsonDiagnosticPublisher;
 	SnapshotReady : BOOL;
 	ResultsLogged : BOOL;
 	PostCompleteMisuseReported : BOOL;

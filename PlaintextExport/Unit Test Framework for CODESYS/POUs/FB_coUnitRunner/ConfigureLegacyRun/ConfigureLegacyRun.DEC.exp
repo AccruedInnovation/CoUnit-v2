@@ -1,0 +1,13 @@
+METHOD INTERNAL ConfigureLegacyRun : BOOL
+VAR_INPUT
+	RunId : T_MaxString;
+	BuildId : T_MaxString;
+	TargetId : T_MaxString;
+	InSequence : BOOL;
+END_VAR
+VAR
+	_handle : CmpIecTask.RTS_IEC_HANDLE;
+	_previous : DWORD;
+	_runMode : E_CoUnitRunMode;
+	_delay : TIME;
+END_VAR

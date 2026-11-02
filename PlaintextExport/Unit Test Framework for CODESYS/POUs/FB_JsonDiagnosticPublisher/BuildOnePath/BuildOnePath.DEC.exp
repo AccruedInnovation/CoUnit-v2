@@ -1,0 +1,20 @@
+METHOD PRIVATE BuildOnePath : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+END_VAR
+VAR_IN_OUT
+	Stage : T_MaxString;
+	Backup : T_MaxString;
+END_VAR
+VAR
+	_p : POINTER TO BYTE;
+	_s : POINTER TO BYTE;
+	_b : POINTER TO BYTE;
+	_suffixS : T_MaxString := '.counit.tmp';
+	_suffixB : T_MaxString := '.counit.bak';
+	_ss : POINTER TO BYTE;
+	_sb : POINTER TO BYTE;
+	_length : UINT;
+	_i : UINT;
+	_terminated : BOOL;
+END_VAR

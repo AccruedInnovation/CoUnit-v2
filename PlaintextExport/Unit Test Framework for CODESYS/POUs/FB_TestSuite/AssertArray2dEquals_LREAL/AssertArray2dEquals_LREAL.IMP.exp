@@ -49,5 +49,12 @@ ELSE
 		_offset[1] := _offset[1] + 1;
 	END_WHILE
 END_IF
-IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; END_IF
+IF _result.ArgumentError THEN _result.DiagnosticSuffix := 'Delta must be nonnegative and not NaN'; ELSIF NOT _result.Passed THEN
+	IF LEN(_result.DiagnosticSuffix) > 0 THEN
+		_result.DiagnosticSuffix := BoundedJoin(LeftText := _result.DiagnosticSuffix, RightText := ' | Delta=', AlreadyTruncated := FALSE, Truncated => _truncated);
+	ELSE
+		_result.DiagnosticSuffix := 'Delta=';
+	END_IF
+	_result.DiagnosticSuffix := BoundedJoin(LeftText := _result.DiagnosticSuffix, RightText := Text_LREAL(Value := Delta), AlreadyTruncated := _truncated, Truncated => _truncated);
+END_IF
 RecordAssertionOutcome(TestIndex := _testIndex, Ordinal := _ordinal, AssertionType := E_AssertionType.Type_Array2D_LREAL, Message := Message, Comparison := _result);

@@ -1,0 +1,5 @@
+IF TEST_GUARDED('DISABLED_GuardedOff') THEN
+	DisabledEffects := DisabledEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'legacy/disabled', Message := 'unreachable', ExpectedText := '', ActualText := '', Detail := '');
+	TEST_FINISHED();
+END_IF

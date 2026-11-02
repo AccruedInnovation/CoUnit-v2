@@ -1,1 +1,1 @@
-GetAreTestResultsAvailable := _snapshot.IsValid;
+GetAreTestResultsAvailable := _snapshot.IsValid AND TestSuiteResults <> 0;

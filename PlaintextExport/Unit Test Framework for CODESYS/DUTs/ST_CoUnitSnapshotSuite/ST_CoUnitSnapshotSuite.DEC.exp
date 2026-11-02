@@ -1,5 +1,6 @@
 TYPE ST_CoUnitSnapshotSuite :
 STRUCT
+	SuiteId : STRING(63);
 	Name : T_MaxString;
 	Identity : UINT;
 	Total : UINT;

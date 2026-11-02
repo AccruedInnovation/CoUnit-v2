@@ -1,0 +1,28 @@
+(* Single producer writes payload first, RequestId last; owner writes AckId last.
+   1 configure/list, 2 select (replace), 3 start, 4 cancel, 5 descriptor/result page.
+   Result page contains exactly one bounded record. *)
+TYPE ST_CoUnitExchange :
+STRUCT
+	RequestId : ULINT;
+	Operation : UINT;
+	RunId : STRING(63);
+	BuildId : STRING(64);
+	TargetId : STRING(63);
+	ExpectedGeneration : ULINT;
+	SuiteId : STRING(63);
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	Tag : STRING(63);
+	SuiteIndex : UINT;
+	CaseIndex : UINT;
+	ExpectedSelected : UDINT;
+	AllowEmpty : BOOL;
+	RunTimeout : TIME := T#60s;
+	CleanupTimeout : TIME := T#5s;
+	AckId : ULINT;
+	Accepted : BOOL;
+	Rejection : T_MaxString;
+	Status : ST_CoUnitPublicStatus;
+	Page : ST_CoUnitPublicCase;
+END_STRUCT
+END_TYPE

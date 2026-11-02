@@ -1,0 +1,9 @@
+METHOD INTERNAL SelectCases : UINT
+VAR_INPUT
+	CaseId : T_MaxString;
+	RowKey : T_MaxString;
+	Tag : T_MaxString;
+END_VAR
+VAR
+	_i : UINT;
+END_VAR

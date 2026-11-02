@@ -1,0 +1,11 @@
+IF _state = E_CoUnitReportState.WRITTEN OR _state = E_CoUnitReportState.FAILED THEN RETURN; END_IF
+_lastError := ErrorCode;
+IF _lastError = 0 THEN _lastError := _file.GetLastError(); END_IF
+IF _lastError = 0 THEN _lastError := 16#FFFF0004; END_IF
+IF NOT _file.AbortClose() THEN _cleanupWarning := TRUE; END_IF
+_state := E_CoUnitReportState.FAILED;
+_text := CONCAT(STR1 := 'JSON diagnostic publication failed: ', STR2 := Operation);
+_text := CONCAT(STR1 := _text, STR2 := CONCAT(STR1 := ' code=', STR2 := UDINT_TO_STRING(_lastError)));
+(* Log delivery is best-effort; publisher state and the primary file error remain authoritative. *)
+WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), msgFmtStr := '%s', strArg := _text);
+WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR), msgFmtStr := 'Path: %s', strArg := _path);

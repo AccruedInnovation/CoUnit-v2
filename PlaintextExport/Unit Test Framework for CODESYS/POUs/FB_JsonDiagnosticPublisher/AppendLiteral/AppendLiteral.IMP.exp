@@ -1,0 +1,8 @@
+_p := ADR(Value);
+AppendLiteral := FALSE;
+FOR _i := 0 TO 254 DO
+	IF _p[_i] = 0 THEN AppendLiteral := TRUE; RETURN; END_IF
+	IF NOT AppendByte(Value := _p[_i]) THEN RETURN; END_IF
+END_FOR
+IF _p[255] = 0 THEN AppendLiteral := TRUE;
+ELSE Fail(Operation := 'unterminated JSON literal'); END_IF

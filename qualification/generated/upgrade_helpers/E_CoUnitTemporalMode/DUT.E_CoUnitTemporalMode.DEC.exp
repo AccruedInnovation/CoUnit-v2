@@ -1,0 +1,10 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitTemporalMode :
+(
+	EVENTUALLY_TRUE := 0,
+	REMAINS_TRUE,
+	REMAINS_FALSE,
+	STEP
+) BYTE;
+END_TYPE

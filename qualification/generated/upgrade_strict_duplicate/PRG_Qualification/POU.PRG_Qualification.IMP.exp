@@ -1,0 +1,24 @@
+IF NOT _waiting THEN
+	CASE _step OF
+	0:
+		_request := _request + 1; Exchange.Operation := 1; Exchange.RunId := 'strict-duplicate-run'; Exchange.BuildId := 'strict-build'; Exchange.TargetId := 'qualified-simulator'; Exchange.RunTimeout := T#10s; Exchange.CleanupTimeout := T#2s; Exchange.RequestId := _request; _waiting := TRUE;
+	1:
+		IF Exchange.Status.CatalogReady THEN
+			_request := _request + 1; Exchange.Operation := 3; Exchange.RunId := 'strict-duplicate-run'; Exchange.ExpectedGeneration := 1; Exchange.ExpectedSelected := 0; Exchange.AllowEmpty := FALSE; Exchange.RequestId := _request; _waiting := TRUE;
+		ELSIF Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) THEN
+			Done := TRUE; OraclePass := (Exchange.Status.Reason = 'Duplicate stable case and parameter row') AND (Exchange.Status.TotalCount = 1) AND (Exchange.Status.ErrorCount = 1); IF NOT OraclePass THEN FailedCheck := 1; END_IF
+		END_IF
+	2:
+		IF Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) THEN
+			Done := TRUE; OraclePass := _startAccepted AND (Exchange.Status.Reason = 'Duplicate stable case and parameter row'); IF NOT OraclePass THEN FailedCheck := 2; END_IF
+		END_IF
+	END_CASE
+ELSE
+	IF Exchange.AckId = _request THEN
+		_waiting := FALSE;
+		IF _step = 0 THEN _configAccepted := Exchange.Accepted; _step := 1;
+		ELSIF _step = 1 THEN _startAccepted := Exchange.Accepted; _step := 2;
+		END_IF
+	END_IF
+END_IF
+RUN_CONTROLLED(Exchange := Exchange);

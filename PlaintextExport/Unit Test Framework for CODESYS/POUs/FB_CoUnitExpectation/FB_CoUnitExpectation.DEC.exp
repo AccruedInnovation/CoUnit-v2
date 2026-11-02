@@ -1,0 +1,14 @@
+FUNCTION_BLOCK FB_CoUnitExpectation
+VAR_OUTPUT
+	Resolved : BOOL;
+	State : E_CoUnitTemporalResult := E_CoUnitTemporalResult.REJECTED;
+END_VAR
+VAR
+	_active : BOOL;
+	_key : ST_CoUnitFixtureKey;
+	_mode : E_CoUnitTemporalMode;
+	_startedAt : LTIME;
+	_lastNow : LTIME;
+	_deadline : LTIME;
+	_duration : LTIME;
+END_VAR

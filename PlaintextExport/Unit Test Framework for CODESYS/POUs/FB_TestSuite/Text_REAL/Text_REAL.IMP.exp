@@ -4,5 +4,14 @@ IF (_bits AND DWORD#16#7F800000) = DWORD#16#7F800000 THEN
 	ELSIF (_bits AND DWORD#16#80000000) <> 0 THEN Text_REAL := '-Infinity';
 	ELSE Text_REAL := '+Infinity'; END_IF
 ELSE
-	Text_REAL := REAL_TO_STRING(Value);
+	_hexPtr := ADR(_hex);
+	_digitsPtr := ADR(_digits);
+	FOR _i := 0 TO 7 DO
+		_nibble := DWORD_TO_USINT(SHR(_bits, 28 - (_i * 4)) AND DWORD#16#F);
+		_hexPtr[_i] := _digitsPtr[_nibble];
+	END_FOR
+	_hexPtr[8] := 0;
+	Text_REAL := BoundedJoin(LeftText := REAL_TO_STRING(Value), RightText := ' [bits=16#', AlreadyTruncated := FALSE, Truncated => _truncated);
+	Text_REAL := BoundedJoin(LeftText := Text_REAL, RightText := _hex, AlreadyTruncated := _truncated, Truncated => _truncated);
+	Text_REAL := BoundedJoin(LeftText := Text_REAL, RightText := ']', AlreadyTruncated := _truncated, Truncated => _truncated);
 END_IF

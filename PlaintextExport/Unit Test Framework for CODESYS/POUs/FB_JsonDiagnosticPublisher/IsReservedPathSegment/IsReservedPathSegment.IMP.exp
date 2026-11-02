@@ -1,0 +1,29 @@
+IsReservedPathSegment := FALSE;
+IF Length = 0 THEN RETURN; END_IF
+_baseLength := Length;
+FOR _i := 0 TO 243 DO
+	IF _i >= Length THEN EXIT; END_IF
+	IF PathBytes[Start + _i] = 16#2E THEN _baseLength := _i; EXIT; END_IF
+END_FOR
+IF _baseLength = 3 THEN
+	_first := UpperAsciiByte(Value := PathBytes[Start]);
+	_second := UpperAsciiByte(Value := PathBytes[Start + 1]);
+	_third := UpperAsciiByte(Value := PathBytes[Start + 2]);
+	CASE _first OF
+		16#43: IsReservedPathSegment := _second = 16#4F AND _third = 16#4E;
+		16#50: IsReservedPathSegment := _second = 16#52 AND _third = 16#4E;
+		16#41: IsReservedPathSegment := _second = 16#55 AND _third = 16#58;
+		16#4E: IsReservedPathSegment := _second = 16#55 AND _third = 16#4C;
+	ELSE IsReservedPathSegment := FALSE;
+	END_CASE
+ELSIF _baseLength = 4 THEN
+	_first := UpperAsciiByte(Value := PathBytes[Start]);
+	_second := UpperAsciiByte(Value := PathBytes[Start + 1]);
+	_third := UpperAsciiByte(Value := PathBytes[Start + 2]);
+	_fourth := PathBytes[Start + 3];
+	CASE _first OF
+		16#43: IsReservedPathSegment := _second = 16#4F AND _third = 16#4D AND _fourth >= 16#31 AND _fourth <= 16#39;
+		16#4C: IsReservedPathSegment := _second = 16#50 AND _third = 16#54 AND _fourth >= 16#31 AND _fourth <= 16#39;
+	ELSE IsReservedPathSegment := FALSE;
+	END_CASE
+END_IF

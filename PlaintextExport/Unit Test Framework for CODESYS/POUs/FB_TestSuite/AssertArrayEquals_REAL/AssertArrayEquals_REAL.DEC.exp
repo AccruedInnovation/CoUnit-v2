@@ -19,4 +19,5 @@ VAR
 	_shapeMatches : BOOL;
 	_elementEqual : BOOL;
 	_argumentError : BOOL;
+	_truncated : BOOL;
 END_VAR

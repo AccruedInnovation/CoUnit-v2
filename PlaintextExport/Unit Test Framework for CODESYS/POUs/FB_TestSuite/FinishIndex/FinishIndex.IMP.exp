@@ -1,11 +1,22 @@
 FinishIndex := FALSE;
 IF Index < 1 OR Index > NumberOfTests THEN RETURN; END_IF
 IF TestRecords[Index].State = E_CoUnitTestState.OPEN THEN
-	IF TestRecords[Index].HasFailure THEN
+	IF TestRecords[Index].CleanupOutcome = E_CoUnitFixtureOutcome.PENDING THEN
+		TestRecords[Index].CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		TestRecords[Index].LaterDetail := 'Case finished before required cleanup completed';
+		GVL_coUnit.coUnitRunner.MarkCleanupIncomplete();
+	END_IF
+	IF TestRecords[Index].TerminationCause = E_CoUnitFixtureCause.CANCELLED THEN
+		TestRecords[Index].State := E_CoUnitTestState.ABORTED;
+	ELSIF TestRecords[Index].TerminationCause <> E_CoUnitFixtureCause.NONE OR TestRecords[Index].CleanupOutcome = E_CoUnitFixtureOutcome.FAILED OR TestRecords[Index].CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE THEN
+		TestRecords[Index].State := E_CoUnitTestState.ERROR;
+	ELSIF TestRecords[Index].HasFailure THEN
 		TestRecords[Index].State := E_CoUnitTestState.FAILED;
 	ELSE
 		TestRecords[Index].State := E_CoUnitTestState.PASSED;
 	END_IF
+	GVL_coUnit.coUnitRunner.OnCaseTerminal(State := TestRecords[Index].State);
+	GVL_coUnit.coUnitRunner.MarkCaseFinished(Index := Index);
 	IF TestRecords[Index].IsOrdered THEN AdvanceOrderedCursor(); END_IF
 END_IF
 FinishIndex := TRUE;

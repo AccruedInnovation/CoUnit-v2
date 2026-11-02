@@ -1,0 +1,24 @@
+_p := ADR(Path);
+_s := ADR(Stage);
+_b := ADR(Backup);
+_ss := ADR(_suffixS);
+_sb := ADR(_suffixB);
+BuildOnePath := FALSE;
+IF _p[0] = 0 THEN RETURN; END_IF
+FOR _length := 0 TO 244 DO
+	IF _p[_length] = 0 THEN _terminated := TRUE; EXIT; END_IF
+END_FOR
+IF NOT _terminated THEN RETURN; END_IF
+FOR _i := 0 TO 243 DO
+	IF _i >= _length THEN EXIT; END_IF
+	_s[_i] := _p[_i];
+	_b[_i] := _p[_i];
+END_FOR
+FOR _i := 0 TO 10 DO
+	_s[_length + _i] := _ss[_i];
+	_b[_length + _i] := _sb[_i];
+END_FOR
+_s[_length + 11] := 0;
+_b[_length + 11] := 0;
+IF _s[_length + 11] <> 0 OR _b[_length + 11] <> 0 THEN RETURN; END_IF
+BuildOnePath := (_s[_length] <> 0) AND (_b[_length] <> 0);

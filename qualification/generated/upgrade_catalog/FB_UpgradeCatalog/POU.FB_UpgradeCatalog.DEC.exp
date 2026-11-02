@@ -1,0 +1,12 @@
+FUNCTION_BLOCK FB_UpgradeCatalog EXTENDS FB_TestSuite
+VAR_OUTPUT
+	RowAEffects : UINT;
+	RowBEffects : UINT;
+	DisabledEffects : UINT;
+	RowBScans : UINT;
+END_VAR
+VAR
+	_handleA : UINT;
+	_handleB : UINT;
+	_handleDisabled : UINT;
+END_VAR

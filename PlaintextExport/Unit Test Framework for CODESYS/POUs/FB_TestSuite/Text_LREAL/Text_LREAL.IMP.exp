@@ -4,5 +4,14 @@ IF (_bits AND LWORD#16#7FF0000000000000) = LWORD#16#7FF0000000000000 THEN
 	ELSIF (_bits AND LWORD#16#8000000000000000) <> 0 THEN Text_LREAL := '-Infinity';
 	ELSE Text_LREAL := '+Infinity'; END_IF
 ELSE
-	Text_LREAL := LREAL_TO_STRING(Value);
+	_hexPtr := ADR(_hex);
+	_digitsPtr := ADR(_digits);
+	FOR _i := 0 TO 15 DO
+		_nibble := LWORD_TO_USINT(SHR(_bits, 60 - (_i * 4)) AND LWORD#16#F);
+		_hexPtr[_i] := _digitsPtr[_nibble];
+	END_FOR
+	_hexPtr[16] := 0;
+	Text_LREAL := BoundedJoin(LeftText := LREAL_TO_STRING(Value), RightText := ' [bits=16#', AlreadyTruncated := FALSE, Truncated => _truncated);
+	Text_LREAL := BoundedJoin(LeftText := Text_LREAL, RightText := _hex, AlreadyTruncated := _truncated, Truncated => _truncated);
+	Text_LREAL := BoundedJoin(LeftText := Text_LREAL, RightText := ']', AlreadyTruncated := _truncated, Truncated => _truncated);
 END_IF

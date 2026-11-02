@@ -1,0 +1,9 @@
+METHOD PRIVATE AppendJsonEscapedCodePoint : BOOL
+VAR_INPUT
+	CodePoint : UDINT;
+END_VAR
+VAR
+	_cp : UDINT;
+	_hexDigits : STRING(16) := '0123456789ABCDEF';
+	_hex : POINTER TO BYTE;
+END_VAR

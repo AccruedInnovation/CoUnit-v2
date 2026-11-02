@@ -1,0 +1,14 @@
+METHOD PRIVATE IsReservedPathSegment : BOOL
+VAR_INPUT
+	PathBytes : POINTER TO BYTE;
+	Start : UINT;
+	Length : UINT;
+END_VAR
+VAR
+	_i : UINT;
+	_baseLength : UINT;
+	_first : BYTE;
+	_second : BYTE;
+	_third : BYTE;
+	_fourth : BYTE;
+END_VAR

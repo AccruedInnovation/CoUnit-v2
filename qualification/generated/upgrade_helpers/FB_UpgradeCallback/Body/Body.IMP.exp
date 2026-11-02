@@ -1,0 +1,2 @@
+BodyCalls := BodyCalls + 1;
+Body := BodyResult;

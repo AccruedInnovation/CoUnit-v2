@@ -1,0 +1,6 @@
+METHOD PRIVATE FailRecoveryArtifact
+VAR_INPUT
+	Size : ULINT;
+	Operation : T_MaxString;
+	EmptyOperation : T_MaxString;
+END_VAR

@@ -1,0 +1,4 @@
+METHOD INTERNAL DefinitionError
+VAR_INPUT
+	Reason : T_MaxString;
+END_VAR

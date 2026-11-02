@@ -2,7 +2,7 @@
 <testsuites tests="4" failures="1" errors="1" skipped="1">
   <testsuite name="Suite &amp; &lt;A&gt;" tests="4" failures="1" errors="1" skipped="1">
     <testcase classname="Suite &amp; &lt;A&gt;" name="Pass &quot;quoted&quot;" assertions="2" />
-    <testcase classname="Suite &amp; &lt;A&gt;" name="Fail &amp; compare" assertions="3"><failure type="Type_DINT" message="expected &lt;3 &amp; 4&gt; but got &quot;5&quot;">expected &lt;3 &amp; 4&gt; but got &quot;5&quot;</failure></testcase>
+    <testcase classname="Suite &amp; &lt;A&gt;" name="Fail &amp; compare" assertions="3"><failure type="Type_DINT" message="expected &lt;3 &amp; 4&gt; but got &quot;5&quot;">Expected: 3 &amp; &lt;4&gt;&#10;Actual: &quot;5&quot;</failure></testcase>
     <testcase classname="Suite &amp; &lt;A&gt;" name="Disabled" assertions="0"><skipped /></testcase>
     <testcase classname="Suite &amp; &lt;A&gt;" name="Framework error" assertions="0"><error message="task lookup failed">task lookup failed</error></testcase>
   </testsuite>

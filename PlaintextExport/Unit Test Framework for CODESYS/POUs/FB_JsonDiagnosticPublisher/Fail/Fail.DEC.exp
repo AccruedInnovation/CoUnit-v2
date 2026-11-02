@@ -1,0 +1,8 @@
+METHOD PRIVATE Fail
+VAR_INPUT
+	Operation : T_MaxString;
+	ErrorCode : UDINT := 0;
+END_VAR
+VAR
+	_text : T_MaxString;
+END_VAR

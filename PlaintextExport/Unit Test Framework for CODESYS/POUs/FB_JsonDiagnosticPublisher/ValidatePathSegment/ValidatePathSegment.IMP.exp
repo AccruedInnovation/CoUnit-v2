@@ -1,0 +1,7 @@
+ValidatePathSegment := FALSE;
+IF Length = 0 THEN RETURN; END_IF
+IF Length = 1 AND PathBytes[Start] = 16#2E THEN RETURN; END_IF
+IF Length = 2 AND PathBytes[Start] = 16#2E AND PathBytes[Start + 1] = 16#2E THEN RETURN; END_IF
+IF PathBytes[Start + Length - 1] = 16#2E THEN RETURN; END_IF
+IF IsReservedPathSegment(PathBytes := PathBytes, Start := Start, Length := Length) THEN RETURN; END_IF
+ValidatePathSegment := TRUE;

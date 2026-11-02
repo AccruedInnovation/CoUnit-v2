@@ -1,0 +1,7 @@
+METHOD INTERNAL ReadPublicCase : BOOL
+VAR_INPUT
+	Index : UINT;
+END_VAR
+VAR_IN_OUT
+	Page : ST_CoUnitPublicCase;
+END_VAR

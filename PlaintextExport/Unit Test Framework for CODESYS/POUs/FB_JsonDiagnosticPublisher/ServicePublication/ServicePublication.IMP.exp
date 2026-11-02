@@ -1,0 +1,3 @@
+_snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
+IF NOT __ISVALIDREF(_snapshot) THEN RETURN; END_IF
+ServiceSnapshotWork(Snapshot := _snapshot);

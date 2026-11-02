@@ -1,0 +1,19 @@
+METHOD PRIVATE ValidateSnapshotSuite : BOOL
+VAR_INPUT
+	SuiteIndex : UINT(1..GVL_Param_coUnit.MaxNumberOfTestSuites);
+END_VAR
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+	AllTotal : UDINT;
+	AllPassed : UDINT;
+	AllFailed : UDINT;
+	AllSkipped : UDINT;
+	AllErrors : UDINT;
+END_VAR
+VAR
+	_testIndex : UINT(1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite);
+	_passed : UDINT;
+	_failed : UDINT;
+	_skipped : UDINT;
+	_errors : UDINT;
+END_VAR

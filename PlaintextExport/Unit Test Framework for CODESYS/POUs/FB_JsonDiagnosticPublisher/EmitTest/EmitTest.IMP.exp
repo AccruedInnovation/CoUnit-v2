@@ -1,0 +1,45 @@
+EmitTest := FALSE;
+IF NOT AppendLiteral(Value := '{"classname":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Test.ClassName) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"name":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Test.Name) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"case_id":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Test.CaseId) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"row_key":') THEN RETURN; END_IF
+IF NOT AppendJsonString(Value := Test.RowKey) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"status":') THEN RETURN; END_IF
+IF NOT AppendTestStatus(State := Test.State) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"assertions":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UINT_TO_STRING(Test.NumberOfAsserts)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"selected":') THEN RETURN; END_IF
+IF Test.Selected THEN
+	IF NOT AppendLiteral(Value := 'true') THEN RETURN; END_IF
+ELSE
+	IF NOT AppendLiteral(Value := 'false') THEN RETURN; END_IF
+END_IF
+IF NOT AppendLiteral(Value := ',"started":') THEN RETURN; END_IF
+IF Test.Started THEN
+	IF NOT AppendLiteral(Value := 'true') THEN RETURN; END_IF
+ELSE
+	IF NOT AppendLiteral(Value := 'false') THEN RETURN; END_IF
+END_IF
+IF Test.CleanupOutcome <> E_CoUnitFixtureOutcome.NOT_RUN OR Test.TerminationCause <> E_CoUnitFixtureCause.NONE THEN
+	IF NOT AppendLiteral(Value := ',"fixture":{"primary_cause":') THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := USINT_TO_STRING(TO_USINT(Test.TerminationCause))) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"cleanup_outcome":') THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := USINT_TO_STRING(TO_USINT(Test.CleanupOutcome))) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"detail":') THEN RETURN; END_IF
+	IF NOT AppendJsonString(Value := Test.LaterDetail) THEN RETURN; END_IF
+	IF NOT AppendLiteral(Value := ',"truncated":') THEN RETURN; END_IF
+	IF Test.LaterDetailTruncated THEN
+		IF NOT AppendLiteral(Value := 'true}') THEN RETURN; END_IF
+	ELSE
+		IF NOT AppendLiteral(Value := 'false}') THEN RETURN; END_IF
+	END_IF
+END_IF
+IF Test.State = E_CoUnitTestState.FAILED THEN
+	IF NOT AppendTestFailure(Test := Test) THEN RETURN; END_IF
+ELSIF Test.State = E_CoUnitTestState.ABORTED OR Test.State = E_CoUnitTestState.ERROR THEN
+	IF NOT AppendTestError(Test := Test, TerminationReason := TerminationReason) THEN RETURN; END_IF
+END_IF
+EmitTest := AppendLiteral(Value := '}');

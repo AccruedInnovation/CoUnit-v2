@@ -9,4 +9,5 @@ VAR
 	_testIndex : UINT;
 	_ordinal : UDINT;
 	_result : ST_CoUnitComparisonResult;
+	_truncated : BOOL;
 END_VAR

@@ -1,0 +1,16 @@
+METHOD INTERNAL ServicePublic
+VAR_IN_OUT
+	Exchange : ST_CoUnitExchange;
+END_VAR
+VAR
+	_handle : CmpIecTask.RTS_IEC_HANDLE;
+	_previous : DWORD;
+	_request : ULINT;
+	_operation : UINT;
+	_s : UINT;
+	_other : UINT;
+	_count : UINT;
+	_identity : STRING(63);
+	_ok : BOOL;
+	_prepared : BOOL;
+END_VAR

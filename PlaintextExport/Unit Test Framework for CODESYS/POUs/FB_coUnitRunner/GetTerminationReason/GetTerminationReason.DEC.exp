@@ -1,0 +1,1 @@
+METHOD INTERNAL GetTerminationReason : T_MaxString

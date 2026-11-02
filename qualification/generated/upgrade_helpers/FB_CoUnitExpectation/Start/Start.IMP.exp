@@ -1,0 +1,20 @@
+Start := FALSE;
+IF _active AND (State = E_CoUnitTemporalResult.WAITING) THEN RETURN; END_IF
+IF _active AND (Key.RunId = _key.RunId) AND (Key.SuiteId = _key.SuiteId) AND (Key.CaseId = _key.CaseId)
+	AND (Key.RowKey = _key.RowKey) AND (Key.AttemptId = _key.AttemptId) AND (Key.StepId = _key.StepId) THEN RETURN; END_IF
+IF (Now < LTIME#0ns) OR (Duration < LTIME#0ns) THEN RETURN; END_IF
+IF Now > (LTIME#9223372036854775807ns - Duration) THEN RETURN; END_IF
+IF (Mode <> E_CoUnitTemporalMode.EVENTUALLY_TRUE)
+	AND (Mode <> E_CoUnitTemporalMode.REMAINS_TRUE)
+	AND (Mode <> E_CoUnitTemporalMode.REMAINS_FALSE)
+	AND (Mode <> E_CoUnitTemporalMode.STEP) THEN RETURN; END_IF
+_key := Key;
+_mode := Mode;
+_startedAt := Now;
+_lastNow := Now;
+_duration := Duration;
+_deadline := Now + Duration;
+_active := TRUE;
+Resolved := FALSE;
+State := E_CoUnitTemporalResult.WAITING;
+Start := TRUE;

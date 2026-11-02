@@ -1,9 +1,13 @@
 BeginTest := FALSE;
 IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := FALSE, TestIndex => _unused, Execute => _execute) THEN RETURN; END_IF
+IF _catalogMode THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Dynamic TEST cannot mutate a frozen catalog');
+	RETURN;
+END_IF
 (* A rejected declaration suppresses the following segment instead of inheriting the prior test. *)
 GVL_coUnit.coUnitRunner.SelectTest(Index := 0, Execute := FALSE, Name := '');
 IF NOT CoUnitCanonicalName(Name := Name, Canonical => _canonical, Disabled => _disabled) THEN
-	GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Empty canonical test name');
+	DefinitionError(Reason := 'Empty canonical test name');
 	RETURN;
 END_IF
 _index := FindTest(Name := Name);
@@ -33,12 +37,12 @@ IF _index = 0 THEN
 	IF Ordered AND _disabled THEN AdvanceOrderedCursor(); END_IF
 ELSE
 	IF TestRecords[_index].IsOrdered <> Ordered OR TestRecords[_index].DefinedDisabled <> _disabled THEN
-		GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Conflicting test declaration shape');
+		DefinitionError(Reason := 'Conflicting test declaration shape');
 		RETURN;
 	END_IF
 	IF TestRecords[_index].LastSeenEpoch = _epoch THEN
 		IF TestRecords[_index].DuplicateReportedEpoch <> _epoch THEN
-			GVL_coUnit.coUnitRunner.Diagnostic(Reason := 'Duplicate test declaration in runner epoch');
+			DefinitionError(Reason := 'Duplicate test declaration in runner epoch');
 			TestRecords[_index].DuplicateReportedEpoch := _epoch;
 		END_IF
 		RETURN;

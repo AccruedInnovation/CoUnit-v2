@@ -1,0 +1,20 @@
+ValidatePathRoot := FALSE;
+PathKind := 0;
+Separator := 0;
+SegmentStart := 0;
+IF PathBytes[0] = 16#2F THEN
+	PathKind := 2;
+	Separator := 16#2F;
+	SegmentStart := 1;
+ELSIF PathBytes[0] = 16#5C THEN
+	RETURN;
+ELSIF Length >= 2 AND PathBytes[1] = 16#3A THEN
+	_isLetter := (PathBytes[0] >= 16#41 AND PathBytes[0] <= 16#5A) OR (PathBytes[0] >= 16#61 AND PathBytes[0] <= 16#7A);
+	IF NOT _isLetter OR Length < 3 OR (PathBytes[2] <> 16#2F AND PathBytes[2] <> 16#5C) THEN RETURN; END_IF
+	PathKind := 3;
+	Separator := PathBytes[2];
+	SegmentStart := 3;
+ELSE
+	PathKind := 1;
+END_IF
+ValidatePathRoot := TRUE;

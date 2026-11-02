@@ -1,0 +1,21 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "effects": {
+    "disabled": 0,
+    "active": 1
+  },
+  "cases": [
+    {
+      "name": "GuardedOff",
+      "state": "SKIPPED",
+      "assertions": 0
+    },
+    {
+      "name": "GuardedActive",
+      "state": "PASSED",
+      "assertions": 1
+    }
+  ]
+}

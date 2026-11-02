@@ -1,0 +1,4 @@
+_identityOk := SetCatalogIdentity(SuiteId := 'upgrade');
+_handleA := DefineCase(CaseId := 'row', Name := 'RowA', RowKey := 'a', Tags := 'upgrade', Disabled := FALSE);
+_handleB := DefineCase(CaseId := 'row', Name := 'RowB', RowKey := 'b', Tags := 'upgrade', Disabled := FALSE);
+_handleDisabled := DefineCase(CaseId := 'row', Name := 'DISABLED_Off', RowKey := 'disabled', Tags := 'upgrade', Disabled := TRUE);

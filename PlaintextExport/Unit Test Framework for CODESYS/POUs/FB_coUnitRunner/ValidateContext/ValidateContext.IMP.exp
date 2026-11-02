@@ -8,7 +8,10 @@ IF ActiveSuite = 0 OR_ELSE ActiveSuite <> Suite THEN
 	RETURN;
 END_IF
 IF RequireTest THEN
-	IF ActiveTestIndex = 0 THEN RETURN; END_IF
+	IF ActiveTestIndex = 0 THEN
+		IF ActiveSuite^.HasStrictDefinitions() THEN FrameworkError(Reason := 'Assertion or finish without a bound strict case'); END_IF
+		RETURN;
+	END_IF
 	IF ActiveTestIndex > ActiveSuite^.GetNumberOfTests() THEN
 		FrameworkError(Reason := 'Invalid active test index');
 		RETURN;

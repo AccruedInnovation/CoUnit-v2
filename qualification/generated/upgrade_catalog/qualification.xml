@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit upgrade qualification: upgrade_catalog" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_UpgradeCatalog" pouType="functionBlock">
+        <interface>
+          <outputVars>
+            <variable name="RowAEffects">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="RowBEffects">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="DisabledEffects">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="RowBScans">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_handleA">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_handleB">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_handleDisabled">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </localVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF BeginCase(Handle := _handleA) THEN
+	RowAEffects := RowAEffects + 1;
+	AssertResult(Passed := TRUE, CheckId := 'upgrade/row/a', Message := 'Row A', ExpectedText := 'unused', ActualText := 'unused', Detail := 'A must remain unselected');
+	TEST_FINISHED();
+END_IF
+IF BeginCase(Handle := _handleB) THEN
+	RowBEffects := RowBEffects + 1;
+	RowBScans := RowBScans + 1;
+	AssertResult(Passed := (RowAEffects = 0) AND (DisabledEffects = 0) AND (RowBEffects = RowBScans) AND (RowBScans &lt;= 3), CheckId := 'upgrade/row/b', Message := 'Only the selected row may produce effects', ExpectedText := 'RowA=0; disabled=0; RowB=scan', ActualText := CONCAT(CONCAT(UINT_TO_STRING(RowAEffects), '/'), CONCAT(UINT_TO_STRING(DisabledEffects), CONCAT('/', UINT_TO_STRING(RowBEffects)))), Detail := 'three cyclic invocations');
+	IF RowBScans &gt;= 3 THEN
+		TEST_FINISHED();
+	END_IF
+END_IF
+IF BeginCase(Handle := _handleDisabled) THEN
+	DisabledEffects := DisabledEffects + 1;
+	TEST_FINISHED();
+END_IF</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Describe" ObjectId="" qualifiedName="FB_UpgradeCatalog.Describe">
+              <interface>
+                <localVars>
+                  <variable name="_identityOk">
+                    <type>
+                      <BOOL />
+                    </type>
+                  </variable>
+                  <variable name="_unusedHandle">
+                    <type>
+                      <UINT />
+                    </type>
+                  </variable>
+                </localVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">_identityOk := SetCatalogIdentity(SuiteId := 'upgrade');
+_handleA := DefineCase(CaseId := 'row', Name := 'RowA', RowKey := 'a', Tags := 'upgrade', Disabled := FALSE);
+_handleB := DefineCase(CaseId := 'row', Name := 'RowB', RowKey := 'b', Tags := 'upgrade', Disabled := FALSE);
+_handleDisabled := DefineCase(CaseId := 'row', Name := 'DISABLED_Off', RowKey := 'disabled', Tags := 'upgrade', Disabled := TRUE);</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Describe
+VAR
+	_identityOk : BOOL;
+	_unusedHandle : UINT;
+END_VAR</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_UpgradeCatalog EXTENDS FB_TestSuite
+VAR_OUTPUT
+	RowAEffects : UINT;
+	RowBEffects : UINT;
+	DisabledEffects : UINT;
+	RowBScans : UINT;
+END_VAR
+VAR
+	_handleA : UINT;
+	_handleB : UINT;
+	_handleDisabled : UINT;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCheck">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="SnapshotBytes">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="Exchange">
+              <type>
+                <derived name="ST_CoUnitExchange" />
+              </type>
+            </variable>
+            <variable name="Suite">
+              <type>
+                <derived name="FB_UpgradeCatalog" />
+              </type>
+            </variable>
+            <variable name="_step">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_request">
+              <type>
+                <ULINT />
+              </type>
+            </variable>
+            <variable name="_waiting">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_configured">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_listA">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_listB">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_listDisabled">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_selected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_started">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_rowAResult">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_rowBResult">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_disabledResult">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_cancelRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_finalStatus">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_epochBeforeCancel">
+              <type>
+                <ULINT />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+IF NOT _waiting THEN
+	CASE _step OF
+	0:
+		_request := _request + 1; Exchange.Operation := 1; Exchange.RunId := 'upgrade-run-1'; Exchange.BuildId := 'upgrade-build-1'; Exchange.TargetId := 'qualified-simulator';
+		Exchange.RunTimeout := T#10s; Exchange.CleanupTimeout := T#2s; Exchange.RequestId := _request; _waiting := TRUE;
+	1:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 1; Exchange.RequestId := _request; _waiting := TRUE;
+	2:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 2; Exchange.RequestId := _request; _waiting := TRUE;
+	3:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 3; Exchange.RequestId := _request; _waiting := TRUE;
+	4:
+		_request := _request + 1; Exchange.Operation := 2; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteId := 'upgrade'; Exchange.CaseId := 'row'; Exchange.RowKey := 'b'; Exchange.RequestId := _request; _waiting := TRUE;
+	5:
+		_request := _request + 1; Exchange.Operation := 3; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.ExpectedSelected := 1; Exchange.RequestId := _request; _waiting := TRUE;
+	6:
+		IF Exchange.Status.ExecutionComplete AND Exchange.Status.ResultsAvailable THEN
+			_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 1; Exchange.RequestId := _request; _waiting := TRUE; _step := 7;
+		ELSE _started := _started OR Exchange.Status.SelectionFrozen; END_IF
+	8:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 2; Exchange.RequestId := _request; _waiting := TRUE;
+	9:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 3; Exchange.RequestId := _request; _waiting := TRUE;
+	10:
+		_epochBeforeCancel := Exchange.Status.ProgressEpoch;
+		_request := _request + 1; Exchange.Operation := 4; Exchange.RunId := 'stale-run'; Exchange.ExpectedGeneration := 99; Exchange.RequestId := _request; _waiting := TRUE;
+	11:
+		_finalStatus := Exchange.Status.ExecutionComplete AND Exchange.Status.ResultsAvailable AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.NORMAL) AND (Exchange.Status.RunId = 'upgrade-run-1') AND (Exchange.Status.Generation = 1) AND Exchange.Status.SelectionFrozen;
+		OraclePass := _configured AND _listA AND _listB AND _listDisabled AND _selected AND _started AND _rowAResult AND _rowBResult AND _disabledResult AND _cancelRejected AND _finalStatus AND (Suite.RowAEffects = 0) AND (Suite.RowBEffects = 3) AND (Suite.DisabledEffects = 0) AND (Suite.RowBScans = 3);
+		FailedCheck := 0;
+		IF NOT _configured THEN FailedCheck := 1; ELSIF NOT _listA THEN FailedCheck := 2; ELSIF NOT _listB THEN FailedCheck := 3; ELSIF NOT _listDisabled THEN FailedCheck := 4; ELSIF NOT _selected THEN FailedCheck := 5; ELSIF NOT _started THEN FailedCheck := 6; ELSIF NOT _rowAResult THEN FailedCheck := 7; ELSIF NOT _rowBResult THEN FailedCheck := 8; ELSIF NOT _disabledResult THEN FailedCheck := 9; ELSIF NOT _cancelRejected THEN FailedCheck := 10; ELSIF NOT _finalStatus THEN FailedCheck := 11; ELSIF Suite.RowAEffects &lt;&gt; 0 THEN FailedCheck := 12; ELSIF Suite.RowBEffects &lt;&gt; 3 THEN FailedCheck := 13; ELSIF Suite.DisabledEffects &lt;&gt; 0 THEN FailedCheck := 14; ELSIF Suite.RowBScans &lt;&gt; 3 THEN FailedCheck := 15; END_IF
+		Done := TRUE;
+	END_CASE
+ELSE
+	IF Exchange.AckId = _request THEN
+		_waiting := FALSE;
+		CASE _step OF
+		0: _configured := Exchange.Accepted AND Exchange.Status.CatalogReady AND (Exchange.Status.Generation = 1); _step := 1;
+		1: _listA := Exchange.Accepted AND (Exchange.Page.RunId = 'upgrade-run-1') AND (Exchange.Page.Generation = 1) AND (Exchange.Page.SuiteId = 'upgrade') AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'a') AND (Exchange.Page.Name = 'RowA') AND Exchange.Page.Selected AND NOT Exchange.Page.Disabled AND (Suite.RowAEffects = 0); _step := 2;
+		2: _listB := Exchange.Accepted AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'b') AND (Exchange.Page.Name = 'RowB') AND Exchange.Page.Selected AND NOT Exchange.Page.Disabled AND (Suite.RowBEffects = 0); _step := 3;
+		3: _listDisabled := Exchange.Accepted AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'disabled') AND (Exchange.Page.Name = 'Off') AND Exchange.Page.Selected AND Exchange.Page.Disabled AND (Suite.DisabledEffects = 0); _step := 4;
+		4: _selected := Exchange.Accepted AND (Exchange.Status.SelectedCount = 1); _step := 5;
+		5: _started := _started OR (Exchange.Accepted AND Exchange.Status.SelectionFrozen); _step := 6;
+		7: _rowAResult := Exchange.Accepted AND NOT Exchange.Page.Selected AND NOT Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.SKIPPED) AND (Suite.RowAEffects = 0); _step := 8;
+		8: _rowBResult := Exchange.Accepted AND Exchange.Page.Selected AND Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.PASSED) AND (Exchange.Page.MaxAssertionsPerInvocation = 1) AND (Suite.RowBEffects = 3) AND (Suite.RowBScans = 3); _step := 9;
+		9: _disabledResult := Exchange.Accepted AND NOT Exchange.Page.Selected AND Exchange.Page.Disabled AND NOT Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.SKIPPED) AND (Suite.DisabledEffects = 0); _step := 10;
+		10: _cancelRejected := NOT Exchange.Accepted AND Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.NORMAL) AND (Exchange.Status.ProgressEpoch = _epochBeforeCancel) AND (Exchange.Status.RunId = 'upgrade-run-1') AND (Exchange.Status.Generation = 1); _step := 11;
+		END_CASE
+	END_IF
+END_IF
+RUN_CONTROLLED(Exchange := Exchange);</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	Exchange : ST_CoUnitExchange;
+	Suite : FB_UpgradeCatalog;
+	_step : UINT;
+	_request : ULINT;
+	_waiting : BOOL;
+	_configured : BOOL;
+	_listA : BOOL;
+	_listB : BOOL;
+	_listDisabled : BOOL;
+	_selected : BOOL;
+	_started : BOOL;
+	_rowAResult : BOOL;
+	_rowBResult : BOOL;
+	_disabledResult : BOOL;
+	_cancelRejected : BOOL;
+	_finalStatus : BOOL;
+	_epochBeforeCancel : ULINT;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="UpgradeCore">
+          <Object Name="FB_UpgradeCatalog" ObjectId="">
+            <Object Name="Describe" ObjectId="" />
+          </Object>
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

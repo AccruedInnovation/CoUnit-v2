@@ -1,0 +1,25 @@
+IF (_state = E_CoUnitReportState.WRITTEN AND _phase <> 8) OR _state = E_CoUnitReportState.FAILED OR
+	_state = E_CoUnitReportState.DISABLED OR _paused THEN RETURN; END_IF
+IF NOT _configured THEN
+	_enabled := GVL_Param_coUnit.DiagnosticJsonEnablePublish;
+	_path := GVL_coUnit.DiagnosticJsonFilePath;
+	IF GVL_coUnit.StringIsUtf8 THEN _textMode := E_CoUnitTextMode.UTF8;
+	ELSE _textMode := GVL_CoUnitReporting.StringEncodingMode; END_IF
+	_configured := TRUE;
+END_IF
+IF NOT _enabled THEN _state := E_CoUnitReportState.DISABLED; RETURN; END_IF
+IF NOT Snapshot.IsValid THEN RETURN; END_IF
+CASE _phase OF
+	0: IF NOT ServicePhasePrepare(Snapshot := Snapshot) THEN RETURN; END_IF
+	1: IF NOT ServicePhaseHeader(Snapshot := Snapshot) THEN RETURN; END_IF
+	2: IF NOT ServicePhaseSuite(Snapshot := Snapshot) THEN RETURN; END_IF
+	3, 4: IF NOT ServicePhaseTest(Snapshot := Snapshot) THEN RETURN; END_IF
+	5: IF NOT ServicePhaseAdvanceSuite() THEN RETURN; END_IF
+	6: IF NOT ServicePhasePreserveCurrent() THEN RETURN; END_IF
+	7: IF NOT ServicePhaseCommit() THEN RETURN; END_IF
+	8: IF NOT ServicePhaseCleanup() THEN RETURN; END_IF
+ELSE
+	Fail(Operation := 'invalid JSON publication phase');
+	RETURN;
+END_CASE
+IF _pauseAfter <> 0 AND _phase = _pauseAfter THEN _paused := TRUE; END_IF

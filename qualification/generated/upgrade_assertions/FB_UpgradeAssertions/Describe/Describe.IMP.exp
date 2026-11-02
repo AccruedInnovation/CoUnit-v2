@@ -1,0 +1,4 @@
+_ok := SetCatalogIdentity(SuiteId := 'upgrade-assertions');
+_hCustom := DefineCase(CaseId := 'assertion', Name := 'Custom', RowKey := 'custom', Tags := '', Disabled := FALSE);
+_hFloat := DefineCase(CaseId := 'assertion', Name := 'FloatNear', RowKey := 'float', Tags := '', Disabled := FALSE);
+_hString := DefineCase(CaseId := 'assertion', Name := 'LongString', RowKey := 'string', Tags := '', Disabled := FALSE);

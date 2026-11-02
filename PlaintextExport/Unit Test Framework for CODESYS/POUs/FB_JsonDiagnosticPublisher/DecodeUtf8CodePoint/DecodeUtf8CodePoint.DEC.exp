@@ -1,0 +1,15 @@
+METHOD PRIVATE DecodeUtf8CodePoint : UDINT
+VAR_INPUT
+	Bytes : POINTER TO BYTE;
+	Index : UINT;
+	FirstByte : UDINT;
+END_VAR
+VAR_OUTPUT
+	Taken : UINT;
+END_VAR
+VAR
+	_required : UINT;
+	_initialMask : UDINT;
+	_minimum : UDINT;
+	_cp : UDINT;
+END_VAR

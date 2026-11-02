@@ -1,0 +1,6 @@
+METHOD PUBLIC Execute : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+	Cancel : BOOL;
+END_VAR

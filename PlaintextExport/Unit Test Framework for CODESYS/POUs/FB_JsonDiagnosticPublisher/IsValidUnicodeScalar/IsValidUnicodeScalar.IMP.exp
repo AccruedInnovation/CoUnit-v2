@@ -1,0 +1,2 @@
+IsValidUnicodeScalar := (CodePoint >= Minimum) AND (CodePoint <= 16#10FFFF) AND
+	NOT (CodePoint >= 16#D800 AND CodePoint <= 16#DFFF);

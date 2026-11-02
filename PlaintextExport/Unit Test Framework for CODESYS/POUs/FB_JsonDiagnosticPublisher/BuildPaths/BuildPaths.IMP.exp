@@ -1,0 +1,20 @@
+BuildPaths := FALSE;
+_xmlPath := GVL_coUnit.xUnitFilePath;
+IF NOT ValidateCanonicalPath(Path := _path, PathKind => _jsonPathKind) THEN RETURN; END_IF
+IF NOT ValidateCanonicalPath(Path := _xmlPath, PathKind => _xmlPathKind) THEN RETURN; END_IF
+IF _jsonPathKind <> _xmlPathKind THEN RETURN; END_IF
+IF NOT BuildOnePath(Path := _path, Stage := _stage, Backup := _backup) THEN RETURN; END_IF
+IF NOT BuildOnePath(Path := _xmlPath, Stage := _xmlStage, Backup := _xmlBackup) THEN RETURN; END_IF
+IF PathsConflict(LeftPath := _path, RightPath := _xmlPath) OR
+	PathsConflict(LeftPath := _path, RightPath := _xmlStage) OR
+	PathsConflict(LeftPath := _path, RightPath := _xmlBackup) OR
+	PathsConflict(LeftPath := _stage, RightPath := _xmlPath) OR
+	PathsConflict(LeftPath := _stage, RightPath := _xmlStage) OR
+	PathsConflict(LeftPath := _stage, RightPath := _xmlBackup) OR
+	PathsConflict(LeftPath := _backup, RightPath := _xmlPath) OR
+	PathsConflict(LeftPath := _backup, RightPath := _xmlStage) OR
+	PathsConflict(LeftPath := _backup, RightPath := _xmlBackup) THEN
+	Fail(Operation := 'cross-publisher path collision');
+	RETURN;
+END_IF
+BuildPaths := TRUE;

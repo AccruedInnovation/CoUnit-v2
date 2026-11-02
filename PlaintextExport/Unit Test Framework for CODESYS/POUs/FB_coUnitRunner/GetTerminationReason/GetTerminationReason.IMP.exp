@@ -1,0 +1,4 @@
+GetTerminationReason := FrameworkErrorReason;
+IF RunDisposition = E_CoUnitRunDisposition.ABORTED AND LEN(GetTerminationReason) = 0 THEN
+	GetTerminationReason := 'Run cancelled by owner';
+END_IF

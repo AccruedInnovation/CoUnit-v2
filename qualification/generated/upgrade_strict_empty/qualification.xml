@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit upgrade qualification: upgrade_strict_empty" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_UpgradeStrict" pouType="functionBlock">
+        <interface>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Extends>FB_TestSuite</Extends>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Execution through methods. *)</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Describe" ObjectId="" qualifiedName="FB_UpgradeStrict.Describe">
+              <interface>
+                <localVars>
+                  <variable name="_ok">
+                    <type>
+                      <BOOL />
+                    </type>
+                  </variable>
+                  <variable name="_h1">
+                    <type>
+                      <UINT />
+                    </type>
+                  </variable>
+                  <variable name="_h2">
+                    <type>
+                      <UINT />
+                    </type>
+                  </variable>
+                </localVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">_h1 := DefineCase(CaseId := 'partial', Name := 'Defined before invalid suite identity', RowKey := '', Tags := '', Disabled := FALSE);</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Describe
+VAR
+	_ok : BOOL;
+	_h1 : UINT;
+	_h2 : UINT;
+END_VAR</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_UpgradeStrict EXTENDS FB_TestSuite</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCheck">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="Exchange">
+              <type>
+                <derived name="ST_CoUnitExchange" />
+              </type>
+            </variable>
+            <variable name="Suite">
+              <type>
+                <derived name="FB_UpgradeStrict" />
+              </type>
+            </variable>
+            <variable name="_step">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_request">
+              <type>
+                <ULINT />
+              </type>
+            </variable>
+            <variable name="_waiting">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_configAccepted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_startAccepted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _waiting THEN
+	CASE _step OF
+	0:
+		_request := _request + 1; Exchange.Operation := 1; Exchange.RunId := 'strict-empty-run'; Exchange.BuildId := 'strict-build'; Exchange.TargetId := 'qualified-simulator'; Exchange.RunTimeout := T#10s; Exchange.CleanupTimeout := T#2s; Exchange.RequestId := _request; _waiting := TRUE;
+	1:
+		IF Exchange.Status.CatalogReady THEN
+			_request := _request + 1; Exchange.Operation := 3; Exchange.RunId := 'strict-empty-run'; Exchange.ExpectedGeneration := 1; Exchange.ExpectedSelected := 0; Exchange.AllowEmpty := TRUE; Exchange.RequestId := _request; _waiting := TRUE;
+		ELSIF Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) THEN
+			Done := TRUE; OraclePass := (Exchange.Status.Reason = 'Catalog suite omitted stable identity') AND (Exchange.Status.TotalCount = 1) AND (Exchange.Status.ErrorCount = 1); IF NOT OraclePass THEN FailedCheck := 1; END_IF
+		END_IF
+	2:
+		IF Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.FRAMEWORK_ERROR) THEN
+			Done := TRUE; OraclePass := _startAccepted AND (Exchange.Status.Reason = 'Catalog suite omitted stable identity'); IF NOT OraclePass THEN FailedCheck := 2; END_IF
+		END_IF
+	END_CASE
+ELSE
+	IF Exchange.AckId = _request THEN
+		_waiting := FALSE;
+		IF _step = 0 THEN _configAccepted := Exchange.Accepted; _step := 1;
+		ELSIF _step = 1 THEN _startAccepted := Exchange.Accepted; _step := 2;
+		END_IF
+	END_IF
+END_IF
+RUN_CONTROLLED(Exchange := Exchange);</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	Exchange : ST_CoUnitExchange;
+	Suite : FB_UpgradeStrict;
+	_step : UINT;
+	_request : ULINT;
+	_waiting : BOOL;
+	_configAccepted : BOOL;
+	_startAccepted : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="UpgradeCore">
+          <Object Name="FB_UpgradeStrict" ObjectId="">
+            <Object Name="Describe" ObjectId="" />
+          </Object>
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

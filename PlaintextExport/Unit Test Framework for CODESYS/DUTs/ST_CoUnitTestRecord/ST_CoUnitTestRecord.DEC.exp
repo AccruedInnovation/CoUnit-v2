@@ -1,6 +1,11 @@
 TYPE ST_CoUnitTestRecord :
 STRUCT
 	InUse : BOOL;
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	Tags : T_MaxString;
+	Selected : BOOL := TRUE;
+	Started : BOOL;
 	CanonicalName : T_MaxString;
 	DefinedDisabled : BOOL;
 	IsOrdered : BOOL;
@@ -12,6 +17,10 @@ STRUCT
 	DuplicateReportedEpoch : ULINT;
 	InvocationOrdinal : UDINT;
 	MaxAssertionsPerInvocation : UDINT;
+	CleanupOutcome : E_CoUnitFixtureOutcome;
+	TerminationCause : E_CoUnitFixtureCause;
+	LaterDetail : STRING(127);
+	LaterDetailTruncated : BOOL;
 	FirstFailure : ST_CoUnitFirstFailure;
 END_STRUCT
 END_TYPE

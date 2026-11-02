@@ -55,6 +55,21 @@ def signature(text: str, kind: str) -> str:
     return canonical(header + ''.join(f'{scope} {body} END_VAR' for scope, body in blocks))
 
 
+def preserve_approved_additions(symbol: str, candidate_signature: str) -> str:
+    # User-approved recommendation #5: one additive, disabled-by-default JSON
+    # publication switch. Match the exact type/default exactly once; any typo,
+    # duplicate, or other constant drift remains visible to the normal check.
+    if symbol == 'GVL_Param_coUnit':
+        tokens = candidate_signature.split()
+        addition = canonical('DiagnosticJsonEnablePublish : BOOL := FALSE;').split()
+        matches = [index for index in range(len(tokens) - len(addition) + 1) if tokens[index:index + len(addition)] == addition]
+        if len(matches) == 1:
+            index = matches[0]
+            del tokens[index:index + len(addition)]
+            return ' '.join(tokens)
+    return candidate_signature
+
+
 def check(baseline: Path, candidate: Path, inventory: Path = INVENTORY) -> list[str]:
     with inventory.open(encoding='utf-8-sig', newline='') as stream:
         rows = list(csv.DictReader(stream))
@@ -69,6 +84,7 @@ def check(baseline: Path, candidate: Path, inventory: Path = INVENTORY) -> list[
             continue
         before = signature(old.read_text(encoding='utf-8-sig'), row['kind'])
         after = signature(new.read_text(encoding='utf-8-sig'), row['kind'])
+        after = preserve_approved_additions(row['symbol'], after)
         # User-approved 2026-09-09: aggregate case counters must represent 32*2048.
         # Permit only these three UINT -> UDINT changes, not arbitrary type drift.
         if row['symbol'] == 'ST_TestSuiteResults':

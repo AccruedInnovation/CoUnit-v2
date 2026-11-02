@@ -1,0 +1,9 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	Suite : FB_UpgradeLegacyGuarded;
+END_VAR

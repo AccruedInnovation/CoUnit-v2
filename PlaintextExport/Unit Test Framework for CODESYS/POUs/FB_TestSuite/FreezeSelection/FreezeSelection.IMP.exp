@@ -1,0 +1,8 @@
+FOR _selectionIndex := 1 TO NumberOfTests DO
+	IF NOT TestRecords[_selectionIndex].Selected THEN
+		IF TestRecords[_selectionIndex].State = E_CoUnitTestState.OPEN THEN
+			TestRecords[_selectionIndex].State := E_CoUnitTestState.SKIPPED;
+			GVL_coUnit.coUnitRunner.OnCaseTerminal(State := E_CoUnitTestState.SKIPPED);
+		END_IF
+	END_IF
+END_FOR

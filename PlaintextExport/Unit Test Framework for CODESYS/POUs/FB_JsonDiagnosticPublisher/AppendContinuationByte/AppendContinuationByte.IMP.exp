@@ -1,0 +1,1 @@
+AppendContinuationByte := AppendByte(Value := DWORD_TO_BYTE(DWORD#16#80 OR (SHR(CodePoint, Shift) AND DWORD#16#3F)));

@@ -1,0 +1,8 @@
+IF (Phase <> _lastProgressPhase) OR (StepId <> _lastProgressStep) THEN
+	_lastProgressPhase := Phase;
+	_lastProgressStep := StepId;
+	_lastProgressAt := LTIME();
+	IF _progressEpoch < ULINT#18446744073709551615 THEN
+		_progressEpoch := _progressEpoch + 1;
+	END_IF
+END_IF

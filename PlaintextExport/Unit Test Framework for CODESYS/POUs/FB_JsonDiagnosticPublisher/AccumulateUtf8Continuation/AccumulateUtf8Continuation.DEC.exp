@@ -1,0 +1,15 @@
+METHOD PRIVATE AccumulateUtf8Continuation : BOOL
+VAR_INPUT
+	Bytes : POINTER TO BYTE;
+	Index : UINT;
+	Required : UINT;
+END_VAR
+VAR_IN_OUT
+	CodePoint : UDINT;
+END_VAR
+VAR_OUTPUT
+	Taken : UINT;
+END_VAR
+VAR
+	_j : UINT;
+END_VAR

@@ -1,6 +1,18 @@
 IF RunState = E_CoUnitRunState.FINALIZING THEN
-	(* BuildSnapshot is synchronous: FALSE is a terminal framework defect, never pending. *)
+	IF _terminalizing THEN
+		_remaining := GetWorkBudget();
+		WHILE _remaining > 0 AND _terminalSuite <= SuiteCount DO
+			_done := Suites[UDINT_TO_UINT(_terminalSuite)]^.TerminalizeOpenStep(State := _terminalState, Budget := _remaining, Consumed => _consumed);
+			_remaining := _remaining - MIN(_remaining, MAX(UINT#1, _consumed));
+			IF _done THEN _terminalSuite := _terminalSuite + 1; ELSE RETURN; END_IF
+		END_WHILE
+		IF _terminalSuite <= SuiteCount THEN RETURN; END_IF
+		_terminalizing := FALSE;
+		RETURN;
+	END_IF
+	(* FALSE can mean bounded work remains; only a finished rejection is a defect. *)
 	SnapshotReady := TestResults.BuildSnapshot(Disposition := RunDisposition);
+	IF NOT SnapshotReady AND NOT TestResults.IsBuildFinished() THEN RETURN; END_IF
 	IF NOT SnapshotReady THEN
 		FrameworkError(Reason := 'Final result snapshot rejected');
 		(* A failed snapshot also needs a permanent boundary before execution completes. *)
@@ -11,7 +23,8 @@ END_IF
 IF RunState = E_CoUnitRunState.COMPLETE AND SnapshotReady THEN
 	IF NOT ResultsLogged THEN
 		TestResultLogger.LogTestSuiteResults();
-		ResultsLogged := TRUE;
+		ResultsLogged := CdsTestResultLogger.IsComplete();
 	END_IF
 	XmlTestResultPublisher.LogTestSuiteResults();
+	DiagnosticJsonPublisher.ServicePublication();
 END_IF

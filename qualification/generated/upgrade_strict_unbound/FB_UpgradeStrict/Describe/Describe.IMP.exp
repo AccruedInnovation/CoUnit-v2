@@ -1,0 +1,2 @@
+_ok := SetCatalogIdentity(SuiteId := 'strict-unbound');
+_h1 := DefineCase(CaseId := 'declared', Name := 'Declared', RowKey := '', Tags := '', Disabled := FALSE);

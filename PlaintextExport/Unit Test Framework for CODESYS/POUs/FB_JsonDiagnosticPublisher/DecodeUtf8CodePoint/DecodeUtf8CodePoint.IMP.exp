@@ -1,0 +1,12 @@
+DecodeUtf8CodePoint := 16#FFFD;
+Taken := 1;
+IF FirstByte >= 16#C2 AND FirstByte <= 16#DF THEN _required := 2; _initialMask := 16#1F; _minimum := 16#80;
+ELSIF FirstByte >= 16#E0 AND FirstByte <= 16#EF THEN _required := 3; _initialMask := 16#0F; _minimum := 16#800;
+ELSIF FirstByte >= 16#F0 AND FirstByte <= 16#F4 THEN _required := 4; _initialMask := 16#07; _minimum := 16#10000;
+ELSE RETURN;
+END_IF
+_cp := FirstByte AND _initialMask;
+IF NOT AccumulateUtf8Continuation(Bytes := Bytes, Index := Index, Required := _required,
+	CodePoint := _cp, Taken => Taken) THEN RETURN; END_IF
+IF NOT IsValidUnicodeScalar(CodePoint := _cp, Minimum := _minimum) THEN RETURN; END_IF
+DecodeUtf8CodePoint := _cp;

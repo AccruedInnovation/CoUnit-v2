@@ -1,1 +1,1 @@
-METHOD INTERNAL GetCleanupWarning : BOOL
+METHOD PUBLIC GetCleanupWarning : BOOL

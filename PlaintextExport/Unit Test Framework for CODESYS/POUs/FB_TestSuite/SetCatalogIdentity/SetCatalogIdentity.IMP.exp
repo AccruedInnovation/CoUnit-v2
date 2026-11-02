@@ -1,0 +1,7 @@
+SetCatalogIdentity := FALSE;
+IF NOT _catalogDeclaring OR LEN(SuiteId) = 0 OR LEN(SuiteId) > 63 OR LEN(_suiteId) > 0 THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Invalid or duplicate stable suite identity');
+	RETURN;
+END_IF
+_suiteId := SuiteId;
+SetCatalogIdentity := TRUE;

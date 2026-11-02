@@ -1,24 +1,47 @@
-IF NOT AppendLiteral('<testcase') THEN RETURN; END_IF
-IF NOT Attribute('name', Test.Name) THEN RETURN; END_IF
-IF NOT Attribute('classname', Test.ClassName) THEN RETURN; END_IF
-IF NOT Attribute('assertions', UINT_TO_STRING(Test.NumberOfAsserts)) THEN RETURN; END_IF
-IF NOT AppendLiteral('>') THEN RETURN; END_IF
+EmitTest := FALSE;
+IF NOT AppendLiteral(Value := '<testcase') THEN RETURN; END_IF
+IF NOT Attribute(Name := 'name', Value := Test.Name) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'classname', Value := Test.ClassName) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'counit-case-id', Value := Test.CaseId) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'counit-row-key', Value := Test.RowKey) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'counit-selected', Value := BOOL_TO_STRING(Test.Selected)) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'counit-started', Value := BOOL_TO_STRING(Test.Started)) THEN RETURN; END_IF
+IF Test.CleanupOutcome <> E_CoUnitFixtureOutcome.NOT_RUN OR Test.TerminationCause <> E_CoUnitFixtureCause.NONE THEN
+	IF NOT Attribute(Name := 'counit-fixture-cause', Value := USINT_TO_STRING(TO_USINT(Test.TerminationCause))) THEN RETURN; END_IF
+	IF NOT Attribute(Name := 'counit-cleanup-outcome', Value := USINT_TO_STRING(TO_USINT(Test.CleanupOutcome))) THEN RETURN; END_IF
+	IF NOT Attribute(Name := 'counit-fixture-detail', Value := Test.LaterDetail) THEN RETURN; END_IF
+	IF NOT Attribute(Name := 'counit-fixture-truncated', Value := BOOL_TO_STRING(Test.LaterDetailTruncated)) THEN RETURN; END_IF
+END_IF
+IF NOT Attribute(Name := 'assertions', Value := UINT_TO_STRING(Test.NumberOfAsserts)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := '>') THEN RETURN; END_IF
 CASE Test.State OF
-	E_CoUnitTestState.PASSED: _type := ''; // No result child
+	E_CoUnitTestState.PASSED:
+		EmitTest := AppendLiteral(Value := '</testcase>');
+		RETURN;
 	E_CoUnitTestState.FAILED:
-		IF NOT AppendLiteral('<failure') THEN RETURN; END_IF
-		_type := CONCAT('Type_', F_AssertionTypeToString(Test.FirstFailure.AssertionType));
-		IF NOT Attribute('type', _type) THEN RETURN; END_IF
-		IF NOT Attribute('message', Test.FirstFailure.Message) THEN RETURN; END_IF
-		IF NOT AppendLiteral('/>') THEN RETURN; END_IF
+		IF NOT EmitFailure(Test := Test) THEN RETURN; END_IF
 	E_CoUnitTestState.SKIPPED:
-		IF NOT AppendLiteral('<skipped/>') THEN RETURN; END_IF
+		IF NOT AppendLiteral(Value := '<skipped/>') THEN RETURN; END_IF
 	E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR:
 		IF Test.State = E_CoUnitTestState.ABORTED THEN _error := 'Run aborted'; ELSE _error := 'Framework error'; END_IF
-		IF NOT AppendLiteral('<error') THEN RETURN; END_IF
-		IF NOT Attribute('message', _error) THEN RETURN; END_IF
-		IF NOT AppendLiteral('/>') THEN RETURN; END_IF
+		IF NOT AppendLiteral(Value := '<error') THEN RETURN; END_IF
+		IF NOT Attribute(Name := 'message', Value := _error) THEN RETURN; END_IF
+		IF LEN(TerminationReason) > 0 THEN
+			IF NOT Attribute(Name := 'termination-reason', Value := TerminationReason) THEN RETURN; END_IF
+		END_IF
+		IF Test.FirstFailure.IsSet THEN
+			_type := CONCAT(STR1 := 'Type_', STR2 := F_AssertionTypeToString(AssertionType := Test.FirstFailure.AssertionType));
+			IF NOT Attribute(Name := 'failure-type', Value := _type) THEN RETURN; END_IF
+			IF NOT Attribute(Name := 'failure-message', Value := Test.FirstFailure.Message) THEN RETURN; END_IF
+			IF NOT AppendLiteral(Value := '>Expected: ') THEN RETURN; END_IF
+			IF NOT AppendEscaped(Value := Test.FirstFailure.ExpectedText) THEN RETURN; END_IF
+			IF NOT AppendLiteral(Value := '&#10;Actual: ') THEN RETURN; END_IF
+			IF NOT AppendEscaped(Value := Test.FirstFailure.ActualText) THEN RETURN; END_IF
+			IF NOT AppendLiteral(Value := '</error>') THEN RETURN; END_IF
+		ELSE
+			IF NOT AppendLiteral(Value := '/>') THEN RETURN; END_IF
+		END_IF
 ELSE
-	Fail('nonterminal snapshot test'); RETURN;
+	Fail(Operation := 'nonterminal snapshot test'); RETURN;
 END_CASE
-EmitTest := AppendLiteral('</testcase>');
+EmitTest := AppendLiteral(Value := '</testcase>');

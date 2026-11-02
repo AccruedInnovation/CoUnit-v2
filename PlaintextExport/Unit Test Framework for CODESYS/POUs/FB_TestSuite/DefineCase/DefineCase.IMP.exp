@@ -1,0 +1,61 @@
+DefineCase := 0;
+IF NOT _catalogDeclaring OR NOT _catalogMode THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Catalog mutation outside declaration');
+	RETURN;
+END_IF
+IF _catalogIncremental THEN
+	IF _catalogCallsThisStep > 0 THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Incremental catalog step declared more than one case');
+		RETURN;
+	END_IF
+	_catalogCallsThisStep := _catalogCallsThisStep + 1;
+END_IF
+IF LEN(CaseId) = 0 OR LEN(CaseId) > 63 OR LEN(RowKey) > 63 OR
+	NOT CoUnitCanonicalName(Name := Name, Canonical => _canonical, Disabled => _disabled) THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Invalid stable case identity or display name');
+	RETURN;
+END_IF
+(* The hash is only a bounded index; full stable ID and row bytes decide identity. *)
+_key := CONCAT(CONCAT(CaseId, '|'), RowKey);
+_bytes := ADR(_key);
+_hash := DWORD#2166136261;
+FOR _byteIndex := 0 TO INT_TO_UINT(LEN(_key)) - 1 DO
+	_hash := _hash XOR BYTE_TO_DWORD(_bytes[_byteIndex]);
+	_wide := DWORD_TO_ULINT(_hash) * ULINT#16777619;
+	_hash := ULINT_TO_DWORD(_wide AND ULINT#4294967295);
+END_FOR
+_slots := UINT_TO_UDINT(GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite) * 2 + 1;
+_slot := DWORD_TO_UDINT(_hash) MOD _slots;
+FOR _probe := 0 TO _slots - 1 DO
+	_existing := _catalogIndex[UDINT_TO_DINT(_slot)];
+	IF _existing = 0 THEN EXIT; END_IF
+	IF TestRecords[_existing].CaseId = CaseId AND TestRecords[_existing].RowKey = RowKey THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Duplicate stable case and parameter row');
+		RETURN;
+	END_IF
+	_slot := (_slot + 1) MOD _slots;
+END_FOR
+IF _probe >= _slots THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Catalog identity index capacity exceeded');
+	RETURN;
+END_IF
+IF NumberOfTests >= GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Catalog capacity exceeded');
+	RETURN;
+END_IF
+_i := NumberOfTests + 1;
+TestRecords[_i].InUse := TRUE;
+TestRecords[_i].CanonicalName := _canonical;
+TestRecords[_i].CaseId := CaseId;
+TestRecords[_i].RowKey := RowKey;
+TestRecords[_i].Tags := Tags;
+TestRecords[_i].Selected := TRUE;
+TestRecords[_i].DefinedDisabled := Disabled OR _disabled;
+TestRecords[_i].State := E_CoUnitTestState.OPEN;
+IF TestRecords[_i].DefinedDisabled THEN
+	TestRecords[_i].State := E_CoUnitTestState.SKIPPED;
+	_catalogSkipped := _catalogSkipped + 1;
+END_IF
+_catalogIndex[UDINT_TO_DINT(_slot)] := _i;
+NumberOfTests := _i;
+DefineCase := _i;

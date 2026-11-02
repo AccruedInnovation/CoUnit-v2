@@ -1,0 +1,11 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureOutcome :
+(
+	NOT_RUN := 0,
+	PENDING,
+	PASSED,
+	FAILED,
+	INCOMPLETE
+) BYTE;
+END_TYPE

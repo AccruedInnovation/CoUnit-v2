@@ -1,0 +1,11 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureCause :
+(
+	NONE := 0,
+	SETUP_FAILED,
+	BODY_FAILED,
+	CANCELLED,
+	PHASE_TIMEOUT
+) BYTE;
+END_TYPE

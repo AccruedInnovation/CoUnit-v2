@@ -1,0 +1,4 @@
+METHOD Describe
+VAR
+	_ok : BOOL;
+END_VAR

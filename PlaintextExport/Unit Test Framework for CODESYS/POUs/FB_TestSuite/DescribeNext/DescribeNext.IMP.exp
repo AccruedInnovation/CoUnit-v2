@@ -1,0 +1,3 @@
+_catalogIncremental := FALSE;
+Describe();
+DescribeNext := TRUE;

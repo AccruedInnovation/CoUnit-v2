@@ -1,6 +1,11 @@
-# CoUnit 2.0.0 native qualification
+# Framework qualification
 
-These fixtures and independent host oracles have been executed on the exact Windows-1252 SP22 Patch2 local simulator row in `runtime-matrix.csv`. All 32 VER and eight SCN requirements passed for that row; native UTF-8 compiler and physical-controller rows remain unqualified. `native-evidence.zip` preserves accepted runs and earlier failed attempts. `coverage.csv` names the evidence for each requirement. The original 1.2.0.3 tree remains the compatibility baseline.
+The [qualification summary](../docs/upgrade-plan.md) distinguishes the current
+candidate's bounded observations from historical results. The fixtures and
+independent oracles below include deliberate failures and internal hooks: these
+are not ordinary consumer test patterns. `native-evidence.zip` and
+`runtime-matrix.csv` preserve the historical 2.0.0.0 simulator evidence and its
+limits; that matrix does not qualify the 2.1.0.6 candidate.
 
 ## Build and execute one isolated shard
 
@@ -48,13 +53,13 @@ Bind the output path to a run-owned disposable directory before launch, remove/a
 | `seal_violation` | Inject immediately before snapshot seal. Both dispositions become FRAMEWORK_ERROR, the snapshot remains valid, and already-terminal pass/fail/skip records and counts remain intact. |
 | `device_log` | Capture plain/substituted text, first-placeholder-only replacement, a complete 498-byte prefix/argument/suffix result, and raw UTF-8 at the 127-byte chunk boundary. |
 | `timeout` | Deliberately leaves a test open. The finite external watchdog must classify EXECUTION_TIMEOUT, retain evidence, and stop/reinitialize the disposable application. |
-| `reporting` | Four-case independently populated snapshot drives publisher with controlled file failures/pauses. |
+| `reporting` | Six-case independently populated snapshot (pass, scalar/array failures, skip and error) drives XML plus an independently configured optional JSON publisher with controlled file failures/pauses. |
 
 The complete 32-VER / eight-SCN map and residual observations are in [coverage.csv](coverage.csv). This map deliberately does not convert a generated fixture into a native PASS. Max-bound guards, disabled-body effects, registration timing, repeat-state memory use and platform diagnostics need observations beyond the final snapshot.
 
 ## Independent XML checks
 
-For the direct publisher's four-case snapshot:
+For the direct publisher's six-case snapshot:
 
 ```powershell
 python qualification/verify_xunit.py <fresh-report.xml> qualification/generated/reporting/expected.json --require-disposition
@@ -66,7 +71,15 @@ For ordinary native shards, bind the exact suite instance path from the imported
 python qualification/check_report.py <fresh-report.xml> qualification/generated/multiscan/expected.json --suite-class <exact-suite-class>
 ```
 
-`verify_xunit.py` checks XML structure, terminal children, counters and optional exact logical JSON. Its positive fixture and three intentional negative fixtures are preserved under `fixtures/`. `check_report.py` additionally requires the generated selected case inventory and externally bound class names. A self-consistent empty report cannot satisfy a nonempty expected inventory. Neither parser establishes launch identity or atomic publication by itself.
+`verify_xunit.py` checks XML structure, terminal children, counters, failure type/message/body text, and optional exact logical JSON. Its positive fixture and three intentional negative fixtures are preserved under `fixtures/`. `check_report.py` additionally requires the generated selected case inventory and externally bound class names. A self-consistent empty report cannot satisfy a nonempty expected inventory. Neither parser establishes launch identity or atomic publication by itself.
+
+The optional JSON publisher is checked against that same logical expected file:
+
+```powershell
+python qualification/verify_json_report.py <fresh-report.json> qualification/generated/reporting/expected.json --require-disposition
+```
+
+The JSON oracle requires UTF-8, format version 1, closed object keys, consistent root/suite counts, unique JSON keys, terminal case states and exact first-failure details. It normalizes failure `expected` and `actual` into the same labeled body checked by the XML oracle. A requested sidecar must also be bound to the exact run by the external completion record and fresh run-specific path; parsing alone does not prove freshness. JSON is default-off and has independent state and file effects. One publisher may commit when the other fails, and a JSON failure does not change XML bytes, testcase truth or run disposition.
 
 CoUnit 2.0 candidate reports must include root attribute `counit-run-disposition="NORMAL|ABORTED|FRAMEWORK_ERROR"`. The qualification parser preserves it as `run_disposition`, allowing deliberate ABORTED/FRAMEWORK_ERROR fixtures to match their expected outcomes without changing terminal test counts. `check_report.py` always requires and compares it; the generic XML parser requires it with `--require-disposition` so original legacy controls remain usable. `--require-success` is a separate release-success gate requiring NORMAL, at least one test, zero failed assertions and zero error cases. Expected-negative qualification fixtures must not use that success gate.
 
@@ -82,9 +95,11 @@ For `device_log`, `generated/device_log/expected.json` defines five independentl
 
 ## Publication and currentness controls
 
-For `reporting`, set `TextMode` to the actual bound project encoding: `UTF8`, `LATIN1`, or `WINDOWS1252`. `UNKNOWN` deliberately fails preflight. `Path` must be inside the disposable directory. Its default is only a proposed relative path; create/bind the directory in the native launcher. `ChunkLimit=64` makes the four-case report exceed several chunks. Keep `ExpectedState=WRITTEN` for normal publication, or use `FAILED` for precommit failures. `Configured` alone is not acceptance.
+For `reporting`, set `TextMode` to the actual bound project encoding: `UTF8`, `LATIN1`, or `WINDOWS1252`. `UNKNOWN` deliberately fails preflight. `Path` must be inside the disposable directory. Its default is only a proposed relative path; create/bind the directory in the native launcher. `ChunkLimit=64` makes the six-case XML report exceed several chunks and streams labeled expected/actual failure bodies. Keep `ExpectedState=WRITTEN` for normal publication, or use `FAILED` for precommit failures. `Configured` alone is not acceptance.
 
-`SuiteName` and `FailureMessage` are writable pre-start inputs for encoding probes. Prepare the expected decoded text separately before applying raw bytes; update the independent expected JSON accordingly. The default four-case JSON applies only to the default text inputs.
+For JSON cases, set `JsonEnabled=TRUE`, give `JsonPath` a distinct fresh sibling filename, and select `JsonExpectedState` independently. JSON and XML paths must be canonical ASCII paths with the same relative/absolute kind and base interpretation; the adapter's `PlcLogic/ci/report-{run_id}.json` relative sibling path is supported. Preflight rejects non-ASCII bytes, repeated or mixed separators, `.`/`..` components, trailing dots, reserved Windows device names and unresolved macro forms. The publisher uses a fixed 256-byte chunk and cursor rather than a snapshot/report copy. Its companion paths use the same `.counit.tmp` and `.counit.bak` suffixes and 244-byte final/255-byte companion bounds; preflight checks the JSON final/stage/backup against all three XML paths before any JSON file operation, folding ASCII case and normalizing separator direction. An invalid or colliding JSON path fails only the JSON publisher. Test OPEN, WRITE, FLUSH, CLOSE, RENAME/commit and cleanup faults separately for each publisher, including a known prior file and reinitialization at phases 6, 7 and 8. Capture `JsonPublisherBytes` and `SnapshotBytes` from the generated fixture on the qualified target; source `SIZEOF` declarations are not a measured memory result. Verify the final JSON with the command above. Windows-1252 byte mapping and raw UTF-8 decoding are separate qualification cases; do not infer native UTF-8 runtime support from the decoder fixture.
+
+`SuiteName` and `FailureMessage` are writable pre-start inputs for encoding probes. Prepare the expected decoded text separately before applying raw bytes; update the independent expected JSON accordingly. The default six-case JSON applies only to the default text inputs.
 
 Each run starts from a new application instance. Precreate a known prior complete file with unique sentinel bytes and compare those exact bytes after faults. File operation occurrences are counted only within the selected operation class. Operations occur in this order, with conditional recovery operations depending on initial files:
 
@@ -114,7 +129,8 @@ Path-capacity variants require 244 stored bytes accepted and 245/246 rejected be
 
 ## Compatibility and support
 
-`check_public_api.py` compares all 60 R3 declarations to 1.2.0.3. It excludes private/local variable blocks and comments from callable signatures, while preserving input/output/in-out types and names, returns, result structures and configuration values. The only approved public exception is `ST_TestSuiteResults.NumberOfTestCases`, `NumberOfSuccessfulTestCases`, and `NumberOfFailedTestCases`: UINTâ†’UDINT, approved by the user for 65536 aggregate capacity. Any other drift fails. A real current consumer must still compile against installed 2.0.0 without normal test-source edits; runner/library binding changes are recorded separately.
+`check_public_api.py` compares all 60 R3 declarations to 1.2.0.3. It excludes private/local variable blocks and comments from callable signatures, while preserving input/output/in-out types and names, returns, result structures and configuration values. The only approved public exception is `ST_TestSuiteResults.NumberOfTestCases`, `NumberOfSuccessfulTestCases`, and `NumberOfFailedTestCases`: UINTâ†’UDINT, approved by the user for 65536 aggregate capacity. Any other drift fails. A real current consumer must still compile against installed 2.0.0 without normal test-source edits; runner/library binding changes are recorded separately. Bounded installed CoUnit 2.0.1.0 consumer and JSON-on checks do not replace the historical 2.0.0.0 framework matrix or establish 2.1.0.6 compatibility.
+
 
 For the aggregate native runs, also capture the legacy result projection: `GVL_coUnit.coUnitRunner.TestResults.TestSuiteResults.NumberOfTestCases`, `NumberOfSuccessfulTestCases`, and `NumberOfFailedTestCases`. The pass variant expects 65536/65536/0; the failed variant expects 65536/0/65536. These are private diagnostic monitor paths, not new public API calls. The suite source checks the canonical snapshot; the legacy capture independently detects projection narrowing.
 

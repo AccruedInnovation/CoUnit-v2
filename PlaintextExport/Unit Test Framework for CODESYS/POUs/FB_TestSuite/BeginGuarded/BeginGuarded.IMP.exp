@@ -1,0 +1,2 @@
+_strictDefinitions := TRUE;
+BeginGuarded := BeginTest(Name := Name, Ordered := FALSE);

@@ -20,6 +20,22 @@ IF NOT BoundTaskValid THEN
 	DelayTime := Delay;
 END_IF
 IF NOT IsOwner() THEN RETURN; END_IF
+IF TopLevelActive THEN
+	FrameworkError(Reason := 'Recursive top-level runner invocation');
+	RETURN;
+END_IF
+IF _controlledMode AND NOT _startRequested AND RunState = E_CoUnitRunState.IDLE THEN RETURN; END_IF
+IF _controlledMode AND _startRequested AND (RunState = E_CoUnitRunState.RUNNING OR RunState = E_CoUnitRunState.BETWEEN_SUITES) THEN
+	IF NOT _cancelRequested AND (LTIME() - _runStartedAt >= TIME_TO_LTIME(_runTimeout)) THEN
+		_cancelRequested := TRUE;
+		_cancelStartedAt := LTIME();
+		FrameworkErrorReason := 'Cooperative run deadline expired';
+	END_IF
+	IF _cancelRequested AND (LTIME() - _cancelStartedAt >= TIME_TO_LTIME(_cleanupTimeout)) THEN
+		_cleanupIncomplete := TRUE;
+		AbortRunningTestSuiteTests();
+	END_IF
+END_IF
 IF RunState = E_CoUnitRunState.COMPLETE THEN
 	IF (Mode <> RunMode OR PostCommitViolationLatch <> 0) AND NOT PostCompleteMisuseReported THEN
 		Diagnostic(Reason := 'Rejected mode/task misuse after immutable run completion');
@@ -30,10 +46,6 @@ IF RunState = E_CoUnitRunState.COMPLETE THEN
 END_IF
 IF NOT CheckViolation() THEN
 	ProgressFinalization();
-	RETURN;
-END_IF
-IF TopLevelActive THEN
-	FrameworkError(Reason := 'Recursive top-level runner invocation');
 	RETURN;
 END_IF
 IF RunState = E_CoUnitRunState.IDLE THEN
@@ -92,7 +104,8 @@ IF RunState = E_CoUnitRunState.RUNNING THEN
 		_complete := SequenceSuiteIndex > SuiteCount;
 	END_IF
 	IF _complete AND RunState = E_CoUnitRunState.RUNNING THEN
-		RunDisposition := E_CoUnitRunDisposition.NORMAL;
+		IF _cancelRequested THEN RunDisposition := E_CoUnitRunDisposition.ABORTED;
+		ELSE RunDisposition := E_CoUnitRunDisposition.NORMAL; END_IF
 		RunState := E_CoUnitRunState.FINALIZING;
 	END_IF
 END_IF

@@ -1,0 +1,9 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "disposition": "FRAMEWORK_ERROR",
+  "reason": "Catalog suite omitted stable identity",
+  "configuration_accepted": false,
+  "start_accepted": false
+}

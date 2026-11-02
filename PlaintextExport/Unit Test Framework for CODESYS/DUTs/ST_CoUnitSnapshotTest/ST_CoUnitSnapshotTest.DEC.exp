@@ -1,9 +1,17 @@
 TYPE ST_CoUnitSnapshotTest :
 STRUCT
-	Name : T_MaxString;
-	ClassName : T_MaxString;
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	Selected : BOOL;
+	Started : BOOL;
+	Name : REFERENCE TO T_MaxString;
+	ClassName : REFERENCE TO T_MaxString;
 	State : E_CoUnitTestState;
 	NumberOfAsserts : UINT;
-	FirstFailure : ST_CoUnitFirstFailure;
+	CleanupOutcome : E_CoUnitFixtureOutcome;
+	TerminationCause : E_CoUnitFixtureCause;
+	LaterDetail : REFERENCE TO STRING(127);
+	LaterDetailTruncated : BOOL;
+	FirstFailure : REFERENCE TO ST_CoUnitFirstFailure;
 END_STRUCT
 END_TYPE

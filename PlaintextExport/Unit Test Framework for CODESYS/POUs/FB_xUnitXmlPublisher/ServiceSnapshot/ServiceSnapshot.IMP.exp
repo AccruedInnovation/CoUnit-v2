@@ -32,6 +32,16 @@ CASE _phase OF
 		ELSE Fail('invalid run disposition'); RETURN;
 		END_CASE
 		IF NOT Attribute('counit-run-disposition', _dispositionText) THEN RETURN; END_IF
+		IF NOT Attribute('counit-schema-version', UINT_TO_STRING(Snapshot.SchemaVersion)) THEN RETURN; END_IF
+		IF NOT Attribute('counit-framework-version', Snapshot.FrameworkVersion) THEN RETURN; END_IF
+		IF NOT Attribute('counit-run-id', Snapshot.RunId) THEN RETURN; END_IF
+		IF NOT Attribute('counit-build-id', Snapshot.BuildId) THEN RETURN; END_IF
+		IF NOT Attribute('counit-target-id', Snapshot.TargetId) THEN RETURN; END_IF
+		IF NOT Attribute('counit-generation', ULINT_TO_STRING(Snapshot.Generation)) THEN RETURN; END_IF
+		IF NOT Attribute('counit-clock-mode', Snapshot.ClockMode) THEN RETURN; END_IF
+		IF LEN(Snapshot.TerminationReason) > 0 THEN
+			IF NOT Attribute('counit-termination-reason', Snapshot.TerminationReason) THEN RETURN; END_IF
+		END_IF
 		IF NOT AppendLiteral('>') THEN RETURN; END_IF
 		_phase := 2;
 	2:
@@ -39,6 +49,7 @@ CASE _phase OF
 			IF NOT AppendLiteral('<testsuite') THEN RETURN; END_IF
 			IF NOT Attribute('id', UINT_TO_STRING(Snapshot.Suites[_suiteIndex].Identity)) THEN RETURN; END_IF
 			IF NOT Attribute('name', Snapshot.Suites[_suiteIndex].Name) THEN RETURN; END_IF
+			IF NOT Attribute('counit-suite-id', Snapshot.Suites[_suiteIndex].SuiteId) THEN RETURN; END_IF
 			IF NOT Counts(Snapshot.Suites[_suiteIndex].Total, Snapshot.Suites[_suiteIndex].Failed,
 				Snapshot.Suites[_suiteIndex].Errors, Snapshot.Suites[_suiteIndex].Skipped) THEN RETURN; END_IF
 			IF NOT AppendLiteral('>') THEN RETURN; END_IF
@@ -57,7 +68,7 @@ CASE _phase OF
 		END_IF
 	3, 4:
 		IF _testIndex <= Snapshot.Suites[_suiteIndex].Total THEN
-			IF NOT EmitTest(Test := Snapshot.Suites[_suiteIndex].Tests[_testIndex]) THEN RETURN; END_IF
+			IF NOT EmitTest(Test := Snapshot.Suites[_suiteIndex].Tests[_testIndex], TerminationReason := Snapshot.TerminationReason) THEN RETURN; END_IF
 			_testIndex := _testIndex + 1;
 			_phase := 4;
 		ELSE

@@ -28,6 +28,14 @@
                 <simpleValue value="'counit_qualification/report.xml'" />
               </initialValue>
             </variable>
+            <variable name="JsonPath">
+              <type>
+                <derived name="T_MaxString" />
+              </type>
+              <initialValue>
+                <simpleValue value="'counit_qualification/report.json'" />
+              </initialValue>
+            </variable>
             <variable name="TextMode">
               <type>
                 <derived name="E_CoUnitTextMode" />
@@ -94,6 +102,64 @@
                 <simpleValue value="E_CoUnitReportState.WRITTEN" />
               </initialValue>
             </variable>
+            <variable name="JsonEnabled">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="FALSE" />
+              </initialValue>
+            </variable>
+            <variable name="JsonExpectedState">
+              <type>
+                <derived name="E_CoUnitReportState" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitReportState.DISABLED" />
+              </initialValue>
+            </variable>
+            <variable name="JsonFaultOperation">
+              <type>
+                <derived name="E_CoUnitFileOperation" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFileOperation.NONE" />
+              </initialValue>
+            </variable>
+            <variable name="JsonFaultOccurrence">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="JsonFaultOccurrence2">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="JsonFaultError">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="16#FFFF0001" />
+              </initialValue>
+            </variable>
+            <variable name="JsonShortWrite">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="JsonPauseAfterPhase">
+              <type>
+                <UINT />
+              </type>
+            </variable>
             <variable name="ReleasePause">
               <type>
                 <BOOL />
@@ -152,7 +218,47 @@
                 <derived name="E_CoUnitReportState" />
               </type>
             </variable>
+            <variable name="JsonConfigured">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="JsonPhase">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="JsonFileEffects">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="JsonLastFileError">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="JsonReportState">
+              <type>
+                <derived name="E_CoUnitReportState" />
+              </type>
+            </variable>
+            <variable name="JsonCleanupWarning">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="JsonFlushUnsupported">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
             <variable name="SnapshotBytes">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="JsonPublisherBytes">
               <type>
                 <UDINT />
               </type>
@@ -162,6 +268,21 @@
             <variable name="_snapshot">
               <type>
                 <derived name="ST_CoUnitRunSnapshot" />
+              </type>
+            </variable>
+            <variable name="_backing">
+              <type>
+                <array>
+                  <dimension lower="1" upper="6" />
+                  <baseType>
+                    <derived name="ST_CoUnitTestRecord" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="_fixtureIndex">
+              <type>
+                <UINT />
               </type>
             </variable>
             <variable name="_results">
@@ -174,7 +295,17 @@
                 <derived name="FB_xUnitXmlPublisher(_results)" />
               </type>
             </variable>
+            <variable name="_jsonPublisher">
+              <type>
+                <derived name="FB_JsonDiagnosticPublisher" />
+              </type>
+            </variable>
             <variable name="_result">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_jsonResult">
               <type>
                 <BOOL />
               </type>
@@ -189,19 +320,26 @@
         <body>
           <ST>
             <xhtml xmlns="http://www.w3.org/1999/xhtml">SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+JsonPublisherBytes := SIZEOF(_jsonPublisher);
 IF NOT Init THEN
+	FOR _fixtureIndex := 1 TO 6 DO
+		_snapshot.Suites[1].Tests[_fixtureIndex].Name REF= _backing[_fixtureIndex].CanonicalName;
+		_snapshot.Suites[1].Tests[_fixtureIndex].ClassName REF= _snapshot.Suites[1].Name;
+		_snapshot.Suites[1].Tests[_fixtureIndex].LaterDetail REF= _backing[_fixtureIndex].LaterDetail;
+		_snapshot.Suites[1].Tests[_fixtureIndex].FirstFailure REF= _backing[_fixtureIndex].FirstFailure;
+	END_FOR
 	_snapshot.Disposition := E_CoUnitRunDisposition.NORMAL;
 	_snapshot.SuiteCount := 1;
-	_snapshot.Total := 4;
+	_snapshot.Total := 6;
 	_snapshot.Passed := 1;
-	_snapshot.Failed := 1;
+	_snapshot.Failed := 3;
 	_snapshot.Skipped := 1;
 	_snapshot.Errors := 1;
 	_snapshot.Suites[1].Name := SuiteName;
 	_snapshot.Suites[1].Identity := 0;
-	_snapshot.Suites[1].Total := 4;
+	_snapshot.Suites[1].Total := 6;
 	_snapshot.Suites[1].Passed := 1;
-	_snapshot.Suites[1].Failed := 1;
+	_snapshot.Suites[1].Failed := 3;
 	_snapshot.Suites[1].Skipped := 1;
 	_snapshot.Suites[1].Errors := 1;
 	_snapshot.Suites[1].Tests[1].Name := 'Pass "quoted"';
@@ -215,24 +353,62 @@ IF NOT Init THEN
 	_snapshot.Suites[1].Tests[2].FirstFailure.IsSet := TRUE;
 	_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType := E_AssertionType.Type_DINT;
 	_snapshot.Suites[1].Tests[2].FirstFailure.Message := FailureMessage;
-	_snapshot.Suites[1].Tests[3].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ExpectedText := '3';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[3].Name := 'String scalar mismatch';
 	_snapshot.Suites[1].Tests[3].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.SKIPPED;
-	_snapshot.Suites[1].Tests[4].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[3].NumberOfAsserts := 1;
+	_snapshot.Suites[1].Tests[3].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType := E_AssertionType.Type_STRING;
+	_snapshot.Suites[1].Tests[3].FirstFailure.Message := 'string mismatch';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ExpectedText := 'left &lt;&amp; "quoted"';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ActualText := 'right &amp;&gt; "quoted"';
+	_snapshot.Suites[1].Tests[4].Name := 'Array mismatch';
 	_snapshot.Suites[1].Tests[4].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.ERROR;
+	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[4].NumberOfAsserts := 2;
+	_snapshot.Suites[1].Tests[4].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[4].FirstFailure.AssertionType := E_AssertionType.Type_Array_UINT;
+	_snapshot.Suites[1].Tests[4].FirstFailure.Message := 'array mismatch';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ExpectedText := '4';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[5].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[5].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[5].State := E_CoUnitTestState.SKIPPED;
+	_snapshot.Suites[1].Tests[5].NumberOfAsserts := 0;
+	_snapshot.Suites[1].Tests[6].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[6].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[6].State := E_CoUnitTestState.ERROR;
 	_snapshot.IsValid := TRUE;
+	GVL_coUnit.xUnitFilePath := Path;
 	Configured := _publisher.ConfigureTest(Path := Path, Enabled := TRUE, ChunkLimit := ChunkLimit, TextMode := TextMode, FaultOperation := FaultOperation, FaultOccurrence := FaultOccurrence, FaultOccurrence2 := FaultOccurrence2, FaultError := FaultError, ShortWrite := ShortWrite, PauseAfterPhase := PauseAfterPhase);
+	JsonConfigured := _jsonPublisher.ConfigureTest(Path := JsonPath, Enabled := JsonEnabled, TextMode := TextMode,
+		FaultOperation := JsonFaultOperation, FaultOccurrence := JsonFaultOccurrence, FaultOccurrence2 := JsonFaultOccurrence2,
+		FaultError := JsonFaultError, ShortWrite := JsonShortWrite, PauseAfterPhase := JsonPauseAfterPhase);
 	Init := TRUE;
 END_IF
-IF ReleasePause THEN _result := _publisher.Resume(); END_IF
+IF ReleasePause THEN
+	_result := _publisher.Resume();
+	_jsonResult := _jsonPublisher.Resume();
+END_IF
 _result := _publisher.ServiceSnapshot(Snapshot := _snapshot);
+_jsonResult := _jsonPublisher.ServiceSnapshot(Snapshot := _snapshot);
 Phase := _publisher.GetPhase();
 ReportState := _publisher.GetReportState();
 FileEffects := _publisher.GetFileEffectCount();
 LastFileError := _publisher.GetLastFileError();
-Done := (ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED);
-OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (_snapshot.Total = 4) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 1) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1);
+JsonPhase := _jsonPublisher.GetPhase();
+JsonReportState := _jsonPublisher.GetReportState();
+JsonFileEffects := _jsonPublisher.GetFileEffectCount();
+JsonLastFileError := _jsonPublisher.GetLastFileError();
+JsonCleanupWarning := _jsonPublisher.GetCleanupWarning();
+JsonFlushUnsupported := _jsonPublisher.GetFlushUnsupported();
+Done := ((ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED)) AND
+	((JsonReportState = E_CoUnitReportState.WRITTEN) OR (JsonReportState = E_CoUnitReportState.FAILED) OR (JsonReportState = E_CoUnitReportState.DISABLED));
+OraclePass := Done AND (ReportState = ExpectedState) AND (JsonReportState = JsonExpectedState) AND _snapshot.IsValid AND
+	(_snapshot.Total = 6) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 3) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1) AND
+	((JsonEnabled) OR (JsonFileEffects = 0));
 </xhtml>
           </ST>
         </body>
@@ -242,6 +418,7 @@ OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (
               <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
 VAR_INPUT
 	Path : T_MaxString := 'counit_qualification/report.xml';
+	JsonPath : T_MaxString := 'counit_qualification/report.json';
 	TextMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
 	ChunkLimit : UDINT := 64;
 	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
@@ -251,6 +428,14 @@ VAR_INPUT
 	ShortWrite : BOOL;
 	PauseAfterPhase : UINT;
 	ExpectedState : E_CoUnitReportState := E_CoUnitReportState.WRITTEN;
+	JsonEnabled : BOOL := FALSE;
+	JsonExpectedState : E_CoUnitReportState := E_CoUnitReportState.DISABLED;
+	JsonFaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	JsonFaultOccurrence : UDINT := 0;
+	JsonFaultOccurrence2 : UDINT := 0;
+	JsonFaultError : UDINT := 16#FFFF0001;
+	JsonShortWrite : BOOL;
+	JsonPauseAfterPhase : UINT;
 	ReleasePause : BOOL;
 	SuiteName : T_MaxString := 'Suite &amp; &lt;A&gt;';
 	FailureMessage : T_MaxString := 'expected &lt;3 &amp; 4&gt; but got "5"';
@@ -263,13 +448,25 @@ VAR_OUTPUT
 	FileEffects : UDINT;
 	LastFileError : UDINT;
 	ReportState : E_CoUnitReportState;
+	JsonConfigured : BOOL;
+	JsonPhase : UINT;
+	JsonFileEffects : UDINT;
+	JsonLastFileError : UDINT;
+	JsonReportState : E_CoUnitReportState;
+	JsonCleanupWarning : BOOL;
+	JsonFlushUnsupported : BOOL;
 	SnapshotBytes : UDINT;
+	JsonPublisherBytes : UDINT;
 END_VAR
 VAR
 	_snapshot : ST_CoUnitRunSnapshot;
+	_backing : ARRAY[1..6] OF ST_CoUnitTestRecord;
+	_fixtureIndex : UINT;
 	_results : FB_TestResults;
 	_publisher : FB_xUnitXmlPublisher(_results);
+	_jsonPublisher : FB_JsonDiagnosticPublisher;
 	_result : BOOL;
+	_jsonResult : BOOL;
 	Init : BOOL;
 END_VAR</xhtml>
             </InterfaceAsPlainText>

@@ -1,8 +1,11 @@
 METHOD PRIVATE EmitTest : BOOL
+VAR_INPUT
+	TerminationReason : T_MaxString;
+END_VAR
 VAR_IN_OUT
 	Test : ST_CoUnitSnapshotTest;
 END_VAR
 VAR
-	_type : T_MaxString;
 	_error : T_MaxString;
+	_type : T_MaxString;
 END_VAR

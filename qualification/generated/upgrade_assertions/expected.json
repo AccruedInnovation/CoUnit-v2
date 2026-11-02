@@ -1,0 +1,34 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "effects": {
+    "custom": 1,
+    "float": 1,
+    "string": 1
+  },
+  "cases": [
+    {
+      "name": "Custom",
+      "state": "FAILED",
+      "assertions": 1,
+      "check_id": "domain/limit"
+    },
+    {
+      "name": "FloatNear",
+      "state": "FAILED",
+      "assertions": 1,
+      "expected_raw_bits": "3F800000",
+      "actual_raw_bits": "3F800001",
+      "applied_delta_raw_bits": "00000000"
+    },
+    {
+      "name": "LongString",
+      "state": "FAILED",
+      "assertions": 1,
+      "expected_code_units": 300,
+      "actual_code_units": 300,
+      "mismatch_offset": 299
+    }
+  ]
+}

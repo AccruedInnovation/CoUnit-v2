@@ -1,0 +1,4 @@
+UpperAsciiByte := Value;
+IF Value >= 16#61 AND Value <= 16#7A THEN
+	UpperAsciiByte := UDINT_TO_BYTE(BYTE_TO_UDINT(Value) - 16#20);
+END_IF

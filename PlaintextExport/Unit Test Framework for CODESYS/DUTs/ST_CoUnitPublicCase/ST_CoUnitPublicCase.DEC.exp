@@ -1,0 +1,21 @@
+TYPE ST_CoUnitPublicCase :
+STRUCT
+	RunId : STRING(63);
+	Generation : ULINT;
+	SuiteId : STRING(63);
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	Tags : T_MaxString;
+	Name : T_MaxString;
+	Selected : BOOL;
+	Disabled : BOOL;
+	Started : BOOL;
+	State : E_CoUnitTestState;
+	MaxAssertionsPerInvocation : UDINT;
+	CleanupOutcome : E_CoUnitFixtureOutcome;
+	TerminationCause : E_CoUnitFixtureCause;
+	LaterDetail : STRING(127);
+	LaterDetailTruncated : BOOL;
+	FirstFailure : ST_CoUnitFirstFailure;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,8 @@
+SetupCalls := SetupCalls + 1;
+IF SetupCalls = SetupFailOn THEN
+	Setup := E_CoUnitFixtureCallback.FAILED;
+ELSIF SetupCalls < SetupPassOn THEN
+	Setup := E_CoUnitFixtureCallback.PENDING;
+ELSE
+	Setup := E_CoUnitFixtureCallback.PASSED;
+END_IF

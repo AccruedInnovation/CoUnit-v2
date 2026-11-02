@@ -1,0 +1,5 @@
+IF _strictDefinitions THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := Reason);
+ELSE
+	GVL_coUnit.coUnitRunner.Diagnostic(Reason := Reason);
+END_IF

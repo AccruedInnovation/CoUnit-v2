@@ -1,0 +1,5 @@
+(* Internal entry also used by isolated qualification fixtures. Snapshot remains immutable. *)
+METHOD INTERNAL ServiceSnapshot : BOOL
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR

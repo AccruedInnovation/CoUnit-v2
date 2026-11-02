@@ -1,0 +1,22 @@
+METHOD DefineCase : UINT
+VAR_INPUT
+	CaseId : T_MaxString;
+	Name : T_MaxString;
+	RowKey : T_MaxString;
+	Tags : T_MaxString;
+	Disabled : BOOL;
+END_VAR
+VAR
+	_i : UINT;
+	_existing : UINT;
+	_probe : UDINT;
+	_slot : UDINT;
+	_slots : UDINT;
+	_hash : DWORD;
+	_wide : ULINT;
+	_key : STRING(127);
+	_bytes : POINTER TO BYTE;
+	_byteIndex : UINT;
+	_canonical : T_MaxString;
+	_disabled : BOOL;
+END_VAR

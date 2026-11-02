@@ -1,0 +1,25 @@
+ServicePhaseTest := FALSE;
+IF _suiteIndex = 0 OR _suiteIndex > Snapshot.SuiteCount OR
+	_suiteIndex > GVL_Param_coUnit.MaxNumberOfTestSuites THEN
+	Fail(Operation := 'suite index outside snapshot bounds');
+	RETURN;
+END_IF
+IF Snapshot.Suites[_suiteIndex].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+	Fail(Operation := 'suite test count outside snapshot bounds');
+	RETURN;
+END_IF
+IF _testIndex <= Snapshot.Suites[_suiteIndex].Total THEN
+	IF _testIndex = 0 OR _testIndex > Snapshot.Suites[_suiteIndex].Total OR
+		_testIndex > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN
+		Fail(Operation := 'test index outside snapshot bounds');
+		RETURN;
+	END_IF
+	IF _testIndex > 1 AND_THEN NOT AppendLiteral(Value := ',') THEN RETURN; END_IF
+	IF NOT EmitTest(Test := Snapshot.Suites[_suiteIndex].Tests[_testIndex], TerminationReason := Snapshot.TerminationReason) THEN RETURN; END_IF
+	_testIndex := _testIndex + 1;
+	_phase := 4;
+ELSE
+	IF NOT AppendLiteral(Value := ']}') THEN RETURN; END_IF
+	_phase := 5;
+END_IF
+ServicePhaseTest := TRUE;

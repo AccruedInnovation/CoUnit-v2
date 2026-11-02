@@ -1,0 +1,21 @@
+ServicePhaseCommit := FALSE;
+IF NOT _file.Rename(OldPath := _stage, NewPath := _path) THEN
+	_commitError := _file.GetLastError();
+	IF _movedCurrent THEN
+		_restoreOk := _file.Rename(OldPath := _backup, NewPath := _path);
+		IF NOT _restoreOk THEN
+			WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_ERROR),
+				msgFmtStr := 'JSON report restore failed; current absent: %s', strArg := _path);
+		END_IF
+	END_IF
+	Fail(Operation := 'commit staging', ErrorCode := _commitError);
+	RETURN;
+END_IF
+_state := E_CoUnitReportState.WRITTEN;
+_phase := 8;
+WRITE_DEVICE_LOG(msgCtrlMask := UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO),
+	msgFmtStr := 'JSON diagnostic report exported: %s', strArg := _path);
+IF _pauseAfter <> 8 THEN
+	IF NOT ServicePhaseCleanup() THEN RETURN; END_IF
+END_IF
+ServicePhaseCommit := TRUE;

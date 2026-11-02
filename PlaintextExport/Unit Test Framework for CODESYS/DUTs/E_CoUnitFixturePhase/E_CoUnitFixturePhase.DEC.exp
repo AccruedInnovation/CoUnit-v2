@@ -1,0 +1,11 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixturePhase :
+(
+	IDLE := 0,
+	SETUP,
+	BODY,
+	CLEANUP,
+	COMPLETE
+) BYTE;
+END_TYPE

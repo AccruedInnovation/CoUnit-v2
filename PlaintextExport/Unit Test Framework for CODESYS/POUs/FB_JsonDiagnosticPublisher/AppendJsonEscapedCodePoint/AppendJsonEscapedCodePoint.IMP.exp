@@ -1,0 +1,21 @@
+AppendJsonEscapedCodePoint := FALSE;
+_cp := CodePoint;
+_hex := ADR(_hexDigits);
+IF (_cp < 16#20 AND _cp <> 9 AND _cp <> 10 AND _cp <> 13) OR
+	(_cp >= 16#D800 AND _cp <= 16#DFFF) OR _cp = 16#FFFE OR _cp = 16#FFFF OR _cp > 16#10FFFF THEN _cp := 16#FFFD; END_IF
+CASE _cp OF
+	16#08: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\b');
+	9: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\t');
+	10: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\n');
+	12: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\f');
+	13: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\r');
+	16#22: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\"');
+	16#5C: AppendJsonEscapedCodePoint := AppendLiteral(Value := '\\');
+ELSE
+	IF _cp < 16#20 THEN
+		IF NOT AppendLiteral(Value := '\u00') THEN RETURN; END_IF
+		IF NOT AppendByte(Value := _hex[UDINT_TO_UINT(DWORD_TO_UDINT(SHR(UDINT_TO_DWORD(_cp), 4)))]) THEN RETURN; END_IF
+		AppendJsonEscapedCodePoint := AppendByte(Value := _hex[UDINT_TO_UINT(_cp AND 16#0F)]);
+	ELSE AppendJsonEscapedCodePoint := AppendCodePoint(Value := _cp);
+	END_IF
+END_CASE

@@ -1,0 +1,2 @@
+IF Size = 0 THEN Fail(Operation := EmptyOperation);
+ELSE Fail(Operation := Operation); END_IF

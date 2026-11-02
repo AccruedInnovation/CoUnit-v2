@@ -1,0 +1,5 @@
+METHOD PRIVATE ServicePhasePreserveCurrent : BOOL
+VAR
+	_exists : DINT;
+	_currentSize : ULINT;
+END_VAR

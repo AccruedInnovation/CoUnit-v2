@@ -1,4 +1,7 @@
 METHOD INTERNAL ProgressFinalization
 VAR
+	_remaining : UINT;
+	_consumed : UINT;
+	_done : BOOL;
 	_sealedDisposition : E_CoUnitRunDisposition;
 END_VAR

@@ -1,0 +1,5 @@
+METHOD INTERNAL SetProgressPhase
+VAR_INPUT
+	Phase : E_CoUnitFixturePhase;
+	StepId : T_MaxString;
+END_VAR
