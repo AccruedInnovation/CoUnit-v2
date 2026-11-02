@@ -1,6 +1,7 @@
 PROGRAM PRG_Qualification
 VAR_INPUT
 	Path : T_MaxString := 'counit_qualification/report.xml';
+	JsonPath : T_MaxString := 'counit_qualification/report.json';
 	TextMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
 	ChunkLimit : UDINT := 64;
 	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
@@ -10,6 +11,14 @@ VAR_INPUT
 	ShortWrite : BOOL;
 	PauseAfterPhase : UINT;
 	ExpectedState : E_CoUnitReportState := E_CoUnitReportState.WRITTEN;
+	JsonEnabled : BOOL := FALSE;
+	JsonExpectedState : E_CoUnitReportState := E_CoUnitReportState.DISABLED;
+	JsonFaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	JsonFaultOccurrence : UDINT := 0;
+	JsonFaultOccurrence2 : UDINT := 0;
+	JsonFaultError : UDINT := 16#FFFF0001;
+	JsonShortWrite : BOOL;
+	JsonPauseAfterPhase : UINT;
 	ReleasePause : BOOL;
 	SuiteName : T_MaxString := 'Suite & <A>';
 	FailureMessage : T_MaxString := 'expected <3 & 4> but got "5"';
@@ -22,12 +31,24 @@ VAR_OUTPUT
 	FileEffects : UDINT;
 	LastFileError : UDINT;
 	ReportState : E_CoUnitReportState;
+	JsonConfigured : BOOL;
+	JsonPhase : UINT;
+	JsonFileEffects : UDINT;
+	JsonLastFileError : UDINT;
+	JsonReportState : E_CoUnitReportState;
+	JsonCleanupWarning : BOOL;
+	JsonFlushUnsupported : BOOL;
 	SnapshotBytes : UDINT;
+	JsonPublisherBytes : UDINT;
 END_VAR
 VAR
 	_snapshot : ST_CoUnitRunSnapshot;
+	_backing : ARRAY[1..6] OF ST_CoUnitTestRecord;
+	_fixtureIndex : UINT;
 	_results : FB_TestResults;
 	_publisher : FB_xUnitXmlPublisher(_results);
+	_jsonPublisher : FB_JsonDiagnosticPublisher;
 	_result : BOOL;
+	_jsonResult : BOOL;
 	Init : BOOL;
 END_VAR

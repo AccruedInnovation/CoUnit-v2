@@ -41,4 +41,7 @@ VAR_GLOBAL
 	
     (* Default path and filename for the xunit testresults e.g.: for use with jenkins *)
     xUnitFilePath : T_MaxString := 'coUnit_xunit_testresults.xml';
+
+    (* Fresh per-run diagnostic JSON path; ignored while publication is disabled. *)
+    DiagnosticJsonFilePath : T_MaxString := '';
 END_VAR

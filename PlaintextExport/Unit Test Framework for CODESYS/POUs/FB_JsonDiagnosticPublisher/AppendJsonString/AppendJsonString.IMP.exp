@@ -1,0 +1,12 @@
+AppendJsonString := FALSE;
+IF NOT AppendByte(Value := 16#22) THEN RETURN; END_IF
+_p := ADR(Value);
+_i := 0;
+WHILE _i < 255 DO
+	IF _p[_i] = 0 THEN AppendJsonString := AppendByte(Value := 16#22); RETURN; END_IF
+	_cp := DecodeJsonCodePoint(Bytes := _p, Index := _i, TextMode := _textMode, Taken => _taken);
+	IF NOT AppendJsonEscapedCodePoint(CodePoint := _cp) THEN RETURN; END_IF
+	_i := _i + _taken;
+END_WHILE
+IF _p[255] <> 0 THEN Fail(Operation := 'unterminated diagnostic text'); RETURN; END_IF
+AppendJsonString := AppendByte(Value := 16#22);

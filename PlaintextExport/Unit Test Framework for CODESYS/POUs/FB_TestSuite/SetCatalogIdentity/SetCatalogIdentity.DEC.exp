@@ -1,0 +1,4 @@
+METHOD SetCatalogIdentity : BOOL
+VAR_INPUT
+	SuiteId : T_MaxString;
+END_VAR

@@ -1,0 +1,216 @@
+(* Bind the same task fence as RUN before applying any mutation. *)
+IF NOT CoUnitTryGetTask(Handle => _handle) THEN RETURN; END_IF
+IF NOT BoundTaskValid THEN
+	_previous := TEST_AND_SET(StartClaim);
+	IF _previous <> 0 THEN SignalViolation(); RETURN; END_IF
+	BoundTaskHandle := _handle;
+	BoundTaskValid := TRUE;
+	RunMode := E_CoUnitRunMode.ALL_SUITES;
+END_IF
+IF NOT IsOwner() THEN RETURN; END_IF
+IF TopLevelActive THEN
+	FrameworkError(Reason := 'Recursive top-level runner invocation');
+	RETURN;
+END_IF
+IF _catalogPreparing THEN
+	_ok := CheckViolation();
+	IF NOT _ok THEN
+		_catalogPreparing := FALSE;
+	ELSIF LTIME() - _catalogStartedAt >= TIME_TO_LTIME(_runTimeout) THEN
+		_catalogPreparing := FALSE;
+		FrameworkError(Reason := 'Catalog preparation deadline expired');
+	ELSIF _catalogCursor > SuiteCount THEN
+		_catalogPreparing := FALSE;
+		_catalogReady := TRUE;
+	ELSE
+			_count := Suites[_catalogCursor]^.GetNumberOfTests();
+			_s := Suites[_catalogCursor]^.GetCatalogSkipped();
+			TopLevelActive := TRUE;
+		_prepared := Suites[_catalogCursor]^.PrepareCatalog();
+			TopLevelActive := FALSE;
+			_count := Suites[_catalogCursor]^.GetNumberOfTests() - _count;
+			_s := Suites[_catalogCursor]^.GetCatalogSkipped() - _s;
+			_selectedCount := _selectedCount + _count;
+			_publicTotal := _publicTotal + _count;
+			_publicSkipped := _publicSkipped + UINT_TO_UDINT(_s);
+			_ok := CheckViolation();
+			IF NOT _ok THEN
+				_catalogPreparing := FALSE;
+			ELSIF RunState <> E_CoUnitRunState.IDLE THEN
+			_catalogPreparing := FALSE;
+			ELSIF LTIME() - _catalogStartedAt >= TIME_TO_LTIME(_runTimeout) THEN
+				_catalogPreparing := FALSE;
+				FrameworkError(Reason := 'Catalog preparation deadline expired');
+		ELSIF _prepared THEN
+			_identity := Suites[_catalogCursor]^.GetCatalogIdentity();
+			_ok := TRUE;
+			FOR _other := 1 TO _catalogCursor - 1 DO
+				IF _identity = Suites[_other]^.GetCatalogIdentity() THEN
+					FrameworkError(Reason := 'Stable suite identity collision');
+					_ok := FALSE;
+					EXIT;
+				END_IF
+			END_FOR
+			IF NOT _ok OR RunState <> E_CoUnitRunState.IDLE THEN
+				_catalogPreparing := FALSE;
+			ELSE
+				IF _catalogCursor = SuiteCount THEN
+					_catalogPreparing := FALSE;
+					_catalogReady := TRUE;
+				ELSE
+					_catalogCursor := _catalogCursor + 1;
+				END_IF
+			END_IF
+		END_IF
+	END_IF
+END_IF
+_request := Exchange.RequestId;
+IF _request <> Exchange.AckId THEN
+	Exchange.Accepted := FALSE;
+	Exchange.Rejection := '';
+	_operation := Exchange.Operation;
+	IF _request = 0 OR _request <= _lastPublicRequest THEN
+		Exchange.Rejection := 'Request sequence must increase';
+	ELSIF _operation <> 1 AND (Exchange.RunId <> _publicRunId OR Exchange.ExpectedGeneration <> _generation) THEN
+		Exchange.Rejection := 'Stale run or generation';
+	ELSE
+		CASE _operation OF
+			1:
+				IF _controlledMode OR _generation <> 0 OR RunState <> E_CoUnitRunState.IDLE OR Epoch <> 0 THEN
+					Exchange.Rejection := 'Fresh application required for configure or rerun';
+				ELSIF LEN(Exchange.RunId) = 0 OR LEN(Exchange.BuildId) = 0 OR LEN(Exchange.TargetId) = 0 OR Exchange.RunTimeout <= T#0ms OR Exchange.CleanupTimeout <= T#0ms THEN
+					Exchange.Rejection := 'Run build target identity and positive deadlines required';
+				ELSE
+					_controlledMode := TRUE;
+					_publicRunId := Exchange.RunId;
+					_publicBuildId := Exchange.BuildId;
+					_publicTargetId := Exchange.TargetId;
+					_runTimeout := Exchange.RunTimeout;
+					_cleanupTimeout := Exchange.CleanupTimeout;
+					_generation := 1;
+					_selectedCount := 0;
+					_publicTotal := 0;
+					_publicSkipped := 0;
+					IF NOT CoUnitBindStringEncoding() THEN
+						Exchange.Rejection := 'Unsupported native STRING encoding';
+						FrameworkError(Reason := 'Unsupported native STRING encoding');
+					ELSE
+						_catalogReady := FALSE;
+						_catalogPreparing := TRUE;
+						_catalogCursor := 1;
+						_catalogStartedAt := LTIME();
+						Exchange.Accepted := TRUE;
+					END_IF
+				END_IF
+			2:
+				IF NOT _catalogReady OR _startRequested THEN
+					Exchange.Rejection := 'Selection is frozen or catalog unavailable';
+				ELSE
+					_selectedCount := 0;
+					FOR _s := 1 TO SuiteCount DO
+						_identity := Suites[_s]^.GetCatalogIdentity();
+						IF LEN(Exchange.SuiteId) = 0 OR _identity = Exchange.SuiteId THEN
+							_count := Suites[_s]^.SelectCases(CaseId := Exchange.CaseId, RowKey := Exchange.RowKey, Tag := Exchange.Tag);
+						ELSE
+							_count := Suites[_s]^.SelectCases(CaseId := ' ', RowKey := '', Tag := '');
+						END_IF
+						_selectedCount := _selectedCount + _count;
+					END_FOR
+					Exchange.Accepted := TRUE;
+				END_IF
+			3:
+				IF NOT _catalogReady OR _startRequested THEN
+					Exchange.Rejection := 'Run already started or catalog unavailable';
+				ELSIF _selectedCount <> Exchange.ExpectedSelected OR (_selectedCount = 0 AND NOT Exchange.AllowEmpty) THEN
+					Exchange.Rejection := 'Selected inventory count mismatch or unexpected empty run';
+				ELSE
+					FOR _s := 1 TO SuiteCount DO Suites[_s]^.FreezeSelection(); END_FOR
+					_startRequested := TRUE;
+					_runStartedAt := LTIME();
+					Exchange.Accepted := TRUE;
+				END_IF
+			4:
+				IF _catalogPreparing THEN
+					AbortRunningTestSuiteTests();
+					IF RunState = E_CoUnitRunState.FINALIZING AND RunDisposition = E_CoUnitRunDisposition.ABORTED THEN
+						_catalogPreparing := FALSE;
+						_catalogReady := FALSE;
+						_cancelRequested := TRUE;
+						_cancelStartedAt := LTIME();
+						FrameworkErrorReason := 'Run cancelled by owner';
+						Exchange.Accepted := TRUE;
+					ELSE
+						_catalogPreparing := FALSE;
+					END_IF
+				ELSIF NOT _startRequested OR SnapshotSealed OR RunState = E_CoUnitRunState.FINALIZING OR RunState = E_CoUnitRunState.COMPLETE THEN
+					Exchange.Rejection := 'No active cancellable run';
+				ELSE
+					IF NOT _cancelRequested THEN
+						_cancelRequested := TRUE;
+						_cancelStartedAt := LTIME();
+						FrameworkErrorReason := 'Run cancelled by owner';
+					END_IF
+					Exchange.Accepted := TRUE;
+				END_IF
+			5:
+				IF NOT _catalogReady OR Exchange.SuiteIndex = 0 OR Exchange.SuiteIndex > SuiteCount THEN
+					Exchange.Rejection := 'Catalog page out of bounds';
+				ELSE
+					Exchange.Page.RunId := _publicRunId;
+					Exchange.Page.Generation := _generation;
+					Exchange.Accepted := Suites[Exchange.SuiteIndex]^.ReadPublicCase(Index := Exchange.CaseIndex, Page := Exchange.Page);
+					IF NOT Exchange.Accepted THEN Exchange.Rejection := 'Case page out of bounds'; END_IF
+				END_IF
+		ELSE
+			Exchange.Rejection := 'Unknown command';
+		END_CASE
+	END_IF
+	IF Exchange.RequestId <> _request THEN
+		(* The single producer contract forbids changing a submitted payload before acknowledgement. *)
+		FrameworkError(Reason := 'Command changed while owner applied it');
+		Exchange.Accepted := FALSE;
+		Exchange.Rejection := 'Command producer violated acknowledgement contract';
+	END_IF
+	_lastPublicRequest := MAX(_lastPublicRequest, _request);
+END_IF
+IF _controlledMode THEN ExecuteRun(Mode := E_CoUnitRunMode.ALL_SUITES, Delay := T#0ms); END_IF
+Exchange.Status.SchemaVersion := 2;
+Exchange.Status.FrameworkVersion := '2.1.0.6';
+Exchange.Status.RunId := _publicRunId;
+Exchange.Status.BuildId := _publicBuildId;
+Exchange.Status.TargetId := _publicTargetId;
+Exchange.Status.Generation := _generation;
+Exchange.Status.State := RunState;
+Exchange.Status.Disposition := RunDisposition;
+Exchange.Status.CatalogReady := _catalogReady;
+Exchange.Status.SelectionFrozen := _startRequested;
+Exchange.Status.CancelRequested := _cancelRequested;
+Exchange.Status.CleanupIncomplete := _cleanupIncomplete;
+Exchange.Status.ExecutionComplete := RunState = E_CoUnitRunState.FINALIZING OR RunState = E_CoUnitRunState.COMPLETE;
+Exchange.Status.ResultsAvailable := SnapshotReady;
+Exchange.Status.SuiteCount := SuiteCount;
+Exchange.Status.SelectedCount := _selectedCount;
+Exchange.Status.ActiveSuite := _lastProgressSuite;
+Exchange.Status.ActiveCase := _lastProgressCase;
+Exchange.Status.Phase := _lastProgressPhase;
+Exchange.Status.StepId := _lastProgressStep;
+Exchange.Status.LastProgressAt := _lastProgressAt;
+Exchange.Status.TotalCount := _publicTotal;
+Exchange.Status.StartedCount := _publicStarted;
+Exchange.Status.PassedCount := _publicPassed;
+Exchange.Status.FailedCount := _publicFailed;
+Exchange.Status.SkippedCount := _publicSkipped;
+Exchange.Status.ErrorCount := _publicErrors;
+Exchange.Status.XmlPhase := xUnitXmlPublisher.GetPhase();
+Exchange.Status.XmlFileError := xUnitXmlPublisher.GetLastFileError();
+Exchange.Status.XmlCleanupWarning := xUnitXmlPublisher.GetCleanupWarning();
+Exchange.Status.JsonPhase := DiagnosticJsonPublisher.GetPhase();
+Exchange.Status.JsonFileError := DiagnosticJsonPublisher.GetLastFileError();
+Exchange.Status.JsonCleanupWarning := DiagnosticJsonPublisher.GetCleanupWarning();
+Exchange.Status.ProgressEpoch := _progressEpoch;
+Exchange.Status.XmlState := xUnitXmlPublisher.GetReportState();
+Exchange.Status.JsonState := DiagnosticJsonPublisher.GetReportState();
+Exchange.Status.Reason := FrameworkErrorReason;
+
+(* Publish acknowledgement after the complete response/status page. *)
+IF Exchange.AckId <> _request THEN Exchange.AckId := _request; END_IF

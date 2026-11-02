@@ -1,0 +1,20 @@
+IF BeginCase(Handle := _hCustom) THEN
+	CustomEffects := CustomEffects + 1;
+	AssertResult(Passed := FALSE, CheckId := 'domain/limit', Message := 'custom failure', ExpectedText := 'limit=10', ActualText := 'limit=12', Detail := 'first failed custom assertion');
+	TEST_FINISHED();
+END_IF
+IF BeginCase(Handle := _hFloat) THEN
+	FloatEffects := FloatEffects + 1;
+	MEMCPY(destAddr := ADR(_expectedFloat), srcAddr := ADR(_expectedBits), n := SIZEOF(_expectedFloat));
+	MEMCPY(destAddr := ADR(_actualFloat), srcAddr := ADR(_actualBits), n := SIZEOF(_actualFloat));
+	AssertEquals_REAL(Expected := _expectedFloat, Actual := _actualFloat, Delta := 0.0, Message := 'adjacent finite REAL values');
+	TEST_FINISHED();
+END_IF
+IF BeginCase(Handle := _hString) THEN
+	_expectedPtr := ADR(_expected); _actualPtr := ADR(_actual);
+	FOR _i := 0 TO 299 DO _expectedPtr[_i] := BYTE#16#41; _actualPtr[_i] := BYTE#16#41; END_FOR
+	_expectedPtr[300] := 0; _actualPtr[300] := 0; _actualPtr[299] := BYTE#16#42;
+	StringEffects := StringEffects + 1;
+	AssertEquals(Expected := _expected, Actual := _actual, Message := 'late long string mismatch');
+	TEST_FINISHED();
+END_IF

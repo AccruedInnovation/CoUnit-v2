@@ -1,0 +1,10 @@
+TYPE ST_CoUnitFixtureKey :
+STRUCT
+	RunId : STRING(63);
+	SuiteId : STRING(63);
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	AttemptId : STRING(63);
+	StepId : STRING(63);
+END_STRUCT
+END_TYPE

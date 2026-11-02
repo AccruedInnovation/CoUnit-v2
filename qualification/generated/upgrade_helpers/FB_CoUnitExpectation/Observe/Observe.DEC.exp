@@ -1,0 +1,7 @@
+METHOD PUBLIC Observe : E_CoUnitTemporalResult
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+	Condition : BOOL;
+	Cancel : BOOL;
+END_VAR

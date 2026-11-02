@@ -1,0 +1,14 @@
+AppendTestStatus := FALSE;
+CASE State OF
+	E_CoUnitTestState.OPEN:
+		Fail(Operation := 'nonterminal snapshot test');
+	E_CoUnitTestState.PASSED:
+		AppendTestStatus := AppendJsonString(Value := 'passed');
+	E_CoUnitTestState.FAILED:
+		AppendTestStatus := AppendJsonString(Value := 'failure');
+	E_CoUnitTestState.SKIPPED:
+		AppendTestStatus := AppendJsonString(Value := 'skipped');
+	E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR:
+		AppendTestStatus := AppendJsonString(Value := 'error');
+ELSE Fail(Operation := 'nonterminal snapshot test');
+END_CASE

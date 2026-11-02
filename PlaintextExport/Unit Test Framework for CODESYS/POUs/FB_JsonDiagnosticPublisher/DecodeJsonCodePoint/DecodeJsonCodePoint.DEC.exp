@@ -1,0 +1,12 @@
+METHOD PRIVATE DecodeJsonCodePoint : UDINT
+VAR_INPUT
+	Bytes : POINTER TO BYTE;
+	Index : UINT;
+	TextMode : E_CoUnitTextMode;
+END_VAR
+VAR_OUTPUT
+	Taken : UINT;
+END_VAR
+VAR
+	_cp : UDINT;
+END_VAR

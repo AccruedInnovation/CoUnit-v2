@@ -1,0 +1,19 @@
+ValidateCanonicalPath := FALSE;
+PathKind := 0;
+_p := ADR(Path);
+IF _p[0] = 0 THEN RETURN; END_IF
+FOR _length := 0 TO 244 DO
+	IF _p[_length] = 0 THEN _terminated := TRUE; EXIT; END_IF
+END_FOR
+IF NOT _terminated THEN RETURN; END_IF
+IF NOT ValidatePathRoot(PathBytes := _p, Length := _length, PathKind => PathKind, Separator => _separator,
+	SegmentStart => _segmentStart) THEN RETURN; END_IF
+FOR _i := 0 TO 244 DO
+	IF _i > _length THEN EXIT; END_IF
+	IF _i >= _segmentStart THEN
+		IF _i = _length THEN _byte := 0; ELSE _byte := _p[_i]; END_IF
+		IF NOT ValidatePathPart(PathBytes := _p, Position := _i, CurrentByte := _byte,
+			SegmentStart := _segmentStart, Separator := _separator) THEN RETURN; END_IF
+	END_IF
+END_FOR
+ValidateCanonicalPath := TRUE;

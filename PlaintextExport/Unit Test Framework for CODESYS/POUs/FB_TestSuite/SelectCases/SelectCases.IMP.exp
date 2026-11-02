@@ -1,0 +1,8 @@
+SelectCases := 0;
+IF NOT _catalogFrozen OR HasBeenInvoked THEN RETURN; END_IF
+FOR _i := 1 TO NumberOfTests DO
+	TestRecords[_i].Selected := (LEN(CaseId) = 0 OR TestRecords[_i].CaseId = CaseId) AND
+		(LEN(RowKey) = 0 OR TestRecords[_i].RowKey = RowKey) AND
+		(LEN(Tag) = 0 OR FIND(CONCAT(CONCAT('|', TestRecords[_i].Tags), '|'), CONCAT(CONCAT('|', Tag), '|')) > 0);
+	IF TestRecords[_i].Selected THEN SelectCases := SelectCases + 1; END_IF
+END_FOR

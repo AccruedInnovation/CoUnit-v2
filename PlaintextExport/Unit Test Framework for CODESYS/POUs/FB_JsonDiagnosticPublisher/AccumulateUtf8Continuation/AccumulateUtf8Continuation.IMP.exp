@@ -1,0 +1,11 @@
+AccumulateUtf8Continuation := FALSE;
+Taken := 1;
+FOR _j := 1 TO 3 DO
+	IF _j >= Required THEN EXIT; END_IF
+	IF Index + _j >= 255 THEN RETURN; END_IF
+	IF Bytes[Index + _j] = 0 THEN RETURN; END_IF
+	IF (Bytes[Index + _j] AND 16#C0) <> 16#80 THEN RETURN; END_IF
+	CodePoint := DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(CodePoint), 6) OR UDINT_TO_DWORD(BYTE_TO_UDINT(Bytes[Index + _j] AND 16#3F)));
+	Taken := Taken + 1;
+END_FOR
+AccumulateUtf8Continuation := TRUE;

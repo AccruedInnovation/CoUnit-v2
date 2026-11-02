@@ -1,0 +1,5 @@
+CONFIGURE_LEGACY_RUN := GVL_coUnit.coUnitRunner.ConfigureLegacyRun(
+	RunId := RunId,
+	BuildId := BuildId,
+	TargetId := TargetId,
+	InSequence := InSequence);

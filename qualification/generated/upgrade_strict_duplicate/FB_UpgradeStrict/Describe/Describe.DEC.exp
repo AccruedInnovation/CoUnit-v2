@@ -1,0 +1,6 @@
+METHOD Describe
+VAR
+	_ok : BOOL;
+	_h1 : UINT;
+	_h2 : UINT;
+END_VAR

@@ -1,0 +1,4 @@
+METHOD INTERNAL OnCaseTerminal
+VAR_INPUT
+	State : E_CoUnitTestState;
+END_VAR

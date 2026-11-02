@@ -1,0 +1,24 @@
+{attribute 'hide_all_locals'}
+FUNCTION_BLOCK FB_JsonDiagnosticPublisher IMPLEMENTS I_TestResultLogger
+VAR
+	_file : FB_CoUnitReportFile;
+	_buffer : ARRAY[0..255] OF BYTE;
+	_used : UDINT;
+	_writtenBytes : ULINT;
+	_state : E_CoUnitReportState := E_CoUnitReportState.PENDING;
+	_phase : UINT;
+	_suiteIndex : UINT := 1;
+	_testIndex : UINT := 1;
+	_path : T_MaxString;
+	_stage : T_MaxString;
+	_backup : T_MaxString;
+	_textMode : E_CoUnitTextMode;
+	_enabled : BOOL;
+	_configured : BOOL;
+	_movedCurrent : BOOL;
+	_paused : BOOL;
+	_pauseAfter : UINT;
+	_lastError : UDINT;
+	_cleanupWarning : BOOL;
+	_flushUnsupported : BOOL;
+END_VAR

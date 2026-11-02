@@ -1,0 +1,16 @@
+METHOD PRIVATE ValidateCanonicalPath : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+END_VAR
+VAR_OUTPUT
+	PathKind : UINT;
+END_VAR
+VAR
+	_p : POINTER TO BYTE;
+	_i : UINT;
+	_length : UINT;
+	_segmentStart : UINT;
+	_separator : BYTE;
+	_byte : BYTE;
+	_terminated : BOOL;
+END_VAR

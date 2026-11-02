@@ -1,0 +1,3 @@
+ServiceSnapshot := FALSE;
+ServiceSnapshotWork(Snapshot := Snapshot);
+ServiceSnapshot := _state = E_CoUnitReportState.WRITTEN;

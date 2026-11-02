@@ -5,8 +5,9 @@ END_VAR
 VAR
 	_s : UINT;
 	_t : UINT;
+	_work : UINT;
+	_budget : UINT;
 	_suite : POINTER TO FB_TestSuite;
-	_record : ST_CoUnitTestRecord;
-	_ok : BOOL;
+	_record : POINTER TO ST_CoUnitTestRecord;
 	_sealedDisposition : E_CoUnitRunDisposition;
 END_VAR

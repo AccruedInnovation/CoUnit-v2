@@ -1,0 +1,31 @@
+MapWindows1252CodePoint := CodePoint;
+CASE CodePoint OF
+	16#80: MapWindows1252CodePoint := 16#20AC;
+	16#82: MapWindows1252CodePoint := 16#201A;
+	16#83: MapWindows1252CodePoint := 16#0192;
+	16#84: MapWindows1252CodePoint := 16#201E;
+	16#85: MapWindows1252CodePoint := 16#2026;
+	16#86: MapWindows1252CodePoint := 16#2020;
+	16#87: MapWindows1252CodePoint := 16#2021;
+	16#88: MapWindows1252CodePoint := 16#02C6;
+	16#89: MapWindows1252CodePoint := 16#2030;
+	16#8A: MapWindows1252CodePoint := 16#0160;
+	16#8B: MapWindows1252CodePoint := 16#2039;
+	16#8C: MapWindows1252CodePoint := 16#0152;
+	16#8E: MapWindows1252CodePoint := 16#017D;
+	16#91: MapWindows1252CodePoint := 16#2018;
+	16#92: MapWindows1252CodePoint := 16#2019;
+	16#93: MapWindows1252CodePoint := 16#201C;
+	16#94: MapWindows1252CodePoint := 16#201D;
+	16#95: MapWindows1252CodePoint := 16#2022;
+	16#96: MapWindows1252CodePoint := 16#2013;
+	16#97: MapWindows1252CodePoint := 16#2014;
+	16#98: MapWindows1252CodePoint := 16#02DC;
+	16#99: MapWindows1252CodePoint := 16#2122;
+	16#9A: MapWindows1252CodePoint := 16#0161;
+	16#9B: MapWindows1252CodePoint := 16#203A;
+	16#9C: MapWindows1252CodePoint := 16#0153;
+	16#9E: MapWindows1252CodePoint := 16#017E;
+	16#9F: MapWindows1252CodePoint := 16#0178;
+ELSE MapWindows1252CodePoint := 16#FFFD;
+END_CASE

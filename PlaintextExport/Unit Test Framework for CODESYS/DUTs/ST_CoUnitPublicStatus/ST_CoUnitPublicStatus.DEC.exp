@@ -1,0 +1,41 @@
+TYPE ST_CoUnitPublicStatus :
+STRUCT
+	SchemaVersion : UINT := 2;
+	FrameworkVersion : STRING(15) := '2.1.0.6';
+	RunId : STRING(63);
+	BuildId : STRING(64);
+	TargetId : STRING(63);
+	Generation : ULINT;
+	State : E_CoUnitRunState;
+	Disposition : E_CoUnitRunDisposition;
+	CatalogReady : BOOL;
+	SelectionFrozen : BOOL;
+	CancelRequested : BOOL;
+	CleanupIncomplete : BOOL;
+	ExecutionComplete : BOOL;
+	ResultsAvailable : BOOL;
+	SuiteCount : UINT;
+	SelectedCount : UDINT;
+	ActiveSuite : UINT;
+	ActiveCase : UINT;
+	ProgressEpoch : ULINT;
+	Phase : E_CoUnitFixturePhase;
+	StepId : STRING(63);
+	LastProgressAt : LTIME;
+	TotalCount : UDINT;
+	StartedCount : UDINT;
+	PassedCount : UDINT;
+	FailedCount : UDINT;
+	SkippedCount : UDINT;
+	ErrorCount : UDINT;
+	XmlPhase : UINT;
+	XmlFileError : UDINT;
+	XmlCleanupWarning : BOOL;
+	JsonPhase : UINT;
+	JsonFileError : UDINT;
+	JsonCleanupWarning : BOOL;
+	XmlState : E_CoUnitReportState;
+	JsonState : E_CoUnitReportState;
+	Reason : T_MaxString;
+END_STRUCT
+END_TYPE

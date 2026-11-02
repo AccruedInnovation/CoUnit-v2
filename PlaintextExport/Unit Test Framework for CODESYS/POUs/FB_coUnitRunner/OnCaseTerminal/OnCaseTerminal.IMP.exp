@@ -1,0 +1,7 @@
+IF NOT _controlledMode THEN RETURN; END_IF
+CASE State OF
+	E_CoUnitTestState.PASSED: _publicPassed := _publicPassed + 1;
+	E_CoUnitTestState.FAILED: _publicFailed := _publicFailed + 1;
+	E_CoUnitTestState.SKIPPED: _publicSkipped := _publicSkipped + 1;
+	E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR: _publicErrors := _publicErrors + 1;
+END_CASE

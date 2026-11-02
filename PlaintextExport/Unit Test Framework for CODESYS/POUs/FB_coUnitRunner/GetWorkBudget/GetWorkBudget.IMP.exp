@@ -1,0 +1,1 @@
+GetWorkBudget := LIMIT(UINT#1, GVL_CoUnitReporting.RecordsPerScan, UINT#1024);

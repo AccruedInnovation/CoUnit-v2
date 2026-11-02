@@ -1,0 +1,21 @@
+BeginCase := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := FALSE, TestIndex => _unused, Execute => _execute) THEN RETURN; END_IF
+GVL_coUnit.coUnitRunner.SelectTest(Index := 0, Execute := FALSE, Name := '');
+IF NOT _catalogFrozen OR Handle = 0 OR Handle > NumberOfTests THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Invalid or unfrozen catalog handle');
+	RETURN;
+END_IF
+_epoch := GVL_coUnit.coUnitRunner.GetEpoch();
+IF TestRecords[Handle].LastSeenEpoch = _epoch THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Duplicate catalog case invocation in one scan');
+	RETURN;
+END_IF
+TestRecords[Handle].LastSeenEpoch := _epoch;
+TestRecords[Handle].InvocationOrdinal := 0;
+_execute := TestRecords[Handle].Selected AND TestRecords[Handle].State = E_CoUnitTestState.OPEN;
+IF _execute AND NOT TestRecords[Handle].Started THEN
+	TestRecords[Handle].Started := TRUE;
+	GVL_coUnit.coUnitRunner.MarkCaseStarted();
+END_IF
+GVL_coUnit.coUnitRunner.SelectTest(Index := Handle, Execute := _execute, Name := TestRecords[Handle].CanonicalName);
+BeginCase := _execute;

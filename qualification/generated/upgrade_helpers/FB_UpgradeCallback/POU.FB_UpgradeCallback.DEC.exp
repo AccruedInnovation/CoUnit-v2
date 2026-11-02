@@ -1,0 +1,10 @@
+FUNCTION_BLOCK FB_UpgradeCallback IMPLEMENTS I_CoUnitFixture
+VAR_INPUT
+	SetupCalls : UINT;
+	BodyCalls : UINT;
+	CleanupCalls : UINT;
+	SetupFailOn : UINT := 0;
+	SetupPassOn : UINT := 1;
+	BodyResult : E_CoUnitFixtureCallback := E_CoUnitFixtureCallback.PASSED;
+	CleanupResult : E_CoUnitFixtureCallback := E_CoUnitFixtureCallback.PASSED;
+END_VAR

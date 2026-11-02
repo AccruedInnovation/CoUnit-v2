@@ -1,0 +1,9 @@
+METHOD PRIVATE ServicePhaseSuite : BOOL
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR
+VAR
+	_exists : DINT;
+	_size : ULINT;
+	_flushResult : DINT;
+END_VAR

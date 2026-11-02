@@ -1,0 +1,25 @@
+IF NOT _active THEN Observe := E_CoUnitTemporalResult.REJECTED; RETURN; END_IF
+IF (Key.RunId <> _key.RunId) OR (Key.SuiteId <> _key.SuiteId) OR (Key.CaseId <> _key.CaseId)
+	OR (Key.RowKey <> _key.RowKey) OR (Key.AttemptId <> _key.AttemptId) OR (Key.StepId <> _key.StepId) THEN
+	Observe := E_CoUnitTemporalResult.REJECTED;
+	RETURN;
+END_IF
+Resolved := FALSE;
+IF State <> E_CoUnitTemporalResult.WAITING THEN Observe := State; RETURN; END_IF
+IF (Now < _lastNow) OR (Now < LTIME#0ns) THEN Observe := E_CoUnitTemporalResult.REJECTED; RETURN; END_IF
+_lastNow := Now;
+IF Cancel THEN
+	State := E_CoUnitTemporalResult.CANCELLED;
+ELSIF (_mode = E_CoUnitTemporalMode.EVENTUALLY_TRUE) OR (_mode = E_CoUnitTemporalMode.STEP) THEN
+	IF Now > _deadline THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Condition THEN State := E_CoUnitTemporalResult.PASSED;
+	ELSIF Now >= _deadline THEN State := E_CoUnitTemporalResult.FAILED; END_IF
+ELSIF _mode = E_CoUnitTemporalMode.REMAINS_TRUE THEN
+	IF NOT Condition THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Now >= _deadline THEN State := E_CoUnitTemporalResult.PASSED; END_IF
+ELSIF _mode = E_CoUnitTemporalMode.REMAINS_FALSE THEN
+	IF Condition THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Now >= _deadline THEN State := E_CoUnitTemporalResult.PASSED; END_IF
+END_IF
+IF State <> E_CoUnitTemporalResult.WAITING THEN Resolved := TRUE; END_IF
+Observe := State;

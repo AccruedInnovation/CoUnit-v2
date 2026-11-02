@@ -1,0 +1,11 @@
+METHOD INTERNAL TerminalizeOpenStep : BOOL
+VAR_INPUT
+	State : E_CoUnitTestState;
+	Budget : UINT;
+END_VAR
+VAR_OUTPUT
+	Consumed : UINT;
+END_VAR
+VAR
+	_index : UINT;
+END_VAR

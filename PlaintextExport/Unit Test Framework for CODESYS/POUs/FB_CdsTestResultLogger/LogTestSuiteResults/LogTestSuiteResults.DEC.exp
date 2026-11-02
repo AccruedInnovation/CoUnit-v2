@@ -3,5 +3,7 @@ VAR
 	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
 	_s : UINT;
 	_t : UINT;
+	_work : UINT;
+	_budget : UINT;
 	_text : T_MaxString;
 END_VAR

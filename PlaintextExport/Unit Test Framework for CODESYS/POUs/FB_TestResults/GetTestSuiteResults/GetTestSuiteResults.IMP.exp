@@ -1,1 +1,5 @@
-GetTestSuiteResults REF= TestSuiteResults;
+IF TestSuiteResults = 0 THEN
+	GetTestSuiteResults REF= 0;
+ELSE
+	GetTestSuiteResults REF= TestSuiteResults^;
+END_IF

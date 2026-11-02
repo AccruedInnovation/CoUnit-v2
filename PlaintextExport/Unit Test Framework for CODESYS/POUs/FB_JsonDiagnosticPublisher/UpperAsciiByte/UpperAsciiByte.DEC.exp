@@ -1,0 +1,4 @@
+METHOD PRIVATE UpperAsciiByte : BYTE
+VAR_INPUT
+	Value : BYTE;
+END_VAR

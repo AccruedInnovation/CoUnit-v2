@@ -1,0 +1,28 @@
+ValidateSnapshotSuite := FALSE;
+IF SuiteIndex = 0 OR SuiteIndex > Snapshot.SuiteCount OR
+	SuiteIndex > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
+IF Snapshot.Suites[SuiteIndex].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN RETURN; END_IF
+_passed := 0; _failed := 0; _skipped := 0; _errors := 0;
+FOR _testIndex := 1 TO Snapshot.Suites[SuiteIndex].Total DO
+	IF _testIndex = 0 OR _testIndex > Snapshot.Suites[SuiteIndex].Total OR
+		_testIndex > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN RETURN; END_IF
+	IF Snapshot.Suites[SuiteIndex].Tests[_testIndex].NumberOfAsserts > GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite THEN RETURN; END_IF
+	CASE Snapshot.Suites[SuiteIndex].Tests[_testIndex].State OF
+		E_CoUnitTestState.PASSED: _passed := _passed + 1;
+		E_CoUnitTestState.FAILED: _failed := _failed + 1;
+		E_CoUnitTestState.SKIPPED: _skipped := _skipped + 1;
+		E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR: _errors := _errors + 1;
+		E_CoUnitTestState.OPEN: RETURN;
+	ELSE
+		RETURN;
+	END_CASE
+	IF _testIndex = Snapshot.Suites[SuiteIndex].Total THEN EXIT; END_IF
+END_FOR
+IF _passed <> Snapshot.Suites[SuiteIndex].Passed OR _failed <> Snapshot.Suites[SuiteIndex].Failed OR
+	_skipped <> Snapshot.Suites[SuiteIndex].Skipped OR _errors <> Snapshot.Suites[SuiteIndex].Errors THEN RETURN; END_IF
+AllTotal := AllTotal + Snapshot.Suites[SuiteIndex].Total;
+AllPassed := AllPassed + _passed;
+AllFailed := AllFailed + _failed;
+AllSkipped := AllSkipped + _skipped;
+AllErrors := AllErrors + _errors;
+ValidateSnapshotSuite := TRUE;

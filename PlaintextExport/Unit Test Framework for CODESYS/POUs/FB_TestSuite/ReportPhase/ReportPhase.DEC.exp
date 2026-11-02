@@ -1,0 +1,9 @@
+METHOD ReportPhase : BOOL
+VAR_INPUT
+	Phase : E_CoUnitFixturePhase;
+	StepId : T_MaxString;
+END_VAR
+VAR
+	_index : UINT;
+	_execute : BOOL;
+END_VAR

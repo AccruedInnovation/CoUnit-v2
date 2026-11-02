@@ -1,0 +1,13 @@
+ValidatePathPart := FALSE;
+IF CurrentByte = 16#2F OR CurrentByte = 16#5C OR CurrentByte = 0 THEN
+	IF CurrentByte <> 0 THEN
+		IF Separator = 0 THEN Separator := CurrentByte; END_IF
+		IF Separator <> CurrentByte THEN RETURN; END_IF
+	END_IF
+	_segmentLength := Position - SegmentStart;
+	IF NOT ValidatePathSegment(PathBytes := PathBytes, Start := SegmentStart, Length := _segmentLength) THEN RETURN; END_IF
+	SegmentStart := Position + 1;
+	ValidatePathPart := TRUE;
+ELSE
+	ValidatePathPart := ValidatePathByte(Value := CurrentByte);
+END_IF

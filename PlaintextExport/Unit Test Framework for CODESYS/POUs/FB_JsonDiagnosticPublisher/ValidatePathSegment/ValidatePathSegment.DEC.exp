@@ -1,0 +1,6 @@
+METHOD PRIVATE ValidatePathSegment : BOOL
+VAR_INPUT
+	PathBytes : POINTER TO BYTE;
+	Start : UINT;
+	Length : UINT;
+END_VAR

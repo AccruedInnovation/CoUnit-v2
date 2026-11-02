@@ -1,0 +1,17 @@
+AppendCodePoint := FALSE;
+_bits := UDINT_TO_DWORD(Value);
+IF Value < 16#80 THEN
+	AppendCodePoint := AppendByte(Value := UDINT_TO_BYTE(Value));
+ELSIF Value < 16#800 THEN
+	IF NOT AppendByte(Value := DWORD_TO_BYTE(DWORD#16#C0 OR SHR(_bits, 6))) THEN RETURN; END_IF
+	AppendCodePoint := AppendContinuationByte(CodePoint := _bits, Shift := 0);
+ELSIF Value < 16#10000 THEN
+	IF NOT AppendByte(Value := DWORD_TO_BYTE(DWORD#16#E0 OR SHR(_bits, 12))) THEN RETURN; END_IF
+	IF NOT AppendContinuationByte(CodePoint := _bits, Shift := 6) THEN RETURN; END_IF
+	AppendCodePoint := AppendContinuationByte(CodePoint := _bits, Shift := 0);
+ELSE
+	IF NOT AppendByte(Value := DWORD_TO_BYTE(DWORD#16#F0 OR SHR(_bits, 18))) THEN RETURN; END_IF
+	IF NOT AppendContinuationByte(CodePoint := _bits, Shift := 12) THEN RETURN; END_IF
+	IF NOT AppendContinuationByte(CodePoint := _bits, Shift := 6) THEN RETURN; END_IF
+	AppendCodePoint := AppendContinuationByte(CodePoint := _bits, Shift := 0);
+END_IF

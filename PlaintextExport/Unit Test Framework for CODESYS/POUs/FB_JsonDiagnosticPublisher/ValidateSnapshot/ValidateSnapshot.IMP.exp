@@ -1,0 +1,15 @@
+ValidateSnapshot := FALSE;
+IF NOT Snapshot.IsValid OR Snapshot.SuiteCount > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
+IF Snapshot.Disposition <> E_CoUnitRunDisposition.NORMAL AND Snapshot.Disposition <> E_CoUnitRunDisposition.ABORTED AND
+	Snapshot.Disposition <> E_CoUnitRunDisposition.FRAMEWORK_ERROR THEN RETURN; END_IF
+_total := 0; _allPassed := 0; _allFailed := 0; _allSkipped := 0; _allErrors := 0;
+FOR _s := 1 TO GVL_Param_coUnit.MaxNumberOfTestSuites DO
+	IF _s > Snapshot.SuiteCount THEN EXIT; END_IF
+	IF _s = 0 OR _s > Snapshot.SuiteCount OR _s > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
+	IF NOT ValidateSnapshotSuite(Snapshot := Snapshot, SuiteIndex := _s, AllTotal := _total,
+		AllPassed := _allPassed, AllFailed := _allFailed, AllSkipped := _allSkipped, AllErrors := _allErrors) THEN RETURN; END_IF
+	IF _s = Snapshot.SuiteCount THEN EXIT; END_IF
+END_FOR
+ValidateSnapshot := (_total = Snapshot.Total) AND (_allPassed = Snapshot.Passed) AND
+	(_allFailed = Snapshot.Failed) AND (_allSkipped = Snapshot.Skipped) AND (_allErrors = Snapshot.Errors) AND
+	(Snapshot.Total = Snapshot.Passed + Snapshot.Failed + Snapshot.Skipped + Snapshot.Errors);

@@ -1,0 +1,7 @@
+METHOD PUBLIC Start : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Mode : E_CoUnitTemporalMode;
+	Now : LTIME;
+	Duration : LTIME;
+END_VAR

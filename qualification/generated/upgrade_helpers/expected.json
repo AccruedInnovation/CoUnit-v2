@@ -1,0 +1,31 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "checks": {
+    "temporal_boundary_pass": true,
+    "stale_key_rejected_without_state_change": true,
+    "resolved_pulse_once": true,
+    "terminal_state_stable": true,
+    "completed_key_restart_rejected": true,
+    "hold_violation_at_deadline_fails": true,
+    "hold_true_passes_at_deadline": true,
+    "named_step_passes_on_true": true,
+    "late_eventual_true_fails": true,
+    "hold_true_overshoot_passes": true,
+    "hold_false_overshoot_passes": true,
+    "fixture_binding_stable": true,
+    "null_binding_rejected": true,
+    "invalid_binding_rejected": true,
+    "cancel_resolves_cancelled": true,
+    "setup_failure_suppresses_body": true,
+    "partial_setup_runs_cleanup": true,
+    "primary_body_failure_survives_cleanup_failure": true,
+    "cleanup_budget_reports_incomplete": true,
+    "completed_fixture_key_restart_rejected": true,
+    "late_setup_success_not_invoked": true,
+    "late_cleanup_success_not_invoked": true,
+    "exact_phase_deadline_success_allowed": true
+  },
+  "failed_check": 0
+}

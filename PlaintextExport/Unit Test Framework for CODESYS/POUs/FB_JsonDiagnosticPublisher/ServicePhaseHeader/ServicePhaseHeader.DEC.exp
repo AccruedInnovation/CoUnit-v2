@@ -1,0 +1,7 @@
+METHOD PRIVATE ServicePhaseHeader : BOOL
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR
+VAR
+	_dispositionText : T_MaxString;
+END_VAR

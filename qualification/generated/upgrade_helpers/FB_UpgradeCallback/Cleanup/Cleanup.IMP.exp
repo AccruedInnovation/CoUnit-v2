@@ -1,0 +1,2 @@
+CleanupCalls := CleanupCalls + 1;
+Cleanup := CleanupResult;

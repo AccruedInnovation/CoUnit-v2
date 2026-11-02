@@ -1,0 +1,4 @@
+METHOD BindLegacyResults : BOOL
+VAR_IN_OUT
+	Destination : ST_TestSuiteResults;
+END_VAR

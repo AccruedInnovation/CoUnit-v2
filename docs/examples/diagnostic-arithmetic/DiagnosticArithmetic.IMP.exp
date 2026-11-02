@@ -1,0 +1,18 @@
+IF CoUnit.TEST_GUARDED(TestName := 'DiagnosticArithmetic') THEN
+	_phaseAccepted := ReportPhase(Phase := CoUnit.E_CoUnitFixturePhase.BODY,
+		StepId := 'arithmetic/observe');
+	AssertResult(Passed := _phaseAccepted, CheckId := 'progress/admission',
+		Message := 'Progress accepted in active test context',
+		ExpectedText := 'TRUE', ActualText := BOOL_TO_STRING(_phaseAccepted),
+		Detail := 'Before arithmetic observation');
+	_actual := DINT#6 * DINT#7;
+	AssertResult(Passed := _actual = DINT#42, CheckId := 'arithmetic/product',
+		Message := 'Multiplication result', ExpectedText := '42',
+		ActualText := DINT_TO_STRING(_actual), Detail := 'Sampled in this invocation');
+	_phaseAccepted := ReportPhase(Phase := CoUnit.E_CoUnitFixturePhase.COMPLETE,
+		StepId := 'arithmetic/complete');
+	AssertResult(Passed := _phaseAccepted, CheckId := 'progress/complete',
+		Message := 'Completion phase accepted', ExpectedText := 'TRUE',
+		ActualText := BOOL_TO_STRING(_phaseAccepted), Detail := 'Before TEST_FINISHED');
+	CoUnit.TEST_FINISHED();
+END_IF

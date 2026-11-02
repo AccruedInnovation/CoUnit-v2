@@ -1,0 +1,8 @@
+ServicePhaseAdvanceSuite := FALSE;
+IF _suiteIndex = 0 OR _suiteIndex > GVL_Param_coUnit.MaxNumberOfTestSuites THEN
+	Fail(Operation := 'suite index outside snapshot bounds');
+	RETURN;
+END_IF
+_suiteIndex := _suiteIndex + 1;
+_phase := 2;
+ServicePhaseAdvanceSuite := TRUE;

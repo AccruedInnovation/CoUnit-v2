@@ -1,0 +1,1 @@
+COUNIT_CANCELLED := GVL_coUnit.coUnitRunner.IsCancelRequested();

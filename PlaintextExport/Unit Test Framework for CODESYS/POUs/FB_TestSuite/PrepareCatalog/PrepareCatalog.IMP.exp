@@ -1,0 +1,39 @@
+PrepareCatalog := FALSE;
+IF _catalogFrozen THEN PrepareCatalog := TRUE; RETURN; END_IF
+IF GVL_coUnit.coUnitRunner.GetRunState() <> E_CoUnitRunState.IDLE THEN RETURN; END_IF
+IF NOT _catalogPreparing THEN
+	IF HasBeenInvoked OR NumberOfTests <> 0 THEN
+		GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Catalog must precede body execution');
+		RETURN;
+	END_IF
+	_catalogPreparing := TRUE;
+	_catalogMode := TRUE;
+	_strictDefinitions := TRUE;
+END_IF
+IF GVL_coUnit.coUnitRunner.GetRunState() <> E_CoUnitRunState.IDLE THEN
+	_catalogPreparing := FALSE;
+	RETURN;
+END_IF
+_catalogDeclaring := TRUE;
+_catalogIncremental := TRUE;
+_catalogCallsThisStep := 0;
+PrepareCatalog := DescribeNext();
+_catalogDeclaring := FALSE;
+_catalogIncremental := FALSE;
+IF GVL_coUnit.coUnitRunner.GetRunState() <> E_CoUnitRunState.IDLE THEN
+	_catalogPreparing := FALSE;
+	PrepareCatalog := FALSE;
+	RETURN;
+END_IF
+IF LEN(_suiteId) = 0 THEN
+	_catalogPreparing := FALSE;
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Catalog suite omitted stable identity');
+	PrepareCatalog := FALSE;
+	RETURN;
+END_IF
+IF PrepareCatalog THEN
+	_catalogFrozen := TRUE;
+	_catalogPreparing := FALSE;
+	RETURN;
+END_IF
+PrepareCatalog := FALSE;

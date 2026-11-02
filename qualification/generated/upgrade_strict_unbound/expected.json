@@ -1,0 +1,9 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "disposition": "FRAMEWORK_ERROR",
+  "reason": "Dynamic TEST cannot mutate a frozen catalog",
+  "configuration_accepted": true,
+  "start_accepted": true
+}

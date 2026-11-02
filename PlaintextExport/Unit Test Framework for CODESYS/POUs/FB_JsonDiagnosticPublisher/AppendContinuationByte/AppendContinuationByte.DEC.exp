@@ -1,0 +1,5 @@
+METHOD PRIVATE AppendContinuationByte : BOOL
+VAR_INPUT
+	CodePoint : DWORD;
+	Shift : UINT;
+END_VAR

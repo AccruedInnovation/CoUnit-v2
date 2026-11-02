@@ -1,6 +1,14 @@
 Canonical := F_RTrim(in := F_LTrim(in := Name));
-_lower := F_ToLCase(in := Canonical);
-Disabled := FIND(STR1 := _lower, STR2 := 'disabled_') = 1;
+Disabled := FALSE;
+IF LEN(Canonical) > 0 THEN
+	_lower := LEFT(STR := Canonical, SIZE := 1);
+	IF (_lower = 'D') OR (_lower = 'd') THEN
+		IF LEN(Canonical) >= 9 THEN
+			_lower := F_ToLCase(in := LEFT(STR := Canonical, SIZE := 9));
+			Disabled := _lower = 'disabled_';
+		END_IF
+	END_IF
+END_IF
 IF Disabled THEN
 	Canonical := DELETE(STR := Canonical, LEN := 9, POS := 1);
 	Canonical := F_RTrim(in := F_LTrim(in := Canonical));

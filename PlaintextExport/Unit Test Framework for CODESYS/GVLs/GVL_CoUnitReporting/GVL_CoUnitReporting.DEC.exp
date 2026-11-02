@@ -1,5 +1,9 @@
 {attribute 'qualified_only'}
 VAR_GLOBAL
+	(* Framework finalization and log records serviced per owner invocation. *)
+	RecordsPerScan : UINT := 16;
+	(* Ordinary output is summaries plus non-passing cases. *)
+	LogPassedCases : BOOL := FALSE;
 	(* Set once by the accepted run owner from compiler-encoded bytes. *)
 	{attribute 'hide'}
 	StringEncodingMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;

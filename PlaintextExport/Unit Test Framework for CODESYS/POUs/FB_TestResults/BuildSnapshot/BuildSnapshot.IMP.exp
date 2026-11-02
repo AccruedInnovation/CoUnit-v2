@@ -1,79 +1,129 @@
 BuildSnapshot := _snapshot.IsValid;
-IF _buildAttempted THEN RETURN; END_IF
-_buildAttempted := TRUE;
-IF GVL_CoUnitReporting.InjectSnapshotBuildFailure THEN
-	GVL_CoUnitReporting.InjectSnapshotBuildFailure := FALSE;
-	RETURN;
+IF _buildFinished THEN RETURN; END_IF
+IF NOT _buildAttempted THEN
+	_buildAttempted := TRUE;
+	IF GVL_CoUnitReporting.InjectSnapshotBuildFailure THEN
+		GVL_CoUnitReporting.InjectSnapshotBuildFailure := FALSE;
+		RejectSnapshot(); RETURN;
+	END_IF
+	IF Disposition = E_CoUnitRunDisposition.UNSET THEN RejectSnapshot(); RETURN; END_IF
+	_snapshot.RunId := GVL_coUnit.coUnitRunner.GetPublicRunId();
+	_snapshot.BuildId := GVL_coUnit.coUnitRunner.GetPublicBuildId();
+	_snapshot.TargetId := GVL_coUnit.coUnitRunner.GetPublicTargetId();
+	_snapshot.Generation := GVL_coUnit.coUnitRunner.GetPublicGeneration();
+	_snapshot.Disposition := Disposition;
+	_snapshot.SuiteCount := GVL_coUnit.coUnitRunner.GetSuiteCount();
+	IF _snapshot.SuiteCount > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RejectSnapshot(); RETURN; END_IF
+	_buildPhase := 1;
+	_buildSuite := 1;
+	_buildTest := 0;
 END_IF
-IF Disposition = E_CoUnitRunDisposition.UNSET THEN RETURN; END_IF
-_snapshot.Disposition := Disposition;
-_snapshot.SuiteCount := GVL_coUnit.coUnitRunner.GetSuiteCount();
-IF _snapshot.SuiteCount > GVL_Param_coUnit.MaxNumberOfTestSuites THEN RETURN; END_IF
-FOR _s := 1 TO _snapshot.SuiteCount DO
-	_suite := GVL_coUnit.coUnitRunner.GetSuite(Index := _s);
-	IF _suite = 0 THEN RETURN; END_IF
-	_snapshot.Suites[_s].Name := F_RemoveInstancePathAndProjectNameFromTestInstancePath(_suite^.GetInstancePath());
-	_snapshot.Suites[_s].Identity := _s - 1;
-	_snapshot.Suites[_s].Total := _suite^.GetNumberOfTests();
-	IF _snapshot.Suites[_s].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN RETURN; END_IF
-	FOR _t := 1 TO _snapshot.Suites[_s].Total DO
-		_ok := _suite^.GetCanonicalRecord(Index := _t, Record => _record);
-		IF NOT _ok OR NOT _record.InUse THEN RETURN; END_IF
-		IF _record.State = E_CoUnitTestState.PASSED AND _record.HasFailure THEN RETURN; END_IF
-		IF _record.State = E_CoUnitTestState.FAILED AND NOT _record.HasFailure THEN RETURN; END_IF
-		IF _record.MaxAssertionsPerInvocation > 65535 OR
-			_record.MaxAssertionsPerInvocation > GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite THEN RETURN; END_IF
-		_snapshot.Suites[_s].Tests[_t].Name := _record.CanonicalName;
-		_snapshot.Suites[_s].Tests[_t].ClassName := _snapshot.Suites[_s].Name;
-		_snapshot.Suites[_s].Tests[_t].State := _record.State;
-		_snapshot.Suites[_s].Tests[_t].NumberOfAsserts := UDINT_TO_UINT(_record.MaxAssertionsPerInvocation);
-		_snapshot.Suites[_s].Tests[_t].FirstFailure := _record.FirstFailure;
-		CASE _record.State OF
-			E_CoUnitTestState.PASSED: _snapshot.Suites[_s].Passed := _snapshot.Suites[_s].Passed + 1;
-			E_CoUnitTestState.FAILED: _snapshot.Suites[_s].Failed := _snapshot.Suites[_s].Failed + 1;
-			E_CoUnitTestState.SKIPPED: _snapshot.Suites[_s].Skipped := _snapshot.Suites[_s].Skipped + 1;
-			E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR: _snapshot.Suites[_s].Errors := _snapshot.Suites[_s].Errors + 1;
+_budget := GVL_coUnit.coUnitRunner.GetWorkBudget();
+_work := 0;
+WHILE _work < _budget AND NOT _buildFinished DO
+	_work := _work + 1;
+	IF _buildPhase = 1 THEN
+		IF _buildSuite > _snapshot.SuiteCount THEN
+			IF _snapshot.Total <> _snapshot.Passed + _snapshot.Failed + _snapshot.Skipped + _snapshot.Errors THEN RejectSnapshot(); RETURN; END_IF
+			_buildPhase := 2;
+			_buildSuite := 1;
+			_buildTest := 0;
+			IF TestSuiteResults <> 0 THEN
+				TestSuiteResults^.NumberOfTestSuites := _snapshot.SuiteCount;
+				TestSuiteResults^.NumberOfTestCases := _snapshot.Total;
+				TestSuiteResults^.NumberOfSuccessfulTestCases := _snapshot.Passed;
+				TestSuiteResults^.NumberOfFailedTestCases := _snapshot.Failed;
+			END_IF
 		ELSE
-			RETURN;
-		END_CASE
-	END_FOR
-	IF UINT_TO_UDINT(_snapshot.Suites[_s].Total) <> UINT_TO_UDINT(_snapshot.Suites[_s].Passed) +
-		_snapshot.Suites[_s].Failed + _snapshot.Suites[_s].Skipped + _snapshot.Suites[_s].Errors THEN RETURN; END_IF
-	_snapshot.Total := _snapshot.Total + _snapshot.Suites[_s].Total;
-	_snapshot.Passed := _snapshot.Passed + _snapshot.Suites[_s].Passed;
-	_snapshot.Failed := _snapshot.Failed + _snapshot.Suites[_s].Failed;
-	_snapshot.Skipped := _snapshot.Skipped + _snapshot.Suites[_s].Skipped;
-	_snapshot.Errors := _snapshot.Errors + _snapshot.Suites[_s].Errors;
-END_FOR
-IF _snapshot.Total <> _snapshot.Passed + _snapshot.Failed + _snapshot.Skipped + _snapshot.Errors THEN RETURN; END_IF
-TestSuiteResults.NumberOfTestSuites := _snapshot.SuiteCount;
-TestSuiteResults.NumberOfTestCases := _snapshot.Total;
-TestSuiteResults.NumberOfSuccessfulTestCases := _snapshot.Passed;
-TestSuiteResults.NumberOfFailedTestCases := _snapshot.Failed;
-FOR _s := 1 TO _snapshot.SuiteCount DO
-	TestSuiteResults.TestSuiteResults[_s].Name := _snapshot.Suites[_s].Name;
-	TestSuiteResults.TestSuiteResults[_s].Identity := _snapshot.Suites[_s].Identity;
-	TestSuiteResults.TestSuiteResults[_s].NumberOfTests := _snapshot.Suites[_s].Total;
-	TestSuiteResults.TestSuiteResults[_s].NumberOfFailedTests := _snapshot.Suites[_s].Failed;
-	FOR _t := 1 TO _snapshot.Suites[_s].Total DO
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].TestName := _snapshot.Suites[_s].Tests[_t].Name;
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].TestClassName := _snapshot.Suites[_s].Tests[_t].ClassName;
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].TestIsFailed := _snapshot.Suites[_s].Tests[_t].State = E_CoUnitTestState.FAILED;
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].TestIsSkipped := _snapshot.Suites[_s].Tests[_t].State = E_CoUnitTestState.SKIPPED;
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].NumberOfAsserts := _snapshot.Suites[_s].Tests[_t].NumberOfAsserts;
-		TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].FailureType := E_AssertionType.Type_UNDEFINED;
-		IF _snapshot.Suites[_s].Tests[_t].State = E_CoUnitTestState.FAILED AND _snapshot.Suites[_s].Tests[_t].FirstFailure.IsSet THEN
-			TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].FailureType := _snapshot.Suites[_s].Tests[_t].FirstFailure.AssertionType;
-			TestSuiteResults.TestSuiteResults[_s].TestCaseResults[_t].FailureMessage := _snapshot.Suites[_s].Tests[_t].FirstFailure.Message;
+			_s := UDINT_TO_UINT(_buildSuite);
+			_suite := GVL_coUnit.coUnitRunner.GetSuite(Index := _s);
+			IF _suite = 0 THEN RejectSnapshot(); RETURN; END_IF
+			IF _buildTest = 0 THEN
+				_snapshot.Suites[_s].SuiteId := _suite^.GetCatalogIdentity();
+				_snapshot.Suites[_s].Name := F_RemoveInstancePathAndProjectNameFromTestInstancePath(_suite^.GetInstancePath());
+				_snapshot.Suites[_s].Identity := _s - 1;
+				_snapshot.Suites[_s].Total := _suite^.GetNumberOfTests();
+				IF _snapshot.Suites[_s].Total > GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite THEN RejectSnapshot(); RETURN; END_IF
+				_buildTest := 1;
+			ELSIF _buildTest > _snapshot.Suites[_s].Total THEN
+				IF UINT_TO_UDINT(_snapshot.Suites[_s].Total) <> UINT_TO_UDINT(_snapshot.Suites[_s].Passed) + _snapshot.Suites[_s].Failed + _snapshot.Suites[_s].Skipped + _snapshot.Suites[_s].Errors THEN RejectSnapshot(); RETURN; END_IF
+				_snapshot.Total := _snapshot.Total + _snapshot.Suites[_s].Total;
+				_snapshot.Passed := _snapshot.Passed + _snapshot.Suites[_s].Passed;
+				_snapshot.Failed := _snapshot.Failed + _snapshot.Suites[_s].Failed;
+				_snapshot.Skipped := _snapshot.Skipped + _snapshot.Suites[_s].Skipped;
+				_snapshot.Errors := _snapshot.Errors + _snapshot.Suites[_s].Errors;
+				_buildSuite := _buildSuite + 1;
+				_buildTest := 0;
+			ELSE
+				_t := UDINT_TO_UINT(_buildTest);
+				_record := _suite^.GetCanonicalRecordRef(Index := _t);
+				IF _record = 0 OR_ELSE NOT _record^.InUse THEN RejectSnapshot(); RETURN; END_IF
+				IF _record^.State = E_CoUnitTestState.PASSED AND _record^.HasFailure THEN RejectSnapshot(); RETURN; END_IF
+				IF _record^.State = E_CoUnitTestState.FAILED AND NOT _record^.HasFailure THEN RejectSnapshot(); RETURN; END_IF
+				IF _record^.MaxAssertionsPerInvocation > 65535 OR _record^.MaxAssertionsPerInvocation > GVL_Param_coUnit.MaxNumberOfAssertsForEachTestSuite THEN RejectSnapshot(); RETURN; END_IF
+				_snapshot.Suites[_s].Tests[_t].CaseId := _record^.CaseId;
+				_snapshot.Suites[_s].Tests[_t].RowKey := _record^.RowKey;
+				_snapshot.Suites[_s].Tests[_t].Selected := _record^.Selected;
+				_snapshot.Suites[_s].Tests[_t].Started := _record^.Started;
+				_snapshot.Suites[_s].Tests[_t].Name REF= _record^.CanonicalName;
+				_snapshot.Suites[_s].Tests[_t].ClassName REF= _snapshot.Suites[_s].Name;
+				_snapshot.Suites[_s].Tests[_t].State := _record^.State;
+				_snapshot.Suites[_s].Tests[_t].NumberOfAsserts := UDINT_TO_UINT(_record^.MaxAssertionsPerInvocation);
+				_snapshot.Suites[_s].Tests[_t].CleanupOutcome := _record^.CleanupOutcome;
+				_snapshot.Suites[_s].Tests[_t].TerminationCause := _record^.TerminationCause;
+				_snapshot.Suites[_s].Tests[_t].LaterDetail REF= _record^.LaterDetail;
+				_snapshot.Suites[_s].Tests[_t].LaterDetailTruncated := _record^.LaterDetailTruncated;
+				_snapshot.Suites[_s].Tests[_t].FirstFailure REF= _record^.FirstFailure;
+				CASE _record^.State OF
+					E_CoUnitTestState.PASSED: _snapshot.Suites[_s].Passed := _snapshot.Suites[_s].Passed + 1;
+					E_CoUnitTestState.FAILED: _snapshot.Suites[_s].Failed := _snapshot.Suites[_s].Failed + 1;
+					E_CoUnitTestState.SKIPPED: _snapshot.Suites[_s].Skipped := _snapshot.Suites[_s].Skipped + 1;
+					E_CoUnitTestState.ABORTED, E_CoUnitTestState.ERROR: _snapshot.Suites[_s].Errors := _snapshot.Suites[_s].Errors + 1;
+				ELSE
+					RejectSnapshot(); RETURN;
+				END_CASE
+				_buildTest := _buildTest + 1;
+			END_IF
 		END_IF
-	END_FOR
-END_FOR
-IF GVL_CoUnitReporting.InjectSnapshotSealViolation THEN
-	GVL_CoUnitReporting.InjectSnapshotSealViolation := FALSE;
-	GVL_coUnit.coUnitRunner.SignalViolation();
-END_IF
-(* Seal the run against late integrity notifications before publishing immutable truth. *)
-IF NOT GVL_coUnit.coUnitRunner.SealSnapshot(Disposition => _sealedDisposition) THEN RETURN; END_IF
-_snapshot.Disposition := _sealedDisposition;
-_snapshot.IsValid := TRUE;
-BuildSnapshot := TRUE;
+	ELSIF _buildPhase = 2 THEN
+		IF TestSuiteResults = 0 OR _buildSuite > _snapshot.SuiteCount THEN
+			_buildPhase := 3;
+		ELSE
+			_s := UDINT_TO_UINT(_buildSuite);
+			IF _buildTest = 0 THEN
+				TestSuiteResults^.TestSuiteResults[_s].Name := _snapshot.Suites[_s].Name;
+				TestSuiteResults^.TestSuiteResults[_s].Identity := _snapshot.Suites[_s].Identity;
+				TestSuiteResults^.TestSuiteResults[_s].NumberOfTests := _snapshot.Suites[_s].Total;
+				TestSuiteResults^.TestSuiteResults[_s].NumberOfFailedTests := _snapshot.Suites[_s].Failed;
+				_buildTest := 1;
+			ELSIF _buildTest > _snapshot.Suites[_s].Total THEN
+				_buildSuite := _buildSuite + 1;
+				_buildTest := 0;
+			ELSE
+				_t := UDINT_TO_UINT(_buildTest);
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].TestName := _snapshot.Suites[_s].Tests[_t].Name;
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].TestClassName := _snapshot.Suites[_s].Tests[_t].ClassName;
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].TestIsFailed := _snapshot.Suites[_s].Tests[_t].State = E_CoUnitTestState.FAILED;
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].TestIsSkipped := _snapshot.Suites[_s].Tests[_t].State = E_CoUnitTestState.SKIPPED;
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].NumberOfAsserts := _snapshot.Suites[_s].Tests[_t].NumberOfAsserts;
+				TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].FailureType := E_AssertionType.Type_UNDEFINED;
+				IF _snapshot.Suites[_s].Tests[_t].FirstFailure.IsSet THEN
+					TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].FailureType := _snapshot.Suites[_s].Tests[_t].FirstFailure.AssertionType;
+					TestSuiteResults^.TestSuiteResults[_s].TestCaseResults[_t].FailureMessage := _snapshot.Suites[_s].Tests[_t].FirstFailure.Message;
+				END_IF
+				_buildTest := _buildTest + 1;
+			END_IF
+		END_IF
+	ELSE
+		IF GVL_CoUnitReporting.InjectSnapshotSealViolation THEN
+			GVL_CoUnitReporting.InjectSnapshotSealViolation := FALSE;
+			GVL_coUnit.coUnitRunner.SignalViolation();
+		END_IF
+		IF NOT GVL_coUnit.coUnitRunner.SealSnapshot(Disposition => _sealedDisposition) THEN RejectSnapshot(); RETURN; END_IF
+		_snapshot.Disposition := _sealedDisposition;
+		_snapshot.TerminationReason := GVL_coUnit.coUnitRunner.GetTerminationReason();
+		_snapshot.IsValid := TRUE;
+		_buildFinished := TRUE;
+	END_IF
+END_WHILE
+BuildSnapshot := _snapshot.IsValid;

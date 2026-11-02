@@ -1,0 +1,4 @@
+METHOD PUBLIC LogTestSuiteResults : BOOL
+VAR
+	_snapshot : REFERENCE TO ST_CoUnitRunSnapshot;
+END_VAR

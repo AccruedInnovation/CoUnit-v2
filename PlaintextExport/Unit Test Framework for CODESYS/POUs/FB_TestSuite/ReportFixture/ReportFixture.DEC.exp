@@ -1,0 +1,13 @@
+(* Record fixture lifecycle independently of the immutable first assertion.
+   Mark PENDING after entering setup; submit the terminal cleanup result before TEST_FINISHED. *)
+METHOD ReportFixture : BOOL
+VAR_INPUT
+	PrimaryCause : E_CoUnitFixtureCause;
+	CleanupOutcome : E_CoUnitFixtureOutcome;
+	Detail : T_MaxString;
+END_VAR
+VAR
+	_index : UINT;
+	_execute : BOOL;
+	_previous : E_CoUnitFixtureOutcome;
+END_VAR

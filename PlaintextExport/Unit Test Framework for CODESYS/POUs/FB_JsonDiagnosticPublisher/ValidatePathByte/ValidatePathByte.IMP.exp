@@ -1,0 +1,4 @@
+ValidatePathByte := FALSE;
+IF Value > 16#7F THEN RETURN; END_IF
+ValidatePathByte := (Value >= 16#41 AND Value <= 16#5A) OR (Value >= 16#61 AND Value <= 16#7A) OR
+	(Value >= 16#30 AND Value <= 16#39) OR Value = 16#2D OR Value = 16#5F OR Value = 16#2E;

@@ -1,1 +1,1 @@
-METHOD INTERNAL GetLastFileError : UDINT
+METHOD PUBLIC GetLastFileError : UDINT

@@ -1,0 +1,26 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+	SnapshotBytes : UDINT;
+END_VAR
+VAR
+	Exchange : ST_CoUnitExchange;
+	Suite : FB_UpgradeCatalog;
+	_step : UINT;
+	_request : ULINT;
+	_waiting : BOOL;
+	_configured : BOOL;
+	_listA : BOOL;
+	_listB : BOOL;
+	_listDisabled : BOOL;
+	_selected : BOOL;
+	_started : BOOL;
+	_rowAResult : BOOL;
+	_rowBResult : BOOL;
+	_disabledResult : BOOL;
+	_cancelRejected : BOOL;
+	_finalStatus : BOOL;
+	_epochBeforeCancel : ULINT;
+END_VAR

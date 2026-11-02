@@ -1,0 +1,10 @@
+EmitFailure := FALSE;
+IF NOT AppendLiteral(Value := '<failure') THEN RETURN; END_IF
+_type := CONCAT(STR1 := 'Type_', STR2 := F_AssertionTypeToString(AssertionType := Test.FirstFailure.AssertionType));
+IF NOT Attribute(Name := 'type', Value := _type) THEN RETURN; END_IF
+IF NOT Attribute(Name := 'message', Value := Test.FirstFailure.Message) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := '>Expected: ') THEN RETURN; END_IF
+IF NOT AppendEscaped(Value := Test.FirstFailure.ExpectedText) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := '&#10;Actual: ') THEN RETURN; END_IF
+IF NOT AppendEscaped(Value := Test.FirstFailure.ActualText) THEN RETURN; END_IF
+EmitFailure := AppendLiteral(Value := '</failure>');

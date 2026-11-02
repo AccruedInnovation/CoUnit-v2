@@ -1,0 +1,8 @@
+(* Configure identity for the next legacy RUN call from its owning task. *)
+FUNCTION CONFIGURE_LEGACY_RUN : BOOL
+VAR_INPUT
+	RunId : T_MaxString;
+	BuildId : T_MaxString;
+	TargetId : T_MaxString;
+	InSequence : BOOL;
+END_VAR

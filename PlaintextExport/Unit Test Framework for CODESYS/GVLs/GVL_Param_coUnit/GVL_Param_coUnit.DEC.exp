@@ -1,4 +1,5 @@
 {attribute 'qualified_only'}
+{attribute 'parameterlist'}
 VAR_GLOBAL CONSTANT
     MaxNumberOfTestSuites : UINT := 32;
     MaxNumberOfTestsForEachTestSuite : UINT := 2048;
@@ -21,6 +22,9 @@ VAR_GLOBAL CONSTANT
 
     (* Enable (TRUE) or disable (FALSE) publishing of the xUnit Xml report *)
     xUnitEnablePublish : BOOL := TRUE;
+
+    (* Optional diagnostic JSON publication is disabled unless explicitly requested per run. *)
+    DiagnosticJsonEnablePublish : BOOL := FALSE;
 
     (* Time delay between a test suite is finished and the execution of the next test suite starts
        if using RUN_IN_SEQUENCE() *)

@@ -1,0 +1,20 @@
+FUNCTION_BLOCK FB_UpgradeAssertions EXTENDS FB_TestSuite
+VAR_OUTPUT
+	CustomEffects : UINT;
+	FloatEffects : UINT;
+	StringEffects : UINT;
+END_VAR
+VAR
+	_hCustom : UINT;
+	_hFloat : UINT;
+	_hString : UINT;
+	_expectedBits : DWORD := DWORD#16#3F800000;
+	_actualBits : DWORD := DWORD#16#3F800001;
+	_expectedFloat : REAL;
+	_actualFloat : REAL;
+	_expected : STRING(300);
+	_actual : STRING(300);
+	_expectedPtr : POINTER TO BYTE;
+	_actualPtr : POINTER TO BYTE;
+	_i : UINT;
+END_VAR

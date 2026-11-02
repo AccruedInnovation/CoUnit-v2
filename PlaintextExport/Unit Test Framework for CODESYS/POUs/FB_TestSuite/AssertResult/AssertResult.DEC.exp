@@ -1,0 +1,16 @@
+METHOD PUBLIC AssertResult
+VAR_INPUT
+	Passed : BOOL;
+	CheckId : T_MaxString;
+	Message : T_MaxString;
+	ExpectedText : T_MaxString;
+	ActualText : T_MaxString;
+	Detail : T_MaxString;
+END_VAR
+VAR
+	_testIndex : UINT;
+	_ordinal : UDINT;
+	_result : ST_CoUnitComparisonResult;
+	_checkMessage : T_MaxString;
+	_truncated : BOOL;
+END_VAR

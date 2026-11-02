@@ -1,0 +1,1 @@
+IF _controlledMode THEN _publicStarted := _publicStarted + 1; END_IF

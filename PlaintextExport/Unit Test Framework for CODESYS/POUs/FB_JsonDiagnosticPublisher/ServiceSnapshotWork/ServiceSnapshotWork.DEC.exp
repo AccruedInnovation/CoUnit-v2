@@ -1,0 +1,4 @@
+METHOD PRIVATE ServiceSnapshotWork
+VAR_IN_OUT
+	Snapshot : ST_CoUnitRunSnapshot;
+END_VAR

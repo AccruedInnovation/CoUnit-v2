@@ -1,0 +1,38 @@
+ConfigureLegacyRun := FALSE;
+IF LEN(RunId) = 0 OR LEN(RunId) > 63 OR LEN(BuildId) = 0 OR LEN(BuildId) > 64 OR LEN(TargetId) = 0 OR LEN(TargetId) > 63 THEN RETURN; END_IF
+IF InSequence THEN
+	_runMode := E_CoUnitRunMode.IN_SEQUENCE;
+	_delay := GVL_Param_coUnit.TimeBetweenTestSuitesExecution;
+ELSE
+	_runMode := E_CoUnitRunMode.ALL_SUITES;
+	_delay := T#0ms;
+END_IF
+(* Bind the same task fence as RUN before applying any metadata mutation. *)
+IF NOT CoUnitTryGetTask(Handle => _handle) THEN
+	IF BoundTaskValid THEN
+		SignalViolation();
+	ELSE
+		_previous := TEST_AND_SET(InitialLookupDiagnosticClaim);
+		IF _previous = 0 THEN Diagnostic(Reason := 'Current task lookup failed before run start'); END_IF
+	END_IF
+	RETURN;
+END_IF
+IF NOT BoundTaskValid THEN
+	_previous := TEST_AND_SET(StartClaim);
+	IF _previous <> 0 THEN
+		SignalViolation();
+		RETURN;
+	END_IF
+	BoundTaskHandle := _handle;
+	BoundTaskValid := TRUE;
+	RunMode := _runMode;
+	DelayTime := _delay;
+END_IF
+IF NOT IsOwner() THEN RETURN; END_IF
+IF TopLevelActive OR _controlledMode OR _generation <> 0 OR RunState <> E_CoUnitRunState.IDLE OR Epoch <> 0 THEN RETURN; END_IF
+IF RunMode <> _runMode OR DelayTime <> _delay THEN RETURN; END_IF
+_publicRunId := RunId;
+_publicBuildId := BuildId;
+_publicTargetId := TargetId;
+_generation := 1;
+ConfigureLegacyRun := TRUE;

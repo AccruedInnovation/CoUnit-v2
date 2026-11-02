@@ -1,0 +1,10 @@
+AppendCounts := FALSE;
+IF NOT AppendLiteral(Value := '"tests":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UDINT_TO_STRING(Total)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"failures":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UDINT_TO_STRING(Failed)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"errors":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UDINT_TO_STRING(Errors)) THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := ',"skipped":') THEN RETURN; END_IF
+IF NOT AppendLiteral(Value := UDINT_TO_STRING(Skipped)) THEN RETURN; END_IF
+AppendCounts := TRUE;

@@ -1,0 +1,5 @@
+(* Optional allocation: Destination must outlive the complete run. Bind before RUN. *)
+FUNCTION BIND_LEGACY_RESULTS : BOOL
+VAR_IN_OUT
+	Destination : ST_TestSuiteResults;
+END_VAR

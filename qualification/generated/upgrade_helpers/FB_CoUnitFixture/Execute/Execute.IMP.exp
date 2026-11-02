@@ -1,0 +1,143 @@
+Execute := FALSE;
+IF Complete OR (Phase = E_CoUnitFixturePhase.IDLE) THEN RETURN; END_IF
+IF (Key.RunId <> _key.RunId) OR (Key.SuiteId <> _key.SuiteId) OR (Key.CaseId <> _key.CaseId)
+	OR (Key.RowKey <> _key.RowKey) OR (Key.AttemptId <> _key.AttemptId) OR (Key.StepId <> _key.StepId) THEN RETURN; END_IF
+IF (Now < LTIME#0ns) OR (Now < _lastNow) THEN RETURN; END_IF
+_lastNow := Now;
+IF Phase = E_CoUnitFixturePhase.CLEANUP THEN
+	IF Now > _cleanupDeadline THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+		Execute := TRUE;
+		RETURN;
+	END_IF
+	_callback := _fixture.Cleanup(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.PASSED;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSIF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.FAILED;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSIF Now >= _cleanupDeadline THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Now > PhaseDeadline THEN
+	PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+	IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSE
+		Phase := E_CoUnitFixturePhase.CLEANUP;
+		CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+		_cleanupDeadline := Now + _cleanupBudget;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Cancel THEN
+	PrimaryCause := E_CoUnitFixtureCause.CANCELLED;
+	IF _setupEntered THEN
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSE
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Phase = E_CoUnitFixturePhase.SETUP THEN
+	_setupEntered := TRUE;
+	_callback := _fixture.Setup(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		PrimaryCause := E_CoUnitFixtureCause.SETUP_FAILED;
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		IF Now > (LTIME#9223372036854775807ns - _phaseTimeout) THEN
+			PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+			IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+				CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+				Phase := E_CoUnitFixturePhase.COMPLETE;
+				Complete := TRUE;
+			ELSE
+				Phase := E_CoUnitFixturePhase.CLEANUP;
+				CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+				_cleanupDeadline := Now + _cleanupBudget;
+			END_IF
+		ELSE
+			Phase := E_CoUnitFixturePhase.BODY;
+			PhaseDeadline := Now + _phaseTimeout;
+		END_IF
+	ELSIF Now >= PhaseDeadline THEN
+		PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	END_IF
+ELSIF Phase = E_CoUnitFixturePhase.BODY THEN
+	_callback := _fixture.Body(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		PrimaryCause := E_CoUnitFixtureCause.BODY_FAILED;
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF Now >= PhaseDeadline THEN
+		PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+		IF Now > (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	END_IF
+END_IF
+Execute := TRUE;

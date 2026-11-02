@@ -1,0 +1,9 @@
+ReportPhase := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => _index, Execute => _execute) THEN RETURN; END_IF
+IF NOT _execute THEN RETURN; END_IF
+IF LEN(StepId) > 63 OR Phase < E_CoUnitFixturePhase.SETUP OR Phase > E_CoUnitFixturePhase.COMPLETE THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Invalid progress phase or step identity');
+	RETURN;
+END_IF
+GVL_coUnit.coUnitRunner.SetProgressPhase(Phase := Phase, StepId := StepId);
+ReportPhase := TRUE;

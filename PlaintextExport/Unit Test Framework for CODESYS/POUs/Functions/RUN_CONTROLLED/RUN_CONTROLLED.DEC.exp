@@ -1,0 +1,5 @@
+(* Call cyclically from exactly one task. Replaces RUN for the explicit catalog API. *)
+FUNCTION RUN_CONTROLLED
+VAR_IN_OUT
+	Exchange : ST_CoUnitExchange;
+END_VAR

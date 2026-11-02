@@ -1,6 +1,14 @@
 TYPE ST_CoUnitRunSnapshot :
 STRUCT
+	SchemaVersion : UINT := 2;
+	FrameworkVersion : STRING(15) := '2.1.0.6';
+	RunId : STRING(63);
+	BuildId : STRING(64);
+	TargetId : STRING(63);
+	Generation : ULINT;
+	ClockMode : STRING(15) := 'MONOTONIC';
 	IsValid : BOOL;
+	TerminationReason : T_MaxString;
 	Disposition : E_CoUnitRunDisposition;
 	SuiteCount : UINT;
 	Total : UDINT;

@@ -1,0 +1,9 @@
+AppendByte := FALSE;
+IF _state = E_CoUnitReportState.FAILED THEN RETURN; END_IF
+IF _used >= 256 THEN
+	IF NOT FlushChunk() THEN RETURN; END_IF
+END_IF
+IF _used >= 256 OR _used >= SIZEOF(_buffer) THEN Fail(Operation := 'chunk bound'); RETURN; END_IF
+_buffer[_used] := Value;
+_used := _used + 1;
+AppendByte := TRUE;

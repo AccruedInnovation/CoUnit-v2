@@ -1,0 +1,21 @@
+TerminalizeOpenStep := FALSE;
+Consumed := 0;
+IF State <> E_CoUnitTestState.ABORTED AND State <> E_CoUnitTestState.ERROR THEN RETURN; END_IF
+WHILE _terminalCursor <= NumberOfTests AND Consumed < Budget DO
+	_index := UDINT_TO_UINT(_terminalCursor);
+	IF TestRecords[_index].State = E_CoUnitTestState.OPEN THEN
+		IF TestRecords[_index].CleanupOutcome = E_CoUnitFixtureOutcome.PENDING THEN
+			TestRecords[_index].CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			TestRecords[_index].LaterDetail := 'Owner stopped before required cleanup completed';
+			GVL_coUnit.coUnitRunner.MarkCleanupIncomplete();
+		END_IF
+		TestRecords[_index].State := State;
+		GVL_coUnit.coUnitRunner.OnCaseTerminal(State := State);
+	END_IF
+	_terminalCursor := _terminalCursor + 1;
+	Consumed := Consumed + 1;
+END_WHILE
+IF _terminalCursor > NumberOfTests THEN
+	OrderedCursor := UINT_TO_UDINT(NumberOfOrderedTests) + 1;
+	TerminalizeOpenStep := TRUE;
+END_IF

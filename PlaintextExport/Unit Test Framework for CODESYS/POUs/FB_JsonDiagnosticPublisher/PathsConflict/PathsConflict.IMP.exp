@@ -1,0 +1,13 @@
+_left := ADR(LeftPath);
+_right := ADR(RightPath);
+PathsConflict := FALSE;
+FOR _i := 0 TO 255 DO
+	_leftByte := _left[_i];
+	_rightByte := _right[_i];
+	IF _leftByte >= 16#41 AND _leftByte <= 16#5A THEN _leftByte := UDINT_TO_BYTE(BYTE_TO_UDINT(_leftByte) + 16#20); END_IF
+	IF _rightByte >= 16#41 AND _rightByte <= 16#5A THEN _rightByte := UDINT_TO_BYTE(BYTE_TO_UDINT(_rightByte) + 16#20); END_IF
+	IF _leftByte = 16#2F THEN _leftByte := 16#5C; END_IF
+	IF _rightByte = 16#2F THEN _rightByte := 16#5C; END_IF
+	IF _leftByte <> _rightByte THEN RETURN; END_IF
+	IF _leftByte = 0 THEN PathsConflict := TRUE; RETURN; END_IF
+END_FOR

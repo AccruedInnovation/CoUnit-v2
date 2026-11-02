@@ -1,0 +1,11 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitTemporalResult :
+(
+	WAITING := 0,
+	PASSED,
+	FAILED,
+	CANCELLED,
+	REJECTED
+) BYTE;
+END_TYPE

@@ -1,0 +1,8 @@
+METHOD PRIVATE BuildPaths : BOOL
+VAR
+	_xmlPath : T_MaxString;
+	_xmlStage : T_MaxString;
+	_xmlBackup : T_MaxString;
+	_jsonPathKind : UINT;
+	_xmlPathKind : UINT;
+END_VAR

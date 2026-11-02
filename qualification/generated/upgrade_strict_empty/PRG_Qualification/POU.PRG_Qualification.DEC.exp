@@ -1,0 +1,15 @@
+PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	Exchange : ST_CoUnitExchange;
+	Suite : FB_UpgradeStrict;
+	_step : UINT;
+	_request : ULINT;
+	_waiting : BOOL;
+	_configAccepted : BOOL;
+	_startAccepted : BOOL;
+END_VAR

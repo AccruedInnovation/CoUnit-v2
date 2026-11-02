@@ -1,0 +1,9 @@
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureCallback :
+(
+	PENDING := 0,
+	PASSED,
+	FAILED
+) BYTE;
+END_TYPE

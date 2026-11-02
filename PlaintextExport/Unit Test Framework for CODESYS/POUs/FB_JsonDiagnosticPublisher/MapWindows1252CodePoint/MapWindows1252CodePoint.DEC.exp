@@ -1,0 +1,4 @@
+METHOD PRIVATE MapWindows1252CodePoint : UDINT
+VAR_INPUT
+	CodePoint : UDINT;
+END_VAR

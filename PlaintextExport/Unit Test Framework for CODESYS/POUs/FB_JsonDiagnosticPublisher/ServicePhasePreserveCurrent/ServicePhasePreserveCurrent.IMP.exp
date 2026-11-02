@@ -1,0 +1,12 @@
+ServicePhasePreserveCurrent := FALSE;
+_exists := _file.Probe(Path := _path, Size => _currentSize);
+IF _exists < 0 THEN Fail(Operation := 'probe current before commit'); RETURN; END_IF
+IF _exists = 1 THEN
+	IF NOT _file.Rename(OldPath := _path, NewPath := _backup) THEN
+		FailRecoveryArtifact(Size := _currentSize, Operation := 'preserve current', EmptyOperation := 'preserve empty current');
+		RETURN;
+	END_IF
+	_movedCurrent := TRUE;
+END_IF
+_phase := 7;
+ServicePhasePreserveCurrent := TRUE;

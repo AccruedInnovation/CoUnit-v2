@@ -1,0 +1,12 @@
+METHOD PRIVATE PathsConflict : BOOL
+VAR_INPUT
+	LeftPath : T_MaxString;
+	RightPath : T_MaxString;
+END_VAR
+VAR
+	_left : POINTER TO BYTE;
+	_right : POINTER TO BYTE;
+	_leftByte : BYTE;
+	_rightByte : BYTE;
+	_i : UINT;
+END_VAR

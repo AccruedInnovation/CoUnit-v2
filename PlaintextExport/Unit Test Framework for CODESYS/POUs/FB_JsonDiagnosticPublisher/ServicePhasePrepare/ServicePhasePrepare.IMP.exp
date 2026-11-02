@@ -1,0 +1,16 @@
+ServicePhasePrepare := FALSE;
+IF NOT BuildPaths() THEN
+	IF _state <> E_CoUnitReportState.FAILED THEN Fail(Operation := 'path byte capacity, canonical form, or conflict'); END_IF
+	RETURN;
+END_IF
+IF _textMode <> E_CoUnitTextMode.UTF8 AND _textMode <> E_CoUnitTextMode.LATIN1 AND
+	_textMode <> E_CoUnitTextMode.WINDOWS1252 THEN
+	Fail(Operation := 'STRING encoding is not bound');
+	RETURN;
+END_IF
+IF NOT ValidateSnapshot(Snapshot := Snapshot) THEN Fail(Operation := 'snapshot consistency'); RETURN; END_IF
+IF NOT Recover() THEN RETURN; END_IF
+IF NOT _file.OpenWrite(Path := _stage) THEN Fail(Operation := 'open staging'); RETURN; END_IF
+_state := E_CoUnitReportState.WRITING;
+_phase := 1;
+ServicePhasePrepare := TRUE;

@@ -1,0 +1,1 @@
+_h1 := DefineCase(CaseId := 'partial', Name := 'Defined before invalid suite identity', RowKey := '', Tags := '', Disabled := FALSE);

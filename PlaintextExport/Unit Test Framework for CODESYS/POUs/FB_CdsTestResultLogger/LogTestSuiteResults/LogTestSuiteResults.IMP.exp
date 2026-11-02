@@ -1,10 +1,19 @@
 IF _printed THEN LogTestSuiteResults := NOT _loggingFailed; RETURN; END_IF
 _snapshot REF= GVL_coUnit.coUnitRunner.GetSnapshot();
 IF NOT _snapshot.IsValid THEN RETURN; END_IF
-IF GVL_Param_coUnit.LogExtendedResults THEN
-	FOR _s := 1 TO _snapshot.SuiteCount DO
-		LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Suite: %s', _snapshot.Suites[_s].Name);
-		FOR _t := 1 TO _snapshot.Suites[_s].Total DO
+_budget := GVL_coUnit.coUnitRunner.GetWorkBudget();
+_work := 0;
+WHILE _logSuite <= _snapshot.SuiteCount AND _work < _budget DO
+	_work := _work + 1;
+	_s := UDINT_TO_UINT(_logSuite);
+	IF _logTest > _snapshot.Suites[_s].Total THEN
+		_logSuite := _logSuite + 1;
+		_logTest := 1;
+	ELSE
+		_t := UDINT_TO_UINT(_logTest);
+		IF GVL_Param_coUnit.LogExtendedResults AND
+			(GVL_CoUnitReporting.LogPassedCases OR _snapshot.Suites[_s].Tests[_t].State <> E_CoUnitTestState.PASSED) THEN
+			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Suite: %s', _snapshot.Suites[_s].Name);
 			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Test: %s', _snapshot.Suites[_s].Tests[_t].Name);
 			CASE _snapshot.Suites[_s].Tests[_t].State OF
 				E_CoUnitTestState.PASSED: _text := 'PASSED';
@@ -15,9 +24,11 @@ IF GVL_Param_coUnit.LogExtendedResults THEN
 			END_CASE
 			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| State: %s', _text);
 			LogLine(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), '| Assertions: %s', UINT_TO_STRING(_snapshot.Suites[_s].Tests[_t].NumberOfAsserts));
-		END_FOR
-	END_FOR
-END_IF
+		END_IF
+		_logTest := _logTest + 1;
+	END_IF
+END_WHILE
+IF _logSuite <= _snapshot.SuiteCount THEN RETURN; END_IF
 _text := CONCAT('Total=', UDINT_TO_STRING(_snapshot.Total));
 _text := CONCAT(_text, CONCAT(' Passed=', UDINT_TO_STRING(_snapshot.Passed)));
 _text := CONCAT(_text, CONCAT(' Failed=', UDINT_TO_STRING(_snapshot.Failed)));

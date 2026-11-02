@@ -1,3 +1,15 @@
+IF Execute AND Index > 0 THEN
+	IF (ActiveSuiteIndex <> _lastProgressSuite) OR (Index <> _lastProgressCase) THEN
+		_lastProgressSuite := ActiveSuiteIndex;
+		_lastProgressCase := Index;
+		_lastProgressPhase := E_CoUnitFixturePhase.BODY;
+		_lastProgressStep := '';
+		_lastProgressAt := LTIME();
+		IF _progressEpoch < ULINT#18446744073709551615 THEN
+			_progressEpoch := _progressEpoch + 1;
+		END_IF
+	END_IF
+END_IF
 ActiveTestIndex := Index;
 ShouldExecuteCurrentTest := Execute;
 GVL_coUnit.CurrentTestNameBeingCalled := Name;

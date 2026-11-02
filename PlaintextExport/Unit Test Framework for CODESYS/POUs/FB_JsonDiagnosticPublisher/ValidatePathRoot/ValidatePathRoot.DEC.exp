@@ -1,0 +1,13 @@
+METHOD PRIVATE ValidatePathRoot : BOOL
+VAR_INPUT
+	PathBytes : POINTER TO BYTE;
+	Length : UINT;
+END_VAR
+VAR_OUTPUT
+	PathKind : UINT;
+	Separator : BYTE;
+	SegmentStart : UINT;
+END_VAR
+VAR
+	_isLetter : BOOL;
+END_VAR

@@ -1,0 +1,52 @@
+SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+IF NOT _waiting THEN
+	CASE _step OF
+	0:
+		_request := _request + 1; Exchange.Operation := 1; Exchange.RunId := 'upgrade-run-1'; Exchange.BuildId := 'upgrade-build-1'; Exchange.TargetId := 'qualified-simulator';
+		Exchange.RunTimeout := T#10s; Exchange.CleanupTimeout := T#2s; Exchange.RequestId := _request; _waiting := TRUE;
+	1:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 1; Exchange.RequestId := _request; _waiting := TRUE;
+	2:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 2; Exchange.RequestId := _request; _waiting := TRUE;
+	3:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 3; Exchange.RequestId := _request; _waiting := TRUE;
+	4:
+		_request := _request + 1; Exchange.Operation := 2; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteId := 'upgrade'; Exchange.CaseId := 'row'; Exchange.RowKey := 'b'; Exchange.RequestId := _request; _waiting := TRUE;
+	5:
+		_request := _request + 1; Exchange.Operation := 3; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.ExpectedSelected := 1; Exchange.RequestId := _request; _waiting := TRUE;
+	6:
+		IF Exchange.Status.ExecutionComplete AND Exchange.Status.ResultsAvailable THEN
+			_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 1; Exchange.RequestId := _request; _waiting := TRUE; _step := 7;
+		ELSE _started := _started OR Exchange.Status.SelectionFrozen; END_IF
+	8:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 2; Exchange.RequestId := _request; _waiting := TRUE;
+	9:
+		_request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'upgrade-run-1'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 3; Exchange.RequestId := _request; _waiting := TRUE;
+	10:
+		_epochBeforeCancel := Exchange.Status.ProgressEpoch;
+		_request := _request + 1; Exchange.Operation := 4; Exchange.RunId := 'stale-run'; Exchange.ExpectedGeneration := 99; Exchange.RequestId := _request; _waiting := TRUE;
+	11:
+		_finalStatus := Exchange.Status.ExecutionComplete AND Exchange.Status.ResultsAvailable AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.NORMAL) AND (Exchange.Status.RunId = 'upgrade-run-1') AND (Exchange.Status.Generation = 1) AND Exchange.Status.SelectionFrozen;
+		OraclePass := _configured AND _listA AND _listB AND _listDisabled AND _selected AND _started AND _rowAResult AND _rowBResult AND _disabledResult AND _cancelRejected AND _finalStatus AND (Suite.RowAEffects = 0) AND (Suite.RowBEffects = 3) AND (Suite.DisabledEffects = 0) AND (Suite.RowBScans = 3);
+		FailedCheck := 0;
+		IF NOT _configured THEN FailedCheck := 1; ELSIF NOT _listA THEN FailedCheck := 2; ELSIF NOT _listB THEN FailedCheck := 3; ELSIF NOT _listDisabled THEN FailedCheck := 4; ELSIF NOT _selected THEN FailedCheck := 5; ELSIF NOT _started THEN FailedCheck := 6; ELSIF NOT _rowAResult THEN FailedCheck := 7; ELSIF NOT _rowBResult THEN FailedCheck := 8; ELSIF NOT _disabledResult THEN FailedCheck := 9; ELSIF NOT _cancelRejected THEN FailedCheck := 10; ELSIF NOT _finalStatus THEN FailedCheck := 11; ELSIF Suite.RowAEffects <> 0 THEN FailedCheck := 12; ELSIF Suite.RowBEffects <> 3 THEN FailedCheck := 13; ELSIF Suite.DisabledEffects <> 0 THEN FailedCheck := 14; ELSIF Suite.RowBScans <> 3 THEN FailedCheck := 15; END_IF
+		Done := TRUE;
+	END_CASE
+ELSE
+	IF Exchange.AckId = _request THEN
+		_waiting := FALSE;
+		CASE _step OF
+		0: _configured := Exchange.Accepted AND Exchange.Status.CatalogReady AND (Exchange.Status.Generation = 1); _step := 1;
+		1: _listA := Exchange.Accepted AND (Exchange.Page.RunId = 'upgrade-run-1') AND (Exchange.Page.Generation = 1) AND (Exchange.Page.SuiteId = 'upgrade') AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'a') AND (Exchange.Page.Name = 'RowA') AND Exchange.Page.Selected AND NOT Exchange.Page.Disabled AND (Suite.RowAEffects = 0); _step := 2;
+		2: _listB := Exchange.Accepted AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'b') AND (Exchange.Page.Name = 'RowB') AND Exchange.Page.Selected AND NOT Exchange.Page.Disabled AND (Suite.RowBEffects = 0); _step := 3;
+		3: _listDisabled := Exchange.Accepted AND (Exchange.Page.CaseId = 'row') AND (Exchange.Page.RowKey = 'disabled') AND (Exchange.Page.Name = 'Off') AND Exchange.Page.Selected AND Exchange.Page.Disabled AND (Suite.DisabledEffects = 0); _step := 4;
+		4: _selected := Exchange.Accepted AND (Exchange.Status.SelectedCount = 1); _step := 5;
+		5: _started := _started OR (Exchange.Accepted AND Exchange.Status.SelectionFrozen); _step := 6;
+		7: _rowAResult := Exchange.Accepted AND NOT Exchange.Page.Selected AND NOT Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.SKIPPED) AND (Suite.RowAEffects = 0); _step := 8;
+		8: _rowBResult := Exchange.Accepted AND Exchange.Page.Selected AND Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.PASSED) AND (Exchange.Page.MaxAssertionsPerInvocation = 1) AND (Suite.RowBEffects = 3) AND (Suite.RowBScans = 3); _step := 9;
+		9: _disabledResult := Exchange.Accepted AND NOT Exchange.Page.Selected AND Exchange.Page.Disabled AND NOT Exchange.Page.Started AND (Exchange.Page.State = E_CoUnitTestState.SKIPPED) AND (Suite.DisabledEffects = 0); _step := 10;
+		10: _cancelRejected := NOT Exchange.Accepted AND Exchange.Status.ExecutionComplete AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.NORMAL) AND (Exchange.Status.ProgressEpoch = _epochBeforeCancel) AND (Exchange.Status.RunId = 'upgrade-run-1') AND (Exchange.Status.Generation = 1); _step := 11;
+		END_CASE
+	END_IF
+END_IF
+RUN_CONTROLLED(Exchange := Exchange);

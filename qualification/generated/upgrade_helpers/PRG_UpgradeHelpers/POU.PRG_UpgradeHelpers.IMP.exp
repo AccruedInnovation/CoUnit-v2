@@ -1,0 +1,145 @@
+CASE _stage OF
+0:
+	_key.RunId := 'run-A'; _key.SuiteId := 'suite-A'; _key.CaseId := 'case-A'; _key.RowKey := 'row-A'; _key.AttemptId := 'attempt-A'; _key.StepId := 'eventually';
+	_staleKey := _key; _staleKey.StepId := 'stale';
+	_temporalBoundary := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#0ns, Duration := LTIME#10ns);
+	_stage := 1;
+1:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#5ns, Condition := FALSE, Cancel := FALSE);
+	_stage := 2;
+2:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#10ns, Condition := TRUE, Cancel := FALSE);
+	_temporalBoundary := _temporalBoundary AND (_temporalResult = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_pulseOnce := _temporal.Resolved;
+	_stage := 3;
+3:
+	_sameKeyRestartRejected := NOT _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#11ns, Duration := LTIME#1ns);
+	_temporalResult := _temporal.Observe(Key := _staleKey, Now := LTIME#11ns, Condition := FALSE, Cancel := FALSE);
+	_staleRejected := (_temporalResult = E_CoUnitTemporalResult.REJECTED) AND (_temporal.State = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#11ns, Condition := FALSE, Cancel := FALSE);
+	_stableTerminal := (_temporalResult = E_CoUnitTemporalResult.PASSED) AND NOT _temporal.Resolved;
+	_stage := 4;
+4:
+	_key.StepId := 'hold-false';
+	_holdFalseStarted := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_FALSE, Now := LTIME#20ns, Duration := LTIME#5ns);
+	_stage := 5;
+5:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#25ns, Condition := TRUE, Cancel := FALSE);
+	_holdViolationAtDeadline := _holdFalseStarted AND (_temporalResult = E_CoUnitTemporalResult.FAILED) AND _temporal.Resolved;
+	_key.StepId := 'hold-true';
+	_holdTrueBoundary := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_TRUE, Now := LTIME#30ns, Duration := LTIME#3ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#33ns, Condition := TRUE, Cancel := FALSE);
+	_holdTrueBoundary := _holdTrueBoundary AND (_temporalResult = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_key.StepId := 'named-step';
+	_stepPass := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.STEP, Now := LTIME#34ns, Duration := LTIME#5ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#35ns, Condition := TRUE, Cancel := FALSE);
+	_stepPass := _stepPass AND (_temporalResult = E_CoUnitTemporalResult.PASSED);
+	_key.StepId := 'late-eventually';
+	_lateEventuallyFails := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#36ns, Duration := LTIME#5ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#42ns, Condition := TRUE, Cancel := FALSE);
+	_lateEventuallyFails := _lateEventuallyFails AND (_temporalResult = E_CoUnitTemporalResult.FAILED);
+	_stage := 6;
+6:
+	_key.StepId := 'cancel';
+	_cancelled := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.STEP, Now := LTIME#43ns, Duration := LTIME#50ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#44ns, Condition := FALSE, Cancel := TRUE);
+	_cancelled := _cancelled AND (_temporalResult = E_CoUnitTemporalResult.CANCELLED);
+	_fixtureKey := _key; _fixtureKey.StepId := 'setup-fail-cleanup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 2; _callback.SetupPassOn := 99;
+	_callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_setupFailureSuppressedBody := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#0ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_stage := 7;
+7:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#1ns, Cancel := FALSE);
+	_stage := 8;
+8:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#2ns, Cancel := FALSE);
+	_stage := 9;
+9:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#3ns, Cancel := FALSE);
+	_setupFailureSuppressedBody := _setupFailureSuppressedBody AND (_callback.BodyCalls = 0) AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.SETUP_FAILED);
+	_partialSetupCleaned := _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED) AND (_callback.CleanupCalls = 1);
+	_sameFixtureRestartRejected := NOT _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#4ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_fixtureKey.StepId := 'body-fail';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 1;
+	_callback.BodyResult := E_CoUnitFixtureCallback.FAILED; _callback.CleanupResult := E_CoUnitFixtureCallback.FAILED;
+	_primaryCausePreserved := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#10ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_stage := 10;
+10:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#11ns, Cancel := FALSE);
+	_stage := 11;
+11:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#12ns, Cancel := FALSE);
+	_stage := 12;
+12:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#13ns, Cancel := FALSE);
+	_primaryCausePreserved := _primaryCausePreserved AND _fixture.Complete AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.BODY_FAILED) AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.FAILED);
+	_fixtureKey.StepId := 'cleanup-budget';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 1;
+	_callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PENDING;
+	_cleanupTimeoutVisible := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#20ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#2ns);
+	_stage := 13;
+13:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#21ns, Cancel := FALSE);
+	_stage := 14;
+14:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#22ns, Cancel := FALSE);
+	_stage := 15;
+15:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#23ns, Cancel := FALSE);
+	_stage := 16;
+16:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#25ns, Cancel := FALSE);
+	_cleanupTimeoutVisible := _cleanupTimeoutVisible AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE);
+	_fixtureKey.StepId := 'late-setup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 2; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_lateSetupCallbackSkipped := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#30ns, PhaseTimeout := LTIME#2ns, CleanupBudget := LTIME#2ns);
+	_stage := 17;
+17:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#31ns, Cancel := FALSE);
+	_stage := 18;
+18:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#33ns, Cancel := FALSE);
+	_lateSetupCallbackSkipped := _lateSetupCallbackSkipped AND (_callback.SetupCalls = 1) AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.PHASE_TIMEOUT) AND (_fixture.Phase = E_CoUnitFixturePhase.CLEANUP);
+	_stage := 19;
+19:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#34ns, Cancel := FALSE);
+	_lateSetupCallbackSkipped := _lateSetupCallbackSkipped AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED);
+	_fixtureKey.StepId := 'late-cleanup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupPassOn := 1; _callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_lateCleanupSkipped := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#40ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#2ns);
+	_stage := 20;
+20:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#41ns, Cancel := FALSE);
+	_stage := 21;
+21:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#42ns, Cancel := FALSE);
+	_stage := 22;
+22:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#45ns, Cancel := FALSE);
+	_lateCleanupSkipped := _lateCleanupSkipped AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE) AND (_callback.CleanupCalls = 0);
+	_fixtureKey.StepId := 'exact-phase-deadline';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupPassOn := 1; _callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_exactPhaseBoundary := _fixture.Start(Key := _fixtureKey, Fixture := _callback, Now := LTIME#60ns, PhaseTimeout := LTIME#1ns, CleanupBudget := LTIME#2ns);
+	_stage := 23;
+23:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#61ns, Cancel := FALSE);
+	_exactPhaseBoundary := _exactPhaseBoundary AND (_callback.SetupCalls = 1) AND (_fixture.Phase = E_CoUnitFixturePhase.BODY);
+	_stage := 24;
+24:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#62ns, Cancel := FALSE);
+	_stage := 25;
+25:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#63ns, Cancel := FALSE);
+	_exactPhaseBoundary := _exactPhaseBoundary AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED);
+	OraclePass := _temporalBoundary AND _staleRejected AND _pulseOnce AND _stableTerminal AND _sameKeyRestartRejected AND _holdViolationAtDeadline AND _holdTrueBoundary AND _stepPass AND _lateEventuallyFails AND _cancelled AND _setupFailureSuppressedBody AND _partialSetupCleaned AND _primaryCausePreserved AND _cleanupTimeoutVisible AND _sameFixtureRestartRejected AND _lateSetupCallbackSkipped AND _lateCleanupSkipped AND _exactPhaseBoundary;
+	FailedCheck := 0;
+	IF NOT _temporalBoundary THEN FailedCheck := 1; ELSIF NOT _staleRejected THEN FailedCheck := 2; ELSIF NOT _pulseOnce THEN FailedCheck := 3; ELSIF NOT _stableTerminal THEN FailedCheck := 4; ELSIF NOT _sameKeyRestartRejected THEN FailedCheck := 5; ELSIF NOT _holdViolationAtDeadline THEN FailedCheck := 6; ELSIF NOT _holdTrueBoundary THEN FailedCheck := 7; ELSIF NOT _stepPass THEN FailedCheck := 8; ELSIF NOT _lateEventuallyFails THEN FailedCheck := 9; ELSIF NOT _cancelled THEN FailedCheck := 10; ELSIF NOT _setupFailureSuppressedBody THEN FailedCheck := 11; ELSIF NOT _partialSetupCleaned THEN FailedCheck := 12; ELSIF NOT _primaryCausePreserved THEN FailedCheck := 13; ELSIF NOT _cleanupTimeoutVisible THEN FailedCheck := 14; ELSIF NOT _sameFixtureRestartRejected THEN FailedCheck := 15; ELSIF NOT _lateSetupCallbackSkipped THEN FailedCheck := 16; ELSIF NOT _lateCleanupSkipped THEN FailedCheck := 17; ELSIF NOT _exactPhaseBoundary THEN FailedCheck := 18; END_IF
+	Done := TRUE;
+END_CASE

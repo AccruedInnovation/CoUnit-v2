@@ -1,0 +1,8 @@
+Taken := 1;
+_cp := BYTE_TO_UDINT(Bytes[Index]);
+IF TextMode = E_CoUnitTextMode.UTF8 AND _cp >= 16#80 THEN
+	_cp := DecodeUtf8CodePoint(Bytes := Bytes, Index := Index, FirstByte := _cp, Taken => Taken);
+ELSIF TextMode = E_CoUnitTextMode.WINDOWS1252 AND _cp >= 16#80 AND _cp <= 16#9F THEN
+	_cp := MapWindows1252CodePoint(CodePoint := _cp);
+END_IF
+DecodeJsonCodePoint := _cp;

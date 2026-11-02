@@ -1,0 +1,5 @@
+METHOD DiagnosticArithmetic
+VAR
+	_actual : DINT;
+	_phaseAccepted : BOOL;
+END_VAR

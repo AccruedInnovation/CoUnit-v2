@@ -1,0 +1,7 @@
+METHOD PRIVATE AppendCodePoint : BOOL
+VAR_INPUT
+	Value : UDINT;
+END_VAR
+VAR
+	_bits : DWORD;
+END_VAR

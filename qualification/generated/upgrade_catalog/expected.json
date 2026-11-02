@@ -1,0 +1,41 @@
+{
+  "native_status": "NOT_RUN",
+  "done": true,
+  "oracle_pass": true,
+  "failed_check": 0,
+  "public_contract": {
+    "run_id": "upgrade-run-1",
+    "generation": 1,
+    "suite_id": "upgrade",
+    "case_id": "row",
+    "rows": {
+      "a": {
+        "name": "RowA",
+        "selected": false,
+        "started": false,
+        "state": "OPEN"
+      },
+      "b": {
+        "name": "RowB",
+        "selected": true,
+        "started": true,
+        "state": "PASSED",
+        "max_assertions_per_invocation": 1
+      },
+      "disabled": {
+        "name": "Off",
+        "selected": false,
+        "disabled": true,
+        "started": false,
+        "state": "SKIPPED"
+      }
+    },
+    "effects": {
+      "row_a": 0,
+      "row_b": 3,
+      "disabled": 0
+    },
+    "stale_cancel_accepted": false,
+    "final_disposition": "NORMAL"
+  }
+}

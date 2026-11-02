@@ -1,0 +1,1605 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP22 Patch 2" creationDateTime="2000-01-01T00:00:00" />
+  <contentHeader name="CoUnit cooperative fixture and temporal expectation helpers" modificationDateTime="2000-01-01T00:00:00">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes>
+      <dataType name="E_CoUnitTemporalMode">
+        <baseType>
+          <derived name="( EVENTUALLY_TRUE := 0, REMAINS_TRUE, REMAINS_FALSE, STEP ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitTemporalMode :
+(
+	EVENTUALLY_TRUE := 0,
+	REMAINS_TRUE,
+	REMAINS_FALSE,
+	STEP
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="E_CoUnitTemporalResult">
+        <baseType>
+          <derived name="( WAITING := 0, PASSED, FAILED, CANCELLED, REJECTED ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitTemporalResult :
+(
+	WAITING := 0,
+	PASSED,
+	FAILED,
+	CANCELLED,
+	REJECTED
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="ST_CoUnitFixtureKey">
+        <baseType>
+          <struct>
+            <variable name="RunId">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+            <variable name="SuiteId">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+            <variable name="CaseId">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+            <variable name="RowKey">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+            <variable name="AttemptId">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+            <variable name="StepId">
+              <type>
+                <string length="63" />
+              </type>
+            </variable>
+          </struct>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">TYPE ST_CoUnitFixtureKey :
+STRUCT
+	RunId : STRING(63);
+	SuiteId : STRING(63);
+	CaseId : STRING(63);
+	RowKey : STRING(63);
+	AttemptId : STRING(63);
+	StepId : STRING(63);
+END_STRUCT
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="E_CoUnitFixtureCallback">
+        <baseType>
+          <derived name="( PENDING := 0, PASSED, FAILED ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureCallback :
+(
+	PENDING := 0,
+	PASSED,
+	FAILED
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="E_CoUnitFixturePhase">
+        <baseType>
+          <derived name="( IDLE := 0, SETUP, BODY, CLEANUP, COMPLETE ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixturePhase :
+(
+	IDLE := 0,
+	SETUP,
+	BODY,
+	CLEANUP,
+	COMPLETE
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="E_CoUnitFixtureCause">
+        <baseType>
+          <derived name="( NONE := 0, SETUP_FAILED, BODY_FAILED, CANCELLED, PHASE_TIMEOUT ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureCause :
+(
+	NONE := 0,
+	SETUP_FAILED,
+	BODY_FAILED,
+	CANCELLED,
+	PHASE_TIMEOUT
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="E_CoUnitFixtureOutcome">
+        <baseType>
+          <derived name="( NOT_RUN := 0, PENDING, PASSED, FAILED, INCOMPLETE ) BYTE" />
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_CoUnitFixtureOutcome :
+(
+	NOT_RUN := 0,
+	PENDING,
+	PASSED,
+	FAILED,
+	INCOMPLETE
+) BYTE;
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </dataType>
+    </dataTypes>
+    <pous>
+      <pou name="FB_CoUnitExpectation" pouType="functionBlock">
+        <interface>
+          <outputVars>
+            <variable name="Resolved">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="State">
+              <type>
+                <derived name="E_CoUnitTemporalResult" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitTemporalResult.REJECTED" />
+              </initialValue>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_active">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_key">
+              <type>
+                <derived name="ST_CoUnitFixtureKey" />
+              </type>
+            </variable>
+            <variable name="_mode">
+              <type>
+                <derived name="E_CoUnitTemporalMode" />
+              </type>
+            </variable>
+            <variable name="_startedAt">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_lastNow">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_deadline">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_duration">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Execution through methods. *)</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Start" ObjectId="" qualifiedName="FB_CoUnitExpectation.Start">
+              <interface>
+                <returnType>
+                  <BOOL />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Mode">
+                    <type>
+                      <derived name="E_CoUnitTemporalMode" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                  <variable name="Duration">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">Start := FALSE;
+IF _active AND (State = E_CoUnitTemporalResult.WAITING) THEN RETURN; END_IF
+IF _active AND (Key.RunId = _key.RunId) AND (Key.SuiteId = _key.SuiteId) AND (Key.CaseId = _key.CaseId)
+	AND (Key.RowKey = _key.RowKey) AND (Key.AttemptId = _key.AttemptId) AND (Key.StepId = _key.StepId) THEN RETURN; END_IF
+IF (Now &lt; LTIME#0ns) OR (Duration &lt; LTIME#0ns) THEN RETURN; END_IF
+IF Now &gt; (LTIME#9223372036854775807ns - Duration) THEN RETURN; END_IF
+IF (Mode &lt;&gt; E_CoUnitTemporalMode.EVENTUALLY_TRUE)
+	AND (Mode &lt;&gt; E_CoUnitTemporalMode.REMAINS_TRUE)
+	AND (Mode &lt;&gt; E_CoUnitTemporalMode.REMAINS_FALSE)
+	AND (Mode &lt;&gt; E_CoUnitTemporalMode.STEP) THEN RETURN; END_IF
+_key := Key;
+_mode := Mode;
+_startedAt := Now;
+_lastNow := Now;
+_duration := Duration;
+_deadline := Now + Duration;
+_active := TRUE;
+Resolved := FALSE;
+State := E_CoUnitTemporalResult.WAITING;
+Start := TRUE;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD PUBLIC Start : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Mode : E_CoUnitTemporalMode;
+	Now : LTIME;
+	Duration : LTIME;
+END_VAR
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Observe" ObjectId="" qualifiedName="FB_CoUnitExpectation.Observe">
+              <interface>
+                <returnType>
+                  <derived name="E_CoUnitTemporalResult" />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                  <variable name="Condition">
+                    <type>
+                      <BOOL />
+                    </type>
+                  </variable>
+                  <variable name="Cancel">
+                    <type>
+                      <BOOL />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _active THEN Observe := E_CoUnitTemporalResult.REJECTED; RETURN; END_IF
+IF (Key.RunId &lt;&gt; _key.RunId) OR (Key.SuiteId &lt;&gt; _key.SuiteId) OR (Key.CaseId &lt;&gt; _key.CaseId)
+	OR (Key.RowKey &lt;&gt; _key.RowKey) OR (Key.AttemptId &lt;&gt; _key.AttemptId) OR (Key.StepId &lt;&gt; _key.StepId) THEN
+	Observe := E_CoUnitTemporalResult.REJECTED;
+	RETURN;
+END_IF
+Resolved := FALSE;
+IF State &lt;&gt; E_CoUnitTemporalResult.WAITING THEN Observe := State; RETURN; END_IF
+IF (Now &lt; _lastNow) OR (Now &lt; LTIME#0ns) THEN Observe := E_CoUnitTemporalResult.REJECTED; RETURN; END_IF
+_lastNow := Now;
+IF Cancel THEN
+	State := E_CoUnitTemporalResult.CANCELLED;
+ELSIF (_mode = E_CoUnitTemporalMode.EVENTUALLY_TRUE) OR (_mode = E_CoUnitTemporalMode.STEP) THEN
+	IF Now &gt; _deadline THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Condition THEN State := E_CoUnitTemporalResult.PASSED;
+	ELSIF Now &gt;= _deadline THEN State := E_CoUnitTemporalResult.FAILED; END_IF
+ELSIF _mode = E_CoUnitTemporalMode.REMAINS_TRUE THEN
+	IF NOT Condition THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Now &gt;= _deadline THEN State := E_CoUnitTemporalResult.PASSED; END_IF
+ELSIF _mode = E_CoUnitTemporalMode.REMAINS_FALSE THEN
+	IF Condition THEN State := E_CoUnitTemporalResult.FAILED;
+	ELSIF Now &gt;= _deadline THEN State := E_CoUnitTemporalResult.PASSED; END_IF
+END_IF
+IF State &lt;&gt; E_CoUnitTemporalResult.WAITING THEN Resolved := TRUE; END_IF
+Observe := State;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD PUBLIC Observe : E_CoUnitTemporalResult
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+	Condition : BOOL;
+	Cancel : BOOL;
+END_VAR
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_CoUnitExpectation
+VAR_OUTPUT
+	Resolved : BOOL;
+	State : E_CoUnitTemporalResult := E_CoUnitTemporalResult.REJECTED;
+END_VAR
+VAR
+	_active : BOOL;
+	_key : ST_CoUnitFixtureKey;
+	_mode : E_CoUnitTemporalMode;
+	_startedAt : LTIME;
+	_lastNow : LTIME;
+	_deadline : LTIME;
+	_duration : LTIME;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_CoUnitFixture" pouType="functionBlock">
+        <interface>
+          <outputVars>
+            <variable name="Phase">
+              <type>
+                <derived name="E_CoUnitFixturePhase" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFixturePhase.IDLE" />
+              </initialValue>
+            </variable>
+            <variable name="Complete">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="PrimaryCause">
+              <type>
+                <derived name="E_CoUnitFixtureCause" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFixtureCause.NONE" />
+              </initialValue>
+            </variable>
+            <variable name="CleanupOutcome">
+              <type>
+                <derived name="E_CoUnitFixtureOutcome" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFixtureOutcome.NOT_RUN" />
+              </initialValue>
+            </variable>
+            <variable name="PhaseDeadline">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_key">
+              <type>
+                <derived name="ST_CoUnitFixtureKey" />
+              </type>
+            </variable>
+            <variable name="_fixture">
+              <type>
+                <derived name="I_CoUnitFixture" />
+              </type>
+            </variable>
+            <variable name="_phaseTimeout">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_lastNow">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_cleanupBudget">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_cleanupDeadline">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_setupEntered">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_callback">
+              <type>
+                <derived name="E_CoUnitFixtureCallback" />
+              </type>
+            </variable>
+            <variable name="_startValid">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Execution through methods. *)</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Start" ObjectId="" qualifiedName="FB_CoUnitFixture.Start">
+              <interface>
+                <returnType>
+                  <BOOL />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Fixture">
+                    <type>
+                      <derived name="REFERENCE TO I_CoUnitFixture" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                  <variable name="PhaseTimeout">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                  <variable name="CleanupBudget">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">Start := FALSE;
+IF NOT __ISVALIDREF(Fixture) THEN RETURN; END_IF
+IF Fixture = 0 THEN RETURN; END_IF
+IF (Phase &lt;&gt; E_CoUnitFixturePhase.IDLE) AND (Phase &lt;&gt; E_CoUnitFixturePhase.COMPLETE) THEN RETURN; END_IF
+IF (Phase = E_CoUnitFixturePhase.COMPLETE) AND (Key.RunId = _key.RunId) AND (Key.SuiteId = _key.SuiteId) AND (Key.CaseId = _key.CaseId)
+	AND (Key.RowKey = _key.RowKey) AND (Key.AttemptId = _key.AttemptId) AND (Key.StepId = _key.StepId) THEN RETURN; END_IF
+IF (Now &lt; LTIME#0ns) OR (PhaseTimeout &lt;= LTIME#0ns) OR (CleanupBudget &lt; LTIME#0ns) THEN RETURN; END_IF
+IF (Now &gt; (LTIME#9223372036854775807ns - PhaseTimeout)) OR (Now &gt; (LTIME#9223372036854775807ns - CleanupBudget)) THEN RETURN; END_IF
+_key := Key;
+_fixture := Fixture;
+_phaseTimeout := PhaseTimeout;
+_lastNow := Now;
+_cleanupBudget := CleanupBudget;
+_setupEntered := FALSE;
+PrimaryCause := E_CoUnitFixtureCause.NONE;
+CleanupOutcome := E_CoUnitFixtureOutcome.NOT_RUN;
+PhaseDeadline := Now + PhaseTimeout;
+Phase := E_CoUnitFixturePhase.SETUP;
+Complete := FALSE;
+Start := TRUE;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD PUBLIC Start : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Fixture : REFERENCE TO I_CoUnitFixture;
+	Now : LTIME;
+	PhaseTimeout : LTIME;
+	CleanupBudget : LTIME;
+END_VAR
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Execute" ObjectId="" qualifiedName="FB_CoUnitFixture.Execute">
+              <interface>
+                <returnType>
+                  <BOOL />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                  <variable name="Cancel">
+                    <type>
+                      <BOOL />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">Execute := FALSE;
+IF Complete OR (Phase = E_CoUnitFixturePhase.IDLE) THEN RETURN; END_IF
+IF (Key.RunId &lt;&gt; _key.RunId) OR (Key.SuiteId &lt;&gt; _key.SuiteId) OR (Key.CaseId &lt;&gt; _key.CaseId)
+	OR (Key.RowKey &lt;&gt; _key.RowKey) OR (Key.AttemptId &lt;&gt; _key.AttemptId) OR (Key.StepId &lt;&gt; _key.StepId) THEN RETURN; END_IF
+IF (Now &lt; LTIME#0ns) OR (Now &lt; _lastNow) THEN RETURN; END_IF
+_lastNow := Now;
+IF Phase = E_CoUnitFixturePhase.CLEANUP THEN
+	IF Now &gt; _cleanupDeadline THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+		Execute := TRUE;
+		RETURN;
+	END_IF
+	_callback := _fixture.Cleanup(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.PASSED;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSIF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.FAILED;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSIF Now &gt;= _cleanupDeadline THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Now &gt; PhaseDeadline THEN
+	PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+	IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+		CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	ELSE
+		Phase := E_CoUnitFixturePhase.CLEANUP;
+		CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+		_cleanupDeadline := Now + _cleanupBudget;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Cancel THEN
+	PrimaryCause := E_CoUnitFixtureCause.CANCELLED;
+	IF _setupEntered THEN
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSE
+		Phase := E_CoUnitFixturePhase.COMPLETE;
+		Complete := TRUE;
+	END_IF
+	Execute := TRUE;
+	RETURN;
+END_IF
+IF Phase = E_CoUnitFixturePhase.SETUP THEN
+	_setupEntered := TRUE;
+	_callback := _fixture.Setup(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		PrimaryCause := E_CoUnitFixtureCause.SETUP_FAILED;
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		IF Now &gt; (LTIME#9223372036854775807ns - _phaseTimeout) THEN
+			PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+			IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+				CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+				Phase := E_CoUnitFixturePhase.COMPLETE;
+				Complete := TRUE;
+			ELSE
+				Phase := E_CoUnitFixturePhase.CLEANUP;
+				CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+				_cleanupDeadline := Now + _cleanupBudget;
+			END_IF
+		ELSE
+			Phase := E_CoUnitFixturePhase.BODY;
+			PhaseDeadline := Now + _phaseTimeout;
+		END_IF
+	ELSIF Now &gt;= PhaseDeadline THEN
+		PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	END_IF
+ELSIF Phase = E_CoUnitFixturePhase.BODY THEN
+	_callback := _fixture.Body(Key := _key, Now := Now);
+	IF _callback = E_CoUnitFixtureCallback.FAILED THEN
+		PrimaryCause := E_CoUnitFixtureCause.BODY_FAILED;
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF _callback = E_CoUnitFixtureCallback.PASSED THEN
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	ELSIF Now &gt;= PhaseDeadline THEN
+		PrimaryCause := E_CoUnitFixtureCause.PHASE_TIMEOUT;
+		IF Now &gt; (LTIME#9223372036854775807ns - _cleanupBudget) THEN
+			CleanupOutcome := E_CoUnitFixtureOutcome.INCOMPLETE;
+			Phase := E_CoUnitFixturePhase.COMPLETE;
+			Complete := TRUE;
+		ELSE
+			Phase := E_CoUnitFixturePhase.CLEANUP;
+			CleanupOutcome := E_CoUnitFixtureOutcome.PENDING;
+			_cleanupDeadline := Now + _cleanupBudget;
+		END_IF
+	END_IF
+END_IF
+Execute := TRUE;
+</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD PUBLIC Execute : BOOL
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+	Cancel : BOOL;
+END_VAR
+</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_CoUnitFixture
+VAR_OUTPUT
+	Phase : E_CoUnitFixturePhase := E_CoUnitFixturePhase.IDLE;
+	Complete : BOOL;
+	PrimaryCause : E_CoUnitFixtureCause := E_CoUnitFixtureCause.NONE;
+	CleanupOutcome : E_CoUnitFixtureOutcome := E_CoUnitFixtureOutcome.NOT_RUN;
+	PhaseDeadline : LTIME;
+END_VAR
+VAR
+	_key : ST_CoUnitFixtureKey;
+	_fixture : I_CoUnitFixture;
+	_phaseTimeout : LTIME;
+	_lastNow : LTIME;
+	_cleanupBudget : LTIME;
+	_cleanupDeadline : LTIME;
+	_setupEntered : BOOL;
+	_callback : E_CoUnitFixtureCallback;
+	_startValid : BOOL;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_UpgradeCallback" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="SetupCalls">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="BodyCalls">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="CleanupCalls">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="SetupFailOn">
+              <type>
+                <UINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="SetupPassOn">
+              <type>
+                <UINT />
+              </type>
+              <initialValue>
+                <simpleValue value="1" />
+              </initialValue>
+            </variable>
+            <variable name="BodyResult">
+              <type>
+                <derived name="E_CoUnitFixtureCallback" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFixtureCallback.PASSED" />
+              </initialValue>
+            </variable>
+            <variable name="CleanupResult">
+              <type>
+                <derived name="E_CoUnitFixtureCallback" />
+              </type>
+              <initialValue>
+                <simpleValue value="E_CoUnitFixtureCallback.PASSED" />
+              </initialValue>
+            </variable>
+          </inputVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+              <Inheritance>
+                <Implements>I_CoUnitFixture</Implements>
+              </Inheritance>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">(* Execution through methods. *)</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Setup" ObjectId="" qualifiedName="FB_UpgradeCallback.Setup">
+              <interface>
+                <returnType>
+                  <derived name="E_CoUnitFixtureCallback" />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">SetupCalls := SetupCalls + 1;
+IF SetupCalls = SetupFailOn THEN
+	Setup := E_CoUnitFixtureCallback.FAILED;
+ELSIF SetupCalls &lt; SetupPassOn THEN
+	Setup := E_CoUnitFixtureCallback.PENDING;
+ELSE
+	Setup := E_CoUnitFixtureCallback.PASSED;
+END_IF</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Setup : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Body" ObjectId="" qualifiedName="FB_UpgradeCallback.Body">
+              <interface>
+                <returnType>
+                  <derived name="E_CoUnitFixtureCallback" />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">BodyCalls := BodyCalls + 1;
+Body := BodyResult;</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Body : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+            <Method name="Cleanup" ObjectId="" qualifiedName="FB_UpgradeCallback.Cleanup">
+              <interface>
+                <returnType>
+                  <derived name="E_CoUnitFixtureCallback" />
+                </returnType>
+                <inputVars>
+                  <variable name="Key">
+                    <type>
+                      <derived name="ST_CoUnitFixtureKey" />
+                    </type>
+                  </variable>
+                  <variable name="Now">
+                    <type>
+                      <derived name="LTIME" />
+                    </type>
+                  </variable>
+                </inputVars>
+              </interface>
+              <body>
+                <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">CleanupCalls := CleanupCalls + 1;
+Cleanup := CleanupResult;</xhtml>
+                </ST>
+              </body>
+              <InterfaceAsPlainText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Cleanup : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR</xhtml>
+              </InterfaceAsPlainText>
+            </Method>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_UpgradeCallback IMPLEMENTS I_CoUnitFixture
+VAR_INPUT
+	SetupCalls : UINT;
+	BodyCalls : UINT;
+	CleanupCalls : UINT;
+	SetupFailOn : UINT := 0;
+	SetupPassOn : UINT := 1;
+	BodyResult : E_CoUnitFixtureCallback := E_CoUnitFixtureCallback.PASSED;
+	CleanupResult : E_CoUnitFixtureCallback := E_CoUnitFixtureCallback.PASSED;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_Qualification" pouType="program">
+        <interface>
+          <outputVars>
+            <variable name="Done">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="OraclePass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="FailedCheck">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="_stage">
+              <type>
+                <UINT />
+              </type>
+            </variable>
+            <variable name="_now">
+              <type>
+                <derived name="LTIME" />
+              </type>
+            </variable>
+            <variable name="_key">
+              <type>
+                <derived name="ST_CoUnitFixtureKey" />
+              </type>
+            </variable>
+            <variable name="_staleKey">
+              <type>
+                <derived name="ST_CoUnitFixtureKey" />
+              </type>
+            </variable>
+            <variable name="_temporal">
+              <type>
+                <derived name="FB_CoUnitExpectation" />
+              </type>
+            </variable>
+            <variable name="_temporalResult">
+              <type>
+                <derived name="E_CoUnitTemporalResult" />
+              </type>
+            </variable>
+            <variable name="_fixture">
+              <type>
+                <derived name="FB_CoUnitFixture" />
+              </type>
+            </variable>
+            <variable name="_fixtureKey">
+              <type>
+                <derived name="ST_CoUnitFixtureKey" />
+              </type>
+            </variable>
+            <variable name="_callback">
+              <type>
+                <derived name="FB_UpgradeCallback" />
+              </type>
+            </variable>
+            <variable name="_temporalBoundary">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_staleRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_pulseOnce">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_stableTerminal">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_holdFalseStarted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_holdViolationAtDeadline">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_holdTrueBoundary">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_stepPass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_lateEventuallyFails">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_sameKeyRestartRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_cancelled">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_setupFailureSuppressedBody">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_partialSetupCleaned">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_primaryCausePreserved">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_cleanupTimeoutVisible">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_sameFixtureRestartRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_lateSetupCallbackSkipped">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_lateCleanupSkipped">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_exactPhaseBoundary">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_holdTrueOvershoot">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_holdFalseOvershoot">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_binding">
+              <type>
+                <derived name="I_CoUnitFixture" />
+              </type>
+            </variable>
+            <variable name="_invalidBinding">
+              <type>
+                <derived name="REFERENCE TO I_CoUnitFixture" />
+              </type>
+            </variable>
+            <variable name="_otherCallback">
+              <type>
+                <derived name="FB_UpgradeCallback" />
+              </type>
+            </variable>
+            <variable name="_fixtureBindingStable">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_nullBindingRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="_invalidBindingRejected">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">CASE _stage OF
+0:
+	_key.RunId := 'run-A'; _key.SuiteId := 'suite-A'; _key.CaseId := 'case-A'; _key.RowKey := 'row-A'; _key.AttemptId := 'attempt-A'; _key.StepId := 'eventually';
+	_staleKey := _key; _staleKey.StepId := 'stale';
+	_temporalBoundary := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#0ns, Duration := LTIME#10ns);
+	_stage := 1;
+1:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#5ns, Condition := FALSE, Cancel := FALSE);
+	_stage := 2;
+2:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#10ns, Condition := TRUE, Cancel := FALSE);
+	_temporalBoundary := _temporalBoundary AND (_temporalResult = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_pulseOnce := _temporal.Resolved;
+	_stage := 3;
+3:
+	_sameKeyRestartRejected := NOT _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#11ns, Duration := LTIME#1ns);
+	_temporalResult := _temporal.Observe(Key := _staleKey, Now := LTIME#11ns, Condition := FALSE, Cancel := FALSE);
+	_staleRejected := (_temporalResult = E_CoUnitTemporalResult.REJECTED) AND (_temporal.State = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#11ns, Condition := FALSE, Cancel := FALSE);
+	_stableTerminal := (_temporalResult = E_CoUnitTemporalResult.PASSED) AND NOT _temporal.Resolved;
+	_stage := 4;
+4:
+	_key.StepId := 'hold-false';
+	_holdFalseStarted := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_FALSE, Now := LTIME#20ns, Duration := LTIME#5ns);
+	_stage := 5;
+5:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#25ns, Condition := TRUE, Cancel := FALSE);
+	_holdViolationAtDeadline := _holdFalseStarted AND (_temporalResult = E_CoUnitTemporalResult.FAILED) AND _temporal.Resolved;
+	_key.StepId := 'hold-true';
+	_holdTrueBoundary := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_TRUE, Now := LTIME#30ns, Duration := LTIME#3ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#33ns, Condition := TRUE, Cancel := FALSE);
+	_holdTrueBoundary := _holdTrueBoundary AND (_temporalResult = E_CoUnitTemporalResult.PASSED) AND _temporal.Resolved;
+	_key.StepId := 'named-step';
+	_stepPass := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.STEP, Now := LTIME#34ns, Duration := LTIME#5ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#35ns, Condition := TRUE, Cancel := FALSE);
+	_stepPass := _stepPass AND (_temporalResult = E_CoUnitTemporalResult.PASSED);
+	_key.StepId := 'late-eventually';
+	_lateEventuallyFails := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.EVENTUALLY_TRUE, Now := LTIME#36ns, Duration := LTIME#5ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#42ns, Condition := TRUE, Cancel := FALSE);
+	_lateEventuallyFails := _lateEventuallyFails AND (_temporalResult = E_CoUnitTemporalResult.FAILED);
+	_stage := 6;
+6:
+	_key.StepId := 'cancel';
+	_cancelled := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.STEP, Now := LTIME#43ns, Duration := LTIME#50ns);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#44ns, Condition := FALSE, Cancel := TRUE);
+	_cancelled := _cancelled AND (_temporalResult = E_CoUnitTemporalResult.CANCELLED);
+	_fixtureKey := _key; _fixtureKey.StepId := 'setup-fail-cleanup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 2; _callback.SetupPassOn := 99;
+	_callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_binding := _callback;
+	_setupFailureSuppressedBody := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#0ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_stage := 7;
+7:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#1ns, Cancel := FALSE);
+	_stage := 8;
+8:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#2ns, Cancel := FALSE);
+	_stage := 9;
+9:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#3ns, Cancel := FALSE);
+	_setupFailureSuppressedBody := _setupFailureSuppressedBody AND (_callback.BodyCalls = 0) AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.SETUP_FAILED);
+	_partialSetupCleaned := _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED) AND (_callback.CleanupCalls = 1);
+	_binding := _callback;
+	_sameFixtureRestartRejected := NOT _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#4ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_fixtureKey.StepId := 'body-fail';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 1;
+	_callback.BodyResult := E_CoUnitFixtureCallback.FAILED; _callback.CleanupResult := E_CoUnitFixtureCallback.FAILED;
+	_binding := _callback;
+	_primaryCausePreserved := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#10ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_stage := 10;
+10:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#11ns, Cancel := FALSE);
+	_stage := 11;
+11:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#12ns, Cancel := FALSE);
+	_stage := 12;
+12:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#13ns, Cancel := FALSE);
+	_primaryCausePreserved := _primaryCausePreserved AND _fixture.Complete AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.BODY_FAILED) AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.FAILED);
+	_fixtureKey.StepId := 'cleanup-budget';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 1;
+	_callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PENDING;
+	_binding := _callback;
+	_cleanupTimeoutVisible := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#20ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#2ns);
+	_stage := 13;
+13:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#21ns, Cancel := FALSE);
+	_stage := 14;
+14:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#22ns, Cancel := FALSE);
+	_stage := 15;
+15:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#23ns, Cancel := FALSE);
+	_stage := 16;
+16:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#25ns, Cancel := FALSE);
+	_cleanupTimeoutVisible := _cleanupTimeoutVisible AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE);
+	_fixtureKey.StepId := 'late-setup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupFailOn := 0; _callback.SetupPassOn := 2; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_binding := _callback;
+	_lateSetupCallbackSkipped := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#30ns, PhaseTimeout := LTIME#2ns, CleanupBudget := LTIME#2ns);
+	_stage := 17;
+17:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#31ns, Cancel := FALSE);
+	_stage := 18;
+18:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#33ns, Cancel := FALSE);
+	_lateSetupCallbackSkipped := _lateSetupCallbackSkipped AND (_callback.SetupCalls = 1) AND (_fixture.PrimaryCause = E_CoUnitFixtureCause.PHASE_TIMEOUT) AND (_fixture.Phase = E_CoUnitFixturePhase.CLEANUP);
+	_stage := 19;
+19:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#34ns, Cancel := FALSE);
+	_lateSetupCallbackSkipped := _lateSetupCallbackSkipped AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED);
+	_fixtureKey.StepId := 'late-cleanup';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupPassOn := 1; _callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_binding := _callback;
+	_lateCleanupSkipped := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#40ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#2ns);
+	_stage := 20;
+20:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#41ns, Cancel := FALSE);
+	_stage := 21;
+21:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#42ns, Cancel := FALSE);
+	_stage := 22;
+22:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#45ns, Cancel := FALSE);
+	_lateCleanupSkipped := _lateCleanupSkipped AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE) AND (_callback.CleanupCalls = 0);
+	_fixtureKey.StepId := 'exact-phase-deadline';
+	_callback.SetupCalls := 0; _callback.BodyCalls := 0; _callback.CleanupCalls := 0;
+	_callback.SetupPassOn := 1; _callback.BodyResult := E_CoUnitFixtureCallback.PASSED; _callback.CleanupResult := E_CoUnitFixtureCallback.PASSED;
+	_binding := _callback;
+	_exactPhaseBoundary := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#60ns, PhaseTimeout := LTIME#1ns, CleanupBudget := LTIME#2ns);
+	_stage := 23;
+23:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#61ns, Cancel := FALSE);
+	_exactPhaseBoundary := _exactPhaseBoundary AND (_callback.SetupCalls = 1) AND (_fixture.Phase = E_CoUnitFixturePhase.BODY);
+	_stage := 24;
+24:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#62ns, Cancel := FALSE);
+	_stage := 25;
+25:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#63ns, Cancel := FALSE);
+	_exactPhaseBoundary := _exactPhaseBoundary AND _fixture.Complete AND (_fixture.CleanupOutcome = E_CoUnitFixtureOutcome.PASSED);
+	_stage := 26;
+26:
+	_key.StepId := 'hold-true-overshoot';
+	_holdTrueOvershoot := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_TRUE, Now := LTIME#0ms, Duration := LTIME#15ms);
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#0ms, Condition := TRUE, Cancel := FALSE);
+	_stage := 27;
+27:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#10ms, Condition := TRUE, Cancel := FALSE);
+	_stage := 28;
+28:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#20ms, Condition := TRUE, Cancel := FALSE);
+	_holdTrueOvershoot := _holdTrueOvershoot AND (_temporalResult = E_CoUnitTemporalResult.PASSED);
+	_key.StepId := 'hold-false-overshoot';
+	_holdFalseOvershoot := _temporal.Start(Key := _key, Mode := E_CoUnitTemporalMode.REMAINS_FALSE, Now := LTIME#0ms, Duration := LTIME#15ms);
+	_stage := 29;
+29:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#0ms, Condition := FALSE, Cancel := FALSE);
+	_stage := 30;
+30:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#10ms, Condition := FALSE, Cancel := FALSE);
+	_stage := 31;
+31:
+	_temporalResult := _temporal.Observe(Key := _key, Now := LTIME#20ms, Condition := FALSE, Cancel := FALSE);
+	_holdFalseOvershoot := _holdFalseOvershoot AND (_temporalResult = E_CoUnitTemporalResult.PASSED);
+	_fixtureKey.StepId := 'stable-binding';
+	_callback.SetupCalls := 0; _callback.SetupPassOn := 1; _callback.SetupFailOn := 0;
+	_otherCallback.SetupCalls := 0; _binding := _callback;
+	_fixtureBindingStable := _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#0ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_binding := _otherCallback;
+	_stage := 32;
+32:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#1ns, Cancel := FALSE);
+	_fixtureBindingStable := _fixtureBindingStable AND (_callback.SetupCalls = 1) AND (_otherCallback.SetupCalls = 0);
+	_stage := 33;
+33:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#2ns, Cancel := FALSE);
+	_stage := 34;
+34:
+	_fixture.Execute(Key := _fixtureKey, Now := LTIME#3ns, Cancel := FALSE);
+	_binding := 0; _fixtureKey.StepId := 'null-binding';
+	_nullBindingRejected := NOT _fixture.Start(Key := _fixtureKey, Fixture := _binding, Now := LTIME#4ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	_invalidBindingRejected := NOT _fixture.Start(Key := _fixtureKey, Fixture := _invalidBinding, Now := LTIME#4ns, PhaseTimeout := LTIME#10ns, CleanupBudget := LTIME#10ns);
+	OraclePass := _temporalBoundary AND _staleRejected AND _pulseOnce AND _stableTerminal AND _sameKeyRestartRejected AND _holdViolationAtDeadline AND _holdTrueBoundary AND _stepPass AND _lateEventuallyFails AND _cancelled AND _setupFailureSuppressedBody AND _partialSetupCleaned AND _primaryCausePreserved AND _cleanupTimeoutVisible AND _sameFixtureRestartRejected AND _lateSetupCallbackSkipped AND _lateCleanupSkipped AND _exactPhaseBoundary AND _holdTrueOvershoot AND _holdFalseOvershoot AND _fixtureBindingStable AND _nullBindingRejected AND _invalidBindingRejected;
+	FailedCheck := 0;
+	IF NOT _temporalBoundary THEN FailedCheck := 1; ELSIF NOT _staleRejected THEN FailedCheck := 2; ELSIF NOT _pulseOnce THEN FailedCheck := 3; ELSIF NOT _stableTerminal THEN FailedCheck := 4; ELSIF NOT _sameKeyRestartRejected THEN FailedCheck := 5; ELSIF NOT _holdViolationAtDeadline THEN FailedCheck := 6; ELSIF NOT _holdTrueBoundary THEN FailedCheck := 7; ELSIF NOT _stepPass THEN FailedCheck := 8; ELSIF NOT _lateEventuallyFails THEN FailedCheck := 9; ELSIF NOT _cancelled THEN FailedCheck := 10; ELSIF NOT _setupFailureSuppressedBody THEN FailedCheck := 11; ELSIF NOT _partialSetupCleaned THEN FailedCheck := 12; ELSIF NOT _primaryCausePreserved THEN FailedCheck := 13; ELSIF NOT _cleanupTimeoutVisible THEN FailedCheck := 14; ELSIF NOT _sameFixtureRestartRejected THEN FailedCheck := 15; ELSIF NOT _lateSetupCallbackSkipped THEN FailedCheck := 16; ELSIF NOT _lateCleanupSkipped THEN FailedCheck := 17; ELSIF NOT _exactPhaseBoundary THEN FailedCheck := 18; ELSIF NOT _holdTrueOvershoot THEN FailedCheck := 19; ELSIF NOT _holdFalseOvershoot THEN FailedCheck := 20; ELSIF NOT _fixtureBindingStable THEN FailedCheck := 21; ELSIF NOT _nullBindingRejected THEN FailedCheck := 22; ELSIF NOT _invalidBindingRejected THEN FailedCheck := 23; END_IF
+	Done := TRUE;
+END_CASE</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">PROGRAM PRG_Qualification
+VAR_OUTPUT
+	Done : BOOL;
+	OraclePass : BOOL;
+	FailedCheck : UINT;
+END_VAR
+VAR
+	_stage : UINT;
+	_now : LTIME;
+	_key : ST_CoUnitFixtureKey;
+	_staleKey : ST_CoUnitFixtureKey;
+	_temporal : FB_CoUnitExpectation;
+	_temporalResult : E_CoUnitTemporalResult;
+	_fixture : FB_CoUnitFixture;
+	_fixtureKey : ST_CoUnitFixtureKey;
+	_callback : FB_UpgradeCallback;
+	_temporalBoundary : BOOL;
+	_staleRejected : BOOL;
+	_pulseOnce : BOOL;
+	_stableTerminal : BOOL;
+	_holdFalseStarted : BOOL;
+	_holdViolationAtDeadline : BOOL;
+	_holdTrueBoundary : BOOL;
+	_stepPass : BOOL;
+	_lateEventuallyFails : BOOL;
+	_sameKeyRestartRejected : BOOL;
+	_cancelled : BOOL;
+	_setupFailureSuppressedBody : BOOL;
+	_partialSetupCleaned : BOOL;
+	_primaryCausePreserved : BOOL;
+	_cleanupTimeoutVisible : BOOL;
+	_sameFixtureRestartRejected : BOOL;
+	_lateSetupCallbackSkipped : BOOL;
+	_lateCleanupSkipped : BOOL;
+	_exactPhaseBoundary : BOOL;
+	_holdTrueOvershoot : BOOL;
+	_holdFalseOvershoot : BOOL;
+	_binding : I_CoUnitFixture;
+	_invalidBinding : REFERENCE TO I_CoUnitFixture;
+	_otherCallback : FB_UpgradeCallback;
+	_fixtureBindingStable : BOOL;
+	_nullBindingRejected : BOOL;
+	_invalidBindingRejected : BOOL;
+END_VAR</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId />
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+      <Interface name="I_CoUnitFixture" ObjectId="">
+        <Methods>
+          <Method name="Setup" ObjectId="" qualifiedName="I_CoUnitFixture.Setup">
+            <interface>
+              <returnType>
+                <derived name="E_CoUnitFixtureCallback" />
+              </returnType>
+              <inputVars>
+                <variable name="Key">
+                  <type>
+                    <derived name="ST_CoUnitFixtureKey" />
+                  </type>
+                </variable>
+                <variable name="Now">
+                  <type>
+                    <derived name="LTIME" />
+                  </type>
+                </variable>
+              </inputVars>
+            </interface>
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Setup : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </Method>
+          <Method name="Body" ObjectId="" qualifiedName="I_CoUnitFixture.Body">
+            <interface>
+              <returnType>
+                <derived name="E_CoUnitFixtureCallback" />
+              </returnType>
+              <inputVars>
+                <variable name="Key">
+                  <type>
+                    <derived name="ST_CoUnitFixtureKey" />
+                  </type>
+                </variable>
+                <variable name="Now">
+                  <type>
+                    <derived name="LTIME" />
+                  </type>
+                </variable>
+              </inputVars>
+            </interface>
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Body : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </Method>
+          <Method name="Cleanup" ObjectId="" qualifiedName="I_CoUnitFixture.Cleanup">
+            <interface>
+              <returnType>
+                <derived name="E_CoUnitFixtureCallback" />
+              </returnType>
+              <inputVars>
+                <variable name="Key">
+                  <type>
+                    <derived name="ST_CoUnitFixtureKey" />
+                  </type>
+                </variable>
+                <variable name="Now">
+                  <type>
+                    <derived name="LTIME" />
+                  </type>
+                </variable>
+              </inputVars>
+            </interface>
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">METHOD Cleanup : E_CoUnitFixtureCallback
+VAR_INPUT
+	Key : ST_CoUnitFixtureKey;
+	Now : LTIME;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </Method>
+        </Methods>
+        <InterfaceAsPlainText>
+          <xhtml xmlns="http://www.w3.org/1999/xhtml">INTERFACE I_CoUnitFixture
+END_INTERFACE
+</xhtml>
+        </InterfaceAsPlainText>
+      </Interface>
+    </data>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="UpgradeHelpers">
+          <Object Name="E_CoUnitTemporalMode" ObjectId="" />
+          <Object Name="E_CoUnitTemporalResult" ObjectId="" />
+          <Object Name="ST_CoUnitFixtureKey" ObjectId="" />
+          <Object Name="E_CoUnitFixtureCallback" ObjectId="" />
+          <Object Name="E_CoUnitFixturePhase" ObjectId="" />
+          <Object Name="E_CoUnitFixtureCause" ObjectId="" />
+          <Object Name="E_CoUnitFixtureOutcome" ObjectId="" />
+          <Object Name="I_CoUnitFixture" ObjectId="">
+            <Object Name="Setup" ObjectId="" />
+            <Object Name="Body" ObjectId="" />
+            <Object Name="Cleanup" ObjectId="" />
+          </Object>
+          <Object Name="FB_CoUnitExpectation" ObjectId="">
+            <Object Name="Start" ObjectId="" />
+            <Object Name="Observe" ObjectId="" />
+          </Object>
+          <Object Name="FB_CoUnitFixture" ObjectId="">
+            <Object Name="Start" ObjectId="" />
+            <Object Name="Execute" ObjectId="" />
+          </Object>
+          <Object Name="FB_UpgradeCallback" ObjectId="">
+            <Object Name="Setup" ObjectId="" />
+            <Object Name="Body" ObjectId="" />
+            <Object Name="Cleanup" ObjectId="" />
+          </Object>
+          <Object Name="PRG_Qualification" ObjectId="" />
+        </Folder>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

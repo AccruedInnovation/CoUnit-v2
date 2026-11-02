@@ -1,0 +1,4 @@
+METHOD INTERNAL GetCanonicalRecordRef : POINTER TO ST_CoUnitTestRecord
+VAR_INPUT
+	Index : UINT;
+END_VAR

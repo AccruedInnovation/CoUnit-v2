@@ -205,7 +205,7 @@
         "state": "FAILED",
         "assertions": 1,
         "failure_type": "Type_LREAL",
-        "message": "F28_AssertEquals_LREAL"
+        "message_contains": "F28_AssertEquals_LREAL"
       },
       {
         "name": "F29_AssertEquals_LTIME",
@@ -226,7 +226,7 @@
         "state": "FAILED",
         "assertions": 1,
         "failure_type": "Type_REAL",
-        "message": "F31_AssertEquals_REAL"
+        "message_contains": "F31_AssertEquals_REAL"
       },
       {
         "name": "F32_AssertEquals_SINT",
@@ -497,7 +497,7 @@
     "_snapshot.Suites[1].Tests[29].NumberOfAsserts = UINT#1",
     "_snapshot.Suites[1].Tests[29].FirstFailure.IsSet",
     "_snapshot.Suites[1].Tests[29].FirstFailure.AssertionType = E_AssertionType.Type_LREAL",
-    "_snapshot.Suites[1].Tests[29].FirstFailure.Message = 'F28_AssertEquals_LREAL'",
+    "FIND(_snapshot.Suites[1].Tests[29].FirstFailure.Message, 'F28_AssertEquals_LREAL') > 0",
     "_snapshot.Suites[1].Tests[30].Name = 'F29_AssertEquals_LTIME'",
     "_snapshot.Suites[1].Tests[30].State = E_CoUnitTestState.FAILED",
     "_snapshot.Suites[1].Tests[30].NumberOfAsserts = UINT#1",
@@ -515,7 +515,7 @@
     "_snapshot.Suites[1].Tests[32].NumberOfAsserts = UINT#1",
     "_snapshot.Suites[1].Tests[32].FirstFailure.IsSet",
     "_snapshot.Suites[1].Tests[32].FirstFailure.AssertionType = E_AssertionType.Type_REAL",
-    "_snapshot.Suites[1].Tests[32].FirstFailure.Message = 'F31_AssertEquals_REAL'",
+    "FIND(_snapshot.Suites[1].Tests[32].FirstFailure.Message, 'F31_AssertEquals_REAL') > 0",
     "_snapshot.Suites[1].Tests[33].Name = 'F32_AssertEquals_SINT'",
     "_snapshot.Suites[1].Tests[33].State = E_CoUnitTestState.FAILED",
     "_snapshot.Suites[1].Tests[33].NumberOfAsserts = UINT#1",

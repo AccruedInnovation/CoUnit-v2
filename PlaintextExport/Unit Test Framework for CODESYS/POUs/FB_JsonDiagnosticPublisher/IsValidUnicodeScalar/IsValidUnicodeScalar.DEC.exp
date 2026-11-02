@@ -1,0 +1,5 @@
+METHOD PRIVATE IsValidUnicodeScalar : BOOL
+VAR_INPUT
+	CodePoint : UDINT;
+	Minimum : UDINT;
+END_VAR

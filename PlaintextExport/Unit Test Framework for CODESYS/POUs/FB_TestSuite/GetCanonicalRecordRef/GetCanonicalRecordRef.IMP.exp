@@ -1,0 +1,3 @@
+GetCanonicalRecordRef := 0;
+IF Index = 0 OR Index > NumberOfTests THEN RETURN; END_IF
+GetCanonicalRecordRef := ADR(TestRecords[Index]);

@@ -1,0 +1,5 @@
+METHOD PRIVATE ServicePhaseCommit : BOOL
+VAR
+	_commitError : UDINT;
+	_restoreOk : BOOL;
+END_VAR

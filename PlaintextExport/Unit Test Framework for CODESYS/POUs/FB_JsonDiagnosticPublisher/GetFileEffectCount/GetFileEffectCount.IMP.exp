@@ -1,0 +1,1 @@
+GetFileEffectCount := _file.GetEffectCount();

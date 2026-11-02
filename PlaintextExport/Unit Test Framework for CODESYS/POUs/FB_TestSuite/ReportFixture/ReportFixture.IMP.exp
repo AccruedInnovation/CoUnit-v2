@@ -1,0 +1,24 @@
+ReportFixture := FALSE;
+IF NOT GVL_coUnit.coUnitRunner.ValidateContext(Suite := THIS, RequireTest := TRUE, TestIndex => _index, Execute => _execute) THEN RETURN; END_IF
+IF NOT _execute THEN RETURN; END_IF
+_previous := TestRecords[_index].CleanupOutcome;
+IF (_previous = E_CoUnitFixtureOutcome.PASSED OR _previous = E_CoUnitFixtureOutcome.FAILED OR _previous = E_CoUnitFixtureOutcome.INCOMPLETE) AND CleanupOutcome <> _previous THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Terminal cleanup result cannot change');
+	RETURN;
+END_IF
+IF _previous <> E_CoUnitFixtureOutcome.NOT_RUN AND CleanupOutcome = E_CoUnitFixtureOutcome.NOT_RUN THEN
+	GVL_coUnit.coUnitRunner.FrameworkError(Reason := 'Required cleanup cannot be erased');
+	RETURN;
+END_IF
+IF TestRecords[_index].TerminationCause = E_CoUnitFixtureCause.NONE THEN TestRecords[_index].TerminationCause := PrimaryCause; END_IF
+TestRecords[_index].CleanupOutcome := CleanupOutcome;
+IF LEN(Detail) > 0 AND (_previous = E_CoUnitFixtureOutcome.NOT_RUN OR _previous = E_CoUnitFixtureOutcome.PENDING) THEN
+	TestRecords[_index].LaterDetailTruncated := LEN(Detail) > 127;
+	IF TestRecords[_index].LaterDetailTruncated THEN
+		TestRecords[_index].LaterDetail := CONCAT(LEFT(Detail, 113), '...<truncated>');
+	ELSE
+		TestRecords[_index].LaterDetail := Detail;
+	END_IF
+END_IF
+IF CleanupOutcome = E_CoUnitFixtureOutcome.INCOMPLETE THEN GVL_coUnit.coUnitRunner.MarkCleanupIncomplete(); END_IF
+ReportFixture := TRUE;

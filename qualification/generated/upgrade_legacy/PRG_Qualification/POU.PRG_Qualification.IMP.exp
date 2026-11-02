@@ -1,0 +1,6 @@
+RUN();
+IF Suite.ActiveCompleted THEN
+	Done := TRUE;
+	OraclePass := (Suite.DisabledEffects = 0) AND (Suite.ActiveEffects = 1);
+	IF NOT OraclePass THEN FailedCheck := 1; END_IF
+END_IF

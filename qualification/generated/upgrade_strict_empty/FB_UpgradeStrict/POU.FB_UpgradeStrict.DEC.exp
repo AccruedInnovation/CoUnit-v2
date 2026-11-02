@@ -1,0 +1,1 @@
+FUNCTION_BLOCK FB_UpgradeStrict EXTENDS FB_TestSuite

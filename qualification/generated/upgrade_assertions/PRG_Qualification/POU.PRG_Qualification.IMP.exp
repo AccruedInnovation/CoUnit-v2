@@ -1,0 +1,26 @@
+IF NOT _started THEN
+IF NOT _waiting THEN
+	CASE _step OF
+	0: _request := _request + 1; Exchange.Operation := 1; Exchange.RunId := 'assertions-run'; Exchange.BuildId := 'assertions-build'; Exchange.TargetId := 'qualified-simulator'; Exchange.RunTimeout := T#10s; Exchange.CleanupTimeout := T#2s; Exchange.RequestId := _request; _waiting := TRUE; _step := 1;
+	2: IF Exchange.Status.CatalogReady THEN _request := _request + 1; Exchange.Operation := 3; Exchange.RunId := 'assertions-run'; Exchange.ExpectedGeneration := 1; Exchange.ExpectedSelected := 3; Exchange.RequestId := _request; _waiting := TRUE; _step := 3; END_IF
+	4: IF Exchange.Status.ExecutionComplete THEN _request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'assertions-run'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 1; Exchange.RequestId := _request; _waiting := TRUE; _step := 5; END_IF
+	6: _request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'assertions-run'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 2; Exchange.RequestId := _request; _waiting := TRUE; _step := 7;
+	8: _request := _request + 1; Exchange.Operation := 5; Exchange.RunId := 'assertions-run'; Exchange.ExpectedGeneration := 1; Exchange.SuiteIndex := 1; Exchange.CaseIndex := 3; Exchange.RequestId := _request; _waiting := TRUE; _step := 9;
+	10:
+		OraclePass := _configured AND _started AND _customObserved AND _floatObserved AND _stringObserved AND (Exchange.Status.Disposition = E_CoUnitRunDisposition.NORMAL) AND (Suite.CustomEffects = 1) AND (Suite.FloatEffects = 1) AND (Suite.StringEffects = 1);
+		IF NOT OraclePass THEN FailedCheck := 1; END_IF Done := TRUE;
+	END_CASE
+ELSE
+	IF Exchange.AckId = _request THEN
+		_waiting := FALSE;
+		CASE _step OF
+		1: _configured := Exchange.Accepted AND Exchange.Status.CatalogReady; _step := 2;
+		3: _started := Exchange.Accepted AND Exchange.Status.SelectionFrozen; _step := 4;
+		5: _customObserved := Exchange.Accepted AND (Exchange.Page.State = E_CoUnitTestState.FAILED) AND Exchange.Page.FirstFailure.IsSet AND (Exchange.Page.FirstFailure.AssertionType = E_AssertionType.Type_BOOL) AND (Exchange.Page.FirstFailure.ExpectedText = 'limit=10') AND (Exchange.Page.FirstFailure.ActualText = 'limit=12') AND (FIND(Exchange.Page.FirstFailure.Message, 'domain/limit') > 0);
+		   _step := 6;
+		7: _floatObserved := Exchange.Accepted AND (Exchange.Page.State = E_CoUnitTestState.FAILED) AND Exchange.Page.FirstFailure.IsSet AND (Exchange.Page.FirstFailure.ExpectedText <> Exchange.Page.FirstFailure.ActualText) AND (FIND(Exchange.Page.FirstFailure.ExpectedText, '16#3F800000') > 0) AND (FIND(Exchange.Page.FirstFailure.ActualText, '16#3F800001') > 0) AND (FIND(Exchange.Page.FirstFailure.Message, 'Delta=') > 0) AND (FIND(Exchange.Page.FirstFailure.Message, '16#00000000') > 0); _step := 8;
+		9: _stringObserved := Exchange.Accepted AND (Exchange.Page.State = E_CoUnitTestState.FAILED) AND Exchange.Page.FirstFailure.IsSet AND (Exchange.Page.FirstFailure.AssertionType = E_AssertionType.Type_ANY) AND (Exchange.Page.FirstFailure.ExpectedText = 'code units=300') AND (Exchange.Page.FirstFailure.ActualText = 'code units=300') AND (FIND(Exchange.Page.FirstFailure.Message, 'offset=299') > 0); _step := 10;
+		END_CASE
+	END_IF
+END_IF
+RUN_CONTROLLED(Exchange := Exchange);

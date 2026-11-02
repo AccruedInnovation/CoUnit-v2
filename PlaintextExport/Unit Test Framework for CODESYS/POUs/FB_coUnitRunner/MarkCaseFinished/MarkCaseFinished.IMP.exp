@@ -1,0 +1,8 @@
+IF Index <> ActiveTestIndex THEN RETURN; END_IF
+IF (ActiveSuiteIndex = _lastProgressSuite) AND (Index = _lastProgressCase) AND (_lastProgressPhase <> E_CoUnitFixturePhase.COMPLETE) THEN
+	_lastProgressPhase := E_CoUnitFixturePhase.COMPLETE;
+	_lastProgressAt := LTIME();
+	IF _progressEpoch < ULINT#18446744073709551615 THEN
+		_progressEpoch := _progressEpoch + 1;
+	END_IF
+END_IF

@@ -7,6 +7,18 @@ VAR
 	{attribute 'noinit'}
 	InstancePath : T_MaxString;
 	TestRecords : ARRAY[1..GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF ST_CoUnitTestRecord;
+	_terminalCursor : UDINT := 1;
+	_catalogIndex : ARRAY[0..2 * GVL_Param_coUnit.MaxNumberOfTestsForEachTestSuite] OF UINT;
+	_catalogSkipped : UINT;
+	_catalogMode : BOOL;
+	_catalogFrozen : BOOL;
+	_catalogPreparing : BOOL;
+	_catalogDeclaring : BOOL;
+	_catalogIncremental : BOOL;
+	_catalogCallsThisStep : UINT;
+	_strictDefinitions : BOOL;
+	_suiteId : STRING(63);
+	_selectionIndex : UINT;
 	NumberOfTests : UINT;
 	NumberOfOrderedTests : UINT;
 	OrderedCursor : UDINT := 1;

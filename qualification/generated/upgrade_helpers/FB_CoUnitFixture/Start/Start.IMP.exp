@@ -1,0 +1,20 @@
+Start := FALSE;
+IF NOT __ISVALIDREF(Fixture) THEN RETURN; END_IF
+IF Fixture = 0 THEN RETURN; END_IF
+IF (Phase <> E_CoUnitFixturePhase.IDLE) AND (Phase <> E_CoUnitFixturePhase.COMPLETE) THEN RETURN; END_IF
+IF (Phase = E_CoUnitFixturePhase.COMPLETE) AND (Key.RunId = _key.RunId) AND (Key.SuiteId = _key.SuiteId) AND (Key.CaseId = _key.CaseId)
+	AND (Key.RowKey = _key.RowKey) AND (Key.AttemptId = _key.AttemptId) AND (Key.StepId = _key.StepId) THEN RETURN; END_IF
+IF (Now < LTIME#0ns) OR (PhaseTimeout <= LTIME#0ns) OR (CleanupBudget < LTIME#0ns) THEN RETURN; END_IF
+IF (Now > (LTIME#9223372036854775807ns - PhaseTimeout)) OR (Now > (LTIME#9223372036854775807ns - CleanupBudget)) THEN RETURN; END_IF
+_key := Key;
+_fixture := Fixture;
+_phaseTimeout := PhaseTimeout;
+_lastNow := Now;
+_cleanupBudget := CleanupBudget;
+_setupEntered := FALSE;
+PrimaryCause := E_CoUnitFixtureCause.NONE;
+CleanupOutcome := E_CoUnitFixtureOutcome.NOT_RUN;
+PhaseDeadline := Now + PhaseTimeout;
+Phase := E_CoUnitFixturePhase.SETUP;
+Complete := FALSE;
+Start := TRUE;

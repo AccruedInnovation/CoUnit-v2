@@ -1,0 +1,6 @@
+FUNCTION_BLOCK FB_UpgradeLegacyGuarded EXTENDS FB_TestSuite
+VAR_OUTPUT
+	DisabledEffects : UINT;
+	ActiveEffects : UINT;
+	ActiveCompleted : BOOL;
+END_VAR

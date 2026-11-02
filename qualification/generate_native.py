@@ -100,7 +100,7 @@ def assertions():
             body += 'Delta := 0.0, '
         testname = f'F{i:02}_{name}'
         body += f"Message := '{testname}');\nTEST_FINISHED();"
-        cases.append(case(testname, body, state='FAILED', failure_type=etype, exact_message=not array and typ not in ('STRING', 'WSTRING')))
+        cases.append(case(testname, body, state='FAILED', failure_type=etype, exact_message=not array and typ not in ('STRING', 'WSTRING', 'REAL', 'LREAL')))
     return [suite('FB_QualificationFamilies', cases, '\n'.join(variables))], [[expected for _, expected in cases]]
 
 
@@ -275,6 +275,7 @@ def reporting():
     declaration = '''PROGRAM PRG_Qualification
 VAR_INPUT
 	Path : T_MaxString := 'counit_qualification/report.xml';
+	JsonPath : T_MaxString := 'counit_qualification/report.json';
 	TextMode : E_CoUnitTextMode := E_CoUnitTextMode.UNKNOWN;
 	ChunkLimit : UDINT := 64;
 	FaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
@@ -284,6 +285,14 @@ VAR_INPUT
 	ShortWrite : BOOL;
 	PauseAfterPhase : UINT;
 	ExpectedState : E_CoUnitReportState := E_CoUnitReportState.WRITTEN;
+	JsonEnabled : BOOL := FALSE;
+	JsonExpectedState : E_CoUnitReportState := E_CoUnitReportState.DISABLED;
+	JsonFaultOperation : E_CoUnitFileOperation := E_CoUnitFileOperation.NONE;
+	JsonFaultOccurrence : UDINT := 0;
+	JsonFaultOccurrence2 : UDINT := 0;
+	JsonFaultError : UDINT := 16#FFFF0001;
+	JsonShortWrite : BOOL;
+	JsonPauseAfterPhase : UINT;
 	ReleasePause : BOOL;
 	SuiteName : T_MaxString := 'Suite & <A>';
 	FailureMessage : T_MaxString := 'expected <3 & 4> but got "5"';
@@ -296,29 +305,48 @@ VAR_OUTPUT
 	FileEffects : UDINT;
 	LastFileError : UDINT;
 	ReportState : E_CoUnitReportState;
+	JsonConfigured : BOOL;
+	JsonPhase : UINT;
+	JsonFileEffects : UDINT;
+	JsonLastFileError : UDINT;
+	JsonReportState : E_CoUnitReportState;
+	JsonCleanupWarning : BOOL;
+	JsonFlushUnsupported : BOOL;
 	SnapshotBytes : UDINT;
+	JsonPublisherBytes : UDINT;
 END_VAR
 VAR
 	_snapshot : ST_CoUnitRunSnapshot;
+	_backing : ARRAY[1..6] OF ST_CoUnitTestRecord;
+	_fixtureIndex : UINT;
 	_results : FB_TestResults;
 	_publisher : FB_xUnitXmlPublisher(_results);
+	_jsonPublisher : FB_JsonDiagnosticPublisher;
 	_result : BOOL;
+	_jsonResult : BOOL;
 	Init : BOOL;
 END_VAR'''
     body = '''SnapshotBytes := SIZEOF(ST_CoUnitRunSnapshot);
+JsonPublisherBytes := SIZEOF(_jsonPublisher);
 IF NOT Init THEN
+	FOR _fixtureIndex := 1 TO 6 DO
+		_snapshot.Suites[1].Tests[_fixtureIndex].Name REF= _backing[_fixtureIndex].CanonicalName;
+		_snapshot.Suites[1].Tests[_fixtureIndex].ClassName REF= _snapshot.Suites[1].Name;
+		_snapshot.Suites[1].Tests[_fixtureIndex].LaterDetail REF= _backing[_fixtureIndex].LaterDetail;
+		_snapshot.Suites[1].Tests[_fixtureIndex].FirstFailure REF= _backing[_fixtureIndex].FirstFailure;
+	END_FOR
 	_snapshot.Disposition := E_CoUnitRunDisposition.NORMAL;
 	_snapshot.SuiteCount := 1;
-	_snapshot.Total := 4;
+	_snapshot.Total := 6;
 	_snapshot.Passed := 1;
-	_snapshot.Failed := 1;
+	_snapshot.Failed := 3;
 	_snapshot.Skipped := 1;
 	_snapshot.Errors := 1;
 	_snapshot.Suites[1].Name := SuiteName;
 	_snapshot.Suites[1].Identity := 0;
-	_snapshot.Suites[1].Total := 4;
+	_snapshot.Suites[1].Total := 6;
 	_snapshot.Suites[1].Passed := 1;
-	_snapshot.Suites[1].Failed := 1;
+	_snapshot.Suites[1].Failed := 3;
 	_snapshot.Suites[1].Skipped := 1;
 	_snapshot.Suites[1].Errors := 1;
 	_snapshot.Suites[1].Tests[1].Name := 'Pass "quoted"';
@@ -332,24 +360,62 @@ IF NOT Init THEN
 	_snapshot.Suites[1].Tests[2].FirstFailure.IsSet := TRUE;
 	_snapshot.Suites[1].Tests[2].FirstFailure.AssertionType := E_AssertionType.Type_DINT;
 	_snapshot.Suites[1].Tests[2].FirstFailure.Message := FailureMessage;
-	_snapshot.Suites[1].Tests[3].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ExpectedText := '3';
+	_snapshot.Suites[1].Tests[2].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[3].Name := 'String scalar mismatch';
 	_snapshot.Suites[1].Tests[3].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.SKIPPED;
-	_snapshot.Suites[1].Tests[4].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[3].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[3].NumberOfAsserts := 1;
+	_snapshot.Suites[1].Tests[3].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[3].FirstFailure.AssertionType := E_AssertionType.Type_STRING;
+	_snapshot.Suites[1].Tests[3].FirstFailure.Message := 'string mismatch';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ExpectedText := 'left <& "quoted"';
+	_snapshot.Suites[1].Tests[3].FirstFailure.ActualText := 'right &> "quoted"';
+	_snapshot.Suites[1].Tests[4].Name := 'Array mismatch';
 	_snapshot.Suites[1].Tests[4].ClassName := SuiteName;
-	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.ERROR;
+	_snapshot.Suites[1].Tests[4].State := E_CoUnitTestState.FAILED;
+	_snapshot.Suites[1].Tests[4].NumberOfAsserts := 2;
+	_snapshot.Suites[1].Tests[4].FirstFailure.IsSet := TRUE;
+	_snapshot.Suites[1].Tests[4].FirstFailure.AssertionType := E_AssertionType.Type_Array_UINT;
+	_snapshot.Suites[1].Tests[4].FirstFailure.Message := 'array mismatch';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ExpectedText := '4';
+	_snapshot.Suites[1].Tests[4].FirstFailure.ActualText := '5';
+	_snapshot.Suites[1].Tests[5].Name := 'Disabled';
+	_snapshot.Suites[1].Tests[5].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[5].State := E_CoUnitTestState.SKIPPED;
+	_snapshot.Suites[1].Tests[5].NumberOfAsserts := 0;
+	_snapshot.Suites[1].Tests[6].Name := 'Framework error';
+	_snapshot.Suites[1].Tests[6].ClassName := SuiteName;
+	_snapshot.Suites[1].Tests[6].State := E_CoUnitTestState.ERROR;
 	_snapshot.IsValid := TRUE;
+	GVL_coUnit.xUnitFilePath := Path;
 	Configured := _publisher.ConfigureTest(Path := Path, Enabled := TRUE, ChunkLimit := ChunkLimit, TextMode := TextMode, FaultOperation := FaultOperation, FaultOccurrence := FaultOccurrence, FaultOccurrence2 := FaultOccurrence2, FaultError := FaultError, ShortWrite := ShortWrite, PauseAfterPhase := PauseAfterPhase);
+	JsonConfigured := _jsonPublisher.ConfigureTest(Path := JsonPath, Enabled := JsonEnabled, TextMode := TextMode,
+		FaultOperation := JsonFaultOperation, FaultOccurrence := JsonFaultOccurrence, FaultOccurrence2 := JsonFaultOccurrence2,
+		FaultError := JsonFaultError, ShortWrite := JsonShortWrite, PauseAfterPhase := JsonPauseAfterPhase);
 	Init := TRUE;
 END_IF
-IF ReleasePause THEN _result := _publisher.Resume(); END_IF
+IF ReleasePause THEN
+	_result := _publisher.Resume();
+	_jsonResult := _jsonPublisher.Resume();
+END_IF
 _result := _publisher.ServiceSnapshot(Snapshot := _snapshot);
+_jsonResult := _jsonPublisher.ServiceSnapshot(Snapshot := _snapshot);
 Phase := _publisher.GetPhase();
 ReportState := _publisher.GetReportState();
 FileEffects := _publisher.GetFileEffectCount();
 LastFileError := _publisher.GetLastFileError();
-Done := (ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED);
-OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (_snapshot.Total = 4) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 1) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1);
+JsonPhase := _jsonPublisher.GetPhase();
+JsonReportState := _jsonPublisher.GetReportState();
+JsonFileEffects := _jsonPublisher.GetFileEffectCount();
+JsonLastFileError := _jsonPublisher.GetLastFileError();
+JsonCleanupWarning := _jsonPublisher.GetCleanupWarning();
+JsonFlushUnsupported := _jsonPublisher.GetFlushUnsupported();
+Done := ((ReportState = E_CoUnitReportState.WRITTEN) OR (ReportState = E_CoUnitReportState.FAILED)) AND
+	((JsonReportState = E_CoUnitReportState.WRITTEN) OR (JsonReportState = E_CoUnitReportState.FAILED) OR (JsonReportState = E_CoUnitReportState.DISABLED));
+OraclePass := Done AND (ReportState = ExpectedState) AND (JsonReportState = JsonExpectedState) AND _snapshot.IsValid AND
+	(_snapshot.Total = 6) AND (_snapshot.Passed = 1) AND (_snapshot.Failed = 3) AND (_snapshot.Skipped = 1) AND (_snapshot.Errors = 1) AND
+	((JsonEnabled) OR (JsonFileEffects = 0));
 '''
     root = HERE / 'generated/reporting'
     root.mkdir(parents=True, exist_ok=True)
@@ -359,9 +425,27 @@ OraclePass := Done AND (ReportState = ExpectedState) AND _snapshot.IsValid AND (
     plc.build_xml([item], 'CoUnit publication qualification').write(str(root / 'qualification.xml'), encoding='utf-8', xml_declaration=True)
     expected = json.loads((HERE / 'fixtures/mixed-results.expected.json').read_text(encoding='utf-8'))
     expected['run_disposition'] = 'NORMAL'
-    expected['suites'][0]['cases'][3]['error']['message'] = 'Framework error'
+    suite = expected['suites'][0]
+    suite.update(identity=0, tests=6, failures=3)
+    suite['cases'][1]['failure']['body'] = 'Expected: 3\nActual: 5'
+    suite['cases'].insert(2, {
+        'classname': 'Suite & <A>', 'name': 'String scalar mismatch', 'status': 'failure', 'assertions': 1,
+        'failure': {
+            'type': 'Type_STRING', 'message': 'string mismatch',
+            'body': 'Expected: left <& "quoted"\nActual: right &> "quoted"',
+        },
+    })
+    suite['cases'].insert(3, {
+        'classname': 'Suite & <A>', 'name': 'Array mismatch', 'status': 'failure', 'assertions': 2,
+        'failure': {
+            'type': 'Type_Array_UINT', 'message': 'array mismatch',
+            'body': 'Expected: 4\nActual: 5',
+        },
+    })
+    suite['cases'][5]['error']['message'] = 'Framework error'
+    expected.update(tests=6, failures=3)
     (root / 'expected.json').write_text(json.dumps(expected, indent=2) + '\n', encoding='utf-8')
-    print('reporting: independent four-case snapshot and parameterized fault/phase controls')
+    print('reporting: independent six-case snapshot and parameterized fault/phase controls')
 
 
 def platform_helpers():
@@ -522,7 +606,7 @@ END_VAR'''
     long_format = prefix + '%s' + suffix
     long_argument = 'QARG-BEGIN|' + 'a' * (250 - len('QARG-BEGIN|') - len('|QARG-END')) + '|QARG-END'
     utf8_prefix = 'QUTF8-BEGIN|' + 'u' * (126 - len('QUTF8-BEGIN|'))
-    utf8_text = utf8_prefix + 'é|QUTF8-TAIL'
+    utf8_text = utf8_prefix + '\u00e9|QUTF8-TAIL'
     body = '''IF NOT Done THEN
 	PlainResult := WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), 'CoUnit qualification plain message', 'unused');
 	SubstitutionResult := WRITE_DEVICE_LOG(UDINT_TO_DWORD(CmpLog.LogClass.LOG_INFO), 'CoUnit qualification value=%s', 'sentinel-42');
@@ -592,7 +676,7 @@ END_IF'''
 
 def utf8_diagnostic():
     # Independent Unicode encoder is the oracle for the raw-byte implementation.
-    message = 'A' + 'é' * 124
+    message = 'A' + '\u00e9' * 124
     diagnostic = 'Invalid assertion argument: ' + message
     marker = '...<truncated>'
     limit = 255 - len(marker.encode('ascii'))
