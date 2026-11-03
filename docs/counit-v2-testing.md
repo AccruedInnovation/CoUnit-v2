@@ -1,6 +1,6 @@
 # CoUnit v2 testing for agents
 
-For current **CoUnit 2.1.0.6** installation, guarded/catalog/temporal APIs,
+For **CoUnit 2.1.0.7** installation, guarded/catalog/temporal APIs,
 structured diagnostics and migration, use the [2.1 guide](2.1-upgrade.md) and its
 examples. Confirm the exact installed provider and matched host route. Qualification
 is bounded to the documented journeys; historical 2.0 examples below are not
@@ -47,7 +47,7 @@ bTestComplete := GVL_coUnit.coUnitRunner.AreAllTestSuitesFinished();
 
 Set the report path before the first RUN call. Keep RUN executing while the host waits for the complete fresh report. A completion flag alone is not a passing result. For framework qualification, use `qualification/generate_native.py` and its generated PRG_Qualification. Consumer programs follow the runner pattern above.
 
-An optional diagnostic JSON sidecar is available in 2.1.0.6: set the library reference parameter `DiagnosticJsonEnablePublish` to `TRUE` before building and bind a distinct fresh run-specific path to `GVL_coUnit.DiagnosticJsonFilePath` before the first RUN call. The default is `FALSE`, so existing consumers continue to publish xUnit only. Observe the JSON publisher's own state, phase, file-error and cleanup-warning getters; XML publication success does not imply JSON success. Bind the requested path to the same exact run in the host completion record and capture it before runtime cleanup. See [report acceptance](../REPORTING.md) and [reporting qualification](../qualification/README.md).
+An optional diagnostic JSON sidecar is available in the current version: set the library reference parameter `DiagnosticJsonEnablePublish` to `TRUE` before building and bind a distinct fresh run-specific path to `GVL_coUnit.DiagnosticJsonFilePath` before the first RUN call. The default is `FALSE`, so existing consumers continue to publish xUnit only. Observe the JSON publisher's own state, phase, file-error and cleanup-warning getters; XML publication success does not imply JSON success. Bind the requested path to the same exact run in the host completion record and capture it before runtime cleanup. See [report acceptance](../REPORTING.md) and [reporting qualification](../qualification/README.md).
 
 ## Test methods and isolation
 
