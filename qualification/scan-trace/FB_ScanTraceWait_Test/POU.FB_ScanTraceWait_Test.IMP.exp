@@ -1,0 +1,19 @@
+IF CoUnit.TEST_GUARDED(TestName := 'TraceWaitThenTerminal') THEN
+	_openOk := _trace.BeginScan(Name := 'trace-wait', Stage := _phase);
+	IF _phase = 0 THEN
+		_emitOk := _trace.Emit(Payload := 'current=waiting fixture_ms=10 prior=unknown abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwx');
+		_closeOk := _trace.EndScan(Terminal := FALSE);
+		_firstOk := _openOk AND_THEN _emitOk AND_THEN _closeOk AND_THEN NOT _trace.ScanOpen;
+		_phase := 1;
+		RETURN;
+	END_IF
+	_emitOk := _trace.Emit(Payload := 'current=terminal progress=50% deadline_ms=20 wall_ms=unknown');
+	_closeOk := _trace.EndScan(Terminal := TRUE);
+	AssertTrue(Condition := _firstOk, Message := 'Waiting scan closed before early return');
+	AssertTrue(Condition := _openOk AND_THEN _emitOk AND_THEN _closeOk, Message := 'Terminal scan accepted');
+	AssertTrue(Condition := _trace.Scan = 2 AND_THEN _trace.Ended AND_THEN _trace.Complete AND_THEN NOT _trace.Incomplete, Message := 'Two scans ended with complete trace');
+	AssertTrue(Condition := _trace.HaveSinkResult AND_THEN _trace.Errors = 0 AND_THEN _trace.ProtocolErrors = 0, Message := 'No trace sink or protocol errors');
+	_resetOk := _trace.Reset();
+	AssertTrue(Condition := _resetOk AND_THEN _trace.Scan = 0 AND_THEN _trace.Sequence = 0 AND_THEN NOT _trace.Ended, Message := 'Trace reset for next use');
+	CoUnit.TEST_FINISHED();
+END_IF

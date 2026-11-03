@@ -1,0 +1,4 @@
+METHOD Emit : BOOL
+VAR_INPUT
+	Payload : STRING(255);
+END_VAR

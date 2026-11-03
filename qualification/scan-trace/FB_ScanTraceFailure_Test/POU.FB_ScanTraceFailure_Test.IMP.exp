@@ -1,0 +1,8 @@
+IF CoUnit.TEST_GUARDED(TestName := 'TraceDeliberateFailure') THEN
+	_openOk := _trace.BeginScan(Name := 'trace-failure', Stage := 1);
+	_emitOk := _trace.Emit(Payload := 'current=assertion-failure prior=unknown');
+	AssertResult(Passed := FALSE, CheckId := 'trace/expected-failure', Message := 'Deliberate failure', ExpectedText := 'TRUE', ActualText := 'FALSE', Detail := 'Failure does not suppress trace closure');
+	_closeOk := _trace.EndScan(Terminal := TRUE);
+	AssertTrue(Condition := _openOk AND_THEN _emitOk AND_THEN _closeOk AND_THEN _trace.Complete, Message := 'Trace closed after assertion failure');
+	CoUnit.TEST_FINISHED();
+END_IF

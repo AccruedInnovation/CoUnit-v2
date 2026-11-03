@@ -1,0 +1,19 @@
+(* Opt-in, one instance per case; all calls execute in the caller's task. *)
+FUNCTION_BLOCK FB_TestScanTrace
+VAR_OUTPUT
+	Scan : UDINT;
+	Sequence : UDINT;
+	Errors : UDINT; (* Failed sink calls; saturates. *)
+	ProtocolErrors : UDINT; (* Invalid calls/data or exhausted counters; saturates. *)
+	LastResult : RTS_IEC_RESULT;
+	HaveSinkResult : BOOL;
+	ScanOpen : BOOL;
+	Ended : BOOL;
+	Complete : BOOL; (* Terminal close and every attempted record accepted. *)
+	Incomplete : BOOL; (* Latched until Reset. *)
+END_VAR
+VAR
+	_name : STRING(32);
+	_text : STRING(255);
+	_written : BOOL;
+END_VAR

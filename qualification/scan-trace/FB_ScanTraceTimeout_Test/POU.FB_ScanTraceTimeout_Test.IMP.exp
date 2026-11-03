@@ -1,0 +1,6 @@
+IF CoUnit.TEST_GUARDED(TestName := 'TraceDeliberateTimeout') THEN
+	_openOk := _trace.BeginScan(Name := 'trace-timeout', Stage := 1);
+	_emitOk := _trace.Emit(Payload := 'current=waiting deadline_ms=host-controlled');
+	_closeOk := _trace.EndScan(Terminal := FALSE);
+	RETURN; (* Deliberately unfinished: select alone with a finite host timeout. *)
+END_IF

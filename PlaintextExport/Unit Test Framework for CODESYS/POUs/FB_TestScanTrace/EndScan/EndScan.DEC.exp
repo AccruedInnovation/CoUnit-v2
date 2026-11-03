@@ -1,0 +1,7 @@
+METHOD EndScan : BOOL
+VAR_INPUT
+	Terminal : BOOL;
+END_VAR
+VAR
+	_text : STRING(160);
+END_VAR

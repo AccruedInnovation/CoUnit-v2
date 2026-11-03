@@ -1,4 +1,9 @@
-# CoUnit 2.1.0.6
+# CoUnit 2.1.0.7 candidate
+
+The opt-in [scan-tracing candidate](docs/scan-tracing.md) has a native library
+build and read-back, but has not completed installed-consumer or runtime
+qualification. Existing 2.1.0.6 instructions and qualification below remain
+version-specific. Do not treat the 2.1.0.7 artifacts as a qualified release.
 
 CoUnit is an xUnit-style unit-testing library for CODESYS. It provides test
 suites, assertions, cyclic execution and xUnit reports, with optional JSON

@@ -1,0 +1,17 @@
+IF CoUnit.TEST_GUARDED(TestName := 'TraceRejectsUnrepresentablePayload') THEN
+	_openOk := _trace.BeginScan(Name := 'trace-protocol', Stage := 1);
+	_emitOk := _trace.Emit(Payload := 'invalid$Nline');
+	_closeOk := _trace.EndScan(Terminal := TRUE);
+	AssertTrue(Condition := _openOk AND_THEN _closeOk, Message := 'Valid frame records accepted');
+	AssertTrue(Condition := NOT _emitOk AND_THEN _trace.Incomplete AND_THEN NOT _trace.Complete AND_THEN _trace.ProtocolErrors = 1, Message := 'Rejected data marks trace incomplete');
+	_resetOk := _trace.Reset();
+	AssertTrue(Condition := _resetOk AND_THEN NOT _trace.Incomplete AND_THEN _trace.ProtocolErrors = 0, Message := 'Reset clears closed trace status');
+	_openOk := _trace.BeginScan(Name := 'trace-late', Stage := 1);
+	_closeOk := _trace.EndScan(Terminal := TRUE);
+	AssertTrue(Condition := _openOk AND_THEN _closeOk AND_THEN _trace.Complete, Message := 'Clean trace completes');
+	_lateOk := _trace.Emit(Payload := 'late');
+	AssertTrue(Condition := NOT _lateOk AND_THEN _trace.Incomplete AND_THEN NOT _trace.Complete AND_THEN _trace.ProtocolErrors = 1, Message := 'Late call invalidates completeness');
+	_resetOk := _trace.Reset();
+	AssertTrue(Condition := _resetOk, Message := 'Closed trace resets');
+	CoUnit.TEST_FINISHED();
+END_IF

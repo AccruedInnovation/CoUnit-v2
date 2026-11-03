@@ -57,7 +57,7 @@ def source_objects(source=ROOT / 'PlaintextExport'):
 
 def active_objects(source=ROOT / 'PlaintextExport'):
     objects = source_objects(source)
-    roots = {'fb_testsuite', 'fb_testresults', 'fb_counitfixture', 'fb_counitexpectation', 'write_device_log', 'bind_legacy_results', 'configure_legacy_run'}
+    roots = {'fb_testsuite', 'fb_testresults', 'fb_counitfixture', 'fb_counitexpectation', 'fb_testscantrace', 'write_device_log', 'bind_legacy_results', 'configure_legacy_run'}
     roots.update(key for key in objects if key.startswith(('test', 'is_test', 'run', 'counit_')))
     pending, seen = list(roots & objects.keys()), set()
     while pending:

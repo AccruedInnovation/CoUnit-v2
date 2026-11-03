@@ -1,0 +1,7 @@
+Emit := FALSE;
+IF NOT ScanOpen OR Ended THEN
+	Incomplete := TRUE; Complete := FALSE;
+	IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+	RETURN;
+END_IF
+Emit := _Write(Kind := 'DATA', Text := Payload);
