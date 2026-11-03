@@ -1,0 +1,10 @@
+FUNCTION_BLOCK FB_ScanTraceWait_Test EXTENDS CoUnit.FB_TestSuite
+VAR
+	_trace : CoUnit.FB_TestScanTrace;
+	_phase : UINT;
+	_openOk : BOOL;
+	_emitOk : BOOL;
+	_closeOk : BOOL;
+	_firstOk : BOOL;
+	_resetOk : BOOL;
+END_VAR

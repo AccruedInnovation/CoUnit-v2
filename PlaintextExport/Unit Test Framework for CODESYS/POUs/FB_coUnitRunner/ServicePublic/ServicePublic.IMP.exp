@@ -175,7 +175,7 @@ IF _request <> Exchange.AckId THEN
 END_IF
 IF _controlledMode THEN ExecuteRun(Mode := E_CoUnitRunMode.ALL_SUITES, Delay := T#0ms); END_IF
 Exchange.Status.SchemaVersion := 2;
-Exchange.Status.FrameworkVersion := '2.1.0.6';
+Exchange.Status.FrameworkVersion := '2.1.0.7';
 Exchange.Status.RunId := _publicRunId;
 Exchange.Status.BuildId := _publicBuildId;
 Exchange.Status.TargetId := _publicTargetId;

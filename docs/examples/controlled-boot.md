@@ -7,5 +7,5 @@ build and runtime workflow; installing the library does not provide one.
 
 `tools/controlled_boot.py` contains historical literal-catalog parsing utilities
 and a host adapter for 2.1.0.1–2.1.0.5. Its host-specific build/run path is not a
-supported 2.1.0.6 workflow. `tools/accept_run.py` checks completed controlled
+supported current workflow. `tools/accept_run.py` checks completed controlled
 reports separately; see [report checking](host-acceptance.md).

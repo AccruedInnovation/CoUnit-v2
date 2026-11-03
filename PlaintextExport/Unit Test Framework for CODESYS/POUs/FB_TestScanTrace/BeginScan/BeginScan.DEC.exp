@@ -1,0 +1,10 @@
+METHOD BeginScan : BOOL
+VAR_INPUT
+	Name : STRING(255);
+	Stage : UINT;
+END_VAR
+VAR
+	_text : STRING(160);
+	_i : INT;
+	_bytes : POINTER TO BYTE;
+END_VAR

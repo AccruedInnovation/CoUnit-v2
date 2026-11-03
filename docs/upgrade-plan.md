@@ -1,6 +1,10 @@
 # Qualification and limitations
 
-CoUnit 2.1.0.6 is a qualification candidate. Native source export/readback and
+CoUnit 2.1.0.7 has a clean native build, read-back and bounded installed-consumer
+runtime checks. See [scan tracing](scan-tracing.md) for those checks and the
+untested sink-error and incomplete timeout-trace limitations.
+
+For CoUnit 2.1.0.6, native source export/readback and
 side-by-side installed-byte verification passed. Bounded legacy ALL and sequence
 runs on CODESYS 3.5.22.20 and Linux Virtual Control SL 4.22 x64 passed with XML
 and requested JSON, report identity checks and cleanup. The sequence observation

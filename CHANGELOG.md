@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0.7
+
+- Adds opt-in scan tracing. Native build, export, read-back and bounded
+  installed-consumer runs passed. A complete timeout trace remains unverified.
+  A real sink failure could not be induced; its error path remains untested and
+  is an accepted limitation. See [scan tracing](docs/scan-tracing.md). Existing
+  2.1.0.6 artifacts remain unchanged.
+
 ## 2.1.0.6 — qualification candidate
 
 - Adds `CONFIGURE_LEGACY_RUN` to bind run, build and target identity for legacy

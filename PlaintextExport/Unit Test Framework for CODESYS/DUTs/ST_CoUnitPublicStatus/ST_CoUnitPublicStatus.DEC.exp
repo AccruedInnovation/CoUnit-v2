@@ -1,7 +1,7 @@
 TYPE ST_CoUnitPublicStatus :
 STRUCT
 	SchemaVersion : UINT := 2;
-	FrameworkVersion : STRING(15) := '2.1.0.6';
+	FrameworkVersion : STRING(15) := '2.1.0.7';
 	RunId : STRING(63);
 	BuildId : STRING(64);
 	TargetId : STRING(63);

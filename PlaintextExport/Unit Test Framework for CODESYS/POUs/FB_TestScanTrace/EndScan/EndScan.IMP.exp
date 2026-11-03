@@ -1,0 +1,18 @@
+EndScan := FALSE;
+IF NOT ScanOpen OR Ended THEN
+	Incomplete := TRUE; Complete := FALSE;
+	IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+	RETURN;
+END_IF
+_text := CONCAT('terminal=', BOOL_TO_STRING(Terminal));
+_text := CONCAT(_text, CONCAT(' sinkErrorsBefore=', UDINT_TO_STRING(Errors)));
+EndScan := _Write(Kind := 'EXIT', Text := _text);
+ScanOpen := FALSE;
+IF Terminal THEN
+	_text := CONCAT('scans=', UDINT_TO_STRING(Scan));
+	_text := CONCAT(_text, CONCAT(' sinkErrorsBefore=', UDINT_TO_STRING(Errors)));
+	_written := _Write(Kind := 'END', Text := _text);
+	IF NOT _written THEN EndScan := FALSE; END_IF
+	Ended := TRUE;
+	Complete := NOT Incomplete;
+END_IF

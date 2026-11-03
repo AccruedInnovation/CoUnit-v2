@@ -1,0 +1,7 @@
+FUNCTION_BLOCK FB_ScanTraceFailure_Test EXTENDS CoUnit.FB_TestSuite
+VAR
+	_trace : CoUnit.FB_TestScanTrace;
+	_openOk : BOOL;
+	_emitOk : BOOL;
+	_closeOk : BOOL;
+END_VAR

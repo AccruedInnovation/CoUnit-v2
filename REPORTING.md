@@ -1,6 +1,6 @@
 # Report acceptance
 
-CoUnit 2.1.0.6 publishes xUnit XML and, when enabled, an independent diagnostic
+CoUnit 2.1.0.7 publishes xUnit XML and, when enabled, an independent diagnostic
 JSON report. Configure fresh writable paths before the first runner call. Keep the
 runner executing until the requested publishers finish; a committed report and a
 passing test run are separate facts.
@@ -53,5 +53,5 @@ rules before integrating a host. Successful publication does not imply test PASS
 ## Qualification
 
 Historical 2.0.0 and 2.0.1 report results are version-specific and do not alone
-qualify 2.1.0.6. See the [qualification record](docs/upgrade-plan.md) and
+qualify 2.1.0.7. See the [qualification record](docs/upgrade-plan.md) and
 [framework qualification](qualification/README.md) for supported scope and gaps.

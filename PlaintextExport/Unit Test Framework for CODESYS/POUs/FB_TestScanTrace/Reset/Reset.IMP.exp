@@ -1,0 +1,17 @@
+Reset := FALSE;
+(* Do not silently discard an open or unfinished trace. *)
+IF ScanOpen OR (Scan <> 0 AND NOT Ended) THEN RETURN; END_IF
+Scan := 0;
+Sequence := 0;
+Errors := 0;
+ProtocolErrors := 0;
+LastResult := 0;
+HaveSinkResult := FALSE;
+ScanOpen := FALSE;
+Ended := FALSE;
+Complete := FALSE;
+Incomplete := FALSE;
+_name := '';
+_text := '';
+_written := FALSE;
+Reset := TRUE;

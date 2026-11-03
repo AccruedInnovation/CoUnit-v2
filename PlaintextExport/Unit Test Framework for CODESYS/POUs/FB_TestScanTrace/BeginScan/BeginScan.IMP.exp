@@ -1,0 +1,38 @@
+BeginScan := FALSE;
+IF Ended OR ScanOpen OR Scan = UDINT#4294967295 THEN
+	Incomplete := TRUE; Complete := FALSE;
+	IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+	RETURN;
+END_IF
+IF Scan = 0 THEN
+	IF LEN(Name) = 0 OR LEN(Name) > 32 THEN
+		Incomplete := TRUE; Complete := FALSE;
+		IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+		RETURN;
+	END_IF
+	_bytes := ADR(Name);
+	FOR _i := 0 TO LEN(Name) - 1 DO
+		IF _bytes[_i] < 33 OR _bytes[_i] > 126 THEN
+			Incomplete := TRUE; Complete := FALSE;
+			IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+			RETURN;
+		END_IF
+	END_FOR
+	_name := Name;
+ELSE
+	IF Name <> _name THEN
+		Incomplete := TRUE; Complete := FALSE;
+		IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+		RETURN;
+	END_IF
+END_IF
+Scan := Scan + 1;
+ScanOpen := TRUE;
+BeginScan := TRUE;
+IF Scan = 1 THEN
+	_written := _Write(Kind := 'BEGIN', Text := 'v3 caller-supplied payload; label observation and clock domains');
+	IF NOT _written THEN BeginScan := FALSE; END_IF
+END_IF
+_text := CONCAT('stage=', UINT_TO_STRING(Stage));
+_written := _Write(Kind := 'ENTER', Text := _text);
+IF NOT _written THEN BeginScan := FALSE; END_IF

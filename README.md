@@ -1,26 +1,26 @@
-# CoUnit 2.1.0.6
+# CoUnit 2.1.0.7
 
 CoUnit is an xUnit-style unit-testing library for CODESYS. It provides test
 suites, assertions, cyclic execution and xUnit reports, with optional JSON
-diagnostics and catalog-based case selection.
+diagnostics, catalog-based case selection and [scan tracing](docs/scan-tracing.md).
 
-**Status:** 2.1.0.6 is a qualification candidate, not a claim of support for
-every target or runtime. The recorded native checks cover selected journeys on
-CODESYS 3.5.22.20 and Linux Virtual Control SL 4.22 x64. Online change, physical
-controller deployment and native UTF-8 compiler configurations are not qualified.
-See [qualification and limitations](docs/upgrade-plan.md) before adoption.
+**Validation scope:** Native checks cover selected journeys on CODESYS 3.5.22.20
+and Linux Virtual Control SL 4.22 x64. Online change, physical controller
+deployment and native UTF-8 compiler configurations are not qualified. See
+[qualification and limitations](docs/upgrade-plan.md) and the scan-tracing guide
+for version-specific evidence and known limitations.
 
 ## Get started
 
-1. Install [counit_2.1.0.6.compiled-library](counit_2.1.0.6.compiled-library)
+1. Install [counit_2.1.0.7.compiled-library](counit_2.1.0.7.compiled-library)
    through the CODESYS Library Repository. In your test application's Library
-   Manager, select version **2.1.0.6** under namespace `CoUnit`.
+   Manager, select version **2.1.0.7** under namespace `CoUnit`.
 2. Follow the [first passing test](docs/2.1-upgrade.md#first-passing-test) to
    create a suite and cyclic runner in a disposable test application.
 3. Capture the fresh xUnit report and verify its disposition, selected cases and
    results. The runner completion flag alone does not mean the tests passed.
 
-The [source library](counit_2.1.0.6.library) is the editable native container;
+The [source library](counit_2.1.0.7.library) is the editable native container;
 [PlaintextExport](PlaintextExport/README.md) is its inspectable source, not a
 replacement for native project settings and references. Keep existing jobs pinned
 to their provider until they deliberately migrate, then rebuild and download a
@@ -56,7 +56,7 @@ host integration tests additionally require the separately supplied historical
 2.1.0.5 helper and fixtures; without them the full discovery command reports
 missing-dependency errors. `COUNIT_BOOT_HELPER` points to that helper and
 `COUNIT_ADAPTER_ROOT` selects a writable scratch directory. The helper is not
-included in this repository and is not a supported 2.1.0.6 execution route:
+included in this repository and is not a supported execution route:
 
 ```powershell
 python generate_assertions.py --check

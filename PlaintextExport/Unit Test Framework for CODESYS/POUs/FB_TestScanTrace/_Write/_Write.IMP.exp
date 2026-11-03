@@ -1,0 +1,43 @@
+_Write := FALSE;
+(* Printable ASCII: character and stored-byte boundaries agree. *)
+_bytes := ADR(Text);
+FOR _i := 0 TO LEN(Text) - 1 DO
+	IF _bytes[_i] < 32 OR _bytes[_i] > 126 THEN
+		Incomplete := TRUE; Complete := FALSE;
+		IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+		RETURN;
+	END_IF
+END_FOR
+_chunks := INT_TO_UINT((LEN(Text) + 47) / 48);
+IF _chunks = 0 THEN _chunks := 1; END_IF
+IF Sequence > UDINT#4294967295 - UINT_TO_UDINT(_chunks) THEN
+	Incomplete := TRUE; Complete := FALSE;
+	IF ProtocolErrors < UDINT#4294967295 THEN ProtocolErrors := ProtocolErrors + 1; END_IF
+	RETURN;
+END_IF
+_Write := TRUE;
+_offset := 1;
+_chunk := 1;
+REPEAT
+	Sequence := Sequence + 1;
+	_text := CONCAT(_name, CONCAT(' s=', UDINT_TO_STRING(Scan)));
+	_text := CONCAT(_text, CONCAT(' q=', UDINT_TO_STRING(Sequence)));
+	_text := CONCAT(_text, CONCAT(' ', Kind));
+	_text := CONCAT(_text, CONCAT(' p=', UINT_TO_STRING(_chunk)));
+	_text := CONCAT(_text, CONCAT('/', UINT_TO_STRING(_chunks)));
+	_text := CONCAT(_text, CONCAT(' ', MID(Text, 48, _offset)));
+	(* CoUnit's existing component is registered by GVL_Support._CmpCfLog. *)
+	LastResult := CmpLog.LogAdd2(hLogger := CmpLog.LogConstants.LOG_STD_LOGGER,
+		udiCmpID := UDINT#16#11110000 OR ComponentID.CMPID_IecCode OR UDINT#16#0123,
+		udiClassID := CmpLog.LogClass.LOG_INFO, udiErrorID := UDINT#0, udiInfoID := UDINT#0,
+		pszInfo := _text);
+	HaveSinkResult := TRUE;
+	IF LastResult <> CmpErrors.Errors.ERR_OK THEN
+		IF Errors < UDINT#4294967295 THEN Errors := Errors + 1; END_IF
+		Incomplete := TRUE; Complete := FALSE;
+		_Write := FALSE;
+	END_IF
+	_offset := _offset + 48;
+	_chunk := _chunk + 1;
+UNTIL _chunk > _chunks
+END_REPEAT

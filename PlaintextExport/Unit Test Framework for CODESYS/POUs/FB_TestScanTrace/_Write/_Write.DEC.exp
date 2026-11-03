@@ -1,0 +1,12 @@
+METHOD PRIVATE _Write : BOOL
+VAR_INPUT
+	Kind : STRING(8);
+	Text : STRING(255);
+END_VAR
+VAR
+	_offset : INT;
+	_i : INT;
+	_chunk : UINT;
+	_chunks : UINT;
+	_bytes : POINTER TO BYTE;
+END_VAR
