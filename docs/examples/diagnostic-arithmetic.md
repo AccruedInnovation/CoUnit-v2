@@ -1,6 +1,6 @@
 # Guarded diagnostic arithmetic
 
-The [source objects](diagnostic-arithmetic/) are executable example input targeting installed CoUnit 2.1.0.6. Create a suite extending
+The [source objects](diagnostic-arithmetic/) are executable example input targeting the current installed CoUnit. Create a suite extending
 `CoUnit.FB_TestSuite`, add the following method, and call `DiagnosticArithmetic()`
 from its suite body on each invocation. Instantiate only the selected suite in
 the persistent runner, and call one CoUnit runner cyclically from one task.

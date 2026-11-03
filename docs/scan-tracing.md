@@ -1,7 +1,16 @@
-# Scan tracing — 2.1.0.7 candidate
+# Scan tracing — 2.1.0.7
 
-The candidate has a clean native library build and read-back, but is not a released
-or runtime-qualified library.
+CoUnit 2.1.0.7 has a clean native build and read-back, with bounded runtime
+evidence on CODESYS 3.5.22.20 and Linux Virtual Control SL 4.22 x64. Two fresh
+application runs passed the waiting, terminal, protocol-rejection and reset
+checks; a deliberate assertion failure retained its failure and terminal trace.
+The timeout run reached its watchdog and cleaned up, but its captured log retained
+only the end of the trace. A complete timeout trace remains unverified.
+
+A real standard-logger sink failure could not be induced using an available
+qualified route. The owner accepts this untested error path; sink error reporting
+is not claimed as native-tested.
+
 A suite owns one `CoUnit.FB_TestScanTrace` per case. Calling its methods does not
 change the test runner, assertions, scheduling, clocks, deadlines or product calls.
 Only the caller knows the source and sampling time of its observations.

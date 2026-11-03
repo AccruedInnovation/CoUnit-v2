@@ -1,7 +1,7 @@
 # Scan-trace qualification cases
 
 These are test suite sources, not a new runner or native evidence. Build against
-the candidate installed CoUnit package with the existing selected-suite workflow.
+the installed CoUnit 2.1.0.7 package with the existing selected-suite workflow.
 Use fresh output paths and a disposable runtime. The qualification host must
 capture raw standard INFO log entries and independently check names, scan numbers,
 sequence numbers, part counts and reconstructed payloads.
@@ -20,6 +20,12 @@ sequence numbers, part counts and reconstructed payloads.
   unfinished case and waiting scan records, then exact runtime/IDE cleanup. This
   deliberately has no terminal record and is not passing test evidence.
 
-A real sink failure must be exercised with a qualified fault route; no fake sink
-success or unverified logger mutation is supplied by these fixtures. Preserve raw
-logs and report exact allocation/IDE cleanup before claiming qualification.
+A real sink failure could not be induced using an available qualified route. The
+owner accepts that the sink-error path remains untested; do not describe protocol
+rejection as a sink failure. No fake sink result or unverified logger mutation is
+supplied by these fixtures.
+
+The recorded timeout run reached the 1,200-second watchdog and its runtime and
+IDE cleanup completed. Its raw log retained only the end of the trace, so a
+complete timeout trace from BEGIN remains unverified. Preserve raw logs and exact
+allocation/IDE cleanup evidence for subsequent runs.
